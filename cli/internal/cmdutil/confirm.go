@@ -5,11 +5,8 @@ import (
 	"unicode"
 	"unicode/utf8"
 
-	"github.com/spf13/cobra"
-	"github.com/spf13/pflag"
-
-	"github.com/Tencent/WeKnora/cli/internal/iostreams"
-	"github.com/Tencent/WeKnora/cli/internal/prompt"
+	"github.com/vagawind/semiclaw/cli/internal/iostreams"
+	"github.com/vagawind/semiclaw/cli/internal/prompt"
 )
 
 // BuildRetryArgv assembles the directly-executable retry argv for a
@@ -61,10 +58,9 @@ func titleFirst(s string) string {
 //
 // Pass n = total count of items about to be deleted.
 // action is the namespaced action verb (e.g. "doc.delete") for the risk envelope.
-// retryArgv is the directly-executable retry argv array
-// (e.g. []string{"weknora","doc","delete","a","b","-y"}); pass nil when no
-// clean retry argv is available.
-func ConfirmDestructiveBatch(p prompt.Prompter, yes, jsonOut bool, verb, what string, n int, action string, retryArgv []string) error {
+// retryCmd is the directly-executable retry argv (e.g. "semiclaw doc delete a b -y");
+// pass "" when no clean retry argv is available.
+func ConfirmDestructiveBatch(p prompt.Prompter, yes, jsonOut bool, verb, what string, n int, action, retryCmd string) error {
 	if yes {
 		return nil
 	}
@@ -105,33 +101,9 @@ func ConfirmDestructiveBatch(p prompt.Prompter, yes, jsonOut bool, verb, what st
 //
 // `yes` should be sourced from the persistent global -y/--yes flag.
 // action is the namespaced action verb (e.g. "kb.delete") for the risk envelope.
-// retryArgv is the directly-executable retry argv array
-// (e.g. []string{"weknora","kb","delete","kb_x","-y"}); pass nil when no
-// clean retry argv is available.
-func ConfirmDestructive(p prompt.Prompter, yes, jsonOut bool, verb, what, id, action string, retryArgv []string) error {
-	return confirmGated(p, yes, jsonOut, verb, what, id, action, RiskDestructive, retryArgv)
-}
-
-// ConfirmWrite guards a reversible metadata write (kb / agent / doc update).
-// Same confirmation gate as ConfirmDestructive — a labeling-accuracy variant,
-// NOT a weaker gate — but tags the risk envelope at the "write" level so an
-// agent can distinguish a recoverable edit from an irreversible delete.
-func ConfirmWrite(p prompt.Prompter, yes, jsonOut bool, verb, what, id, action string, retryArgv []string) error {
-	return confirmGated(p, yes, jsonOut, verb, what, id, action, RiskWrite, retryArgv)
-}
-
-// confirmGated is the shared single-resource confirmation gate behind
-// ConfirmDestructive / ConfirmWrite. `level` is the risk.level reported on the
-// exit-10 envelope (RiskDestructive for irreversible ops, RiskWrite for
-// recoverable edits). Behavior matrix:
-//
-//	yes=true            → proceed (explicit user opt-in via -y/--yes)
-//	non-TTY OR jsonOut  → CodeInputConfirmationRequired (exit 10) + risk{level,action};
-//	                      no UI to prompt, agent/CI must re-invoke with -y after
-//	                      the human explicitly approves
-//	TTY + interactive   → prompt; user-yes proceeds, user-no returns CodeUserAborted
-//	prompter error      → CodeInputMissingFlag (rare; stdin closed mid-prompt)
-func confirmGated(p prompt.Prompter, yes, jsonOut bool, verb, what, id, action, level string, retryArgv []string) error {
+// retryCmd is the directly-executable retry argv (e.g. "semiclaw kb delete kb_x -y");
+// pass "" when no clean retry argv is available.
+func ConfirmDestructive(p prompt.Prompter, yes, jsonOut bool, verb, what, id, action, retryCmd string) error {
 	if yes {
 		return nil
 	}

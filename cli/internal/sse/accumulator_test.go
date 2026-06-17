@@ -3,8 +3,8 @@ package sse_test
 import (
 	"testing"
 
-	"github.com/Tencent/WeKnora/cli/internal/sse"
-	sdk "github.com/Tencent/WeKnora/client"
+	"github.com/vagawind/semiclaw/cli/internal/sse"
+	sdk "github.com/vagawind/semiclaw/client"
 )
 
 // terminator is the canonical "stream is done" event the accumulator

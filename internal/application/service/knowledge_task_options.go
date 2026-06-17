@@ -1,10 +1,7 @@
 package service
 
 import (
-	"time"
-
-	"github.com/Tencent/WeKnora/internal/config"
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/config"
 	"github.com/hibiken/asynq"
 )
 

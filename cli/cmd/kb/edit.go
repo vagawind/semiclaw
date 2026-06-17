@@ -6,9 +6,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/Tencent/WeKnora/cli/internal/cmdutil"
-	"github.com/Tencent/WeKnora/cli/internal/iostreams"
-	sdk "github.com/Tencent/WeKnora/client"
+	"github.com/vagawind/semiclaw/cli/internal/cmdutil"
+	"github.com/vagawind/semiclaw/cli/internal/iostreams"
+	sdk "github.com/vagawind/semiclaw/client"
 )
 
 // kbEditFields enumerates the fields surfaced for `--format json` discovery on
@@ -45,7 +45,7 @@ type EditService interface {
 	UpdateKnowledgeBase(ctx context.Context, id string, req *sdk.UpdateKnowledgeBaseRequest) (*sdk.KnowledgeBase, error)
 }
 
-// NewCmdEdit builds `weknora kb update <id>`. At least one of --name /
+// NewCmdEdit builds `semiclaw kb edit <id>`. At least one of --name /
 // --description must be provided.
 func NewCmdEdit(f *cmdutil.Factory) *cobra.Command {
 	opts := &EditOptions{}
@@ -122,8 +122,8 @@ to the user first.`,
 		RequiredFlags: []string{"<kb-id> (positional)", "--name or --description (at least one)"},
 		Output:        "envelope.data is the updated KnowledgeBase object (id, name, description)",
 		Examples: []string{
-			"weknora kb update kb_abc --name \"New Name\" -y",
-			"weknora kb update kb_abc --description \"Updated desc\" --format json -y",
+			"semiclaw kb edit kb_abc --name \"New Name\" -y",
+			"semiclaw kb edit kb_abc --description \"Updated desc\" --format json -y",
 		},
 		Warnings: []string{
 			"Requires explicit user approval (exit 10 / input.confirmation_required); never auto-add -y.",
@@ -131,6 +131,25 @@ to the user first.`,
 		},
 	})
 	return cmd
+}
+
+// buildKBEditRetryCmd constructs a directly-executable retry argv from the
+// flags the user actually set so agents can surface a precise re-run command.
+func buildKBEditRetryCmd(c *cobra.Command, id string) string {
+	var parts []string
+	parts = append(parts, "semiclaw", "kb", "edit", id)
+	c.Flags().Visit(func(f *pflag.Flag) {
+		switch f.Name {
+		case "name":
+			parts = append(parts, "--name", f.Value.String())
+		case "description":
+			parts = append(parts, "--description", f.Value.String())
+		case "format":
+			parts = append(parts, "--format", f.Value.String())
+		}
+	})
+	parts = append(parts, "-y")
+	return strings.Join(parts, " ")
 }
 
 func runEdit(ctx context.Context, opts *EditOptions, fopts *cmdutil.FormatOptions, svc EditService, id string) error {

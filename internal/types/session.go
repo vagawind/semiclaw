@@ -82,9 +82,9 @@ type Session struct {
 	Description string `json:"description"`
 	// Workspace ID
 	TenantID uint64 `json:"tenant_id"   gorm:"index"`
-	// UserID is the owner scope for this session. WeKnora user UUIDs, API
-	// external-user principals, and embed visitor principals all use this column.
-	UserID string `json:"user_id,omitempty" gorm:"type:varchar(512);index"`
+	// UserID is the owner of the session. Empty for legacy rows (visible at
+	// tenant level) and for IM-created sessions that do not map to a SemiClaw user.
+	UserID string `json:"user_id,omitempty" gorm:"type:varchar(36);index"`
 	// IsPinned indicates whether the session is pinned in the list.
 	IsPinned bool `json:"is_pinned" gorm:"default:false"`
 	// PinnedAt records when the session was pinned; nil when not pinned.

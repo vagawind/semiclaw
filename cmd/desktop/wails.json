@@ -1,19 +1,19 @@
 {
   "$schema": "https://wails.io/schemas/config.v2.json",
-  "name": "WeKnora Lite",
-  "outputfilename": "WeKnora Lite",
+  "name": "SemiClaw Lite",
+  "outputfilename": "SemiClaw Lite",
   "frontend:dir": "../../frontend",
   "wailsjsdir": "../../frontend/src",
   "author": {
-    "name": "WeKnora Team",
+    "name": "SemiClaw Team",
     "email": ""
   },
   "info": {
     "companyName": "Tencent",
-    "productName": "WeKnora Lite",
+    "productName": "SemiClaw Lite",
     "productVersion": "1.0.0",
     "copyright": "Copyright 2026 Tencent",
-    "comments": "WeKnora Desktop Edition"
+    "comments": "SemiClaw Desktop Edition"
   },
   "mac": {
     "category": "public.app-category.productivity",

@@ -1,7 +1,6 @@
-// Package langfuse implements WeKnora's Langfuse/LiteFuse LLM tracing client on
-// top of the OpenTelemetry Go SDK. It records chat/embedding/rerank/VLM/ASR
-// generations plus the surrounding agent/HTTP/asynq spans as OTLP/HTTP spans
-// to a Langfuse v3+ or LiteFuse backend (POST /api/public/otel/v1/traces).
+// Package langfuse implements a lightweight client for the Langfuse ingestion
+// API (https://langfuse.com/docs/api). It lets SemiClaw record LLM traces,
+// generations and token usage in Langfuse without pulling in a heavy SDK.
 //
 // The integration is fully opt-in: when disabled (the default), every public
 // entry point is a cheap no-op, so callers can wire them unconditionally. A
@@ -24,7 +23,7 @@ import (
 //
 // In practice users enable Langfuse purely through environment variables —
 // Host / PublicKey / SecretKey — which matches every other Langfuse SDK and
-// keeps WeKnora's YAML config free of secrets.
+// keeps SemiClaw's YAML config free of secrets.
 type Config struct {
 	// Enabled is the master switch. If false the entire package is a no-op.
 	Enabled bool

@@ -11,8 +11,7 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/Tencent/WeKnora/internal/logger"
-	secutils "github.com/Tencent/WeKnora/internal/utils"
+	"github.com/vagawind/semiclaw/internal/logger"
 )
 
 // Stream Load 相关常量。

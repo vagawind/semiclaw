@@ -9,9 +9,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/Tencent/WeKnora/cli/internal/cmdutil"
-	"github.com/Tencent/WeKnora/cli/internal/iostreams"
-	sdk "github.com/Tencent/WeKnora/client"
+	"github.com/vagawind/semiclaw/cli/internal/cmdutil"
+	"github.com/vagawind/semiclaw/cli/internal/iostreams"
+	sdk "github.com/vagawind/semiclaw/client"
 )
 
 // EditService is the narrow SDK surface this command depends on. The fetch
@@ -92,13 +92,13 @@ with input.confirmation_required. Surface the prompt to the user and only
 retry with -y after explicit approval. Other failure codes: resource.not_found
 (agent id or KB id), auth.forbidden, input.invalid_argument (no flags, bad file).`
 
-const agentEditExample = `  weknora agent update ag_abc --name "Renamed" -y
-  weknora agent update ag_abc --description "" -y              # clear description
-  weknora agent update ag_abc --add-kb kb_new --remove-kb kb_old -y
-  weknora agent update ag_abc --system-prompt-file ./prompt.md -y
-  weknora agent update ag_abc --config-file ./tuned.yaml --temperature 0.9 -y`
+const agentEditExample = `  semiclaw agent edit ag_abc --name "Renamed" -y
+  semiclaw agent edit ag_abc --description "" -y              # clear description
+  semiclaw agent edit ag_abc --add-kb kb_new --remove-kb kb_old -y
+  semiclaw agent edit ag_abc --system-prompt-file ./prompt.md -y
+  semiclaw agent edit ag_abc --config-file ./tuned.yaml --temperature 0.9 -y`
 
-// NewCmdEdit builds `weknora agent update <agent-id>`.
+// NewCmdEdit builds `semiclaw agent edit <agent-id>`.
 func NewCmdEdit(f *cmdutil.Factory) *cobra.Command {
 	opts := &EditOptions{}
 	var systemPromptFile, configFile string
@@ -271,9 +271,9 @@ func NewCmdEdit(f *cmdutil.Factory) *cobra.Command {
 		UsedFor:       "surgically update a custom agent's configuration",
 		RequiredFlags: []string{"<agent-id> (positional)", "at least one update flag (--name, --add-kb, etc.)"},
 		Examples: []string{
-			"weknora agent update ag_abc --name \"Renamed\"",
-			"weknora agent update ag_abc --add-kb kb_new --remove-kb kb_old",
-			"weknora agent update ag_abc --config-file ./tuned.yaml",
+			"semiclaw agent edit ag_abc --name \"Renamed\"",
+			"semiclaw agent edit ag_abc --add-kb kb_new --remove-kb kb_old",
+			"semiclaw agent edit ag_abc --config-file ./tuned.yaml",
 		},
 		Output: "envelope.data is the updated Agent object (id, name, config) after the update is applied",
 		Warnings: []string{
@@ -284,6 +284,39 @@ func NewCmdEdit(f *cmdutil.Factory) *cobra.Command {
 	return cmd
 }
 
+// buildAgentEditRetryCmd constructs a directly-executable retry argv from the
+// flags the user actually set so agents can surface a precise re-run command.
+func buildAgentEditRetryCmd(cmd *cobra.Command, id string) string {
+	var parts []string
+	parts = append(parts, "semiclaw", "agent", "edit", id)
+	cmd.Flags().Visit(func(f *pflag.Flag) {
+		switch f.Name {
+		case "name":
+			parts = append(parts, "--name", f.Value.String())
+		case "description":
+			parts = append(parts, "--description", f.Value.String())
+		case "model":
+			parts = append(parts, "--model", f.Value.String())
+		case "system-prompt":
+			parts = append(parts, "--system-prompt", f.Value.String())
+		case "agent-mode":
+			parts = append(parts, "--agent-mode", f.Value.String())
+		case "rerank-model":
+			parts = append(parts, "--rerank-model", f.Value.String())
+		case "temperature":
+			parts = append(parts, "--temperature", f.Value.String())
+		case "kb-selection-mode":
+			parts = append(parts, "--kb-selection-mode", f.Value.String())
+		case "format":
+			parts = append(parts, "--format", f.Value.String())
+			// --add-kb, --remove-kb, --system-prompt-file, --config-file are excluded
+			// because they are multi-value or file-based; a precise argv is impractical.
+			// The user must reconstruct those manually.
+		}
+	})
+	parts = append(parts, "-y")
+	return strings.Join(parts, " ")
+}
 
 // editHasAnyFlag reports whether opts carries at least one surgical update
 // signal. Required-flag validation lives in runEdit (not PreRunE) so unit

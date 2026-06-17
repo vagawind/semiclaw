@@ -165,61 +165,7 @@ const suggestedQuestions = ref<SuggestedQuestion[]>([])
 const suggestedLoading = ref(false)
 const hostContextRef = ref<Record<string, unknown>>(props.hostContext || {})
 
-const loadFollowUpSuggestions = async (
-  message: Record<string, unknown>,
-  ensure = false,
-  regenerate = false,
-) => {
-  const messageId = String(message.id || message.assistant_message_id || '')
-  const targetSessionId = props.sessionId
-  if (!props.showSuggestedQuestions || !messageId || !targetSessionId || message.suggestionsDismissed) return
-  message.suggestionLoading = true
-  try {
-    let response = ensure
-      ? await ensureEmbedMessageSuggestions(
-        props.channelId, props.token, targetSessionId, messageId, props.sessionSig, props.visitorId, regenerate,
-      )
-      : await getEmbedMessageSuggestions(
-        props.channelId, props.token, targetSessionId, messageId, props.sessionSig, props.visitorId,
-      )
-    let set = response?.data
-    for (let attempt = 0; set?.status === 'generating' && attempt < 120; attempt++) {
-      await new Promise((resolve) => setTimeout(resolve, 1000))
-      if (props.sessionId !== targetSessionId || message.suggestionsDismissed) return
-      response = await getEmbedMessageSuggestions(
-        props.channelId, props.token, targetSessionId, messageId, props.sessionSig, props.visitorId,
-      )
-      set = response?.data
-    }
-    message.suggestionSet = set?.status === 'ready' ? set : null
-  } catch {
-    message.suggestionSet = null
-  } finally {
-    message.suggestionLoading = false
-  }
-}
-
-const loadPersistedFollowUps = (messages: Record<string, unknown>[]) => {
-  for (const message of messages) {
-    if (message.role === 'assistant' && message.is_completed && message.suggestionSet === undefined) {
-      void loadFollowUpSuggestions(message, false)
-    }
-  }
-}
-
-function asUnknownArray(value: unknown): unknown[] | undefined {
-  return Array.isArray(value) ? value : undefined
-}
-
-function asEmbedImages(value: unknown): EmbedImage[] | undefined {
-  return Array.isArray(value) ? value as EmbedImage[] : undefined
-}
-
-function asEmbedAttachments(value: unknown): EmbedAttachment[] | undefined {
-  return Array.isArray(value) ? value as EmbedAttachment[] : undefined
-}
-
-const embedWebSearchStorageKey = () => `weknora-embed-web-search:${props.channelId}`
+const embedWebSearchStorageKey = () => `semiclaw-embed-web-search:${props.channelId}`
 
 const readStoredWebSearchEnabled = () => {
   if (typeof localStorage === 'undefined') return false

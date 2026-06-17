@@ -7,11 +7,12 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/Tencent/WeKnora/cli/internal/cmdutil"
-	"github.com/Tencent/WeKnora/cli/internal/iostreams"
-	"github.com/Tencent/WeKnora/cli/internal/output"
-	"github.com/Tencent/WeKnora/cli/internal/sse"
-	sdk "github.com/Tencent/WeKnora/client"
+	"github.com/vagawind/semiclaw/cli/internal/cmdutil"
+	"github.com/vagawind/semiclaw/cli/internal/format"
+	"github.com/vagawind/semiclaw/cli/internal/iostreams"
+	"github.com/vagawind/semiclaw/cli/internal/output"
+	"github.com/vagawind/semiclaw/cli/internal/sse"
+	sdk "github.com/vagawind/semiclaw/client"
 )
 
 // sessionAskFields enumerates the fields surfaced for `--jq` projection
@@ -49,7 +50,7 @@ type AskService interface {
 	AgentQAStreamWithRequest(ctx context.Context, sessionID string, req *sdk.AgentQARequest, cb sdk.AgentEventCallback) error
 }
 
-// NewCmdAsk builds `weknora session ask --agent <agent-id> "<text>"`.
+// NewCmdAsk builds `semiclaw session ask --agent <agent-id> "<text>"`.
 func NewCmdAsk(f *cmdutil.Factory) *cobra.Command {
 	opts := &AskOptions{}
 	cmd := &cobra.Command{
@@ -60,21 +61,19 @@ a new session is auto-created and its id is reported in the output for
 the caller to thread follow-ups.
 
 AI agents: this is the primary entrypoint for invoking custom agents.
-The 'weknora agent' subtree handles CRUD only (list / view / create /
-update / delete / status / check).
+The 'semiclaw agent' subtree handles CRUD only (list / view / create /
+edit / delete / status / check).
 
 Modes:
-  --format json (default):       one JSON envelope with answer events
-  --format text:                 live human-readable answer stream
-  --format ndjson:               raw NDJSON event stream — init line (session_id,
-                                 agent_id) then SDK agent events verbatim. Debug.
-
-Pass --reference to include bounded kb_id/chunk_id reference indexes. Pass
---verbose to include reasoning, tool activity, and lifecycle frames. Combine
-both flags for the complete projected stream.`,
-		Example: `  weknora session ask --agent ag_x "Summarize Q3 sales"
-  weknora session ask --session sess_x --agent ag_x "Follow-up question"
-  weknora session ask --agent ag_x "Multi-step task" --format ndjson`,
+  --format text:                 live answer streaming + tool-trace footer
+  --format json / --format ndjson / pipe (default): NDJSON event stream —
+                                 one init line at head (session_id, agent_id),
+                                 then raw SDK agent events verbatim. Both
+                                 json and ndjson flags produce the same
+                                 NDJSON stream.`,
+		Example: `  semiclaw session ask --agent ag_x "Summarize Q3 sales"
+  semiclaw session ask --session sess_x --agent ag_x "Follow-up question"
+  semiclaw session ask --agent ag_x "Multi-step task" --format ndjson`,
 		Args: cobra.ExactArgs(1),
 		RunE: func(c *cobra.Command, args []string) error {
 			fopts, err := cmdutil.CheckFormatFlag(c)
@@ -100,9 +99,8 @@ both flags for the complete projected stream.`,
 		UsedFor:       "Invoke a custom agent in a session context. Default JSON returns a bounded answer-event projection. --reference adds indexed citations; --verbose adds reasoning, tools, and lifecycle events. --format ndjson streams raw SDK agent events; --format text renders the selected events live.",
 		RequiredFlags: []string{"<text> (positional)", "--agent"},
 		Examples: []string{
-			`weknora session ask --agent ag_x "Summarize Q3 sales"`,
-			`weknora session ask --agent ag_x "Summarize Q3 sales" --jq '[.data.events[].content] | join("")'`,
-			`weknora session ask --session sess_x --agent ag_x "Follow-up question"`,
+			`semiclaw session ask --agent ag_x "Summarize Q3 sales" --format json`,
+			`semiclaw session ask --session sess_x --agent ag_x "Follow-up question" --format json`,
 		},
 		Output: "Default --format json: {ok,data:{events:[answer...],session_id,agent_id,query}}. --reference adds kb_id/chunk_id reference events; --verbose adds execution events. --format ndjson remains raw.",
 	})
@@ -125,7 +123,7 @@ func runAsk(ctx context.Context, opts *AskOptions, fopts *cmdutil.FormatOptions,
 	sessionID := opts.SessionID
 	autoCreated := false
 	if sessionID == "" {
-		sess, err := svc.CreateSession(ctx, &sdk.CreateSessionRequest{Title: "weknora session ask"})
+		sess, err := svc.CreateSession(ctx, &sdk.CreateSessionRequest{Title: "semiclaw session ask"})
 		if err != nil {
 			if cmdutil.IsCancelled(ctx, err) {
 				return cmdutil.Wrapf(cmdutil.CodeOperationCancelled, err, "session ask cancelled")

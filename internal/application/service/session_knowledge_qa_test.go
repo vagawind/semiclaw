@@ -4,13 +4,13 @@ import (
 	"context"
 	"testing"
 
-	"github.com/Tencent/WeKnora/internal/event"
-	"github.com/Tencent/WeKnora/internal/models/asr"
-	"github.com/Tencent/WeKnora/internal/models/chat"
-	"github.com/Tencent/WeKnora/internal/models/embedding"
-	"github.com/Tencent/WeKnora/internal/models/rerank"
-	"github.com/Tencent/WeKnora/internal/models/vlm"
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/event"
+	"github.com/vagawind/semiclaw/internal/models/asr"
+	"github.com/vagawind/semiclaw/internal/models/chat"
+	"github.com/vagawind/semiclaw/internal/models/embedding"
+	"github.com/vagawind/semiclaw/internal/models/rerank"
+	"github.com/vagawind/semiclaw/internal/models/vlm"
+	"github.com/vagawind/semiclaw/internal/types"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -155,8 +155,8 @@ func TestHandleModelFallback_IncludesHistoryMessages(t *testing.T) {
 		PipelineState: types.PipelineState{
 			History: []*types.History{
 				{
-					Query:  "先介绍一下 WeKnora",
-					Answer: "WeKnora 是一个知识库问答系统。",
+					Query:  "先介绍一下 SemiClaw",
+					Answer: "SemiClaw 是一个知识库问答系统。",
 				},
 			},
 		},
@@ -167,16 +167,11 @@ func TestHandleModelFallback_IncludesHistoryMessages(t *testing.T) {
 
 	svc.handleModelFallback(context.Background(), cm)
 
-	// Corrected fallback shape: a system message carries the fallback
-	// instruction, history is replayed in the middle, and the turn ends on the
-	// user's question. Previously the system message was dropped entirely.
-	require.Len(t, chatModel.lastMessages, 4)
-	assert.Equal(t, "system", chatModel.lastMessages[0].Role)
-	assert.Contains(t, chatModel.lastMessages[0].Content, "Answer the latest user question")
-	assert.Equal(t, "user", chatModel.lastMessages[1].Role)
-	assert.Equal(t, "先介绍一下 WeKnora", chatModel.lastMessages[1].Content)
-	assert.Equal(t, "assistant", chatModel.lastMessages[2].Role)
-	assert.Equal(t, "WeKnora 是一个知识库问答系统。", chatModel.lastMessages[2].Content)
-	assert.Equal(t, "user", chatModel.lastMessages[3].Role)
-	assert.Contains(t, chatModel.lastMessages[3].Content, "现在还能继续讲吗？")
+	require.Len(t, chatModel.lastMessages, 3)
+	assert.Equal(t, "user", chatModel.lastMessages[0].Role)
+	assert.Equal(t, "先介绍一下 SemiClaw", chatModel.lastMessages[0].Content)
+	assert.Equal(t, "assistant", chatModel.lastMessages[1].Role)
+	assert.Equal(t, "SemiClaw 是一个知识库问答系统。", chatModel.lastMessages[1].Content)
+	assert.Equal(t, "user", chatModel.lastMessages[2].Role)
+	assert.Contains(t, chatModel.lastMessages[2].Content, "现在还能继续讲吗？")
 }

@@ -1608,6 +1608,39 @@
                   v-show="currentSection === 'share'" class="section">
                   <AgentShareSettings :agent-id="editorAgent.id" :agent="editorAgent" />
                 </div>
+
+                <!-- IM集成（仅编辑模式） -->
+                <div v-if="editorMode === 'edit' && editorAgent?.id && currentSection === 'im'" class="section">
+                  <div class="section-header">
+                    <h2>{{ $t('agentEditor.im.title') }}</h2>
+                    <p class="section-description">
+                      {{ $t('agentEditor.im.description') }}
+                      <a href="https://github.com/vagawind/semiclaw/blob/main/docs/IM%E9%9B%86%E6%88%90%E5%BC%80%E5%8F%91%E6%96%87%E6%A1%A3.md"
+                        target="_blank" rel="noopener noreferrer" class="doc-link">
+                        {{ $t('agentEditor.im.docLink') }}
+                        <t-icon name="link" class="link-icon" />
+                      </a>
+                    </p>
+                  </div>
+                  <div class="settings-group">
+                    <IMChannelPanel :agent-id="editorAgent.id" />
+                  </div>
+                </div>
+
+                <!-- 网页嵌入（仅编辑模式） -->
+                <div v-if="editorMode === 'edit' && editorAgent?.id && currentSection === 'embed'" class="section">
+                  <div class="section-header">
+                    <h2>{{ $t('agentEditor.embed.title') }}</h2>
+                    <p class="section-description">{{ $t('agentEditor.embed.description') }}</p>
+                  </div>
+                  <div class="settings-group">
+                    <AgentEmbedChannelPanel
+                      :agent-id="editorAgent.id"
+                      :agent-web-search-enabled="formData.config?.web_search_enabled === true"
+                      :agent-image-upload-enabled="formData.config?.image_upload_enabled === true"
+                    />
+                  </div>
+                </div>
               </div>
 
               <!-- 底部操作栏 -->

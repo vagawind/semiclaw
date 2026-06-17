@@ -2,15 +2,8 @@ package format
 
 import sdk "github.com/Tencent/WeKnora/client"
 
-// ReferenceIndex is the bounded citation pointer exposed by projected JSON,
-// text, and MCP output. ChunkID is the chunk the model cited; ParentChunkID is
-// retained when callers prefer to fetch the larger self-contained passage.
-// Full chunk text and retrieval metadata remain available only in raw NDJSON.
-type ReferenceIndex struct {
-	KBID          string `json:"kb_id,omitempty"`
-	ChunkID       string `json:"chunk_id"`
-	ParentChunkID string `json:"parent_chunk_id,omitempty"`
-}
+	sdk "github.com/vagawind/semiclaw/client"
+)
 
 // IndexReferences projects full SDK search results into stable lookup keys.
 // It never mutates the SDK events, which keeps the raw NDJSON path lossless.

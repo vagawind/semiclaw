@@ -111,7 +111,7 @@ const defaultSettings: Settings = {
 export const useSettingsStore = defineStore("settings", {
   state: () => ({
     // 从本地存储加载设置，如果没有则使用默认设置
-    settings: loadAndReconcileSettings(defaultSettings),
+    settings: JSON.parse(localStorage.getItem("SemiClaw_settings") || JSON.stringify(defaultSettings)) as Settings,
     // 进入会话时拍下"全局默认"的快照；离开会话时还原。非持久化字段：
     // 刷新页面相当于重新走"进入会话"流程，自然会重新拍快照。
     _defaultsSnapshot: null as Settings | null,
@@ -181,7 +181,7 @@ export const useSettingsStore = defineStore("settings", {
     saveSettings(settings: Settings) {
       this.settings = { ...settings };
       // 保存到localStorage
-      localStorage.setItem("WeKnora_settings", JSON.stringify(this.settings));
+      localStorage.setItem("SemiClaw_settings", JSON.stringify(this.settings));
     },
 
     // 获取设置
@@ -207,25 +207,25 @@ export const useSettingsStore = defineStore("settings", {
     // 启用/禁用 Agent
     toggleAgent(enabled: boolean) {
       this.settings.isAgentEnabled = enabled;
-      localStorage.setItem("WeKnora_settings", JSON.stringify(this.settings));
+      localStorage.setItem("SemiClaw_settings", JSON.stringify(this.settings));
     },
     
     // 更新 Agent 配置
     updateAgentConfig(config: Partial<AgentConfig>) {
       this.settings.agentConfig = { ...this.settings.agentConfig, ...config };
-      localStorage.setItem("WeKnora_settings", JSON.stringify(this.settings));
+      localStorage.setItem("SemiClaw_settings", JSON.stringify(this.settings));
     },
 
     updateConversationModels(models: Partial<ConversationModels>) {
       const current = this.settings.conversationModels || defaultSettings.conversationModels;
       this.settings.conversationModels = { ...current, ...models };
-      localStorage.setItem("WeKnora_settings", JSON.stringify(this.settings));
+      localStorage.setItem("SemiClaw_settings", JSON.stringify(this.settings));
     },
     
     // 更新模型配置
     updateModelConfig(config: Partial<ModelConfig>) {
       this.settings.modelConfig = { ...this.settings.modelConfig, ...config };
-      localStorage.setItem("WeKnora_settings", JSON.stringify(this.settings));
+      localStorage.setItem("SemiClaw_settings", JSON.stringify(this.settings));
     },
     
     // 添加模型
@@ -242,7 +242,7 @@ export const useSettingsStore = defineStore("settings", {
       }
       models.push(model);
       this.settings.modelConfig[key] = models as any;
-      localStorage.setItem("WeKnora_settings", JSON.stringify(this.settings));
+      localStorage.setItem("SemiClaw_settings", JSON.stringify(this.settings));
     },
     
     // 更新模型
@@ -257,7 +257,7 @@ export const useSettingsStore = defineStore("settings", {
         }
         models[index] = { ...models[index], ...updates };
         this.settings.modelConfig[key] = models as any;
-        localStorage.setItem("WeKnora_settings", JSON.stringify(this.settings));
+        localStorage.setItem("SemiClaw_settings", JSON.stringify(this.settings));
       }
     },
     
@@ -272,7 +272,7 @@ export const useSettingsStore = defineStore("settings", {
         models[0].isDefault = true;
       }
       this.settings.modelConfig[key] = models as any;
-      localStorage.setItem("WeKnora_settings", JSON.stringify(this.settings));
+      localStorage.setItem("SemiClaw_settings", JSON.stringify(this.settings));
     },
     
     // 设置默认模型
@@ -281,26 +281,26 @@ export const useSettingsStore = defineStore("settings", {
       const models = [...this.settings.modelConfig[key]] as ModelItem[];
       models.forEach(m => m.isDefault = (m.id === modelId));
       this.settings.modelConfig[key] = models as any;
-      localStorage.setItem("WeKnora_settings", JSON.stringify(this.settings));
+      localStorage.setItem("SemiClaw_settings", JSON.stringify(this.settings));
     },
     
     // 更新 Ollama 配置
     updateOllamaConfig(config: Partial<OllamaConfig>) {
       this.settings.ollamaConfig = { ...this.settings.ollamaConfig, ...config };
-      localStorage.setItem("WeKnora_settings", JSON.stringify(this.settings));
+      localStorage.setItem("SemiClaw_settings", JSON.stringify(this.settings));
     },
     
     // 选择知识库（替换整个列表）
     selectKnowledgeBases(kbIds: string[]) {
       this.settings.selectedKnowledgeBases = kbIds;
-      localStorage.setItem("WeKnora_settings", JSON.stringify(this.settings));
+      localStorage.setItem("SemiClaw_settings", JSON.stringify(this.settings));
     },
     
     // 添加单个知识库
     addKnowledgeBase(kbId: string) {
       if (!this.settings.selectedKnowledgeBases.includes(kbId)) {
         this.settings.selectedKnowledgeBases.push(kbId);
-        localStorage.setItem("WeKnora_settings", JSON.stringify(this.settings));
+        localStorage.setItem("SemiClaw_settings", JSON.stringify(this.settings));
       }
     },
     
@@ -308,13 +308,13 @@ export const useSettingsStore = defineStore("settings", {
     removeKnowledgeBase(kbId: string) {
       this.settings.selectedKnowledgeBases = 
         this.settings.selectedKnowledgeBases.filter((id: string) => id !== kbId);
-      localStorage.setItem("WeKnora_settings", JSON.stringify(this.settings));
+      localStorage.setItem("SemiClaw_settings", JSON.stringify(this.settings));
     },
     
     // 清空知识库选择
     clearKnowledgeBases() {
       this.settings.selectedKnowledgeBases = [];
-      localStorage.setItem("WeKnora_settings", JSON.stringify(this.settings));
+      localStorage.setItem("SemiClaw_settings", JSON.stringify(this.settings));
     },
     
     // 获取选中的知识库列表
@@ -325,13 +325,54 @@ export const useSettingsStore = defineStore("settings", {
     // 启用/禁用网络搜索
     toggleWebSearch(enabled: boolean) {
       this.settings.webSearchEnabled = enabled;
-      localStorage.setItem("WeKnora_settings", JSON.stringify(this.settings));
+      localStorage.setItem("SemiClaw_settings", JSON.stringify(this.settings));
+    },
+
+    // 启用/禁用记忆功能。
+    // 现在是"真用户级"开关：
+    //   - 本地缓存 (localStorage) 用作 UI 首屏 / 离线兜底；
+    //   - PUT /auth/me/preferences 是真正的持久化，跨设备/浏览器同步。
+    //
+    // 乐观更新：先翻本地状态让 UI 立刻响应，再异步写后端；失败则回滚 + throw
+    // 让调用方（GeneralSettings.vue 的 t-switch）可以提示并把开关复位。
+    async toggleMemory(enabled: boolean): Promise<void> {
+      const previous = !!this.settings.enableMemory;
+      this.settings.enableMemory = enabled;
+      localStorage.setItem("SemiClaw_settings", JSON.stringify(this.settings));
+
+      try {
+        const resp = await updateMyPreferences({ enable_memory: enabled });
+        if (!resp.success) {
+          throw new Error(resp.message || "update failed");
+        }
+      } catch (err) {
+        // 回滚本地状态，让 UI 复位到旧值。
+        this.settings.enableMemory = previous;
+        localStorage.setItem("SemiClaw_settings", JSON.stringify(this.settings));
+        throw err;
+      }
+    },
+
+    // 从 /auth/me 或 /auth/login 返回的 user.preferences 同步到本地 settings。
+    // 调用方：authStore.setUser（每次登录 / 刷新 user / 切租户后都会触发）。
+    // 不写后端，纯本地状态 + localStorage 写入，避免把后端的值再原路 PUT 回去。
+    hydrateFromUserPreferences(prefs: UserPreferences | undefined | null) {
+      if (!prefs) return;
+      let changed = false;
+      if (typeof prefs.enable_memory === "boolean" &&
+          this.settings.enableMemory !== prefs.enable_memory) {
+        this.settings.enableMemory = prefs.enable_memory;
+        changed = true;
+      }
+      if (changed) {
+        localStorage.setItem("SemiClaw_settings", JSON.stringify(this.settings));
+      }
     },
 
     // 启用/禁用自动检查更新
     toggleAutoCheckUpdate(enabled: boolean) {
       this.settings.autoCheckUpdate = enabled;
-      localStorage.setItem("WeKnora_settings", JSON.stringify(this.settings));
+      localStorage.setItem("SemiClaw_settings", JSON.stringify(this.settings));
     },
 
     // File selection actions
@@ -339,7 +380,7 @@ export const useSettingsStore = defineStore("settings", {
       if (!this.settings.selectedFiles) this.settings.selectedFiles = [];
       if (!this.settings.selectedFiles.includes(fileId)) {
         this.settings.selectedFiles.push(fileId);
-        localStorage.setItem("WeKnora_settings", JSON.stringify(this.settings));
+        localStorage.setItem("SemiClaw_settings", JSON.stringify(this.settings));
       }
     },
 
@@ -347,13 +388,13 @@ export const useSettingsStore = defineStore("settings", {
       if (!this.settings.selectedFiles) return;
       this.settings.selectedFiles = this.settings.selectedFiles.filter((id: string) => id !== fileId);
       if (this.settings.selectedFileKbMap) delete this.settings.selectedFileKbMap[fileId];
-      localStorage.setItem("WeKnora_settings", JSON.stringify(this.settings));
+      localStorage.setItem("SemiClaw_settings", JSON.stringify(this.settings));
     },
 
     clearFiles() {
       this.settings.selectedFiles = [];
       this.settings.selectedFileKbMap = {};
-      localStorage.setItem("WeKnora_settings", JSON.stringify(this.settings));
+      localStorage.setItem("SemiClaw_settings", JSON.stringify(this.settings));
     },
 
     addTag(tag: { id: string; name: string; kbId: string; kbName?: string }) {
@@ -406,12 +447,12 @@ export const useSettingsStore = defineStore("settings", {
     setFileKbMap(updates: Record<string, string>) {
       if (!this.settings.selectedFileKbMap) this.settings.selectedFileKbMap = {};
       Object.assign(this.settings.selectedFileKbMap, updates);
-      localStorage.setItem("WeKnora_settings", JSON.stringify(this.settings));
+      localStorage.setItem("SemiClaw_settings", JSON.stringify(this.settings));
     },
 
     removeFileKbId(fileId: string) {
       if (this.settings.selectedFileKbMap) delete this.settings.selectedFileKbMap[fileId];
-      localStorage.setItem("WeKnora_settings", JSON.stringify(this.settings));
+      localStorage.setItem("SemiClaw_settings", JSON.stringify(this.settings));
     },
     
     getSelectedFiles(): string[] {
@@ -466,10 +507,7 @@ export const useSettingsStore = defineStore("settings", {
       this.settings.selectedKnowledgeBases = [];
       this.settings.selectedFiles = [];
       this.settings.selectedFileKbMap = {};
-      this.settings.selectedTags = [];
-      this.settings.selectedMCPServices = [];
-      this.settings.selectedSkills = [];
-      localStorage.setItem("WeKnora_settings", JSON.stringify(this.settings));
+      localStorage.setItem("SemiClaw_settings", JSON.stringify(this.settings));
     },
     
     // 获取选中的智能体ID

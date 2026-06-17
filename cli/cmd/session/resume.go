@@ -1,4 +1,4 @@
-// resume.go implements `weknora session resume` —
+// continue_stream.go implements `semiclaw session continue-stream` —
 // re-attach to an SSE event buffer for an in-progress or already-completed
 // assistant message under a known session_id.
 //
@@ -14,7 +14,7 @@
 //     After TTL the server returns an error which the CLI maps to
 //     local.sse_stream_aborted.
 //
-// Output shape matches `weknora chat` and `weknora session ask` NDJSON mode:
+// Output shape matches `semiclaw chat` and `semiclaw session ask` NDJSON mode:
 // one CLI-injected init line carrying {session_id, message_id, profile} at
 // stream head, then SDK StreamResponse events verbatim. The init line lets
 // agents thread the resume to the original message in their dedupe table
@@ -26,10 +26,10 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/Tencent/WeKnora/cli/internal/cmdutil"
-	"github.com/Tencent/WeKnora/cli/internal/iostreams"
-	"github.com/Tencent/WeKnora/cli/internal/output"
-	sdk "github.com/Tencent/WeKnora/client"
+	"github.com/vagawind/semiclaw/cli/internal/cmdutil"
+	"github.com/vagawind/semiclaw/cli/internal/iostreams"
+	"github.com/vagawind/semiclaw/cli/internal/output"
+	sdk "github.com/vagawind/semiclaw/client"
 )
 
 // resumeFields enumerates the NDJSON init-event + raw SDK event
@@ -54,9 +54,9 @@ type ResumeService interface {
 	ContinueStream(ctx context.Context, sessionID, messageID string, cb func(*sdk.StreamResponse) error) error
 }
 
-// NewCmdResume builds `weknora session resume <session-id> --message <id>`.
-func NewCmdResume(f *cmdutil.Factory) *cobra.Command {
-	opts := &ResumeOptions{}
+// NewCmdContinueStream builds `semiclaw session continue-stream <session-id> --message <id>`.
+func NewCmdContinueStream(f *cmdutil.Factory) *cobra.Command {
+	opts := &ContinueStreamOptions{}
 	cmd := &cobra.Command{
 		Use:   "resume <session-id>",
 		Short: "Resume an SSE event stream for an in-progress or completed session message",
@@ -90,8 +90,8 @@ regardless of --format value. The operator use case (incident response,
 debugging) always wants the raw event log; there is no human-text rendering.
 --format json and --format ndjson behave identically here; --format text is
 silently treated as NDJSON.`,
-		Example: `  weknora session resume sess_xyz --message msg_abc
-  weknora session resume sess_xyz -m msg_abc --format ndjson`,
+		Example: `  semiclaw session continue-stream sess_xyz --message msg_abc
+  semiclaw session continue-stream sess_xyz -m msg_abc --format ndjson`,
 		Args: cobra.ExactArgs(1),
 		RunE: func(c *cobra.Command, args []string) error {
 			opts.SessionID = args[0]
@@ -115,8 +115,8 @@ silently treated as NDJSON.`,
 		UsedFor:       "Resume an SSE event stream for an in-progress or completed assistant message. Produces an NDJSON event stream: init line (session_id, message_id) then raw SDK StreamResponse events.",
 		RequiredFlags: []string{"<session-id> (positional)", "--message (persisted assistant message id — get it from `weknora message list --session <id>`; a live stream's assistant_message_id is not resumable once the message persists)"},
 		Examples: []string{
-			"weknora session resume sess_xyz --message msg_abc --format json",
-			"# Get the message id from: weknora message list --session <session-id> (the persisted assistant message)",
+			"semiclaw session continue-stream sess_xyz --message msg_abc --format json",
+			"# Network-blip recovery: replay with same session_id + message_id from the original 'session ask' init event",
 		},
 		Output: "NDJSON stream: {type:init, session_id, message_id, profile} then SDK StreamResponse events (response_type, content, done, knowledge_references, assistant_message_id, ...)",
 		Warnings: []string{

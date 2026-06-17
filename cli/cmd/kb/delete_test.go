@@ -9,10 +9,10 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/Tencent/WeKnora/cli/internal/cmdutil"
-	"github.com/Tencent/WeKnora/cli/internal/iostreams"
-	"github.com/Tencent/WeKnora/cli/internal/prompt"
-	"github.com/Tencent/WeKnora/cli/internal/testutil"
+	"github.com/vagawind/semiclaw/cli/internal/cmdutil"
+	"github.com/vagawind/semiclaw/cli/internal/iostreams"
+	"github.com/vagawind/semiclaw/cli/internal/prompt"
+	"github.com/vagawind/semiclaw/cli/internal/testutil"
 )
 
 // fakeDeleteSvc records what id was deleted.
@@ -167,8 +167,8 @@ func TestDelete_JSONOut_WithYes_Proceeds(t *testing.T) {
 
 func TestKbDelete_NoYes_JSONMode_AttachesRiskAndRetry(t *testing.T) {
 	// Non-TTY + JSON mode without -y must return CodeInputConfirmationRequired
-	// with risk.action == "kb.delete" and retry_argv == [weknora kb delete kb_x -y].
-	// Regression test for H1: ConfirmDestructive must attach risk + retry_argv.
+	// with risk.action == "kb.delete" and retry_command == "semiclaw kb delete kb_x -y".
+	// Regression test for H1: ConfirmDestructive must attach risk + retry_command.
 	iostreams.SetForTest(t)
 	svc := &fakeDeleteSvc{}
 	p := &testutil.ConfirmPrompter{}
@@ -185,5 +185,5 @@ func TestKbDelete_NoYes_JSONMode_AttachesRiskAndRetry(t *testing.T) {
 	require.NotNil(t, ce.Risk, "expected risk metadata on confirmation_required error")
 	assert.Equal(t, "kb.delete", ce.Risk.Action, "expected risk.action == kb.delete")
 	assert.Equal(t, "destructive", ce.Risk.Level, "expected risk.level == destructive")
-	assert.Equal(t, []string{"weknora", "kb", "delete", "kb_x", "-y"}, ce.RetryArgv, "expected retry_argv")
+	assert.Equal(t, "semiclaw kb delete kb_x -y", ce.RetryCommand, "expected retry_command")
 }

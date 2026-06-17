@@ -9,11 +9,11 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/Tencent/WeKnora/cli/internal/cmdutil"
-	"github.com/Tencent/WeKnora/cli/internal/iostreams"
-	"github.com/Tencent/WeKnora/cli/internal/output"
-	"github.com/Tencent/WeKnora/cli/internal/text"
-	sdk "github.com/Tencent/WeKnora/client"
+	"github.com/vagawind/semiclaw/cli/internal/cmdutil"
+	"github.com/vagawind/semiclaw/cli/internal/iostreams"
+	"github.com/vagawind/semiclaw/cli/internal/output"
+	"github.com/vagawind/semiclaw/cli/internal/text"
+	sdk "github.com/vagawind/semiclaw/client"
 )
 
 // kbListFields enumerates the fields surfaced for `--format json` discovery on
@@ -43,7 +43,7 @@ type ListService interface {
 	ListKnowledgeBases(ctx context.Context) ([]sdk.KnowledgeBase, error)
 }
 
-// NewCmdList builds `weknora kb list`.
+// NewCmdList builds `semiclaw kb list`.
 func NewCmdList(f *cmdutil.Factory) *cobra.Command {
 	opts := &ListOptions{}
 	cmd := &cobra.Command{
@@ -74,9 +74,9 @@ func NewCmdList(f *cmdutil.Factory) *cobra.Command {
 	cmd.Flags().IntVarP(&opts.Limit, "limit", "L", 30, "Maximum results to return — client-side cap; meta.has_more/total_count report the full size (1..10000)")
 	cmdutil.AddFormatFlag(cmd, kbListFields...)
 	cmdutil.SetAgentHelp(cmd, cmdutil.AgentHelp{
-		UsedFor:  "List knowledge bases in the current tenant. --format json emits the standard envelope {ok, data:[...], meta:{count}, profile}.",
-		Examples: []string{"weknora kb list --format json"},
-		Output:   "envelope.data is an array of KnowledgeBase objects with id, name, is_pinned, type, embedding_model_id; meta.total_count is the full tenant set and meta.has_more=true means --limit truncated it (raise --limit to get the rest)",
+		UsedFor:  "List knowledge bases in the current tenant. --format json emits the v0.7 envelope {ok, data:[...], meta:{count}, profile}.",
+		Examples: []string{"semiclaw kb list --format json"},
+		Output:   "envelope.data is an array of KnowledgeBase objects with id, name, is_pinned, type, embedding_model_id",
 	})
 	return cmd
 }

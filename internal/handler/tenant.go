@@ -12,13 +12,12 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 
-	"github.com/Tencent/WeKnora/internal/config"
-	"github.com/Tencent/WeKnora/internal/errors"
-	"github.com/Tencent/WeKnora/internal/handler/dto"
-	"github.com/Tencent/WeKnora/internal/logger"
-	"github.com/Tencent/WeKnora/internal/types"
-	"github.com/Tencent/WeKnora/internal/types/interfaces"
-	secutils "github.com/Tencent/WeKnora/internal/utils"
+	"github.com/vagawind/semiclaw/internal/config"
+	"github.com/vagawind/semiclaw/internal/errors"
+	"github.com/vagawind/semiclaw/internal/logger"
+	"github.com/vagawind/semiclaw/internal/types"
+	"github.com/vagawind/semiclaw/internal/types/interfaces"
+	secutils "github.com/vagawind/semiclaw/internal/utils"
 )
 
 // TenantHandler implements HTTP request handlers for tenant management
@@ -181,7 +180,7 @@ const (
 const defaultMaxOwnedTenantsPerUser = 10
 
 // resolveMaxOwnedTenantsPerUser returns the current cap, walking the
-// 3-tier resolver: system_settings DB row > WEKNORA_TENANT_MAX_OWNED_PER_USER
+// 3-tier resolver: system_settings DB row > SEMICLAW_TENANT_MAX_OWNED_PER_USER
 // env > config.Tenant.MaxOwnedPerUser (yaml) > defaultMaxOwnedTenantsPerUser.
 // We pre-compute the cfg-derived fallback so the SystemSettingService
 // receives a single int64 default — its 3-tier resolver layers DB and
@@ -194,7 +193,7 @@ func (h *TenantHandler) resolveMaxOwnedTenantsPerUser(ctx context.Context) int {
 	return int(h.systemSettingSvc.GetInt(
 		ctx,
 		"tenant.max_owned_per_user",
-		"WEKNORA_TENANT_MAX_OWNED_PER_USER",
+		"SEMICLAW_TENANT_MAX_OWNED_PER_USER",
 		fallback,
 	))
 }
@@ -324,7 +323,7 @@ func (h *TenantHandler) CreateTenant(c *gin.Context) {
 		gb := h.systemSettingSvc.GetInt(
 			ctx,
 			"tenant.default_storage_quota_gb",
-			"WEKNORA_TENANT_DEFAULT_STORAGE_QUOTA_GB",
+			"SEMICLAW_TENANT_DEFAULT_STORAGE_QUOTA_GB",
 			10,
 		)
 		if gb <= 0 {

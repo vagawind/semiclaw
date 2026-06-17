@@ -5,7 +5,7 @@ import (
 	"runtime/debug"
 
 	"github.com/sirupsen/logrus"
-	"github.com/Tencent/WeKnora/internal/logger"
+	"github.com/vagawind/semiclaw/internal/logger"
 	"github.com/gin-gonic/gin"
 )
 

@@ -7,8 +7,7 @@ import (
 	"os"
 	"testing"
 
-	secutils "github.com/Tencent/WeKnora/internal/utils"
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/types"
 )
 
 func TestMain(m *testing.M) {

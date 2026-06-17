@@ -1,7 +1,7 @@
 # Copyright 2025 Tencent
 # SPDX-License-Identifier: MIT
 #
-# WeKnora Helm Chart Values
+# SemiClaw Helm Chart Values
 #
 # Best Practices References:
 # - https://helm.sh/docs/chart_best_practices/values/
@@ -59,7 +59,7 @@ app:
 
   image:
     # -- Image repository
-    repository: wechatopenai/weknora-app
+    repository: vagawind/semiclaw-app
     # -- Image tag (defaults to Chart.appVersion if empty)
     tag: ""
     # -- Image pull policy
@@ -85,7 +85,7 @@ app:
     allowPrivilegeEscalation: false
 
   # -- Environment variables for the app container
-  # Ref: https://github.com/Tencent/WeKnora/blob/main/docker-compose.yml
+  # Ref: https://github.com/vagawind/semiclaw/blob/main/docker-compose.yml
   env:
     GIN_MODE: release
     # -- Retrieval driver: postgres, elasticsearch_v7, elasticsearch_v8, qdrant
@@ -149,7 +149,7 @@ frontend:
 
   image:
     # -- Image repository
-    repository: wechatopenai/weknora-ui
+    repository: vagawind/semiclaw-ui
     # -- Image tag
     tag: latest
     # -- Image pull policy
@@ -196,7 +196,7 @@ docreader:
 
   image:
     # -- Image repository
-    repository: wechatopenai/weknora-docreader
+    repository: vagawind/semiclaw-docreader
     # -- Image tag
     tag: latest
     # -- Image pull policy
@@ -349,7 +349,7 @@ ingress:
   className: nginx
 
   # -- Ingress hostname
-  host: weknora.example.com
+  host: semiclaw.example.com
 
   # -- TLS configuration
   tls:
@@ -373,7 +373,7 @@ ingress:
 # Use --set or external secret management (External Secrets Operator, Vault, etc.)
 #
 # Example installation:
-#   helm install weknora ./helm \
+#   helm install semiclaw ./helm \
 #     --set secrets.dbPassword=<secure-password> \
 #     --set secrets.redisPassword=<secure-password> \
 #     --set secrets.jwtSecret=<secure-random-string>
@@ -384,7 +384,7 @@ secrets:
   # -- Database password (REQUIRED: change in production)
   dbPassword: ""
   # -- Database name
-  dbName: weknora
+  dbName: semiclaw
   # -- Redis username (OPTIONAL: for Redis 6.0+ ACL)
   redisUsername: ""
   # -- Redis password (REQUIRED: change in production)
@@ -393,17 +393,10 @@ secrets:
   jwtSecret: ""
   # -- System AES-256 key for database field encryption (must be exactly 32 bytes).
   # Encrypts: tenants.api_key, model API keys, vector store credentials,
-  # web search provider keys, WeKnoraCloud.AppSecret.
-  # STRONGLY RECOMMENDED to set this explicitly in production. If left empty, a
-  # random 32-char value is generated on first install and reused on subsequent
-  # `helm upgrade` via Secret lookup. However, if the Secret is ever
-  # deleted/recreated (e.g. namespace recreated, GitOps prune, cluster rebuilt)
-  # a new random value will be generated and any data encrypted with the old
-  # key becomes UNRECOVERABLE (the UI will display ciphertext like "enc:v1:..."
-  # instead of plaintext).
-  # NOTE: TENANT_AES_KEY is deprecated since v0.4.0 — encryption now uses
-  # SYSTEM_AES_KEY exclusively. The Go app no longer reads TENANT_AES_KEY and
-  # it has been removed from the Secret.
+  # web search provider keys, SemiClawCloud.AppSecret.
+  # STRONGLY RECOMMENDED to set this explicitly in production. Same caveat as
+  # tenantAesKey: losing this key makes all encrypted fields unreadable
+  # (the UI will display ciphertext like "enc:v1:..." instead of plaintext).
   systemAesKey: ""
 
   # -- Use existing secret instead of creating one

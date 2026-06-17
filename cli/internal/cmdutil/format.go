@@ -10,8 +10,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/Tencent/WeKnora/cli/internal/format"
-	"github.com/Tencent/WeKnora/cli/internal/output"
+	"github.com/vagawind/semiclaw/cli/internal/format"
+	"github.com/vagawind/semiclaw/cli/internal/output"
 )
 
 // FormatMode is the resolved --format value (typed enum).
@@ -23,7 +23,7 @@ const (
 	FormatNDJSON FormatMode = "ndjson"
 )
 
-// DefaultFormatMode is the mode used when neither --format nor WEKNORA_FORMAT
+// DefaultFormatMode is the mode used when neither --format nor SEMICLAW_FORMAT
 // is set. Single source of truth shared by FormatOptions.ResolveDefault and
 // cmd.resolveFormatEarly (the early cobra-parse-error path) so the two cannot
 // drift on what "no flag" defaults to.
@@ -171,11 +171,8 @@ func (o *FormatOptions) ResolveDefault(tty bool) {
 	}
 }
 
-// FromEnv reads WEKNORA_FORMAT and applies it when Mode hasn't been set
-// by --format. ResolveDefault now calls this, so commands get the env var
-// applied automatically; explicit callers (e.g. the root PersistentPreRunE,
-// which resolves the error-envelope mode before any command RunE) remain
-// valid and idempotent.
+// FromEnv reads SEMICLAW_FORMAT and applies it when Mode hasn't been set
+// by --format. Call between CheckFormatFlag and ResolveDefault.
 //
 // Invalid env values are silently ignored (the user's --format on a
 // later invocation will still take precedence).
@@ -183,7 +180,7 @@ func (o *FormatOptions) FromEnv() {
 	if o.Mode != "" {
 		return
 	}
-	v := os.Getenv("WEKNORA_FORMAT")
+	v := os.Getenv("SEMICLAW_FORMAT")
 	switch v {
 	case "text", "json", "ndjson":
 		o.Mode = FormatMode(v)

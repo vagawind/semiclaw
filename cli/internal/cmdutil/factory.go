@@ -12,20 +12,20 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/Tencent/WeKnora/cli/internal/config"
-	"github.com/Tencent/WeKnora/cli/internal/iostreams"
-	"github.com/Tencent/WeKnora/cli/internal/projectlink"
-	"github.com/Tencent/WeKnora/cli/internal/prompt"
-	"github.com/Tencent/WeKnora/cli/internal/secrets"
-	sdk "github.com/Tencent/WeKnora/client"
+	"github.com/vagawind/semiclaw/cli/internal/config"
+	"github.com/vagawind/semiclaw/cli/internal/iostreams"
+	"github.com/vagawind/semiclaw/cli/internal/projectlink"
+	"github.com/vagawind/semiclaw/cli/internal/prompt"
+	"github.com/vagawind/semiclaw/cli/internal/secrets"
+	sdk "github.com/vagawind/semiclaw/client"
 )
 
 // Factory is the dependency container injected at command construction. Each
-// closure is lazy: --help / completion / `weknora version` must NOT trigger
+// closure is lazy: --help / completion / `semiclaw version` must NOT trigger
 // HTTP, keyring access, or filesystem I/O beyond the bare minimum.
 //
 // Four closures:
-//   - Config:   parses ~/.config/weknora/config.yaml (no network)
+//   - Config:   parses ~/.config/semiclaw/config.yaml (no network)
 //   - Client:   constructs the SDK client; only Secrets is sync.Once-cached,
 //     so callers should hold the returned *sdk.Client across
 //     multiple SDK calls within one invocation
@@ -39,7 +39,7 @@ import (
 // iostreams.IO. The bar to add a new closure is at least 2 commands sharing the
 // same dependency; resist factory bloat.
 //
-// Client returns a *sdk.Client (the WeKnora SDK). Commands that want narrow
+// Client returns a *sdk.Client (the SemiClaw SDK). Commands that want narrow
 // service interfaces declare them in their own files and let the real SDK
 // satisfy them implicitly via duck typing.
 type Factory struct {
@@ -112,7 +112,7 @@ func New() *Factory {
 // buildClient resolves the active profile, loads the credentials from secrets,
 // and constructs a *sdk.Client. Returns CodeAuthUnauthenticated when no
 // credentials are available so the user gets the right hint to run
-// `weknora auth login`.
+// `semiclaw auth login`.
 func buildClient(f *Factory) (*sdk.Client, error) {
 	// Env-credential injection: WEKNORA_TOKEN (bearer) or WEKNORA_API_KEY, with
 	// WEKNORA_HOST (or the active profile's host), builds an ephemeral client
@@ -127,24 +127,18 @@ func buildClient(f *Factory) (*sdk.Client, error) {
 	}
 	profileName := cfg.CurrentProfile
 	if profileName == "" {
-		// Zero-state: no profile exists at all. The generic auth.unauthenticated
-		// default retry_argv is `auth login`, but that ALSO fails here (it needs
-		// an active profile) — an agent that execs retry_argv would loop. Point
-		// hint + retry_argv at the real first step: create a profile.
-		return nil, NewError(CodeAuthUnauthenticated, "no profile configured").
-			WithHint("add one first: `weknora profile add <name> --host <url> --use`, then `weknora auth login` (or set WEKNORA_API_KEY + WEKNORA_HOST for headless use)").
-			WithRetryArgv([]string{"weknora", "profile", "add", "--help"})
+		return nil, NewError(CodeAuthUnauthenticated, "no current profile configured; run `semiclaw auth login` to set one up")
 	}
 	prof, ok := cfg.Profiles[profileName]
 	if !ok {
 		// If the user explicitly overrode the profile (via --profile flag or
-		// WEKNORA_PROFILE env), it's a bad argument - not a corrupt config file.
+		// SEMICLAW_PROFILE env), it's a bad argument - not a corrupt config file.
 		// The destructive "remove config.yaml" hint would be catastrophic for a typo.
 		if f.ProfileOverride != "" {
 			return nil, NewError(CodeInputInvalidArgument,
 				fmt.Sprintf("profile %q not configured", profileName)).
-				WithHint("list available profiles with `weknora profile list`").
-				WithRetryArgv([]string{"weknora", "profile", "list"})
+				WithHint("list available profiles with `semiclaw profile list`").
+				WithRetryCommand("semiclaw profile list")
 		}
 		// ProfileOverride is empty: config.CurrentProfile points at a missing entry.
 		// That's a genuinely corrupt config file.
@@ -273,8 +267,8 @@ func AddIgnoredKBFlag(cmd *cobra.Command) {
 // 4-level fallback chain (highest to lowest):
 //  1. --kb flag (kb_<...> id passed through; anything else resolved via
 //     ListKnowledgeBases as a name → id lookup)
-//  2. WEKNORA_KB_ID env (always an explicit id)
-//  3. .weknora/project.yaml (walk-up from cwd)
+//  2. SEMICLAW_KB_ID env (always an explicit id)
+//  3. .semiclaw/project.yaml (walk-up from cwd)
 //  4. error: kb required
 func (f *Factory) ResolveKB(cmd *cobra.Command) (string, error) {
 	if v, _ := cmd.Flags().GetString("kb"); v != "" {
@@ -287,27 +281,7 @@ func (f *Factory) ResolveKB(cmd *cobra.Command) (string, error) {
 		}
 		return ResolveKBNameToID(cmd.Context(), c, v)
 	}
-	return f.resolveKBFromEnvOrLink()
-}
-
-// ResolveKBLocal mirrors ResolveKB but never calls the SDK. When --kb is a
-// name (not a UUID) it returns the raw value as-is instead of looking up the
-// id server-side. Intended for dry-run paths where SDK side effects must be
-// avoided; the dry-run plan reports the user-supplied identifier verbatim,
-// and the live execution path resolves the name → id at call time.
-func (f *Factory) ResolveKBLocal(cmd *cobra.Command) (string, error) {
-	if v, _ := cmd.Flags().GetString("kb"); v != "" {
-		return v, nil
-	}
-	return f.resolveKBFromEnvOrLink()
-}
-
-// resolveKBFromEnvOrLink is the shared fallback tail of ResolveKB /
-// ResolveKBLocal (which differ only in how they treat the --kb flag): it reads
-// WEKNORA_KB_ID, then the walk-up .weknora/project.yaml link, and returns
-// CodeKBIDRequired when neither is set. Never calls the SDK.
-func (f *Factory) resolveKBFromEnvOrLink() (string, error) {
-	if v := os.Getenv("WEKNORA_KB_ID"); v != "" {
+	if v := os.Getenv("SEMICLAW_KB_ID"); v != "" {
 		return v, nil
 	}
 	cwd, err := os.Getwd()
@@ -325,7 +299,34 @@ func (f *Factory) resolveKBFromEnvOrLink() (string, error) {
 	return "", NewError(CodeKBIDRequired, "kb is required")
 }
 
-// ApplyLogLevel resolves --log-level / WEKNORA_LOG_LEVEL (in priority order)
+// ResolveKBLocal mirrors ResolveKB but never calls the SDK. When --kb is a
+// name (not a UUID) it returns the raw value as-is instead of looking up the
+// id server-side. Intended for dry-run paths where SDK side effects must be
+// avoided; the dry-run plan reports the user-supplied identifier verbatim,
+// and the live execution path resolves the name → id at call time.
+func (f *Factory) ResolveKBLocal(cmd *cobra.Command) (string, error) {
+	if v, _ := cmd.Flags().GetString("kb"); v != "" {
+		return v, nil
+	}
+	if v := os.Getenv("SEMICLAW_KB_ID"); v != "" {
+		return v, nil
+	}
+	cwd, err := os.Getwd()
+	if err == nil {
+		if path, found, derr := projectlink.Discover(cwd); derr == nil && found {
+			p, lerr := projectlink.Load(path)
+			if lerr != nil {
+				return "", Wrapf(CodeProjectLinkCorrupt, lerr, "read project link")
+			}
+			if p.KBID != "" {
+				return p.KBID, nil
+			}
+		}
+	}
+	return "", NewError(CodeKBIDRequired, "kb is required")
+}
+
+// ApplyLogLevel resolves --log-level / SEMICLAW_LOG_LEVEL (in priority order)
 // and applies the result to the SDK's debug logger. Intended to be called
 // from the root command's PersistentPreRunE so the resolved level is in
 // effect before any SDK call.
@@ -374,14 +375,14 @@ func refreshAccessToken(ctx context.Context, store secrets.Store, host, profileN
 
 // ActiveProfile returns the resolved profile name for this invocation:
 //  1. ProfileOverride (set by --profile flag in root PersistentPreRunE)
-//  2. WEKNORA_PROFILE env var
+//  2. SEMICLAW_PROFILE env var
 //  3. Config's CurrentProfile (the persisted active profile name)
 //  4. Empty string when nothing is configured (envelope omits the field).
 func (f *Factory) ActiveProfile() string {
 	if f.ProfileOverride != "" {
 		return f.ProfileOverride
 	}
-	if v := os.Getenv("WEKNORA_PROFILE"); v != "" {
+	if v := os.Getenv("SEMICLAW_PROFILE"); v != "" {
 		return v
 	}
 	if f.Config == nil {

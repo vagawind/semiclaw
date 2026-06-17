@@ -10,13 +10,12 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Tencent/WeKnora/internal/application/service"
-	"github.com/Tencent/WeKnora/internal/common"
-	"github.com/Tencent/WeKnora/internal/logger"
-	"github.com/Tencent/WeKnora/internal/middleware/asynqdl"
-	"github.com/Tencent/WeKnora/internal/tracing/langfuse"
-	"github.com/Tencent/WeKnora/internal/types"
-	"github.com/Tencent/WeKnora/internal/types/interfaces"
+	"github.com/vagawind/semiclaw/internal/application/service"
+	"github.com/vagawind/semiclaw/internal/logger"
+	"github.com/vagawind/semiclaw/internal/middleware/asynqdl"
+	"github.com/vagawind/semiclaw/internal/tracing/langfuse"
+	"github.com/vagawind/semiclaw/internal/types"
+	"github.com/vagawind/semiclaw/internal/types/interfaces"
 	"github.com/hibiken/asynq"
 	"go.uber.org/dig"
 )
@@ -54,11 +53,11 @@ type AsynqTaskParams struct {
 // raise the default to 500ms while still allowing operators to tune via env.
 const defaultRedisOpTimeoutMs = 500
 
-// readRedisOpTimeoutMs reads WEKNORA_REDIS_OP_TIMEOUT_MS, falling back to
+// readRedisOpTimeoutMs reads SEMICLAW_REDIS_OP_TIMEOUT_MS, falling back to
 // defaultRedisOpTimeoutMs on missing/invalid input. Kept as a separate helper
 // so both ReadTimeout and WriteTimeout share the same source of truth.
 func readRedisOpTimeoutMs() int {
-	if v := strings.TrimSpace(os.Getenv("WEKNORA_REDIS_OP_TIMEOUT_MS")); v != "" {
+	if v := strings.TrimSpace(os.Getenv("SEMICLAW_REDIS_OP_TIMEOUT_MS")); v != "" {
 		if parsed, err := strconv.Atoi(v); err == nil && parsed > 0 {
 			return parsed
 		}
@@ -122,17 +121,31 @@ func asynqRetryDelayFunc(n int, e error, t *asynq.Task) time.Duration {
 	return asynq.DefaultRetryDelayFunc(n, e, t)
 }
 
-// Worker defaults live in types so server construction and runtime reporting
-// cannot drift. The upstream budget is divided without increasing historical
-// total capacity; Wiki remains separate because its model-heavy workload has a
-// different provider-capacity profile.
+// defaultAsynqConcurrency is the worker pool size used when
+// SEMICLAW_ASYNQ_CONCURRENCY is unset. The asynq library defaults to
+// runtime.NumCPU(), which under-provisions during batch document uploads:
+// a single 4-core container can only process 4 documents in parallel even
+// when 100 are queued, so the queue wait time eats into each task's
+// DocumentProcessTimeout budget. 32 is a safer default for the I/O-bound
+// nature of doc parsing (most time is spent in DocReader / embedding RPCs,
+// not on local CPU).
+const defaultAsynqConcurrency = 32
 
 // newAsynqServer builds an asynq server bound to a specific queue set and
 // concurrency. Every worker pool uses it so Redis options and retry-delay
 // policy stay consistent across the topology.
 func newAsynqServer(concurrency int, queues map[string]int) *asynq.Server {
 	opt := getAsynqRedisClientOpt()
-	return asynq.NewServer(
+	concurrency := defaultAsynqConcurrency
+	if svc != nil {
+		n := svc.GetInt(context.Background(), "asynq.concurrency", "SEMICLAW_ASYNQ_CONCURRENCY", defaultAsynqConcurrency)
+		if n > 0 {
+			concurrency = int(n)
+		}
+	}
+	log.Printf("asynq server starting with concurrency=%d redis_op_timeout=%dms",
+		concurrency, readRedisOpTimeoutMs())
+	srv := asynq.NewServer(
 		opt,
 		asynq.Config{
 			Concurrency:    concurrency,

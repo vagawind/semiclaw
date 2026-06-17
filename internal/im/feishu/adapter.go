@@ -1,7 +1,4 @@
-// Package feishu implements the Feishu (飞书) IM adapter for WeKnora, and with
-// it the Lark adapter: Feishu and Lark are the same product on two isolated
-// clouds (open.feishu.cn and open.larksuite.com) sharing one API surface, so a
-// single implementation serves both. A Region picks the cloud — see region.go.
+// Package feishu implements the Feishu (飞书/Lark) IM adapter for SemiClaw.
 //
 // Bot flow:
 // 1. User sends a message to the bot (direct or @mention in group)
@@ -29,9 +26,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/Tencent/WeKnora/internal/im"
-	"github.com/Tencent/WeKnora/internal/logger"
-	"github.com/Tencent/WeKnora/internal/utils"
+	"github.com/vagawind/semiclaw/internal/im"
+	"github.com/vagawind/semiclaw/internal/logger"
 	"github.com/gin-gonic/gin"
 )
 
@@ -725,7 +721,7 @@ func buildStreamingCardJSON(region Region) string {
 		},
 		"header": map[string]interface{}{
 			"template": "blue",
-			"title":    map[string]string{"tag": "plain_text", "content": "WeKnora"},
+			"title":    map[string]string{"tag": "plain_text", "content": "SemiClaw"},
 		},
 		"body": map[string]interface{}{
 			"elements": []map[string]interface{}{

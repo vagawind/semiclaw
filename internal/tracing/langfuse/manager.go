@@ -5,13 +5,8 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"github.com/Tencent/WeKnora/internal/logger"
-	"go.opentelemetry.io/otel/attribute"
-	"go.opentelemetry.io/otel/propagation"
-	"go.opentelemetry.io/otel/sdk/resource"
-	sdktrace "go.opentelemetry.io/otel/sdk/trace"
-	"go.opentelemetry.io/otel/trace"
-	"go.opentelemetry.io/otel/trace/noop"
+	"github.com/vagawind/semiclaw/internal/logger"
+	"github.com/google/uuid"
 )
 
 // propagator is the W3C TraceContext propagator used to extract/inject

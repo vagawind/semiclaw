@@ -3,7 +3,7 @@ package container
 import (
 	"testing"
 
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/types"
 )
 
 func TestBuildMilvusClientConfig_UsesDatabaseName(t *testing.T) {

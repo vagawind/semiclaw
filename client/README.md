@@ -1,6 +1,6 @@
-# WeKnora HTTP 客户端
+# SemiClaw HTTP 客户端
 
-这个包提供了与WeKnora服务进行交互的客户端库，支持所有基于HTTP的接口调用，使其他模块更方便地集成WeKnora服务，无需直接编写HTTP请求代码。
+这个包提供了与SemiClaw服务进行交互的客户端库，支持所有基于HTTP的接口调用，使其他模块更方便地集成SemiClaw服务，无需直接编写HTTP请求代码。
 
 ## 主要功能
 
@@ -23,7 +23,7 @@
 ```go
 import (
     "context"
-    "github.com/Tencent/WeKnora/client"
+    "github.com/vagawind/semiclaw/client"
     "time"
 )
 

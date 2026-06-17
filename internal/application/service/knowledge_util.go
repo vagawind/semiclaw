@@ -12,11 +12,10 @@ import (
 	"strings"
 	"time"
 
-	filesvc "github.com/Tencent/WeKnora/internal/application/service/file"
-	"github.com/Tencent/WeKnora/internal/logger"
-	"github.com/Tencent/WeKnora/internal/types"
-	"github.com/Tencent/WeKnora/internal/types/interfaces"
-	secutils "github.com/Tencent/WeKnora/internal/utils"
+	filesvc "github.com/vagawind/semiclaw/internal/application/service/file"
+	"github.com/vagawind/semiclaw/internal/logger"
+	"github.com/vagawind/semiclaw/internal/types"
+	"github.com/vagawind/semiclaw/internal/types/interfaces"
 )
 
 // isValidFileType checks if a file type is supported
@@ -440,7 +439,7 @@ func downloadFileFromURL(ctx context.Context, fileURL string, payloadFileName, p
 	}
 
 	// Stream response body into a temp file, capped at maxFileURLSize
-	tmpFile, err := os.CreateTemp("", "weknora-fileurl-*")
+	tmpFile, err := os.CreateTemp("", "semiclaw-fileurl-*")
 	if err != nil {
 		return nil, fmt.Errorf("failed to create temp file: %w", err)
 	}

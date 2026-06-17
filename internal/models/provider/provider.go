@@ -6,7 +6,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/types"
 )
 
 // ProviderName 模型服务商名称
@@ -69,7 +69,7 @@ const (
 func AllProviders() []ProviderName {
 	return []ProviderName{
 		ProviderGeneric,
-		ProviderWeKnoraCloud,
+		ProviderSemiClawCloud,
 		ProviderAliyun,
 		ProviderZhipu,
 		ProviderVolcengine,
@@ -269,8 +269,8 @@ func DetectProvider(baseURL string) ProviderName {
 		return ProviderNvidia
 	case containsAny(baseURL, "api.novita.ai", "novita.ai"):
 		return ProviderNovita
-	case containsAny(baseURL, "weknora.weixin.qq.com"):
-		return ProviderWeKnoraCloud
+	case containsAny(baseURL, "semiclaw.weixin.qq.com"):
+		return ProviderSemiClawCloud
 	default:
 		return ProviderGeneric
 	}
