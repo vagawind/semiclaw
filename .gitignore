@@ -28,15 +28,15 @@ temp/
 logs/
 *.pid
 
-WeKnora
-WeKnora-lite
+SemiClaw
+SemiClaw-lite
 cmd/desktop/build/bin/
 /models/
 test/data/mswag.txt
 data/files/
-data/weknora.db
-data/weknora.db-wal
-data/weknora.db-shm
+data/semiclaw.db
+data/semiclaw.db-wal
+data/semiclaw.db-shm
 
 web/
 
@@ -45,7 +45,7 @@ web/
 /server
 frontend/.vite
 frontend/chrome-extension/
-WeKnora-Chrome-Extension
+SemiClaw-Chrome-Extension
 packages/protoc-3.19.4-linux-x86_64.zip
 
 Claude.md

@@ -10,9 +10,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Tencent/WeKnora/internal/application/service"
-	"github.com/Tencent/WeKnora/internal/middleware"
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/application/service"
+	"github.com/vagawind/semiclaw/internal/middleware"
+	"github.com/vagawind/semiclaw/internal/types"
 	"github.com/gin-gonic/gin"
 )
 
@@ -120,7 +120,7 @@ func (f *flowTenantSvc) SearchTenants(context.Context, string, uint64, int, int)
 func (f *flowTenantSvc) GetTenantByIDForUser(context.Context, uint64, string) (*types.Tenant, error) {
 	return f.tenant, nil
 }
-func (f *flowTenantSvc) GetWeKnoraCloudCredentials(context.Context) *types.WeKnoraCloudCredentials {
+func (f *flowTenantSvc) GetSemiClawCloudCredentials(context.Context) *types.SemiClawCloudCredentials {
 	return nil
 }
 

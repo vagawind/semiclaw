@@ -173,45 +173,45 @@
             </t-select>
           </div>
 
-          <!-- WeKnoraCloud 提示信息 -->
+          <!-- SemiClawCloud 提示信息 -->
           <template v-if="formData.provider === 'weknoracloud'">
             <!-- 凭证已配置 -->
-            <div v-if="wkcCredentialState === 'configured'" class="weknoracloud-hint weknoracloud-hint--ok">
+            <div v-if="wkcCredentialState === 'configured'" class="semiclawcloud-hint semiclawcloud-hint--ok">
               <t-icon name="check-circle-filled" class="hint-icon hint-icon--ok" />
               <div>
-                {{ $t('settings.weknoraCloud.modelHintConfigured') }}
+                {{ $t('settings.semiclawCloud.modelHintConfigured') }}
                 <a href="https://developers.weixin.qq.com/doc/aispeech/knowledge/atomic_capability/atomic_interface.html"
                   target="_blank" rel="noopener noreferrer" class="doc-link">
-                  {{ $t('settings.weknoraCloud.modelHintDocsLink') }}
+                  {{ $t('settings.semiclawCloud.modelHintDocsLink') }}
                   <t-icon name="link" class="link-icon" />
                 </a>
               </div>
             </div>
 
             <!-- 未配置 / 失效 -->
-            <div v-else-if="wkcCredentialState !== 'loading'" class="weknoracloud-hint weknoracloud-hint--warn">
+            <div v-else-if="wkcCredentialState !== 'loading'" class="semiclawcloud-hint semiclawcloud-hint--warn">
               <t-icon name="error-circle-filled" class="hint-icon hint-icon--warn" />
               <div style="flex: 1;">
                 <template v-if="wkcCredentialState === 'expired'">
-                  {{ $t('settings.weknoraCloud.credentialExpired') }}
+                  {{ $t('settings.semiclawCloud.credentialExpired') }}
                 </template>
                 <template v-else>
-                  {{ $t('settings.weknoraCloud.credentialUnconfigured') }}
+                  {{ $t('settings.semiclawCloud.credentialUnconfigured') }}
                 </template>
                 <div style="margin-top: 8px;">
-                  <t-button variant="text" size="small" @click="goToWeKnoraCloudSettings"
+                  <t-button variant="text" size="small" @click="goToSemiClawCloudSettings"
                     style="padding: 0; height: auto;">
                     <template #icon><t-icon name="jump" /></template>
-                    {{ $t('settings.weknoraCloud.goToSettings') }}
+                    {{ $t('settings.semiclawCloud.goToSettings') }}
                   </t-button>
                 </div>
               </div>
             </div>
 
             <!-- 加载中 -->
-            <div v-else class="weknoracloud-hint">
+            <div v-else class="semiclawcloud-hint">
               <t-icon name="loading" class="spinning hint-icon hint-icon--loading" />
-              <span>{{ $t('settings.weknoraCloud.checkingStatus') }}</span>
+              <span>{{ $t('settings.semiclawCloud.checkingStatus') }}</span>
             </div>
           </template>
 
@@ -387,7 +387,7 @@ import { ref, watch, computed, onUnmounted, nextTick } from 'vue'
 import { MessagePlugin, DialogPlugin } from 'tdesign-vue-next'
 import { checkOllamaModels, checkRemoteModel, testEmbeddingModel, checkRerankModel, checkASRModel, listOllamaModels, downloadOllamaModel, getDownloadProgress, checkOllamaStatus, listModelProviders, type OllamaModelInfo, type ModelProviderOption } from '@/api/initialization'
 import {
-  getWeKnoraCloudStatus,
+  getSemiClawCloudStatus,
   putModelCredentials,
   deleteModelCredentialField,
   type ModelCredentialField,
@@ -777,13 +777,13 @@ let downloadInterval: any = null
 const ollamaServiceStatus = ref<boolean | null>(null)
 const checkingOllamaStatus = ref(false)
 
-// WeKnoraCloud 凭证状态
+// SemiClawCloud 凭证状态
 const wkcCredentialState = ref<'loading' | 'unconfigured' | 'configured' | 'expired'>('loading')
 
 const checkWkcCredentialStatus = async () => {
   wkcCredentialState.value = 'loading'
   try {
-    const status = await getWeKnoraCloudStatus()
+    const status = await getSemiClawCloudStatus()
     if (status.needs_reinit) {
       wkcCredentialState.value = 'expired'
     } else if (status.has_models) {
@@ -796,7 +796,7 @@ const checkWkcCredentialStatus = async () => {
   }
 }
 
-const goToWeKnoraCloudSettings = async () => {
+const goToSemiClawCloudSettings = async () => {
   emit('update:visible', false)
   if (uiStore.showSettingsModal) {
     uiStore.closeSettings()
@@ -1025,7 +1025,7 @@ watch(() => props.visible, (val) => {
         formData.value.source = 'remote'
       }
 
-      // 如果当前 provider 是 WeKnoraCloud，检查凭证状态
+      // 如果当前 provider 是 SemiClawCloud，检查凭证状态
       if (formData.value.provider === 'weknoracloud') {
         checkWkcCredentialStatus()
       }
@@ -1092,7 +1092,7 @@ const handleProviderChange = (value: string) => {
     remoteAvailable.value = false
     remoteMessage.value = ''
   }
-  // WeKnoraCloud: 检查凭证状态
+  // SemiClawCloud: 检查凭证状态
   if (value === 'weknoracloud') {
     checkWkcCredentialStatus()
   }
@@ -1443,7 +1443,7 @@ const handleConfirm = async () => {
       return
     }
 
-    // 如果是 remote 类型且非 WeKnoraCloud，必须填写 baseUrl
+    // 如果是 remote 类型且非 SemiClawCloud，必须填写 baseUrl
     if (formData.value.source === 'remote' && formData.value.provider !== 'weknoracloud') {
       if (!formData.value.baseUrl || !formData.value.baseUrl.trim()) {
         MessagePlugin.warning(t('model.editor.remoteBaseUrlRequired'))
@@ -1900,8 +1900,8 @@ const handleCancel = () => {
   }
 }
 
-// WeKnoraCloud 提示信息
-.weknoracloud-hint {
+// SemiClawCloud 提示信息
+.semiclawcloud-hint {
   display: flex;
   align-items: flex-start;
   gap: 10px;

@@ -9,9 +9,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/Tencent/WeKnora/cli/internal/cmdutil"
-	"github.com/Tencent/WeKnora/cli/internal/iostreams"
-	sdk "github.com/Tencent/WeKnora/client"
+	"github.com/vagawind/semiclaw/cli/internal/cmdutil"
+	"github.com/vagawind/semiclaw/cli/internal/iostreams"
+	sdk "github.com/vagawind/semiclaw/client"
 )
 
 // CreateService is the narrow SDK surface this command depends on.
@@ -58,11 +58,11 @@ type createFlagSet struct {
 	kbsSet             bool
 }
 
-const agentCreateExample = `  weknora agent create "Support Bot" --model <model-id>
-  weknora agent create "Code Reviewer" --model <model-id> --system-prompt-file ./prompt.md --attach-kb kb_eng --attach-kb kb_arch
-  weknora agent create "From Template" --model <model-id> --from ag_existing
-  weknora agent create --generate-skeleton > my-agent.yaml
-  weknora agent create "Tuned" --model <model-id> --config-file ./my-agent.yaml`
+const agentCreateExample = `  semiclaw agent create "Support Bot" --model <model-id>
+  semiclaw agent create "Code Reviewer" --model <model-id> --system-prompt-file ./prompt.md --attach-kb kb_eng --attach-kb kb_arch
+  semiclaw agent create "From Template" --model <model-id> --from ag_existing
+  semiclaw agent create --generate-skeleton > my-agent.yaml
+  semiclaw agent create "Tuned" --model <model-id> --config-file ./my-agent.yaml`
 
 const agentCreateLong = `Create a new custom agent.
 
@@ -83,7 +83,7 @@ AI agents: writes a new resource server-side. Failure surfaces as a
 typed code on stderr: input.invalid_argument (bad flags, bad file, or
 bad model), resource.not_found (--from <missing>), auth.unauthenticated.`
 
-// NewCmdCreate builds `weknora agent create <name> --model <id>`.
+// NewCmdCreate builds `semiclaw agent create <name> --model <id>`.
 func NewCmdCreate(f *cmdutil.Factory) *cobra.Command {
 	opts := &CreateOptions{}
 	var systemPromptFile, configFile string

@@ -9,8 +9,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Tencent/WeKnora/internal/logger"
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/logger"
+	"github.com/vagawind/semiclaw/internal/types"
 	"github.com/mark3labs/mcp-go/client"
 	"github.com/mark3labs/mcp-go/client/transport"
 	"github.com/mark3labs/mcp-go/mcp"
@@ -207,7 +207,7 @@ func (c *mcpGoClient) Initialize(ctx context.Context) (*InitializeResult, error)
 			ProtocolVersion: mcp.LATEST_PROTOCOL_VERSION,
 			Capabilities:    mcp.ClientCapabilities{},
 			ClientInfo: mcp.Implementation{
-				Name:    "WeKnora",
+				Name:    "SemiClaw",
 				Version: "1.0.0",
 			},
 		},

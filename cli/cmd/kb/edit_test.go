@@ -9,10 +9,10 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/Tencent/WeKnora/cli/internal/cmdutil"
-	"github.com/Tencent/WeKnora/cli/internal/iostreams"
-	"github.com/Tencent/WeKnora/cli/internal/prompt"
-	sdk "github.com/Tencent/WeKnora/client"
+	"github.com/vagawind/semiclaw/cli/internal/cmdutil"
+	"github.com/vagawind/semiclaw/cli/internal/iostreams"
+	"github.com/vagawind/semiclaw/cli/internal/prompt"
+	sdk "github.com/vagawind/semiclaw/client"
 )
 
 // fakeEditSvc captures the (id, request) pair handed to UpdateKnowledgeBase
@@ -119,12 +119,12 @@ func TestEdit_NotFound(t *testing.T) {
 
 func stringPtr(s string) *string { return &s }
 
-// withRootHarnessKB wraps `weknora kb edit ...` under a synthetic root cmd
+// withRootHarnessKB wraps `semiclaw kb edit ...` under a synthetic root cmd
 // that registers the global persistent flags (mirrors addGlobalFlags in
 // cmd/root.go). Required because NewCmdEdit reads --yes and --format from the
 // persistent flag set.
 func withRootHarnessKB(edit *cobra.Command, args ...string) *cobra.Command {
-	root := &cobra.Command{Use: "weknora"}
+	root := &cobra.Command{Use: "semiclaw"}
 	pf := root.PersistentFlags()
 	pf.BoolP("yes", "y", false, "")
 	pf.String("format", "", "Output format: text | json | ndjson")

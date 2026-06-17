@@ -5,8 +5,8 @@ import (
 	"os"
 	"strings"
 
-	werrors "github.com/Tencent/WeKnora/internal/errors"
-	"github.com/Tencent/WeKnora/internal/types"
+	werrors "github.com/vagawind/semiclaw/internal/errors"
+	"github.com/vagawind/semiclaw/internal/types"
 )
 
 // ResolveProcessConfig merges KB defaults with per-upload overrides for the parse pipeline.

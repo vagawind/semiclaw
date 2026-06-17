@@ -10,9 +10,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Tencent/WeKnora/internal/logger"
-	"github.com/Tencent/WeKnora/internal/models/utils/ollama"
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/logger"
+	"github.com/vagawind/semiclaw/internal/models/utils/ollama"
+	"github.com/vagawind/semiclaw/internal/types"
 	ollamaapi "github.com/ollama/ollama/api"
 )
 

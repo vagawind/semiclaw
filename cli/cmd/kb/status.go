@@ -7,9 +7,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/Tencent/WeKnora/cli/internal/cmdutil"
-	"github.com/Tencent/WeKnora/cli/internal/iostreams"
-	sdk "github.com/Tencent/WeKnora/client"
+	"github.com/vagawind/semiclaw/cli/internal/cmdutil"
+	"github.com/vagawind/semiclaw/cli/internal/iostreams"
+	sdk "github.com/vagawind/semiclaw/client"
 )
 
 // StatusResult is the health-oriented response for `kb status <id>`.
@@ -34,7 +34,7 @@ var kbStatusFields = []string{
 	"is_processing", "processing_count",
 }
 
-// NewCmdStatus builds `weknora kb status <id>`.
+// NewCmdStatus builds `semiclaw kb status <id>`.
 func NewCmdStatus(f *cmdutil.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "status <kb-id>",
@@ -44,12 +44,12 @@ func NewCmdStatus(f *cmdutil.Factory) *cobra.Command {
 1 HTTP call:
   reachable / knowledge_count / chunk_count / is_processing / processing_count
 
-For deep verification including failed_count, use 'weknora kb check <id>'
+For deep verification including failed_count, use 'semiclaw kb check <id>'
 (1 + N HTTP, pages the doc list with parse_status=failed).
 
-For full metadata (config / pinned / tenant), use 'weknora kb view <id>'.`,
-		Example: `  weknora kb status kb_abc
-  weknora kb status kb_abc --format json`,
+For full metadata (config / pinned / tenant), use 'semiclaw kb view <id>'.`,
+		Example: `  semiclaw kb status kb_abc
+  semiclaw kb status kb_abc --format json`,
 		Args: cobra.ExactArgs(1),
 		RunE: func(c *cobra.Command, args []string) error {
 			fopts, err := cmdutil.CheckFormatFlag(c)
@@ -72,7 +72,7 @@ For full metadata (config / pinned / tenant), use 'weknora kb view <id>'.`,
 	cmdutil.SetAgentHelp(cmd, cmdutil.AgentHelp{
 		UsedFor:       "shallow health probe of a knowledge base (one HTTP call): reachability, no failed-doc aggregation",
 		RequiredFlags: []string{"<kb-id> (positional)"},
-		Examples:      []string{"weknora kb status kb_abc"},
+		Examples:      []string{"semiclaw kb status kb_abc"},
 		Output:        "envelope.data is {id, reachable, ...}; use `kb check` for deep failed-doc aggregation",
 	})
 	return cmd

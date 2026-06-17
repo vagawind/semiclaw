@@ -1,6 +1,6 @@
 basePath: /api/v1
 definitions:
-  github_com_Tencent_WeKnora_internal_application_service.WikiLintIssue:
+  github_com_vagawind_semiclaw_internal_application_service.WikiLintIssue:
     properties:
       auto_fixable:
         type: boolean
@@ -9,7 +9,7 @@ definitions:
       page_slug:
         type: string
       severity:
-        $ref: '#/definitions/github_com_Tencent_WeKnora_internal_application_service.WikiLintIssueSeverity'
+        $ref: '#/definitions/github_com_vagawind_semiclaw_internal_application_service.WikiLintIssueSeverity'
       target_slug:
         description: |-
           TargetSlug identifies the other page involved in the issue (e.g. the
@@ -17,9 +17,9 @@ definitions:
           the structured field used by AutoFix instead of parsing Description.
         type: string
       type:
-        $ref: '#/definitions/github_com_Tencent_WeKnora_internal_application_service.WikiLintIssueType'
+        $ref: '#/definitions/github_com_vagawind_semiclaw_internal_application_service.WikiLintIssueType'
     type: object
-  github_com_Tencent_WeKnora_internal_application_service.WikiLintIssueSeverity:
+  github_com_vagawind_semiclaw_internal_application_service.WikiLintIssueSeverity:
     enum:
     - info
     - warning
@@ -29,7 +29,7 @@ definitions:
     - SeverityInfo
     - SeverityWarning
     - SeverityError
-  github_com_Tencent_WeKnora_internal_application_service.WikiLintIssueType:
+  github_com_vagawind_semiclaw_internal_application_service.WikiLintIssueType:
     enum:
     - orphan_page
     - broken_link
@@ -45,23 +45,23 @@ definitions:
     - LintIssueMissingCrossRef
     - LintIssueEmptyContent
     - LintIssueDuplicateSlug
-  github_com_Tencent_WeKnora_internal_application_service.WikiLintReport:
+  github_com_vagawind_semiclaw_internal_application_service.WikiLintReport:
     properties:
       health_score:
         description: 0-100
         type: integer
       issues:
         items:
-          $ref: '#/definitions/github_com_Tencent_WeKnora_internal_application_service.WikiLintIssue'
+          $ref: '#/definitions/github_com_vagawind_semiclaw_internal_application_service.WikiLintIssue'
         type: array
       knowledge_base_id:
         type: string
       stats:
-        $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.WikiStats'
+        $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.WikiStats'
       summary:
         type: string
     type: object
-  github_com_Tencent_WeKnora_internal_datasource.ConnectorMetadata:
+  github_com_vagawind_semiclaw_internal_datasource.ConnectorMetadata:
     properties:
       auth_type:
         description: '"oauth2", "api_key", "token", etc.'
@@ -83,15 +83,15 @@ definitions:
       type:
         type: string
     type: object
-  github_com_Tencent_WeKnora_internal_errors.AppError:
+  github_com_vagawind_semiclaw_internal_errors.AppError:
     properties:
       code:
-        $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.ErrorCode'
+        $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.ErrorCode'
       details: {}
       message:
         type: string
     type: object
-  github_com_Tencent_WeKnora_internal_errors.ErrorCode:
+  github_com_vagawind_semiclaw_internal_errors.ErrorCode:
     enum:
     - 1000
     - 1001
@@ -139,7 +139,7 @@ definitions:
     - ErrAgentInvalidTemperature
     - ErrVectorStoreBindingInvalid
     - ErrVectorStoreUnavailable
-  github_com_Tencent_WeKnora_internal_infrastructure_chunker.DocProfile:
+  github_com_vagawind_semiclaw_internal_infrastructure_chunker.DocProfile:
     properties:
       all_caps_short_line_count:
         type: integer
@@ -188,7 +188,7 @@ definitions:
       visual_sep_count:
         type: integer
     type: object
-  github_com_Tencent_WeKnora_internal_infrastructure_chunker.StrategyTier:
+  github_com_vagawind_semiclaw_internal_infrastructure_chunker.StrategyTier:
     enum:
     - heading
     - heuristic
@@ -198,14 +198,14 @@ definitions:
     - TierHeading
     - TierHeuristic
     - TierLegacy
-  github_com_Tencent_WeKnora_internal_infrastructure_chunker.TierRejection:
+  github_com_vagawind_semiclaw_internal_infrastructure_chunker.TierRejection:
     properties:
       reason:
         type: string
       tier:
-        $ref: '#/definitions/github_com_Tencent_WeKnora_internal_infrastructure_chunker.StrategyTier'
+        $ref: '#/definitions/github_com_vagawind_semiclaw_internal_infrastructure_chunker.StrategyTier'
     type: object
-  github_com_Tencent_WeKnora_internal_types.ASRConfig:
+  github_com_vagawind_semiclaw_internal_types.ASRConfig:
     properties:
       enabled:
         type: boolean
@@ -215,7 +215,7 @@ definitions:
       model_id:
         type: string
     type: object
-  github_com_Tencent_WeKnora_internal_types.AgentStep:
+  github_com_vagawind_semiclaw_internal_types.AgentStep:
     properties:
       iteration:
         description: Iteration number (0-indexed)
@@ -236,10 +236,10 @@ definitions:
       tool_calls:
         description: Tools called in this step (Act phase)
         items:
-          $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.ToolCall'
+          $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.ToolCall'
         type: array
     type: object
-  github_com_Tencent_WeKnora_internal_types.AnswerStrategy:
+  github_com_vagawind_semiclaw_internal_types.AnswerStrategy:
     enum:
     - all
     - random
@@ -247,7 +247,7 @@ definitions:
     x-enum-varnames:
     - AnswerStrategyAll
     - AnswerStrategyRandom
-  github_com_Tencent_WeKnora_internal_types.AuditAction:
+  github_com_vagawind_semiclaw_internal_types.AuditAction:
     enum:
     - rbac.member_added
     - rbac.member_removed
@@ -289,10 +289,10 @@ definitions:
     - AuditActionSystemSettingChanged
     - AuditActionSystemAdminPromoted
     - AuditActionSystemAdminRevoked
-  github_com_Tencent_WeKnora_internal_types.AuditLog:
+  github_com_vagawind_semiclaw_internal_types.AuditLog:
     properties:
       action:
-        $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.AuditAction'
+        $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.AuditAction'
       actor_role:
         type: string
       actor_user_id:
@@ -306,7 +306,7 @@ definitions:
       id:
         type: integer
       outcome:
-        $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.AuditOutcome'
+        $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.AuditOutcome'
       request_method:
         type: string
       request_path:
@@ -320,7 +320,7 @@ definitions:
       tenant_id:
         type: integer
     type: object
-  github_com_Tencent_WeKnora_internal_types.AuditOutcome:
+  github_com_vagawind_semiclaw_internal_types.AuditOutcome:
     enum:
     - success
     - denied
@@ -328,7 +328,7 @@ definitions:
     x-enum-varnames:
     - AuditOutcomeSuccess
     - AuditOutcomeDenied
-  github_com_Tencent_WeKnora_internal_types.COSEngineConfig:
+  github_com_vagawind_semiclaw_internal_types.COSEngineConfig:
     properties:
       app_id:
         type: string
@@ -343,7 +343,7 @@ definitions:
       secret_key:
         type: string
     type: object
-  github_com_Tencent_WeKnora_internal_types.ChatHistoryConfig:
+  github_com_vagawind_semiclaw_internal_types.ChatHistoryConfig:
     properties:
       embedding_model_id:
         description: |-
@@ -359,7 +359,7 @@ definitions:
           This is set internally when the feature is first enabled; users should not set this directly.
         type: string
     type: object
-  github_com_Tencent_WeKnora_internal_types.ChunkingConfig:
+  github_com_vagawind_semiclaw_internal_types.ChunkingConfig:
     properties:
       child_chunk_size:
         description: |-
@@ -395,7 +395,7 @@ definitions:
           ParserEngineRules configures which parser engine to use for each file type.
           When empty, the builtin engine is used for all types.
         items:
-          $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.ParserEngineRule'
+          $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.ParserEngineRule'
         type: array
       separators:
         description: Separators
@@ -415,7 +415,7 @@ definitions:
           as a character count.
         type: integer
     type: object
-  github_com_Tencent_WeKnora_internal_types.ConnectionConfig:
+  github_com_vagawind_semiclaw_internal_types.ConnectionConfig:
     properties:
       addr:
         description: Common
@@ -472,7 +472,7 @@ definitions:
           Auto-populated by TestConnection on successful connectivity check.
         type: string
     type: object
-  github_com_Tencent_WeKnora_internal_types.ContextCompressionStrategy:
+  github_com_vagawind_semiclaw_internal_types.ContextCompressionStrategy:
     enum:
     - sliding_window
     - smart
@@ -480,11 +480,11 @@ definitions:
     x-enum-varnames:
     - ContextCompressionSlidingWindow
     - ContextCompressionSmart
-  github_com_Tencent_WeKnora_internal_types.ContextConfig:
+  github_com_vagawind_semiclaw_internal_types.ContextConfig:
     properties:
       compression_strategy:
         allOf:
-        - $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.ContextCompressionStrategy'
+        - $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.ContextCompressionStrategy'
         description: 'Compression strategy: "sliding_window" or "smart"'
       max_tokens:
         description: Maximum tokens allowed in LLM context
@@ -498,7 +498,7 @@ definitions:
         description: 'Summarize threshold: number of messages before summarization'
         type: integer
     type: object
-  github_com_Tencent_WeKnora_internal_types.CreateOrganizationRequest:
+  github_com_vagawind_semiclaw_internal_types.CreateOrganizationRequest:
     properties:
       avatar:
         description: optional avatar URL
@@ -520,12 +520,12 @@ definitions:
     required:
     - name
     type: object
-  github_com_Tencent_WeKnora_internal_types.CredentialsConfig:
+  github_com_vagawind_semiclaw_internal_types.CredentialsConfig:
     properties:
-      weknoracloud:
-        $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.WeKnoraCloudCredentials'
+      semiclawcloud:
+        $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.SemiClawCloudCredentials'
     type: object
-  github_com_Tencent_WeKnora_internal_types.CustomAgentConfig:
+  github_com_vagawind_semiclaw_internal_types.CustomAgentConfig:
     properties:
       agent_mode:
         description: |-
@@ -769,7 +769,7 @@ definitions:
           If empty, the tenant's default provider (is_default=true) is used.
         type: string
     type: object
-  github_com_Tencent_WeKnora_internal_types.DataSource:
+  github_com_vagawind_semiclaw_internal_types.DataSource:
     properties:
       config:
         description: |-
@@ -812,7 +812,7 @@ definitions:
         type: array
       latest_sync_log:
         allOf:
-        - $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.SyncLog'
+        - $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.SyncLog'
         description: Latest sync log (not stored in DB, populated on query)
       name:
         description: User-friendly name
@@ -846,7 +846,7 @@ definitions:
         description: Last update timestamp
         type: string
     type: object
-  github_com_Tencent_WeKnora_internal_types.EmbeddingParameters:
+  github_com_vagawind_semiclaw_internal_types.EmbeddingParameters:
     properties:
       dimension:
         type: integer
@@ -855,17 +855,17 @@ definitions:
       truncate_prompt_tokens:
         type: integer
     type: object
-  github_com_Tencent_WeKnora_internal_types.ExtractConfig:
+  github_com_vagawind_semiclaw_internal_types.ExtractConfig:
     properties:
       enabled:
         type: boolean
       nodes:
         items:
-          $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.GraphNode'
+          $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.GraphNode'
         type: array
       relations:
         items:
-          $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.GraphRelation'
+          $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.GraphRelation'
         type: array
       tags:
         items:
@@ -874,14 +874,14 @@ definitions:
       text:
         type: string
     type: object
-  github_com_Tencent_WeKnora_internal_types.FAQBatchUpsertPayload:
+  github_com_vagawind_semiclaw_internal_types.FAQBatchUpsertPayload:
     properties:
       dry_run:
         description: 仅验证，不实际导入
         type: boolean
       entries:
         items:
-          $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.FAQEntryPayload'
+          $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.FAQEntryPayload'
         type: array
       knowledge_id:
         type: string
@@ -896,23 +896,23 @@ definitions:
     required:
     - entries
     type: object
-  github_com_Tencent_WeKnora_internal_types.FAQConfig:
+  github_com_vagawind_semiclaw_internal_types.FAQConfig:
     properties:
       index_mode:
-        $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.FAQIndexMode'
+        $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.FAQIndexMode'
       question_index_mode:
-        $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.FAQQuestionIndexMode'
+        $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.FAQQuestionIndexMode'
     type: object
-  github_com_Tencent_WeKnora_internal_types.FAQEntryFieldsBatchUpdate:
+  github_com_vagawind_semiclaw_internal_types.FAQEntryFieldsBatchUpdate:
     properties:
       by_id:
         additionalProperties:
-          $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.FAQEntryFieldsUpdate'
+          $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.FAQEntryFieldsUpdate'
         description: ByID 按条目ID更新，key为条目ID (seq_id)
         type: object
       by_tag:
         additionalProperties:
-          $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.FAQEntryFieldsUpdate'
+          $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.FAQEntryFieldsUpdate'
         description: ByTag 按Tag批量更新，key为TagID (seq_id)
         type: object
       exclude_ids:
@@ -921,7 +921,7 @@ definitions:
           type: integer
         type: array
     type: object
-  github_com_Tencent_WeKnora_internal_types.FAQEntryFieldsUpdate:
+  github_com_vagawind_semiclaw_internal_types.FAQEntryFieldsUpdate:
     properties:
       is_enabled:
         type: boolean
@@ -930,10 +930,10 @@ definitions:
       tag_id:
         type: integer
     type: object
-  github_com_Tencent_WeKnora_internal_types.FAQEntryPayload:
+  github_com_vagawind_semiclaw_internal_types.FAQEntryPayload:
     properties:
       answer_strategy:
-        $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.AnswerStrategy'
+        $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.AnswerStrategy'
       answers:
         items:
           type: string
@@ -962,7 +962,7 @@ definitions:
     required:
     - standard_question
     type: object
-  github_com_Tencent_WeKnora_internal_types.FAQIndexMode:
+  github_com_vagawind_semiclaw_internal_types.FAQIndexMode:
     enum:
     - question_only
     - question_answer
@@ -970,7 +970,7 @@ definitions:
     x-enum-varnames:
     - FAQIndexModeQuestionOnly
     - FAQIndexModeQuestionAnswer
-  github_com_Tencent_WeKnora_internal_types.FAQQuestionIndexMode:
+  github_com_vagawind_semiclaw_internal_types.FAQQuestionIndexMode:
     enum:
     - combined
     - separate
@@ -978,7 +978,7 @@ definitions:
     x-enum-varnames:
     - FAQQuestionIndexModeCombined
     - FAQQuestionIndexModeSeparate
-  github_com_Tencent_WeKnora_internal_types.FAQSearchRequest:
+  github_com_vagawind_semiclaw_internal_types.FAQSearchRequest:
     properties:
       first_priority_tag_ids:
         description: 第一优先级标签ID列表，限定命中范围，优先级最高
@@ -1002,7 +1002,7 @@ definitions:
     required:
     - query_text
     type: object
-  github_com_Tencent_WeKnora_internal_types.GraphNode:
+  github_com_vagawind_semiclaw_internal_types.GraphNode:
     properties:
       attributes:
         items:
@@ -1015,7 +1015,7 @@ definitions:
       name:
         type: string
     type: object
-  github_com_Tencent_WeKnora_internal_types.GraphRelation:
+  github_com_vagawind_semiclaw_internal_types.GraphRelation:
     properties:
       node1:
         type: string
@@ -1024,13 +1024,13 @@ definitions:
       type:
         type: string
     type: object
-  github_com_Tencent_WeKnora_internal_types.ImageProcessingConfig:
+  github_com_vagawind_semiclaw_internal_types.ImageProcessingConfig:
     properties:
       model_id:
         description: Model ID
         type: string
     type: object
-  github_com_Tencent_WeKnora_internal_types.IndexConfig:
+  github_com_vagawind_semiclaw_internal_types.IndexConfig:
     properties:
       buckets_num:
         description: 'Doris: number of buckets per table (DISTRIBUTED BY HASH ...
@@ -1086,7 +1086,7 @@ definitions:
         description: 'Milvus: number of shards per collection (CreateCollection)'
         type: integer
     type: object
-  github_com_Tencent_WeKnora_internal_types.IndexingStrategy:
+  github_com_vagawind_semiclaw_internal_types.IndexingStrategy:
     properties:
       graph_enabled:
         description: GraphEnabled enables knowledge graph entity/relation extraction
@@ -1101,7 +1101,7 @@ definitions:
         description: WikiEnabled enables automatic wiki page generation from documents
         type: boolean
     type: object
-  github_com_Tencent_WeKnora_internal_types.InviteMemberRequest:
+  github_com_vagawind_semiclaw_internal_types.InviteMemberRequest:
     properties:
       representative_user_id:
         description: |-
@@ -1111,7 +1111,7 @@ definitions:
         type: string
       role:
         allOf:
-        - $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.OrgMemberRole'
+        - $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.OrgMemberRole'
         description: 'Role to assign: admin/editor/viewer'
       tenant_id:
         description: TenantID is the tenant to enrol as an org member. Preferred field.
@@ -1125,7 +1125,7 @@ definitions:
     required:
     - role
     type: object
-  github_com_Tencent_WeKnora_internal_types.JoinByOrganizationIDRequest:
+  github_com_vagawind_semiclaw_internal_types.JoinByOrganizationIDRequest:
     properties:
       message:
         description: Optional message for join request
@@ -1135,12 +1135,12 @@ definitions:
         type: string
       role:
         allOf:
-        - $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.OrgMemberRole'
+        - $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.OrgMemberRole'
         description: 'Optional: requested role (admin/editor/viewer); default viewer'
     required:
     - organization_id
     type: object
-  github_com_Tencent_WeKnora_internal_types.JoinOrganizationRequest:
+  github_com_vagawind_semiclaw_internal_types.JoinOrganizationRequest:
     properties:
       invite_code:
         maxLength: 32
@@ -1149,7 +1149,7 @@ definitions:
     required:
     - invite_code
     type: object
-  github_com_Tencent_WeKnora_internal_types.KBCloneTaskStatus:
+  github_com_vagawind_semiclaw_internal_types.KBCloneTaskStatus:
     enum:
     - pending
     - processing
@@ -1161,7 +1161,7 @@ definitions:
     - KBCloneStatusProcessing
     - KBCloneStatusCompleted
     - KBCloneStatusFailed
-  github_com_Tencent_WeKnora_internal_types.KS3EngineConfig:
+  github_com_vagawind_semiclaw_internal_types.KS3EngineConfig:
     properties:
       access_key:
         type: string
@@ -1176,7 +1176,7 @@ definitions:
       secret_key:
         type: string
     type: object
-  github_com_Tencent_WeKnora_internal_types.Knowledge:
+  github_com_vagawind_semiclaw_internal_types.Knowledge:
     properties:
       channel:
         description: Channel indicates through which channel the knowledge was ingested
@@ -1273,18 +1273,18 @@ definitions:
         description: Last updated time of the knowledge
         type: string
     type: object
-  github_com_Tencent_WeKnora_internal_types.KnowledgeBase:
+  github_com_vagawind_semiclaw_internal_types.KnowledgeBase:
     properties:
       asr_config:
         allOf:
-        - $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.ASRConfig'
+        - $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.ASRConfig'
         description: ASR config (Automatic Speech Recognition)
       chunk_count:
         description: Chunk count (not stored in database, calculated on query)
         type: integer
       chunking_config:
         allOf:
-        - $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.ChunkingConfig'
+        - $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.ChunkingConfig'
         description: Chunking configuration
       created_at:
         description: Creation time of the knowledge base
@@ -1315,11 +1315,11 @@ definitions:
         type: string
       extract_config:
         allOf:
-        - $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.ExtractConfig'
+        - $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.ExtractConfig'
         description: Extract config
       faq_config:
         allOf:
-        - $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.FAQConfig'
+        - $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.FAQConfig'
         description: FAQConfig stores FAQ specific configuration such as indexing
           strategy
       id:
@@ -1327,11 +1327,11 @@ definitions:
         type: string
       image_processing_config:
         allOf:
-        - $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.ImageProcessingConfig'
+        - $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.ImageProcessingConfig'
         description: Image processing configuration
       indexing_strategy:
         allOf:
-        - $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.IndexingStrategy'
+        - $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.IndexingStrategy'
         description: |-
           IndexingStrategy controls which indexing pipelines are active for this knowledge base.
           Pipelines: vector search, keyword search, wiki generation, knowledge graph extraction.
@@ -1371,7 +1371,7 @@ definitions:
         type: integer
       question_generation_config:
         allOf:
-        - $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.QuestionGenerationConfig'
+        - $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.QuestionGenerationConfig'
         description: QuestionGenerationConfig stores question generation configuration
           for document knowledge bases
       share_count:
@@ -1380,12 +1380,12 @@ definitions:
         type: integer
       storage_config:
         allOf:
-        - $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.StorageConfig'
+        - $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.StorageConfig'
         description: 'Deprecated: legacy COS config column. Kept for backward compatibility
           with old data.'
       storage_provider_config:
         allOf:
-        - $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.StorageProviderConfig'
+        - $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.StorageProviderConfig'
         description: 'Storage provider config (new): only stores provider selection;
           credentials from tenant StorageEngineConfig'
       summary_model_id:
@@ -1411,40 +1411,40 @@ definitions:
         type: string
       vlm_config:
         allOf:
-        - $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.VLMConfig'
+        - $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.VLMConfig'
         description: VLM config
       wiki_config:
         allOf:
-        - $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.WikiConfig'
+        - $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.WikiConfig'
         description: WikiConfig stores wiki-specific configuration (only for wiki
           type knowledge bases)
     type: object
-  github_com_Tencent_WeKnora_internal_types.KnowledgeBaseConfig:
+  github_com_vagawind_semiclaw_internal_types.KnowledgeBaseConfig:
     properties:
       chunking_config:
         allOf:
-        - $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.ChunkingConfig'
+        - $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.ChunkingConfig'
         description: Chunking configuration
       faq_config:
         allOf:
-        - $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.FAQConfig'
+        - $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.FAQConfig'
         description: FAQ configuration (only for FAQ type knowledge bases)
       image_processing_config:
         allOf:
-        - $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.ImageProcessingConfig'
+        - $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.ImageProcessingConfig'
         description: Image processing configuration
       indexing_strategy:
         allOf:
-        - $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.IndexingStrategy'
+        - $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.IndexingStrategy'
         description: |-
           IndexingStrategy controls which indexing pipelines are active.
           nil means "no change" when updating (preserves existing strategy).
       wiki_config:
         allOf:
-        - $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.WikiConfig'
+        - $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.WikiConfig'
         description: Wiki configuration (only for wiki-enabled knowledge bases)
     type: object
-  github_com_Tencent_WeKnora_internal_types.KnowledgeBaseShareResponse:
+  github_com_vagawind_semiclaw_internal_types.KnowledgeBaseShareResponse:
     properties:
       chunk_count:
         type: integer
@@ -1482,7 +1482,7 @@ definitions:
       source_tenant_id:
         type: integer
     type: object
-  github_com_Tencent_WeKnora_internal_types.KnowledgeMoveProgress:
+  github_com_vagawind_semiclaw_internal_types.KnowledgeMoveProgress:
     properties:
       created_at:
         description: 任务创建时间
@@ -1505,7 +1505,7 @@ definitions:
       source_kb_id:
         type: string
       status:
-        $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.KBCloneTaskStatus'
+        $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.KBCloneTaskStatus'
       target_kb_id:
         type: string
       task_id:
@@ -1517,64 +1517,64 @@ definitions:
         description: 最后更新时间
         type: integer
     type: object
-  github_com_Tencent_WeKnora_internal_types.KnowledgeProcessOverrides:
+  github_com_vagawind_semiclaw_internal_types.KnowledgeProcessOverrides:
     properties:
       asr_config:
-        $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.ASRConfig'
+        $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.ASRConfig'
       chunking_config:
-        $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.ChunkingConfig'
+        $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.ChunkingConfig'
       enable_multimodel:
         type: boolean
       extract_config:
-        $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.ExtractConfig'
+        $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.ExtractConfig'
       graph_enabled:
         type: boolean
       parser_engine_rules:
         items:
-          $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.ParserEngineRule'
+          $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.ParserEngineRule'
         type: array
       question_generation_config:
-        $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.QuestionGenerationConfig'
+        $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.QuestionGenerationConfig'
       vlm_config:
-        $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.VLMConfig'
+        $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.VLMConfig'
     type: object
-  github_com_Tencent_WeKnora_internal_types.ListMembersResponse:
+  github_com_vagawind_semiclaw_internal_types.ListMembersResponse:
     properties:
       members:
         items:
-          $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.OrganizationMemberResponse'
+          $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.OrganizationMemberResponse'
         type: array
       total:
         type: integer
     type: object
-  github_com_Tencent_WeKnora_internal_types.ListOrganizationsResponse:
+  github_com_vagawind_semiclaw_internal_types.ListOrganizationsResponse:
     properties:
       organizations:
         items:
-          $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.OrganizationResponse'
+          $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.OrganizationResponse'
         type: array
       resource_counts:
         allOf:
-        - $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.ResourceCountsByOrgResponse'
+        - $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.ResourceCountsByOrgResponse'
         description: 各空间内知识库/智能体数量，供列表侧栏展示
       total:
         type: integer
     type: object
-  github_com_Tencent_WeKnora_internal_types.ListSharesResponse:
+  github_com_vagawind_semiclaw_internal_types.ListSharesResponse:
     properties:
       shares:
         items:
-          $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.KnowledgeBaseShareResponse'
+          $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.KnowledgeBaseShareResponse'
         type: array
       total:
         type: integer
     type: object
-  github_com_Tencent_WeKnora_internal_types.LocalEngineConfig:
+  github_com_vagawind_semiclaw_internal_types.LocalEngineConfig:
     properties:
       path_prefix:
         type: string
     type: object
-  github_com_Tencent_WeKnora_internal_types.LoginRequest:
+  github_com_vagawind_semiclaw_internal_types.LoginRequest:
     properties:
       email:
         type: string
@@ -1585,11 +1585,11 @@ definitions:
     - email
     - password
     type: object
-  github_com_Tencent_WeKnora_internal_types.LoginResponse:
+  github_com_vagawind_semiclaw_internal_types.LoginResponse:
     properties:
       active_tenant:
         allOf:
-        - $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.Tenant'
+        - $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.Tenant'
         description: |-
           ActiveTenant is the tenant whose ID is encoded in the issued JWT;
           future requests are scoped to it until the client calls /auth/switch-tenant.
@@ -1604,7 +1604,7 @@ definitions:
           empty) — the "always populated" contract relies on the server side
           guaranteeing a non-nil slice.
         items:
-          $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.Membership'
+          $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.Membership'
         type: array
       message:
         type: string
@@ -1615,9 +1615,9 @@ definitions:
       token:
         type: string
       user:
-        $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.User'
+        $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.User'
     type: object
-  github_com_Tencent_WeKnora_internal_types.MCPAdvancedConfig:
+  github_com_vagawind_semiclaw_internal_types.MCPAdvancedConfig:
     properties:
       retry_count:
         description: 'Number of retries, default: 3'
@@ -1629,7 +1629,7 @@ definitions:
         description: 'Timeout in seconds, default: 30'
         type: integer
     type: object
-  github_com_Tencent_WeKnora_internal_types.MCPAuthConfig:
+  github_com_vagawind_semiclaw_internal_types.MCPAuthConfig:
     properties:
       api_key:
         type: string
@@ -1640,20 +1640,20 @@ definitions:
       token:
         type: string
     type: object
-  github_com_Tencent_WeKnora_internal_types.MCPEnvVars:
+  github_com_vagawind_semiclaw_internal_types.MCPEnvVars:
     additionalProperties:
       type: string
     type: object
-  github_com_Tencent_WeKnora_internal_types.MCPHeaders:
+  github_com_vagawind_semiclaw_internal_types.MCPHeaders:
     additionalProperties:
       type: string
     type: object
-  github_com_Tencent_WeKnora_internal_types.MCPService:
+  github_com_vagawind_semiclaw_internal_types.MCPService:
     properties:
       advanced_config:
-        $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.MCPAdvancedConfig'
+        $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.MCPAdvancedConfig'
       auth_config:
-        $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.MCPAuthConfig'
+        $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.MCPAuthConfig'
       created_at:
         type: string
       deleted_at:
@@ -1664,10 +1664,10 @@ definitions:
         type: boolean
       env_vars:
         allOf:
-        - $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.MCPEnvVars'
+        - $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.MCPEnvVars'
         description: Environment variables for stdio
       headers:
-        $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.MCPHeaders'
+        $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.MCPHeaders'
       id:
         type: string
       is_builtin:
@@ -1677,19 +1677,19 @@ definitions:
         type: string
       stdio_config:
         allOf:
-        - $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.MCPStdioConfig'
+        - $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.MCPStdioConfig'
         description: Required for stdio transport
       tenant_id:
         type: integer
       transport_type:
-        $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.MCPTransportType'
+        $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.MCPTransportType'
       updated_at:
         type: string
       url:
         description: 'Optional: required for SSE/HTTP Streamable'
         type: string
     type: object
-  github_com_Tencent_WeKnora_internal_types.MCPStdioConfig:
+  github_com_vagawind_semiclaw_internal_types.MCPStdioConfig:
     properties:
       args:
         description: Command arguments array
@@ -1700,7 +1700,7 @@ definitions:
         description: 'Command: "uvx" or "npx"'
         type: string
     type: object
-  github_com_Tencent_WeKnora_internal_types.MCPTransportType:
+  github_com_vagawind_semiclaw_internal_types.MCPTransportType:
     enum:
     - sse
     - http-streamable
@@ -1718,14 +1718,14 @@ definitions:
     - MCPTransportSSE
     - MCPTransportHTTPStreamable
     - MCPTransportStdio
-  github_com_Tencent_WeKnora_internal_types.ManualKnowledgePayload:
+  github_com_vagawind_semiclaw_internal_types.ManualKnowledgePayload:
     properties:
       channel:
         type: string
       content:
         type: string
       process_config:
-        $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.KnowledgeProcessOverrides'
+        $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.KnowledgeProcessOverrides'
       status:
         type: string
       tag_id:
@@ -1733,7 +1733,7 @@ definitions:
       title:
         type: string
     type: object
-  github_com_Tencent_WeKnora_internal_types.MatchType:
+  github_com_vagawind_semiclaw_internal_types.MatchType:
     enum:
     - 0
     - 1
@@ -1774,16 +1774,16 @@ definitions:
     - MatchTypeWebSearch
     - MatchTypeDirectLoad
     - MatchTypeDataAnalysis
-  github_com_Tencent_WeKnora_internal_types.Membership:
+  github_com_vagawind_semiclaw_internal_types.Membership:
     properties:
       role:
-        $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.TenantRole'
+        $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.TenantRole'
       tenant_id:
         type: integer
       tenant_name:
         type: string
     type: object
-  github_com_Tencent_WeKnora_internal_types.MentionedItem:
+  github_com_vagawind_semiclaw_internal_types.MentionedItem:
     properties:
       id:
         type: string
@@ -1796,7 +1796,7 @@ definitions:
         description: '"kb" for knowledge base, "file" for file'
         type: string
     type: object
-  github_com_Tencent_WeKnora_internal_types.Message:
+  github_com_vagawind_semiclaw_internal_types.Message:
     properties:
       agent_duration_ms:
         description: Agent total execution duration in milliseconds (from query start
@@ -1808,12 +1808,12 @@ definitions:
           This contains the detailed reasoning process and tool calls made by the agent
           Stored for user history display, but NOT included in LLM context to avoid redundancy
         items:
-          $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.AgentStep'
+          $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.AgentStep'
         type: array
       attachments:
         description: Attached files (documents, audio, etc., for user messages)
         items:
-          $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.MessageAttachment'
+          $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.MessageAttachment'
         type: array
       channel:
         description: Channel indicates the source channel of this message (e.g., "web",
@@ -1835,7 +1835,7 @@ definitions:
       images:
         description: Attached images with OCR/Caption text (for user messages)
         items:
-          $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.MessageImage'
+          $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.MessageImage'
         type: array
       is_completed:
         description: Whether message generation is complete
@@ -1852,14 +1852,14 @@ definitions:
       knowledge_references:
         description: References to knowledge chunks used in the response
         items:
-          $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.SearchResult'
+          $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.SearchResult'
         type: array
       mentioned_items:
         description: |-
           Mentioned knowledge bases and files (for user messages)
           Stores the @mentioned items when user sends a message
         items:
-          $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.MentionedItem'
+          $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.MentionedItem'
         type: array
       request_id:
         description: Request identifier for tracking API requests
@@ -1874,7 +1874,7 @@ definitions:
         description: Last update timestamp
         type: string
     type: object
-  github_com_Tencent_WeKnora_internal_types.MessageAttachment:
+  github_com_vagawind_semiclaw_internal_types.MessageAttachment:
     properties:
       content:
         description: Extracted text content (for small text files)
@@ -1898,14 +1898,14 @@ definitions:
         description: Storage URL (provider://path)
         type: string
     type: object
-  github_com_Tencent_WeKnora_internal_types.MessageImage:
+  github_com_vagawind_semiclaw_internal_types.MessageImage:
     properties:
       caption:
         type: string
       url:
         type: string
     type: object
-  github_com_Tencent_WeKnora_internal_types.MinIOEngineConfig:
+  github_com_vagawind_semiclaw_internal_types.MinIOEngineConfig:
     properties:
       access_key_id:
         type: string
@@ -1923,12 +1923,12 @@ definitions:
       use_ssl:
         type: boolean
     type: object
-  github_com_Tencent_WeKnora_internal_types.ModelParameters:
+  github_com_vagawind_semiclaw_internal_types.ModelParameters:
     properties:
       api_key:
         type: string
       app_id:
-        description: WeKnoraCloud 厂商专用凭证
+        description: SemiClawCloud 厂商专用凭证
         type: string
       app_secret:
         description: AES-256 加密存储，实际承载上游 API Key
@@ -1945,7 +1945,7 @@ definitions:
           保留字段（Authorization、api-key、Content-Type、Accept 等）会在运行期被忽略以避免破坏签名/鉴权流程。
         type: object
       embedding_parameters:
-        $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.EmbeddingParameters'
+        $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.EmbeddingParameters'
       extra_config:
         additionalProperties:
           type: string
@@ -1963,7 +1963,7 @@ definitions:
         description: Whether the model accepts image/multimodal input
         type: boolean
     type: object
-  github_com_Tencent_WeKnora_internal_types.ModelSource:
+  github_com_vagawind_semiclaw_internal_types.ModelSource:
     enum:
     - local
     - remote
@@ -2037,7 +2037,7 @@ definitions:
     - ModelSourceNvidia
     - ModelSourceNovita
     - ModelSourceAzureOpenAI
-  github_com_Tencent_WeKnora_internal_types.ModelType:
+  github_com_vagawind_semiclaw_internal_types.ModelType:
     enum:
     - Embedding
     - Rerank
@@ -2063,7 +2063,7 @@ definitions:
     - ModelTypeKnowledgeQA
     - ModelTypeVLLM
     - ModelTypeASR
-  github_com_Tencent_WeKnora_internal_types.OBSEngineConfig:
+  github_com_vagawind_semiclaw_internal_types.OBSEngineConfig:
     properties:
       access_key:
         type: string
@@ -2080,7 +2080,7 @@ definitions:
       use_ssl:
         type: boolean
     type: object
-  github_com_Tencent_WeKnora_internal_types.OIDCAuthURLResponse:
+  github_com_vagawind_semiclaw_internal_types.OIDCAuthURLResponse:
     properties:
       authorization_url:
         type: string
@@ -2091,7 +2091,7 @@ definitions:
       success:
         type: boolean
     type: object
-  github_com_Tencent_WeKnora_internal_types.OIDCConfigResponse:
+  github_com_vagawind_semiclaw_internal_types.OIDCConfigResponse:
     properties:
       enabled:
         type: boolean
@@ -2100,7 +2100,7 @@ definitions:
       success:
         type: boolean
     type: object
-  github_com_Tencent_WeKnora_internal_types.OSSEngineConfig:
+  github_com_vagawind_semiclaw_internal_types.OSSEngineConfig:
     properties:
       access_key:
         type: string
@@ -2121,7 +2121,7 @@ definitions:
       use_temp_bucket:
         type: boolean
     type: object
-  github_com_Tencent_WeKnora_internal_types.OrgMemberRole:
+  github_com_vagawind_semiclaw_internal_types.OrgMemberRole:
     enum:
     - admin
     - editor
@@ -2131,7 +2131,7 @@ definitions:
     - OrgRoleAdmin
     - OrgRoleEditor
     - OrgRoleViewer
-  github_com_Tencent_WeKnora_internal_types.OrganizationMemberResponse:
+  github_com_vagawind_semiclaw_internal_types.OrganizationMemberResponse:
     properties:
       avatar:
         type: string
@@ -2154,7 +2154,7 @@ definitions:
       username:
         type: string
     type: object
-  github_com_Tencent_WeKnora_internal_types.OrganizationResponse:
+  github_com_vagawind_semiclaw_internal_types.OrganizationResponse:
     properties:
       agent_share_count:
         description: 共享到该组织的智能体数量
@@ -2210,7 +2210,7 @@ definitions:
       updated_at:
         type: string
     type: object
-  github_com_Tencent_WeKnora_internal_types.ParserEngineConfig:
+  github_com_vagawind_semiclaw_internal_types.ParserEngineConfig:
     properties:
       mineru_api_key:
         description: MinerU 云 API Key
@@ -2276,7 +2276,7 @@ definitions:
       paddleocr_vl_use_seal_recognition:
         type: boolean
     type: object
-  github_com_Tencent_WeKnora_internal_types.ParserEngineRule:
+  github_com_vagawind_semiclaw_internal_types.ParserEngineRule:
     properties:
       engine:
         type: string
@@ -2285,7 +2285,7 @@ definitions:
           type: string
         type: array
     type: object
-  github_com_Tencent_WeKnora_internal_types.QuestionGenerationConfig:
+  github_com_vagawind_semiclaw_internal_types.QuestionGenerationConfig:
     properties:
       enabled:
         type: boolean
@@ -2294,7 +2294,7 @@ definitions:
           10)'
         type: integer
     type: object
-  github_com_Tencent_WeKnora_internal_types.RegisterRequest:
+  github_com_vagawind_semiclaw_internal_types.RegisterRequest:
     properties:
       email:
         type: string
@@ -2310,18 +2310,18 @@ definitions:
     - password
     - username
     type: object
-  github_com_Tencent_WeKnora_internal_types.RegisterResponse:
+  github_com_vagawind_semiclaw_internal_types.RegisterResponse:
     properties:
       message:
         type: string
       success:
         type: boolean
       tenant:
-        $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.Tenant'
+        $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.Tenant'
       user:
-        $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.User'
+        $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.User'
     type: object
-  github_com_Tencent_WeKnora_internal_types.RequestRoleUpgradeRequest:
+  github_com_vagawind_semiclaw_internal_types.RequestRoleUpgradeRequest:
     properties:
       message:
         description: Optional message explaining the reason
@@ -2329,12 +2329,12 @@ definitions:
         type: string
       requested_role:
         allOf:
-        - $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.OrgMemberRole'
+        - $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.OrgMemberRole'
         description: The role user wants to upgrade to
     required:
     - requested_role
     type: object
-  github_com_Tencent_WeKnora_internal_types.Resource:
+  github_com_vagawind_semiclaw_internal_types.Resource:
     properties:
       description:
         description: Optional description
@@ -2365,7 +2365,7 @@ definitions:
         description: URL to access in external system
         type: string
     type: object
-  github_com_Tencent_WeKnora_internal_types.ResourceCountsByOrgResponse:
+  github_com_vagawind_semiclaw_internal_types.ResourceCountsByOrgResponse:
     properties:
       agents:
         properties:
@@ -2382,7 +2382,7 @@ definitions:
             type: object
         type: object
     type: object
-  github_com_Tencent_WeKnora_internal_types.RetrievalConfig:
+  github_com_vagawind_semiclaw_internal_types.RetrievalConfig:
     properties:
       embedding_top_k:
         description: 'EmbeddingTopK is the maximum number of chunks returned by vector
@@ -2424,18 +2424,18 @@ definitions:
           default: 0.15)'
         type: number
     type: object
-  github_com_Tencent_WeKnora_internal_types.RetrieverEngineParams:
+  github_com_vagawind_semiclaw_internal_types.RetrieverEngineParams:
     properties:
       retriever_engine_type:
         allOf:
-        - $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.RetrieverEngineType'
+        - $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.RetrieverEngineType'
         description: Retriever engine type
       retriever_type:
         allOf:
-        - $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.RetrieverType'
+        - $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.RetrieverType'
         description: Retriever type
     type: object
-  github_com_Tencent_WeKnora_internal_types.RetrieverEngineType:
+  github_com_vagawind_semiclaw_internal_types.RetrieverEngineType:
     enum:
     - postgres
     - elasticsearch
@@ -2461,14 +2461,14 @@ definitions:
     - SQLiteRetrieverEngineType
     - TencentVectorDBRetrieverEngineType
     - OpenSearchRetrieverEngineType
-  github_com_Tencent_WeKnora_internal_types.RetrieverEngines:
+  github_com_vagawind_semiclaw_internal_types.RetrieverEngines:
     properties:
       engines:
         items:
-          $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.RetrieverEngineParams'
+          $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.RetrieverEngineParams'
         type: array
     type: object
-  github_com_Tencent_WeKnora_internal_types.RetrieverType:
+  github_com_vagawind_semiclaw_internal_types.RetrieverType:
     enum:
     - keywords
     - vector
@@ -2486,7 +2486,7 @@ definitions:
     - KeywordsRetrieverType
     - VectorRetrieverType
     - WebSearchRetrieverType
-  github_com_Tencent_WeKnora_internal_types.ReviewJoinRequestRequest:
+  github_com_vagawind_semiclaw_internal_types.ReviewJoinRequestRequest:
     properties:
       approved:
         type: boolean
@@ -2495,11 +2495,11 @@ definitions:
         type: string
       role:
         allOf:
-        - $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.OrgMemberRole'
+        - $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.OrgMemberRole'
         description: 'Optional: role to assign when approving; overrides applicant''s
           requested role'
     type: object
-  github_com_Tencent_WeKnora_internal_types.S3EngineConfig:
+  github_com_vagawind_semiclaw_internal_types.S3EngineConfig:
     properties:
       access_key:
         type: string
@@ -2518,7 +2518,7 @@ definitions:
       use_ssl:
         type: boolean
     type: object
-  github_com_Tencent_WeKnora_internal_types.SearchParams:
+  github_com_vagawind_semiclaw_internal_types.SearchParams:
     properties:
       disable_keywords_match:
         type: boolean
@@ -2562,7 +2562,7 @@ definitions:
       vector_threshold:
         type: number
     type: object
-  github_com_Tencent_WeKnora_internal_types.SearchResult:
+  github_com_vagawind_semiclaw_internal_types.SearchResult:
     properties:
       chunk_index:
         description: Chunk index
@@ -2616,7 +2616,7 @@ definitions:
         type: string
       match_type:
         allOf:
-        - $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.MatchType'
+        - $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.MatchType'
         description: Match type
       matched_content:
         description: |-
@@ -2646,7 +2646,14 @@ definitions:
           type: string
         type: array
     type: object
-  github_com_Tencent_WeKnora_internal_types.Session:
+  github_com_vagawind_semiclaw_internal_types.SemiClawCloudCredentials:
+    properties:
+      app_id:
+        type: string
+      app_secret:
+        type: string
+    type: object
+  github_com_vagawind_semiclaw_internal_types.Session:
     properties:
       created_at:
         type: string
@@ -2663,7 +2670,7 @@ definitions:
         type: boolean
       last_request_state:
         allOf:
-        - $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.SessionLastRequestState'
+        - $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.SessionLastRequestState'
         description: |-
           LastRequestState records the input-bar state used the last time this
           session sent a question (agent, model, KB scope, web search, MCPs).
@@ -2685,10 +2692,10 @@ definitions:
       user_id:
         description: |-
           UserID is the owner of the session. Empty for legacy rows (visible at
-          tenant level) and for IM-created sessions that do not map to a WeKnora user.
+          tenant level) and for IM-created sessions that do not map to a SemiClaw user.
         type: string
     type: object
-  github_com_Tencent_WeKnora_internal_types.SessionLastRequestState:
+  github_com_vagawind_semiclaw_internal_types.SessionLastRequestState:
     properties:
       agent_enabled:
         type: boolean
@@ -2707,17 +2714,17 @@ definitions:
       web_search_enabled:
         type: boolean
     type: object
-  github_com_Tencent_WeKnora_internal_types.ShareKnowledgeBaseRequest:
+  github_com_vagawind_semiclaw_internal_types.ShareKnowledgeBaseRequest:
     properties:
       organization_id:
         type: string
       permission:
-        $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.OrgMemberRole'
+        $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.OrgMemberRole'
     required:
     - organization_id
     - permission
     type: object
-  github_com_Tencent_WeKnora_internal_types.StorageConfig:
+  github_com_vagawind_semiclaw_internal_types.StorageConfig:
     properties:
       app_id:
         description: App ID (COS specific)
@@ -2750,35 +2757,35 @@ definitions:
         description: UseSSL (S3 specific) - whether to use HTTPS
         type: boolean
     type: object
-  github_com_Tencent_WeKnora_internal_types.StorageEngineConfig:
+  github_com_vagawind_semiclaw_internal_types.StorageEngineConfig:
     properties:
       cos:
-        $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.COSEngineConfig'
+        $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.COSEngineConfig'
       default_provider:
         description: '"local", "minio", "cos", "tos", "s3", "oss", "ks3", "obs"'
         type: string
       ks3:
-        $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.KS3EngineConfig'
+        $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.KS3EngineConfig'
       local:
-        $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.LocalEngineConfig'
+        $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.LocalEngineConfig'
       minio:
-        $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.MinIOEngineConfig'
+        $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.MinIOEngineConfig'
       obs:
-        $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.OBSEngineConfig'
+        $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.OBSEngineConfig'
       oss:
-        $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.OSSEngineConfig'
+        $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.OSSEngineConfig'
       s3:
-        $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.S3EngineConfig'
+        $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.S3EngineConfig'
       tos:
-        $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.TOSEngineConfig'
+        $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.TOSEngineConfig'
     type: object
-  github_com_Tencent_WeKnora_internal_types.StorageProviderConfig:
+  github_com_vagawind_semiclaw_internal_types.StorageProviderConfig:
     properties:
       provider:
         description: '"local", "minio", "cos", "tos", "s3", "oss", "ks3", "obs"'
         type: string
     type: object
-  github_com_Tencent_WeKnora_internal_types.SubmitJoinRequestRequest:
+  github_com_vagawind_semiclaw_internal_types.SubmitJoinRequestRequest:
     properties:
       invite_code:
         maxLength: 32
@@ -2789,13 +2796,13 @@ definitions:
         type: string
       role:
         allOf:
-        - $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.OrgMemberRole'
+        - $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.OrgMemberRole'
         description: 'Optional: role the applicant requests (admin/editor/viewer);
           default viewer'
     required:
     - invite_code
     type: object
-  github_com_Tencent_WeKnora_internal_types.SyncLog:
+  github_com_vagawind_semiclaw_internal_types.SyncLog:
     properties:
       created_at:
         description: Creation timestamp (usually same as StartedAt)
@@ -2848,7 +2855,7 @@ definitions:
         description: Last update timestamp
         type: string
     type: object
-  github_com_Tencent_WeKnora_internal_types.SystemSetting:
+  github_com_vagawind_semiclaw_internal_types.SystemSetting:
     properties:
       category:
         description: |-
@@ -2908,7 +2915,7 @@ definitions:
           InputNumber vs Input vs Switch.
         type: string
     type: object
-  github_com_Tencent_WeKnora_internal_types.TOSEngineConfig:
+  github_com_vagawind_semiclaw_internal_types.TOSEngineConfig:
     properties:
       access_key:
         type: string
@@ -2923,7 +2930,7 @@ definitions:
       secret_key:
         type: string
     type: object
-  github_com_Tencent_WeKnora_internal_types.Tenant:
+  github_com_vagawind_semiclaw_internal_types.Tenant:
     properties:
       api_key:
         description: API key
@@ -2933,12 +2940,12 @@ definitions:
         type: string
       chat_history_config:
         allOf:
-        - $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.ChatHistoryConfig'
+        - $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.ChatHistoryConfig'
         description: 'Chat history config: knowledge base configuration for indexing
           and searching chat messages via vector search'
       context_config:
         allOf:
-        - $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.ContextConfig'
+        - $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.ContextConfig'
         description: Global Context configuration for this tenant (default for all
           sessions)
       created_at:
@@ -2946,8 +2953,8 @@ definitions:
         type: string
       credentials:
         allOf:
-        - $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.CredentialsConfig'
-        description: 'Credentials config: third-party provider credentials (e.g. WeKnoraCloud
+        - $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.CredentialsConfig'
+        description: 'Credentials config: third-party provider credentials (e.g. SemiClawCloud
           AppID/AppSecret)'
       deleted_at:
         allOf:
@@ -2964,24 +2971,24 @@ definitions:
         type: string
       parser_engine_config:
         allOf:
-        - $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.ParserEngineConfig'
+        - $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.ParserEngineConfig'
         description: Parser engine config overrides (MinerU endpoint, API key, etc.).
           Used when parsing documents; overrides env.
       retrieval_config:
         allOf:
-        - $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.RetrievalConfig'
+        - $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.RetrievalConfig'
         description: 'Retrieval config: global search/retrieval parameters shared
           by knowledge search and message search'
       retriever_engines:
         allOf:
-        - $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.RetrieverEngines'
+        - $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.RetrieverEngines'
         description: Retriever engines
       status:
         description: Status
         type: string
       storage_engine_config:
         allOf:
-        - $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.StorageEngineConfig'
+        - $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.StorageEngineConfig'
         description: 'Storage engine config: parameters for Local, MinIO, COS. Used
           for document/file storage and docreader.'
       storage_quota:
@@ -2996,10 +3003,10 @@ definitions:
         type: string
       web_search_config:
         allOf:
-        - $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.WebSearchConfig'
+        - $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.WebSearchConfig'
         description: Global WebSearch configuration for this tenant
     type: object
-  github_com_Tencent_WeKnora_internal_types.TenantRole:
+  github_com_vagawind_semiclaw_internal_types.TenantRole:
     enum:
     - owner
     - admin
@@ -3011,7 +3018,7 @@ definitions:
     - TenantRoleAdmin
     - TenantRoleContributor
     - TenantRoleViewer
-  github_com_Tencent_WeKnora_internal_types.ToolCall:
+  github_com_vagawind_semiclaw_internal_types.ToolCall:
     properties:
       args:
         additionalProperties: true
@@ -3028,23 +3035,23 @@ definitions:
         type: string
       provider_metadata:
         allOf:
-        - $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.ToolCallMetadata'
+        - $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.ToolCallMetadata'
         description: Provider-specific tool-call state for replay
       reflection:
         description: Agent's reflection on this tool call result (if enabled)
         type: string
       result:
         allOf:
-        - $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.ToolResult'
+        - $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.ToolResult'
         description: Execution result (contains Output)
     type: object
-  github_com_Tencent_WeKnora_internal_types.ToolCallMetadata:
+  github_com_vagawind_semiclaw_internal_types.ToolCallMetadata:
     additionalProperties:
       items:
         type: integer
       type: array
     type: object
-  github_com_Tencent_WeKnora_internal_types.ToolResult:
+  github_com_vagawind_semiclaw_internal_types.ToolResult:
     properties:
       data:
         additionalProperties: true
@@ -3065,14 +3072,14 @@ definitions:
         description: Whether the tool executed successfully
         type: boolean
     type: object
-  github_com_Tencent_WeKnora_internal_types.UpdateMemberRoleRequest:
+  github_com_vagawind_semiclaw_internal_types.UpdateMemberRoleRequest:
     properties:
       role:
-        $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.OrgMemberRole'
+        $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.OrgMemberRole'
     required:
     - role
     type: object
-  github_com_Tencent_WeKnora_internal_types.UpdateOrganizationRequest:
+  github_com_vagawind_semiclaw_internal_types.UpdateOrganizationRequest:
     properties:
       avatar:
         description: optional avatar URL
@@ -3097,14 +3104,14 @@ definitions:
         description: open for search so others can discover and join
         type: boolean
     type: object
-  github_com_Tencent_WeKnora_internal_types.UpdateSharePermissionRequest:
+  github_com_vagawind_semiclaw_internal_types.UpdateSharePermissionRequest:
     properties:
       permission:
-        $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.OrgMemberRole'
+        $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.OrgMemberRole'
     required:
     - permission
     type: object
-  github_com_Tencent_WeKnora_internal_types.User:
+  github_com_vagawind_semiclaw_internal_types.User:
     properties:
       avatar:
         description: Avatar URL of the user
@@ -3134,14 +3141,14 @@ definitions:
         type: boolean
       preferences:
         allOf:
-        - $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.UserPreferences'
+        - $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.UserPreferences'
         description: |-
           Per-user UI/feature preferences (memory toggle, future knobs).
           Stored as JSON (jsonb on Postgres, TEXT on SQLite) via the
           driver.Valuer / sql.Scanner methods on UserPreferences.
       tenant:
         allOf:
-        - $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.Tenant'
+        - $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.Tenant'
         description: Association relationship, not stored in the database
       tenant_id:
         description: Tenant ID that the user belongs to
@@ -3153,7 +3160,7 @@ definitions:
         description: Username of the user
         type: string
     type: object
-  github_com_Tencent_WeKnora_internal_types.UserInfo:
+  github_com_vagawind_semiclaw_internal_types.UserInfo:
     properties:
       avatar:
         type: string
@@ -3170,7 +3177,7 @@ definitions:
       is_system_admin:
         type: boolean
       preferences:
-        $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.UserPreferences'
+        $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.UserPreferences'
       tenant_id:
         type: integer
       updated_at:
@@ -3178,7 +3185,7 @@ definitions:
       username:
         type: string
     type: object
-  github_com_Tencent_WeKnora_internal_types.UserPreferences:
+  github_com_vagawind_semiclaw_internal_types.UserPreferences:
     properties:
       enable_memory:
         description: |-
@@ -3204,7 +3211,7 @@ definitions:
           *N   = preferred tenant id.
         type: integer
     type: object
-  github_com_Tencent_WeKnora_internal_types.VLMConfig:
+  github_com_vagawind_semiclaw_internal_types.VLMConfig:
     properties:
       api_key:
         description: API Key
@@ -3225,14 +3232,7 @@ definitions:
           Model Name
         type: string
     type: object
-  github_com_Tencent_WeKnora_internal_types.WeKnoraCloudCredentials:
-    properties:
-      app_id:
-        type: string
-      app_secret:
-        type: string
-    type: object
-  github_com_Tencent_WeKnora_internal_types.WebSearchConfig:
+  github_com_vagawind_semiclaw_internal_types.WebSearchConfig:
     properties:
       api_key:
         description: 'Deprecated: Use WebSearchProviderEntity.Parameters.APIKey instead.'
@@ -3271,7 +3271,7 @@ definitions:
         description: 重排模型ID（用于RAG压缩）
         type: string
     type: object
-  github_com_Tencent_WeKnora_internal_types.WebSearchProviderEntity:
+  github_com_vagawind_semiclaw_internal_types.WebSearchProviderEntity:
     properties:
       created_at:
         description: Timestamps
@@ -3292,12 +3292,12 @@ definitions:
         type: string
       parameters:
         allOf:
-        - $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.WebSearchProviderParameters'
+        - $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.WebSearchProviderParameters'
         description: Provider-specific parameters (API key, engine ID, etc.) stored
           as encrypted JSON
       provider:
         allOf:
-        - $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.WebSearchProviderType'
+        - $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.WebSearchProviderType'
         description: 'Provider type: bing, google, duckduckgo, tavily'
       tenant_id:
         description: Tenant ID for scoping
@@ -3305,7 +3305,7 @@ definitions:
       updated_at:
         type: string
     type: object
-  github_com_Tencent_WeKnora_internal_types.WebSearchProviderParameters:
+  github_com_vagawind_semiclaw_internal_types.WebSearchProviderParameters:
     properties:
       api_key:
         description: API key for the search provider (encrypted in DB)
@@ -3329,7 +3329,7 @@ definitions:
           Does not replace the search API endpoint; only tunnels traffic to the official APIs.
         type: string
     type: object
-  github_com_Tencent_WeKnora_internal_types.WebSearchProviderType:
+  github_com_vagawind_semiclaw_internal_types.WebSearchProviderType:
     enum:
     - bing
     - google
@@ -3347,35 +3347,11 @@ definitions:
     - WebSearchProviderTypeOllama
     - WebSearchProviderTypeBaidu
     - WebSearchProviderTypeSearxng
-  github_com_Tencent_WeKnora_internal_types.WikiCategoryPath:
-    properties:
-      count:
-        type: integer
-      path:
-        items:
-          type: string
-        type: array
-    type: object
-  github_com_Tencent_WeKnora_internal_types.WikiCategoryPathListResponse:
-    properties:
-      page:
-        type: integer
-      page_size:
-        type: integer
-      paths:
-        items:
-          $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.WikiCategoryPath'
-        type: array
-      total:
-        type: integer
-      total_pages:
-        type: integer
-    type: object
-  github_com_Tencent_WeKnora_internal_types.WikiConfig:
+  github_com_vagawind_semiclaw_internal_types.WikiConfig:
     properties:
       extraction_granularity:
         allOf:
-        - $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.WikiExtractionGranularity'
+        - $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.WikiExtractionGranularity'
         description: |-
           ExtractionGranularity controls how many candidate slugs Pass 0 extracts
           per document. Empty / unknown value is treated as WikiExtractionStandard.
@@ -3410,7 +3386,7 @@ definitions:
           and updates
         type: string
     type: object
-  github_com_Tencent_WeKnora_internal_types.WikiExtractionGranularity:
+  github_com_vagawind_semiclaw_internal_types.WikiExtractionGranularity:
     enum:
     - focused
     - standard
@@ -3420,20 +3396,99 @@ definitions:
     - WikiExtractionFocused
     - WikiExtractionStandard
     - WikiExtractionExhaustive
-  github_com_Tencent_WeKnora_internal_types.WikiGraphData:
+  github_com_vagawind_semiclaw_internal_types.WikiFolder:
+    properties:
+      created_at:
+        type: string
+      deleted_at:
+        $ref: '#/definitions/gorm.DeletedAt'
+      depth:
+        type: integer
+      id:
+        type: string
+      knowledge_base_id:
+        type: string
+      name:
+        type: string
+      parent_id:
+        type: string
+      path:
+        type: string
+      sort_order:
+        type: integer
+      tenant_id:
+        type: integer
+      updated_at:
+        type: string
+    type: object
+  github_com_vagawind_semiclaw_internal_types.WikiFolderCreateRequest:
+    properties:
+      name:
+        type: string
+      parent_id:
+        type: string
+    type: object
+  github_com_vagawind_semiclaw_internal_types.WikiFolderListResponse:
+    properties:
+      folders:
+        items:
+          $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.WikiFolderNode'
+        type: array
+      parent_id:
+        type: string
+    type: object
+  github_com_vagawind_semiclaw_internal_types.WikiFolderNode:
+    properties:
+      created_at:
+        type: string
+      deleted_at:
+        $ref: '#/definitions/gorm.DeletedAt'
+      depth:
+        type: integer
+      has_children:
+        type: boolean
+      id:
+        type: string
+      knowledge_base_id:
+        type: string
+      name:
+        type: string
+      page_count:
+        type: integer
+      parent_id:
+        type: string
+      path:
+        type: string
+      sort_order:
+        type: integer
+      tenant_id:
+        type: integer
+      updated_at:
+        type: string
+    type: object
+  github_com_vagawind_semiclaw_internal_types.WikiFolderUpdateRequest:
+    properties:
+      move_parent:
+        type: boolean
+      name:
+        type: string
+      parent_id:
+        type: string
+    type: object
+  github_com_vagawind_semiclaw_internal_types.WikiGraphData:
     properties:
       edges:
         items:
-          $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.WikiGraphEdge'
+          $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.WikiGraphEdge'
         type: array
       meta:
-        $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.WikiGraphMeta'
+        $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.WikiGraphMeta'
       nodes:
         items:
-          $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.WikiGraphNode'
+          $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.WikiGraphNode'
         type: array
     type: object
-  github_com_Tencent_WeKnora_internal_types.WikiGraphEdge:
+  github_com_vagawind_semiclaw_internal_types.WikiGraphEdge:
     properties:
       source:
         description: source slug
@@ -3442,7 +3497,7 @@ definitions:
         description: target slug
         type: string
     type: object
-  github_com_Tencent_WeKnora_internal_types.WikiGraphMeta:
+  github_com_vagawind_semiclaw_internal_types.WikiGraphMeta:
     properties:
       center:
         description: populated in ego mode
@@ -3462,7 +3517,7 @@ definitions:
         description: true when Returned < Total (after filters)
         type: boolean
     type: object
-  github_com_Tencent_WeKnora_internal_types.WikiGraphNode:
+  github_com_vagawind_semiclaw_internal_types.WikiGraphNode:
     properties:
       link_count:
         description: Number of inbound + outbound links
@@ -3474,7 +3529,7 @@ definitions:
       title:
         type: string
     type: object
-  github_com_Tencent_WeKnora_internal_types.WikiIndexEntry:
+  github_com_vagawind_semiclaw_internal_types.WikiIndexEntry:
     properties:
       category_path:
         items:
@@ -3495,11 +3550,11 @@ definitions:
       wiki_path:
         type: string
     type: object
-  github_com_Tencent_WeKnora_internal_types.WikiIndexGroup:
+  github_com_vagawind_semiclaw_internal_types.WikiIndexGroup:
     properties:
       items:
         items:
-          $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.WikiIndexEntry'
+          $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.WikiIndexEntry'
         type: array
       next_cursor:
         type: string
@@ -3508,18 +3563,18 @@ definitions:
       type:
         type: string
     type: object
-  github_com_Tencent_WeKnora_internal_types.WikiIndexResponse:
+  github_com_vagawind_semiclaw_internal_types.WikiIndexResponse:
     properties:
       groups:
         items:
-          $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.WikiIndexGroup'
+          $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.WikiIndexGroup'
         type: array
       intro:
         type: string
       version:
         type: integer
     type: object
-  github_com_Tencent_WeKnora_internal_types.WikiLogEntry:
+  github_com_vagawind_semiclaw_internal_types.WikiLogEntry:
     properties:
       action:
         description: |-
@@ -3554,7 +3609,7 @@ definitions:
           readable text without a post-hoc slug→title lookup that might fail
           for now-deleted pages.
         items:
-          $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.WikiLogPageRef'
+          $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.WikiLogPageRef'
         type: array
       summary:
         description: One-line summary of the change, as it was when the event was
@@ -3564,23 +3619,23 @@ definitions:
         description: Tenant scope, mirrored from the enclosing knowledge base.
         type: integer
     type: object
-  github_com_Tencent_WeKnora_internal_types.WikiLogEntryListResponse:
+  github_com_vagawind_semiclaw_internal_types.WikiLogEntryListResponse:
     properties:
       entries:
         items:
-          $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.WikiLogEntry'
+          $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.WikiLogEntry'
         type: array
       next_cursor:
         type: string
     type: object
-  github_com_Tencent_WeKnora_internal_types.WikiLogPageRef:
+  github_com_vagawind_semiclaw_internal_types.WikiLogPageRef:
     properties:
       slug:
         type: string
       title:
         type: string
     type: object
-  github_com_Tencent_WeKnora_internal_types.WikiPage:
+  github_com_vagawind_semiclaw_internal_types.WikiPage:
     properties:
       aliases:
         description: Alternate names, abbreviations, acronyms or translated names
@@ -3590,8 +3645,8 @@ definitions:
       category_path:
         description: |-
           CategoryPath is the directory breadcrumb that groups this page in the
-          wiki browser, e.g. ["AI", "LLM 应用", "RAG"]. It is intentionally
-          label-based so intermediate directory nodes do not need to be real pages.
+          wiki browser, e.g. ["AI", "LLM 应用", "RAG"]. Derived cache of the
+          folder chain identified by FolderID.
         items:
           type: string
         type: array
@@ -3620,6 +3675,14 @@ definitions:
       depth:
         description: Depth is len(CategoryPath), cached for filtering / display.
         type: integer
+      folder_id:
+        description: |-
+          FolderID is the single source of truth for where this page sits in the
+          directory tree — a reference to wiki_folders.id ("" = wiki root). The
+          CategoryPath / WikiPath / Depth fields below are denormalized caches
+          recomputed from this folder's chain on every write so list/index/search
+          queries don't have to join wiki_folders.
+        type: string
       id:
         description: Unique identifier (UUID)
         type: string
@@ -3649,7 +3712,7 @@ definitions:
         description: |-
           ParentSlug optionally points at the wiki page that should act as this
           page's semantic parent in the directory tree. The parent may be empty
-          when the page is grouped only by CategoryPath.
+          when the page is grouped only by FolderID.
         type: string
       slug:
         description: |-
@@ -3699,7 +3762,7 @@ definitions:
           category_path, and title. It keeps large directory listings cheap to sort.
         type: string
     type: object
-  github_com_Tencent_WeKnora_internal_types.WikiPageIssue:
+  github_com_vagawind_semiclaw_internal_types.WikiPageIssue:
     properties:
       created_at:
         type: string
@@ -3728,7 +3791,7 @@ definitions:
       updated_at:
         type: string
     type: object
-  github_com_Tencent_WeKnora_internal_types.WikiPageListResponse:
+  github_com_vagawind_semiclaw_internal_types.WikiPageListResponse:
     properties:
       page:
         type: integer
@@ -3736,14 +3799,23 @@ definitions:
         type: integer
       pages:
         items:
-          $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.WikiPage'
+          $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.WikiPage'
         type: array
       total:
         type: integer
       total_pages:
         type: integer
     type: object
-  github_com_Tencent_WeKnora_internal_types.WikiStats:
+  github_com_vagawind_semiclaw_internal_types.WikiPageMoveRequest:
+    properties:
+      folder_id:
+        type: string
+      slug:
+        type: string
+    required:
+    - slug
+    type: object
+  github_com_vagawind_semiclaw_internal_types.WikiStats:
     properties:
       is_active:
         description: whether wiki ingestion is currently running
@@ -3765,7 +3837,7 @@ definitions:
       recent_updates:
         description: last N updated pages
         items:
-          $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.WikiPage'
+          $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.WikiPage'
         type: array
       total_links:
         type: integer
@@ -3815,7 +3887,7 @@ definitions:
       avatar:
         type: string
       config:
-        $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.CustomAgentConfig'
+        $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.CustomAgentConfig'
       description:
         type: string
       name:
@@ -3832,11 +3904,11 @@ definitions:
       name:
         type: string
       parameters:
-        $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.ModelParameters'
+        $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.ModelParameters'
       source:
-        $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.ModelSource'
+        $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.ModelSource'
       type:
-        $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.ModelType'
+        $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.ModelType'
     required:
     - name
     - parameters
@@ -3846,11 +3918,11 @@ definitions:
   internal_handler.CreateStoreRequest:
     properties:
       connection_config:
-        $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.ConnectionConfig'
+        $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.ConnectionConfig'
       engine_type:
-        $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.RetrieverEngineType'
+        $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.RetrieverEngineType'
       index_config:
-        $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.IndexConfig'
+        $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.IndexConfig'
       name:
         type: string
     required:
@@ -4092,7 +4164,7 @@ definitions:
   internal_handler.KBModelConfigRequest:
     properties:
       asr_config:
-        $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.ASRConfig'
+        $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.ASRConfig'
       documentSplitting:
         description: 文档分块配置
         properties:
@@ -4112,7 +4184,7 @@ definitions:
             type: integer
           parserEngineRules:
             items:
-              $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.ParserEngineRule'
+              $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.ParserEngineRule'
             type: array
           separators:
             items:
@@ -4147,11 +4219,11 @@ definitions:
             type: boolean
           nodes:
             items:
-              $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.GraphNode'
+              $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.GraphNode'
             type: array
           relations:
             items:
-              $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.GraphRelation'
+              $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.GraphRelation'
             type: array
           tags:
             items:
@@ -4172,7 +4244,7 @@ definitions:
         description: 存储引擎选择（"local" | "minio" | "cos"），影响文档上传与文档内图片存储，参数从全局设置读取
         type: string
       vlm_config:
-        $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.VLMConfig'
+        $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.VLMConfig'
     required:
     - llmModelId
     type: object
@@ -4180,7 +4252,7 @@ definitions:
     properties:
       admins:
         items:
-          $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.UserInfo'
+          $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.UserInfo'
         type: array
       total:
         type: integer
@@ -4314,18 +4386,18 @@ definitions:
           $ref: '#/definitions/internal_handler.PreviewChunkResult'
         type: array
       profile:
-        $ref: '#/definitions/github_com_Tencent_WeKnora_internal_infrastructure_chunker.DocProfile'
+        $ref: '#/definitions/github_com_vagawind_semiclaw_internal_infrastructure_chunker.DocProfile'
       rejected:
         items:
-          $ref: '#/definitions/github_com_Tencent_WeKnora_internal_infrastructure_chunker.TierRejection'
+          $ref: '#/definitions/github_com_vagawind_semiclaw_internal_infrastructure_chunker.TierRejection'
         type: array
       selected_tier:
-        $ref: '#/definitions/github_com_Tencent_WeKnora_internal_infrastructure_chunker.StrategyTier'
+        $ref: '#/definitions/github_com_vagawind_semiclaw_internal_infrastructure_chunker.StrategyTier'
       stats:
         $ref: '#/definitions/internal_handler.PreviewChunkingStats'
       tier_chain:
         items:
-          $ref: '#/definitions/github_com_Tencent_WeKnora_internal_infrastructure_chunker.StrategyTier'
+          $ref: '#/definitions/github_com_vagawind_semiclaw_internal_infrastructure_chunker.StrategyTier'
         type: array
     type: object
   internal_handler.PreviewChunkingStats:
@@ -4426,22 +4498,22 @@ definitions:
   internal_handler.StorageCheckRequest:
     properties:
       cos:
-        $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.COSEngineConfig'
+        $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.COSEngineConfig'
       ks3:
-        $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.KS3EngineConfig'
+        $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.KS3EngineConfig'
       minio:
-        $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.MinIOEngineConfig'
+        $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.MinIOEngineConfig'
       obs:
-        $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.OBSEngineConfig'
+        $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.OBSEngineConfig'
       oss:
-        $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.OSSEngineConfig'
+        $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.OSSEngineConfig'
       provider:
         description: '"minio", "cos", "tos", "s3", "oss", "ks3", "obs"'
         type: string
       s3:
-        $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.S3EngineConfig'
+        $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.S3EngineConfig'
       tos:
-        $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.TOSEngineConfig'
+        $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.TOSEngineConfig'
     type: object
   internal_handler.StorageCheckResponse:
     properties:
@@ -4469,7 +4541,7 @@ definitions:
   internal_handler.TestProviderRequest:
     properties:
       parameters:
-        $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.WebSearchProviderParameters'
+        $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.WebSearchProviderParameters'
       provider:
         type: string
     required:
@@ -4478,9 +4550,9 @@ definitions:
   internal_handler.TestStoreRequest:
     properties:
       connection_config:
-        $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.ConnectionConfig'
+        $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.ConnectionConfig'
       engine_type:
-        $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.RetrieverEngineType'
+        $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.RetrieverEngineType'
     required:
     - connection_config
     - engine_type
@@ -4505,7 +4577,7 @@ definitions:
       avatar:
         type: string
       config:
-        $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.CustomAgentConfig'
+        $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.CustomAgentConfig'
       description:
         type: string
       name:
@@ -4533,7 +4605,7 @@ definitions:
   internal_handler.UpdateKnowledgeBaseRequest:
     properties:
       config:
-        $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.KnowledgeBaseConfig'
+        $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.KnowledgeBaseConfig'
       description:
         type: string
       name:
@@ -4550,11 +4622,11 @@ definitions:
       name:
         type: string
       parameters:
-        $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.ModelParameters'
+        $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.ModelParameters'
       source:
-        $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.ModelSource'
+        $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.ModelSource'
       type:
-        $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.ModelType'
+        $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.ModelType'
     type: object
   internal_handler.UpdateProviderRequest:
     properties:
@@ -4565,7 +4637,7 @@ definitions:
       name:
         type: string
       parameters:
-        $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.WebSearchProviderParameters'
+        $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.WebSearchProviderParameters'
     type: object
   internal_handler.UpdateStoreRequest:
     properties:
@@ -4587,7 +4659,7 @@ definitions:
       email:
         type: string
       role:
-        $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.TenantRole'
+        $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.TenantRole'
     required:
     - email
     - role
@@ -4606,7 +4678,7 @@ definitions:
     properties:
       data:
         items:
-          $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.AuditLog'
+          $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.AuditLog'
         type: array
       next_cursor:
         type: integer
@@ -4620,7 +4692,7 @@ definitions:
       message:
         type: string
       role:
-        $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.TenantRole'
+        $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.TenantRole'
     required:
     - email
     - role
@@ -4630,7 +4702,7 @@ definitions:
       message:
         type: string
       role:
-        $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.TenantRole'
+        $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.TenantRole'
     required:
     - role
     type: object
@@ -4658,7 +4730,7 @@ definitions:
       expires_at:
         type: string
       role:
-        $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.TenantRole'
+        $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.TenantRole'
       tenant_id:
         type: integer
       tenant_name:
@@ -4694,7 +4766,7 @@ definitions:
   internal_handler.updateMemberRoleRequest:
     properties:
       role:
-        $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.TenantRole'
+        $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.TenantRole'
     required:
     - role
     type: object
@@ -4804,7 +4876,7 @@ definitions:
       messages:
         description: Messages to use as context for title generation
         items:
-          $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.Message'
+          $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.Message'
         type: array
     required:
     - messages
@@ -4873,11 +4945,11 @@ definitions:
     type: object
 info:
   contact:
-    name: WeKnora Github
-    url: https://github.com/Tencent/WeKnora
-  description: WeKnora 知识库管理系统 API 文档
+    name: SemiClaw Github
+    url: https://github.com/vagawind/semiclaw
+  description: SemiClaw 知识库管理系统 API 文档
   termsOfService: http://swagger.io/terms/
-  title: WeKnora API
+  title: SemiClaw API
   version: "1.0"
 paths:
   /agent/tool-approvals/{pending_id}:
@@ -4909,11 +4981,11 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
         "404":
           description: 待审批记录不存在
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -4936,7 +5008,7 @@ paths:
         "500":
           description: 服务器错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -4965,7 +5037,7 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -4994,15 +5066,15 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
         "403":
           description: 无法删除内置智能体
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
         "404":
           description: 智能体不存在
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -5030,11 +5102,11 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
         "404":
           description: 智能体不存在
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -5068,11 +5140,11 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
         "403":
           description: 无法修改内置智能体
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -5101,11 +5173,11 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
         "404":
           description: 智能体不存在
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -5137,7 +5209,7 @@ paths:
         "403":
           description: 无权限
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -5178,11 +5250,11 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
         "404":
           description: 智能体不存在
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -5266,11 +5338,11 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.LoginResponse'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.LoginResponse'
         "403":
           description: 非 Lite 版本
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       summary: 自动初始化（Lite 桌面版）
       tags:
       - 认证
@@ -5302,7 +5374,7 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       summary: 修改密码
@@ -5349,7 +5421,7 @@ paths:
         "410":
           description: 链接无效或已撤销
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       summary: 解析共享邀请链接 token
       tags:
       - 认证
@@ -5364,18 +5436,18 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.LoginRequest'
+          $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.LoginRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.LoginResponse'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.LoginResponse'
         "401":
           description: 认证失败
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       summary: 用户登录
       tags:
       - 认证
@@ -5395,7 +5467,7 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       summary: 用户登出
@@ -5417,7 +5489,7 @@ paths:
         "401":
           description: 未授权
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       summary: 获取当前用户信息
@@ -5448,11 +5520,11 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
         "401":
           description: 未授权
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       summary: 更新当前用户的个性化设置
@@ -5495,7 +5567,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.OIDCConfigResponse'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.OIDCConfigResponse'
       summary: 获取OIDC登录配置
       tags:
       - 认证
@@ -5516,15 +5588,15 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.OIDCAuthURLResponse'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.OIDCAuthURLResponse'
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
         "403":
           description: OIDC未启用
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       summary: 获取OIDC授权地址
       tags:
       - 认证
@@ -5554,7 +5626,7 @@ paths:
         "401":
           description: 令牌无效
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       summary: 刷新令牌
       tags:
       - 认证
@@ -5569,22 +5641,22 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.RegisterRequest'
+          $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.RegisterRequest'
       produces:
       - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.RegisterResponse'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.RegisterResponse'
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
         "403":
           description: 注册功能已禁用
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       summary: 用户注册
       tags:
       - 认证
@@ -5608,19 +5680,19 @@ paths:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.LoginResponse'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.LoginResponse'
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
         "409":
           description: 邮箱已注册
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
         "410":
           description: 链接无效或已撤销
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       summary: 使用共享链接注册
       tags:
       - 认证
@@ -5647,15 +5719,15 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.LoginResponse'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.LoginResponse'
         "400":
           description: 参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
         "403":
           description: 无该租户成员关系
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       summary: 切换激活租户
@@ -5677,7 +5749,7 @@ paths:
         "401":
           description: 令牌无效
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       summary: 验证令牌
@@ -5745,7 +5817,7 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -5783,7 +5855,7 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -5817,11 +5889,11 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
         "404":
           description: 分块不存在
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -5860,11 +5932,11 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
         "404":
           description: 分块不存在
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -5893,11 +5965,11 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
         "404":
           description: 分块不存在
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -5935,11 +6007,11 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
         "404":
           description: 分块不存在
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -5962,7 +6034,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.DataSource'
+              $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.DataSource'
             type: array
         "400":
           description: Bad Request
@@ -5983,14 +6055,14 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.DataSource'
+          $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.DataSource'
       produces:
       - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.DataSource'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.DataSource'
         "400":
           description: Bad Request
           schema:
@@ -6035,7 +6107,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.DataSource'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.DataSource'
         "404":
           description: Not Found
           schema:
@@ -6060,14 +6132,14 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.DataSource'
+          $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.DataSource'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.DataSource'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.DataSource'
         "400":
           description: Bad Request
           schema:
@@ -6101,7 +6173,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.SyncLog'
+              $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.SyncLog'
             type: array
         "400":
           description: Bad Request
@@ -6153,7 +6225,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.Resource'
+              $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.Resource'
             type: array
         "400":
           description: Bad Request
@@ -6202,7 +6274,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.SyncLog'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.SyncLog'
         "400":
           description: Bad Request
           schema:
@@ -6252,7 +6324,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.SyncLog'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.SyncLog'
         "404":
           description: Not Found
           schema:
@@ -6272,7 +6344,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/github_com_Tencent_WeKnora_internal_datasource.ConnectorMetadata'
+              $ref: '#/definitions/github_com_vagawind_semiclaw_internal_datasource.ConnectorMetadata'
             type: array
       summary: Get available connectors
       tags:
@@ -6329,7 +6401,7 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -6358,7 +6430,7 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -6387,7 +6459,7 @@ paths:
         "404":
           description: 任务不存在
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -6587,7 +6659,7 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -6616,7 +6688,7 @@ paths:
         "404":
           description: 知识库不存在
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -6650,11 +6722,11 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
         "404":
           description: 知识库不存在
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -6684,7 +6756,7 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -6730,7 +6802,7 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -6760,7 +6832,7 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -6795,7 +6867,7 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -6847,7 +6919,7 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -6876,7 +6948,7 @@ paths:
         "404":
           description: 任务不存在
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -6918,7 +6990,7 @@ paths:
         "500":
           description: 服务器错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -6953,7 +7025,7 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -6986,7 +7058,7 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -7032,7 +7104,7 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -7062,7 +7134,7 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -7090,7 +7162,7 @@ paths:
         "500":
           description: 服务器错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -7107,7 +7179,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.KnowledgeBase'
+          $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.KnowledgeBase'
       produces:
       - application/json
       responses:
@@ -7119,7 +7191,7 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -7148,7 +7220,7 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -7180,11 +7252,11 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
         "404":
           description: 知识库不存在
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -7218,7 +7290,7 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -7258,7 +7330,7 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -7311,7 +7383,7 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -7336,7 +7408,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.FAQBatchUpsertPayload'
+          $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.FAQBatchUpsertPayload'
       produces:
       - application/json
       responses:
@@ -7348,7 +7420,7 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -7382,11 +7454,11 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
         "404":
           description: 条目不存在
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -7413,7 +7485,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.FAQEntryPayload'
+          $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.FAQEntryPayload'
       produces:
       - application/json
       responses:
@@ -7425,7 +7497,7 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -7465,11 +7537,11 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
         "404":
           description: 条目不存在
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -7497,7 +7569,7 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -7520,7 +7592,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.FAQEntryFieldsBatchUpdate'
+          $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.FAQEntryFieldsBatchUpdate'
       produces:
       - application/json
       responses:
@@ -7532,7 +7604,7 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -7567,7 +7639,7 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -7590,7 +7662,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.FAQEntryPayload'
+          $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.FAQEntryPayload'
       produces:
       - application/json
       responses:
@@ -7602,7 +7674,7 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -7637,11 +7709,11 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
         "404":
           description: 知识库不存在或无导入记录
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -7664,7 +7736,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.FAQSearchRequest'
+          $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.FAQSearchRequest'
       produces:
       - application/json
       responses:
@@ -7676,7 +7748,7 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -7699,7 +7771,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.SearchParams'
+          $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.SearchParams'
       produces:
       - application/json
       responses:
@@ -7711,7 +7783,7 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -7740,11 +7812,11 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
         "403":
           description: 权限不足
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -7809,7 +7881,7 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -7859,7 +7931,7 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
         "409":
           description: 文件重复
           schema:
@@ -7887,7 +7959,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.ManualKnowledgePayload'
+          $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.ManualKnowledgePayload'
       produces:
       - application/json
       responses:
@@ -7899,7 +7971,7 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -7947,7 +8019,7 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
         "409":
           description: URL重复
           schema:
@@ -7979,11 +8051,11 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
         "404":
           description: 知识库不存在
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -8012,7 +8084,7 @@ paths:
         "404":
           description: 知识库不存在
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -8034,7 +8106,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.ListSharesResponse'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.ListSharesResponse'
       security:
       - Bearer: []
       summary: 获取知识库的共享列表
@@ -8055,7 +8127,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.ShareKnowledgeBaseRequest'
+          $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.ShareKnowledgeBaseRequest'
       produces:
       - application/json
       responses:
@@ -8067,7 +8139,7 @@ paths:
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       summary: 共享知识库到组织
@@ -8096,7 +8168,7 @@ paths:
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       summary: 取消共享
@@ -8122,7 +8194,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.UpdateSharePermissionRequest'
+          $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.UpdateSharePermissionRequest'
       produces:
       - application/json
       responses:
@@ -8134,7 +8206,7 @@ paths:
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       summary: 更新共享权限
@@ -8174,7 +8246,7 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -8215,7 +8287,7 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -8262,7 +8334,7 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -8301,7 +8373,7 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -8331,7 +8403,7 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -8360,7 +8432,7 @@ paths:
         "404":
           description: 任务不存在
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -8391,7 +8463,7 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -8419,11 +8491,11 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
         "404":
           description: 知识不存在
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -8445,7 +8517,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.Knowledge'
+          $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.Knowledge'
       produces:
       - application/json
       responses:
@@ -8457,7 +8529,7 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -8487,15 +8559,15 @@ paths:
         "400":
           description: 状态不支持取消
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
         "403":
           description: 权限不足
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
         "404":
           description: 知识不存在
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -8523,7 +8595,7 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -8554,7 +8626,7 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -8588,11 +8660,11 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
         "403":
           description: 权限不足
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -8632,7 +8704,7 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -8662,11 +8734,11 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
         "403":
           description: 权限不足
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -8709,7 +8781,7 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -8732,7 +8804,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.ManualKnowledgePayload'
+          $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.ManualKnowledgePayload'
       produces:
       - application/json
       responses:
@@ -8744,7 +8816,7 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -8773,7 +8845,7 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -8795,11 +8867,11 @@ paths:
         "200":
           description: 进度信息
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.KnowledgeMoveProgress'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.KnowledgeMoveProgress'
         "404":
           description: 任务不存在
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -8844,7 +8916,7 @@ paths:
         "400":
           description: Invalid request
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -8874,7 +8946,7 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -8903,47 +8975,147 @@ paths:
       summary: Auto-fix wiki issues
       tags:
       - Wiki
-  /knowledgebase/{kb_id}/wiki/categories:
+  /knowledgebase/{kb_id}/wiki/folders:
     get:
-      description: Retrieve direct child directories for a wiki page type and optional
-        parent_path
+      description: Retrieve the direct child folders of a parent folder (parent_id
+        empty = root level), each with its page count and a has-children flag for
+        the directory tree.
       parameters:
       - description: Knowledge base ID
         in: path
         name: kb_id
         required: true
         type: string
-      - description: Wiki page type; comma-separated for multiple (e.g. entity,concept)
+      - description: Parent folder id (empty = root)
         in: query
-        name: page_type
-        required: true
+        name: parent_id
         type: string
-      - description: Parent category path, slash-separated
-        in: query
-        name: parent_path
-        type: string
-      - description: Page number (1-based)
-        in: query
-        name: page
-        type: integer
-      - description: Page size
-        in: query
-        name: page_size
-        type: integer
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.WikiCategoryPathListResponse'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.WikiFolderListResponse'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
-      summary: List wiki category paths
+      summary: List wiki folders
+      tags:
+      - Wiki
+    post:
+      consumes:
+      - application/json
+      description: Create a new (initially empty) directory node under parent_id
+      parameters:
+      - description: Knowledge base ID
+        in: path
+        name: kb_id
+        required: true
+        type: string
+      - description: Folder data
+        in: body
+        name: folder
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.WikiFolderCreateRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.WikiFolder'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
+      security:
+      - Bearer: []
+      summary: Create a wiki folder
+      tags:
+      - Wiki
+  /knowledgebase/{kb_id}/wiki/folders/{folder_id}:
+    delete:
+      description: Delete a folder that has no pages and no child folders
+      parameters:
+      - description: Knowledge base ID
+        in: path
+        name: kb_id
+        required: true
+        type: string
+      - description: Folder ID
+        in: path
+        name: folder_id
+        required: true
+        type: string
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
+      security:
+      - Bearer: []
+      summary: Delete an empty wiki folder
+      tags:
+      - Wiki
+    put:
+      consumes:
+      - application/json
+      description: Rename and/or reparent a folder; the whole subtree's paths and
+        the affected pages' cached paths are recomputed
+      parameters:
+      - description: Knowledge base ID
+        in: path
+        name: kb_id
+        required: true
+        type: string
+      - description: Folder ID
+        in: path
+        name: folder_id
+        required: true
+        type: string
+      - description: Folder update
+        in: body
+        name: folder
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.WikiFolderUpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.WikiFolder'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
+      security:
+      - Bearer: []
+      summary: Rename or move a wiki folder
       tags:
       - Wiki
   /knowledgebase/{kb_id}/wiki/graph:
@@ -8985,7 +9157,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.WikiGraphData'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.WikiGraphData'
       security:
       - Bearer: []
       summary: Get wiki link graph
@@ -9023,7 +9195,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.WikiIndexResponse'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.WikiIndexResponse'
       security:
       - Bearer: []
       summary: Get wiki index view
@@ -9053,7 +9225,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.WikiPageIssue'
+              $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.WikiPageIssue'
             type: array
       security:
       - Bearer: []
@@ -9094,7 +9266,7 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       summary: Update wiki page issue status
@@ -9115,7 +9287,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_application_service.WikiLintReport'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_application_service.WikiLintReport'
       security:
       - Bearer: []
       summary: Run wiki lint
@@ -9147,10 +9319,44 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.WikiLogEntryListResponse'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.WikiLogEntryListResponse'
       security:
       - Bearer: []
       summary: Get wiki operation log
+      tags:
+      - Wiki
+  /knowledgebase/{kb_id}/wiki/move-page:
+    put:
+      consumes:
+      - application/json
+      description: Relocate a page (identified by slug in the body) into a folder
+        (folder_id empty = root); the page's cached category path is recomputed
+      parameters:
+      - description: Knowledge base ID
+        in: path
+        name: kb_id
+        required: true
+        type: string
+      - description: Move target
+        in: body
+        name: move
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.WikiPageMoveRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.WikiPage'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
+      security:
+      - Bearer: []
+      summary: Move a wiki page into a folder
       tags:
       - Wiki
   /knowledgebase/{kb_id}/wiki/pages:
@@ -9196,11 +9402,11 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.WikiPageListResponse'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.WikiPageListResponse'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       summary: List wiki pages
@@ -9221,18 +9427,18 @@ paths:
         name: page
         required: true
         schema:
-          $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.WikiPage'
+          $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.WikiPage'
       produces:
       - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.WikiPage'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.WikiPage'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       summary: Create a wiki page
@@ -9258,7 +9464,7 @@ paths:
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       summary: Delete a wiki page
@@ -9283,11 +9489,11 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.WikiPage'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.WikiPage'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       summary: Get a wiki page by slug
@@ -9313,18 +9519,18 @@ paths:
         name: page
         required: true
         schema:
-          $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.WikiPage'
+          $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.WikiPage'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.WikiPage'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.WikiPage'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       summary: Update a wiki page
@@ -9376,7 +9582,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.WikiPage'
+              $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.WikiPage'
             type: array
       security:
       - Bearer: []
@@ -9398,7 +9604,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.WikiStats'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.WikiStats'
       security:
       - Bearer: []
       summary: Get wiki statistics
@@ -9420,7 +9626,7 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -9437,7 +9643,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.MCPService'
+          $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.MCPService'
       produces:
       - application/json
       responses:
@@ -9449,7 +9655,7 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -9478,7 +9684,7 @@ paths:
         "500":
           description: 服务器错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -9506,7 +9712,7 @@ paths:
         "404":
           description: 服务不存在
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -9540,7 +9746,7 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -9576,11 +9782,11 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
         "404":
           description: 服务不存在
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -9609,11 +9815,11 @@ paths:
         "400":
           description: 字段名非法
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
         "404":
           description: 服务不存在
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -9642,7 +9848,7 @@ paths:
         "500":
           description: 服务器错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -9671,7 +9877,7 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -9712,11 +9918,11 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
         "404":
           description: MCP 服务或工具不存在
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -9745,7 +9951,7 @@ paths:
         "500":
           description: 服务器错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -9860,7 +10066,7 @@ paths:
         "500":
           description: 服务器错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -9898,7 +10104,7 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -9947,7 +10153,7 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -9970,7 +10176,7 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -9999,7 +10205,7 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -10028,7 +10234,7 @@ paths:
         "404":
           description: 模型不存在
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -10056,7 +10262,7 @@ paths:
         "404":
           description: 模型不存在
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -10090,7 +10296,7 @@ paths:
         "404":
           description: 模型不存在
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -10121,9 +10327,9 @@ paths:
       summary: 获取模型厂商列表
       tags:
       - 模型管理
-  /models/weknoracloud/status:
+  /models/semiclawcloud/status:
     get:
-      description: 检查当前租户的 WeKnoraCloud 凭证是否完好；needs_reinit=true 表示需要重新保存
+      description: 检查当前租户的 SemiClawCloud 凭证是否完好；needs_reinit=true 表示需要重新保存
       produces:
       - application/json
       responses:
@@ -10140,9 +10346,9 @@ paths:
       security:
       - Bearer: []
       - ApiKeyAuth: []
-      summary: 检查 WeKnoraCloud 凭证状态
+      summary: 检查 SemiClawCloud 凭证状态
       tags:
-      - WeKnoraCloud
+      - SemiClawCloud
   /organizations:
     get:
       description: 获取当前租户所属的所有组织，并附带各空间内知识库/智能体数量
@@ -10152,7 +10358,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.ListOrganizationsResponse'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.ListOrganizationsResponse'
       security:
       - Bearer: []
       summary: 获取我的组织列表
@@ -10168,7 +10374,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.CreateOrganizationRequest'
+          $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.CreateOrganizationRequest'
       produces:
       - application/json
       responses:
@@ -10180,7 +10386,7 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       summary: 创建组织
@@ -10204,7 +10410,7 @@ paths:
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       summary: 删除组织
@@ -10229,7 +10435,7 @@ paths:
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       summary: 获取组织详情
@@ -10250,7 +10456,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.UpdateOrganizationRequest'
+          $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.UpdateOrganizationRequest'
       produces:
       - application/json
       responses:
@@ -10262,7 +10468,7 @@ paths:
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       summary: 更新组织
@@ -10288,7 +10494,7 @@ paths:
         "403":
           description: 非组织成员
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -10311,7 +10517,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.InviteMemberRequest'
+          $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.InviteMemberRequest'
       produces:
       - application/json
       responses:
@@ -10323,11 +10529,11 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       summary: 邀请成员
@@ -10353,7 +10559,7 @@ paths:
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       summary: 生成邀请码
@@ -10379,7 +10585,7 @@ paths:
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       summary: 获取待审核加入申请列表
@@ -10406,7 +10612,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.ReviewJoinRequestRequest'
+          $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.ReviewJoinRequestRequest'
       produces:
       - application/json
       responses:
@@ -10418,7 +10624,7 @@ paths:
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       summary: 审核加入申请
@@ -10442,7 +10648,7 @@ paths:
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       summary: 退出组织
@@ -10463,7 +10669,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.ListMembersResponse'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.ListMembersResponse'
       security:
       - Bearer: []
       summary: 获取组织成员列表
@@ -10492,7 +10698,7 @@ paths:
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       summary: 移除成员
@@ -10518,7 +10724,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.UpdateMemberRoleRequest'
+          $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.UpdateMemberRoleRequest'
       produces:
       - application/json
       responses:
@@ -10530,7 +10736,7 @@ paths:
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       summary: 更新成员角色
@@ -10552,7 +10758,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.RequestRoleUpgradeRequest'
+          $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.RequestRoleUpgradeRequest'
       produces:
       - application/json
       responses:
@@ -10564,7 +10770,7 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       summary: 申请权限升级
@@ -10600,7 +10806,7 @@ paths:
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       summary: 搜索可邀请的租户
@@ -10669,7 +10875,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.ListSharesResponse'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.ListSharesResponse'
       security:
       - Bearer: []
       summary: 获取组织的共享知识库列表
@@ -10686,7 +10892,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.JoinOrganizationRequest'
+          $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.JoinOrganizationRequest'
       produces:
       - application/json
       responses:
@@ -10698,7 +10904,7 @@ paths:
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       summary: 通过邀请码加入组织
@@ -10715,7 +10921,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.JoinByOrganizationIDRequest'
+          $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.JoinByOrganizationIDRequest'
       produces:
       - application/json
       responses:
@@ -10727,7 +10933,7 @@ paths:
         "403":
           description: Forbidden
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       summary: 通过空间 ID 加入（可搜索空间）
@@ -10744,7 +10950,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.SubmitJoinRequestRequest'
+          $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.SubmitJoinRequestRequest'
       produces:
       - application/json
       responses:
@@ -10756,7 +10962,7 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       summary: 提交加入申请
@@ -10782,7 +10988,7 @@ paths:
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       summary: 通过邀请码预览组织
@@ -10814,6 +11020,38 @@ paths:
       summary: 搜索可加入的空间
       tags:
       - 组织管理
+  /semiclawcloud/credentials:
+    post:
+      consumes:
+      - application/json
+      description: 保存 APPID/APPSECRET 到当前租户配置（不自动创建模型）
+      parameters:
+      - description: '{app_id, app_secret}'
+        in: body
+        name: request
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 'success: true'
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: 请求参数错误
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - Bearer: []
+      - ApiKeyAuth: []
+      summary: 保存 SemiClawCloud 凭证
+      tags:
+      - SemiClawCloud
   /sessions:
     get:
       consumes:
@@ -10851,7 +11089,7 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -10880,7 +11118,7 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -10909,7 +11147,7 @@ paths:
         "404":
           description: 会话不存在
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -10937,7 +11175,7 @@ paths:
         "404":
           description: 会话不存在
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -10959,7 +11197,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.Session'
+          $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.Session'
       produces:
       - application/json
       responses:
@@ -10971,7 +11209,7 @@ paths:
         "404":
           description: 会话不存在
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -11000,11 +11238,11 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
         "404":
           description: 会话不存在
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -11031,7 +11269,7 @@ paths:
         "404":
           description: 会话不存在
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -11066,7 +11304,7 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -11101,7 +11339,7 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -11128,7 +11366,7 @@ paths:
         "404":
           description: 会话不存在
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -11163,7 +11401,7 @@ paths:
         "404":
           description: 会话或消息不存在
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -11198,7 +11436,7 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -11228,7 +11466,7 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -11262,7 +11500,7 @@ paths:
         "404":
           description: 会话或消息不存在
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -11292,7 +11530,7 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -11313,7 +11551,7 @@ paths:
         "500":
           description: 服务器错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -11352,7 +11590,7 @@ paths:
         "500":
           description: 服务器错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -11394,7 +11632,7 @@ paths:
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -11455,7 +11693,7 @@ paths:
         "200":
           description: User promoted successfully
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.UserInfo'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.UserInfo'
         "400":
           description: Bad request
           schema:
@@ -11497,7 +11735,7 @@ paths:
         "200":
           description: Privileges revoked successfully
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.UserInfo'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.UserInfo'
         "400":
           description: Bad request / would remove last admin / self-revoke
           schema:
@@ -11528,7 +11766,7 @@ paths:
           description: list of settings
           schema:
             items:
-              $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.SystemSetting'
+              $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.SystemSetting'
             type: array
         "403":
           description: 'Forbidden: not a system admin'
@@ -11586,7 +11824,7 @@ paths:
         "200":
           description: the setting row
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.SystemSetting'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.SystemSetting'
         "400":
           description: Unknown key
           schema:
@@ -11626,7 +11864,7 @@ paths:
         "200":
           description: the updated row
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.SystemSetting'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.SystemSetting'
         "400":
           description: Bad request / unknown key / type mismatch
           schema:
@@ -11782,7 +12020,7 @@ paths:
         "500":
           description: 服务器错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       summary: 获取租户列表
@@ -11813,7 +12051,7 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       summary: 创建租户
@@ -11841,7 +12079,7 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       summary: 删除租户
@@ -11868,11 +12106,11 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
         "404":
           description: 租户不存在
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -11894,7 +12132,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.Tenant'
+          $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.Tenant'
       produces:
       - application/json
       responses:
@@ -11906,7 +12144,7 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       summary: 更新租户
@@ -11934,11 +12172,11 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
         "403":
           description: 权限不足
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       summary: 重置租户 API Key
@@ -11983,7 +12221,7 @@ paths:
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -12277,7 +12515,7 @@ paths:
         "403":
           description: 权限不足
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       summary: 获取所有租户列表
@@ -12305,7 +12543,7 @@ paths:
         "400":
           description: 不支持的键
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -12339,7 +12577,7 @@ paths:
         "400":
           description: 不支持的键
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -12362,7 +12600,7 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -12385,7 +12623,7 @@ paths:
         "400":
           description: 请求参数错误
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -12427,7 +12665,7 @@ paths:
         "403":
           description: 权限不足
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -12537,7 +12775,7 @@ paths:
         "400":
           description: Invalid request or validation error
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
         "401":
           description: Unauthorized
           schema:
@@ -12546,7 +12784,7 @@ paths:
         "409":
           description: Duplicate endpoint and index
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
       security:
       - Bearer: []
       - ApiKeyAuth: []
@@ -12728,7 +12966,7 @@ paths:
         "400":
           description: Invalid request
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_errors.AppError'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_errors.AppError'
         "401":
           description: Unauthorized
           schema:
@@ -12797,7 +13035,7 @@ paths:
         "200":
           description: Provider 详情
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.WebSearchProviderEntity'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.WebSearchProviderEntity'
         "404":
           description: Provider 不存在
           schema:
@@ -12831,7 +13069,7 @@ paths:
         "200":
           description: 更新后的 Provider
           schema:
-            $ref: '#/definitions/github_com_Tencent_WeKnora_internal_types.WebSearchProviderEntity'
+            $ref: '#/definitions/github_com_vagawind_semiclaw_internal_types.WebSearchProviderEntity'
         "400":
           description: 请求参数错误
           schema:
@@ -13000,38 +13238,6 @@ paths:
       summary: 轮询微信二维码状态
       tags:
       - IM 渠道
-  /weknoracloud/credentials:
-    post:
-      consumes:
-      - application/json
-      description: 保存 APPID/APPSECRET 到当前租户配置（不自动创建模型）
-      parameters:
-      - description: '{app_id, app_secret}'
-        in: body
-        name: request
-        required: true
-        schema:
-          additionalProperties: true
-          type: object
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 'success: true'
-          schema:
-            additionalProperties: true
-            type: object
-        "400":
-          description: 请求参数错误
-          schema:
-            additionalProperties: true
-            type: object
-      security:
-      - Bearer: []
-      - ApiKeyAuth: []
-      summary: 保存 WeKnoraCloud 凭证
-      tags:
-      - WeKnoraCloud
 securityDefinitions:
   ApiKeyAuth:
     description: 租户身份认证：输入 sk- 开头的 API Key

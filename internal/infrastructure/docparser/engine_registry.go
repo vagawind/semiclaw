@@ -3,7 +3,7 @@ package docparser
 import (
 	"strings"
 
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/types"
 )
 
 // EngineRegistration is the interface every locally registered parser engine
@@ -27,7 +27,7 @@ func RegisterEngine(e EngineRegistration) {
 func init() {
 	RegisterEngine(&builtinEngine{})
 	RegisterEngine(&simpleEngine{})
-	RegisterEngine(&weKnoraCloudEngine{})
+	RegisterEngine(&semiClawCloudEngine{})
 	RegisterEngine(&mineruEngine{})
 	RegisterEngine(&mineruCloudEngine{})
 	RegisterEngine(&paddleOCRVLEngine{})
@@ -57,8 +57,8 @@ func (e *builtinEngine) CheckAvailable(docreaderConnected bool, _ map[string]str
 // SimpleEngineName is the engine name for Go-native simple format handling.
 const SimpleEngineName = "simple"
 
-// WeKnoraCloudEngineName is the engine name for WeKnoraCloud-backed document parsing.
-const WeKnoraCloudEngineName = "weknoracloud"
+// SemiClawCloudEngineName is the engine name for SemiClawCloud-backed document parsing.
+const SemiClawCloudEngineName = "weknoracloud"
 
 // ---------------------------------------------------------------------------
 // simple — Go handles md/txt/csv natively, no external service needed.
@@ -80,21 +80,21 @@ func (e *simpleEngine) CheckAvailable(_ bool, _ map[string]string) (bool, string
 }
 
 // ---------------------------------------------------------------------------
-// weknoracloud — Tenant-scoped WeKnoraCloud docreader with signed requests.
+// semiclawcloud — Tenant-scoped SemiClawCloud docreader with signed requests.
 // ---------------------------------------------------------------------------
 
-type weKnoraCloudEngine struct{}
+type semiClawCloudEngine struct{}
 
-func (e *weKnoraCloudEngine) Name() string        { return WeKnoraCloudEngineName }
-func (e *weKnoraCloudEngine) Description() string { return "WeKnoraCloud document reader" }
-func (e *weKnoraCloudEngine) FileTypes(_ bool) []string {
+func (e *semiClawCloudEngine) Name() string        { return SemiClawCloudEngineName }
+func (e *semiClawCloudEngine) Description() string { return "SemiClawCloud document reader" }
+func (e *semiClawCloudEngine) FileTypes(_ bool) []string {
 	return []string{"docx", "doc", "pdf", "md", "markdown", "xlsx", "xls", "pptx", "ppt"}
 }
-func (e *weKnoraCloudEngine) CheckAvailable(docreaderConnected bool, overrides map[string]string) (bool, string) {
-	if overrides["weknoracloud_app_id"] != "" {
+func (e *semiClawCloudEngine) CheckAvailable(docreaderConnected bool, overrides map[string]string) (bool, string) {
+	if overrides["semiclawcloud_app_id"] != "" {
 		return true, ""
 	}
-	return false, "WeKnora Cloud credentials not configured. Go to Settings → WeKnora Cloud to set up."
+	return false, "SemiClaw Cloud credentials not configured. Go to Settings → SemiClaw Cloud to set up."
 }
 
 // ---------------------------------------------------------------------------

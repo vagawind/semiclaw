@@ -1,0 +1,23 @@
+[Unit]
+Description=SemiClaw Lite - Knowledge Base Management System
+After=network.target
+
+[Service]
+Type=simple
+User=semiclaw
+Group=semiclaw
+WorkingDirectory=/opt/semiclaw
+EnvironmentFile=/opt/semiclaw/.env.lite
+ExecStart=/opt/semiclaw/SemiClaw-lite
+Restart=on-failure
+RestartSec=5
+LimitNOFILE=65536
+
+# Security hardening
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/semiclaw/data
+
+[Install]
+WantedBy=multi-user.target

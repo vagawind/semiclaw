@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/types"
 	"github.com/stretchr/testify/assert"
 	"github.com/tencent/vectordatabase-sdk-go/tcvdbtext/encoder"
 )
@@ -87,9 +87,9 @@ func TestTencentVectorDBUsesConfiguredReplicaNumber(t *testing.T) {
 func TestCollectionNameUsesDimensionSuffixByDefault(t *testing.T) {
 	repo := NewTencentVectorDBRetrieveEngineRepository(nil, "", nil).(*repository)
 
-	assert.Equal(t, "weknora_embeddings_1024", repo.collectionName(1024))
-	assert.True(t, repo.matchesCollection("weknora_embeddings_1024"))
-	assert.False(t, repo.matchesCollection("weknora_embeddings"))
+	assert.Equal(t, "semiclaw_embeddings_1024", repo.collectionName(1024))
+	assert.True(t, repo.matchesCollection("semiclaw_embeddings_1024"))
+	assert.False(t, repo.matchesCollection("semiclaw_embeddings"))
 }
 
 func TestCollectionNameRespectsExplicitCollectionName(t *testing.T) {

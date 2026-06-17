@@ -10,9 +10,9 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/Tencent/WeKnora/internal/models/provider"
-	"github.com/Tencent/WeKnora/internal/types"
-	secutils "github.com/Tencent/WeKnora/internal/utils"
+	"github.com/vagawind/semiclaw/internal/models/provider"
+	"github.com/vagawind/semiclaw/internal/types"
+	secutils "github.com/vagawind/semiclaw/internal/utils"
 )
 
 const anthropicVersion = "2023-06-01"

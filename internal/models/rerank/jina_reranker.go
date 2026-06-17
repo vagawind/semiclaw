@@ -8,8 +8,8 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/Tencent/WeKnora/internal/logger"
-	secutils "github.com/Tencent/WeKnora/internal/utils"
+	"github.com/vagawind/semiclaw/internal/logger"
+	secutils "github.com/vagawind/semiclaw/internal/utils"
 )
 
 // JinaReranker implements a reranking system using Jina AI API

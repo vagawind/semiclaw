@@ -9,10 +9,10 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/Tencent/WeKnora/internal/logger"
-	"github.com/Tencent/WeKnora/internal/models/provider"
-	"github.com/Tencent/WeKnora/internal/types"
-	secutils "github.com/Tencent/WeKnora/internal/utils"
+	"github.com/vagawind/semiclaw/internal/logger"
+	"github.com/vagawind/semiclaw/internal/models/provider"
+	"github.com/vagawind/semiclaw/internal/types"
+	secutils "github.com/vagawind/semiclaw/internal/utils"
 	"github.com/sashabaranov/go-openai"
 )
 
@@ -87,12 +87,12 @@ func NewRemoteAPIChat(chatConfig *ChatConfig) (*RemoteAPIChat, error) {
 			modelName = override
 		}
 	}
-	if providerName == provider.ProviderWeKnoraCloud {
+	if providerName == provider.ProviderSemiClawCloud {
 		if chatConfig.AppID == "" {
-			return nil, fmt.Errorf("WeKnoraCloud provider: AppID is required")
+			return nil, fmt.Errorf("SemiClawCloud provider: AppID is required")
 		}
 		if chatConfig.AppSecret == "" {
-			return nil, fmt.Errorf("WeKnoraCloud provider: AppSecret is required")
+			return nil, fmt.Errorf("SemiClawCloud provider: AppSecret is required")
 		}
 	}
 

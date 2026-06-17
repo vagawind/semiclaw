@@ -8,9 +8,9 @@ import (
 	"google.golang.org/api/customsearch/v1"
 	"google.golang.org/api/option"
 
-	"github.com/Tencent/WeKnora/internal/logger"
-	"github.com/Tencent/WeKnora/internal/types"
-	"github.com/Tencent/WeKnora/internal/types/interfaces"
+	"github.com/vagawind/semiclaw/internal/logger"
+	"github.com/vagawind/semiclaw/internal/types"
+	"github.com/vagawind/semiclaw/internal/types/interfaces"
 )
 
 // GoogleProvider implements web search using Google Custom Search Engine API

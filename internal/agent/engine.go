@@ -7,17 +7,17 @@ import (
 	"strings"
 	"time"
 
-	agentmemory "github.com/Tencent/WeKnora/internal/agent/memory"
-	"github.com/Tencent/WeKnora/internal/agent/skills"
-	agenttoken "github.com/Tencent/WeKnora/internal/agent/token"
-	agenttools "github.com/Tencent/WeKnora/internal/agent/tools"
-	"github.com/Tencent/WeKnora/internal/common"
-	appconfig "github.com/Tencent/WeKnora/internal/config"
-	"github.com/Tencent/WeKnora/internal/event"
-	"github.com/Tencent/WeKnora/internal/logger"
-	"github.com/Tencent/WeKnora/internal/models/chat"
-	"github.com/Tencent/WeKnora/internal/tracing/langfuse"
-	"github.com/Tencent/WeKnora/internal/types"
+	agentmemory "github.com/vagawind/semiclaw/internal/agent/memory"
+	"github.com/vagawind/semiclaw/internal/agent/skills"
+	agenttoken "github.com/vagawind/semiclaw/internal/agent/token"
+	agenttools "github.com/vagawind/semiclaw/internal/agent/tools"
+	"github.com/vagawind/semiclaw/internal/common"
+	appconfig "github.com/vagawind/semiclaw/internal/config"
+	"github.com/vagawind/semiclaw/internal/event"
+	"github.com/vagawind/semiclaw/internal/logger"
+	"github.com/vagawind/semiclaw/internal/models/chat"
+	"github.com/vagawind/semiclaw/internal/tracing/langfuse"
+	"github.com/vagawind/semiclaw/internal/types"
 )
 
 // langfuseQueryPreview caps the query length we ship as the agent.execute

@@ -9,8 +9,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/Tencent/WeKnora/internal/logger"
-	secutils "github.com/Tencent/WeKnora/internal/utils"
+	"github.com/vagawind/semiclaw/internal/logger"
+	secutils "github.com/vagawind/semiclaw/internal/utils"
 )
 
 // OpenAIEmbedder implements text vectorization functionality using OpenAI API

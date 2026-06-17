@@ -11,10 +11,10 @@ import (
 	"strings"
 	"time"
 
-	openSearchRepo "github.com/Tencent/WeKnora/internal/application/repository/retriever/opensearch"
-	"github.com/Tencent/WeKnora/internal/errors"
-	"github.com/Tencent/WeKnora/internal/logger"
-	"github.com/Tencent/WeKnora/internal/types"
+	openSearchRepo "github.com/vagawind/semiclaw/internal/application/repository/retriever/opensearch"
+	"github.com/vagawind/semiclaw/internal/errors"
+	"github.com/vagawind/semiclaw/internal/logger"
+	"github.com/vagawind/semiclaw/internal/types"
 	"github.com/go-sql-driver/mysql"   // MySQL driver for database/sql, used by Doris connection test
 	_ "github.com/jackc/pgx/v5/stdlib" // pgx driver for database/sql
 	"github.com/qdrant/go-client/qdrant"

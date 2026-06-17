@@ -7,20 +7,20 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/Tencent/WeKnora/internal/agent"
-	"github.com/Tencent/WeKnora/internal/agent/approval"
-	"github.com/Tencent/WeKnora/internal/agent/skills"
-	"github.com/Tencent/WeKnora/internal/agent/tools"
-	"github.com/Tencent/WeKnora/internal/config"
-	"github.com/Tencent/WeKnora/internal/event"
-	"github.com/Tencent/WeKnora/internal/logger"
-	"github.com/Tencent/WeKnora/internal/mcp"
-	"github.com/Tencent/WeKnora/internal/models/chat"
-	"github.com/Tencent/WeKnora/internal/models/rerank"
-	"github.com/Tencent/WeKnora/internal/sandbox"
-	"github.com/Tencent/WeKnora/internal/types"
-	"github.com/Tencent/WeKnora/internal/types/interfaces"
-	secutils "github.com/Tencent/WeKnora/internal/utils"
+	"github.com/vagawind/semiclaw/internal/agent"
+	"github.com/vagawind/semiclaw/internal/agent/approval"
+	"github.com/vagawind/semiclaw/internal/agent/skills"
+	"github.com/vagawind/semiclaw/internal/agent/tools"
+	"github.com/vagawind/semiclaw/internal/config"
+	"github.com/vagawind/semiclaw/internal/event"
+	"github.com/vagawind/semiclaw/internal/logger"
+	"github.com/vagawind/semiclaw/internal/mcp"
+	"github.com/vagawind/semiclaw/internal/models/chat"
+	"github.com/vagawind/semiclaw/internal/models/rerank"
+	"github.com/vagawind/semiclaw/internal/sandbox"
+	"github.com/vagawind/semiclaw/internal/types"
+	"github.com/vagawind/semiclaw/internal/types/interfaces"
+	secutils "github.com/vagawind/semiclaw/internal/utils"
 	"gorm.io/gorm"
 )
 
@@ -271,21 +271,21 @@ func (s *agentService) initializeSkillsManager(
 	toolRegistry *tools.ToolRegistry,
 ) (*skills.Manager, error) {
 	// Initialize sandbox manager based on environment variables
-	// WEKNORA_SANDBOX_MODE: "docker", "local", "disabled" (default: "disabled")
-	// WEKNORA_SANDBOX_TIMEOUT: timeout in seconds (default: 60)
-	// WEKNORA_SANDBOX_DOCKER_IMAGE: custom Docker image (default: wechatopenai/weknora-sandbox:latest)
+	// SEMICLAW_SANDBOX_MODE: "docker", "local", "disabled" (default: "disabled")
+	// SEMICLAW_SANDBOX_TIMEOUT: timeout in seconds (default: 60)
+	// SEMICLAW_SANDBOX_DOCKER_IMAGE: custom Docker image (default: vagawind/semiclaw-sandbox:latest)
 	var sandboxMgr sandbox.Manager
 	var err error
 
-	sandboxMode := os.Getenv("WEKNORA_SANDBOX_MODE")
+	sandboxMode := os.Getenv("SEMICLAW_SANDBOX_MODE")
 	if sandboxMode == "" {
 		sandboxMode = "disabled"
 	}
-	dockerImage := os.Getenv("WEKNORA_SANDBOX_DOCKER_IMAGE")
+	dockerImage := os.Getenv("SEMICLAW_SANDBOX_DOCKER_IMAGE")
 	if dockerImage == "" {
 		dockerImage = sandbox.DefaultDockerImage
 	}
-	sandboxTimeoutStr := os.Getenv("WEKNORA_SANDBOX_TIMEOUT")
+	sandboxTimeoutStr := os.Getenv("SEMICLAW_SANDBOX_TIMEOUT")
 	sandboxTimeout := 60
 	if sandboxTimeoutStr != "" {
 		if v, err := strconv.Atoi(sandboxTimeoutStr); err == nil && v > 0 {

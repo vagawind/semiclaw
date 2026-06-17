@@ -10,14 +10,14 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Tencent/WeKnora/internal/models/utils"
+	"github.com/vagawind/semiclaw/internal/models/utils"
 	"github.com/google/uuid"
 )
 
-const weKnoraCloudEmbedPath = "/api/v1/embeddings"
+const semiClawCloudEmbedPath = "/api/v1/embeddings"
 
-// WeKnoraCloudEmbedder 实现 embedding.Embedder 接口，对接 WeKnoraCloud /api/v1/embeddings
-type WeKnoraCloudEmbedder struct {
+// SemiClawCloudEmbedder 实现 embedding.Embedder 接口，对接 SemiClawCloud /api/v1/embeddings
+type SemiClawCloudEmbedder struct {
 	modelName                 string
 	remoteModelName           string
 	modelID                   string
@@ -30,19 +30,19 @@ type WeKnoraCloudEmbedder struct {
 	EmbedderPooler
 }
 
-// NewWeKnoraCloudEmbedder 构造 WeKnoraCloudEmbedder
-func NewWeKnoraCloudEmbedder(config Config) (*WeKnoraCloudEmbedder, error) {
+// NewSemiClawCloudEmbedder 构造 SemiClawCloudEmbedder
+func NewSemiClawCloudEmbedder(config Config) (*SemiClawCloudEmbedder, error) {
 	if config.AppID == "" {
-		return nil, fmt.Errorf("WeKnoraCloud embedder: AppID is required")
+		return nil, fmt.Errorf("SemiClawCloud embedder: AppID is required")
 	}
 	if config.AppSecret == "" {
-		return nil, fmt.Errorf("WeKnoraCloud embedder: AppSecret is required")
+		return nil, fmt.Errorf("SemiClawCloud embedder: AppSecret is required")
 	}
 	remoteModelName := ""
 	if config.ExtraConfig != nil {
 		remoteModelName = strings.TrimSpace(config.ExtraConfig["remote_model_name"])
 	}
-	return &WeKnoraCloudEmbedder{
+	return &SemiClawCloudEmbedder{
 		modelName:                 config.ModelName,
 		remoteModelName:           remoteModelName,
 		modelID:                   config.ModelID,
@@ -55,47 +55,47 @@ func NewWeKnoraCloudEmbedder(config Config) (*WeKnoraCloudEmbedder, error) {
 	}, nil
 }
 
-type weKnoraCloudEmbedRequest struct {
+type semiClawCloudEmbedRequest struct {
 	Model                string   `json:"model"`
 	Input                []string `json:"input"`
 	Dimensions           int      `json:"dimensions,omitempty"`
 	TruncatePromptTokens int      `json:"truncate_prompt_tokens,omitempty"`
 }
 
-type weKnoraCloudEmbedResponse struct {
+type semiClawCloudEmbedResponse struct {
 	Data []struct {
 		Index     int       `json:"index"`
 		Embedding []float32 `json:"embedding"`
 	} `json:"data"`
 }
 
-func (e *WeKnoraCloudEmbedder) Embed(ctx context.Context, text string) ([]float32, error) {
+func (e *SemiClawCloudEmbedder) Embed(ctx context.Context, text string) ([]float32, error) {
 	results, err := e.BatchEmbed(ctx, []string{text})
 	if err != nil {
 		return nil, err
 	}
 	if len(results) == 0 {
-		return nil, fmt.Errorf("weknoracloud embedder: empty response")
+		return nil, fmt.Errorf("semiclawcloud embedder: empty response")
 	}
 	return results[0], nil
 }
 
-func (e *WeKnoraCloudEmbedder) BatchEmbed(ctx context.Context, texts []string) ([][]float32, error) {
-	reqBody := weKnoraCloudEmbedRequest{Model: e.effectiveModelName(), Input: texts}
+func (e *SemiClawCloudEmbedder) BatchEmbed(ctx context.Context, texts []string) ([][]float32, error) {
+	reqBody := semiClawCloudEmbedRequest{Model: e.effectiveModelName(), Input: texts}
 	if e.supportsDimensionOverride && e.dimensions > 0 {
 		reqBody.Dimensions = e.dimensions
 	}
 	bodyBytes, err := json.Marshal(reqBody)
 	if err != nil {
-		return nil, fmt.Errorf("weknoracloud embedder: marshal: %w", err)
+		return nil, fmt.Errorf("semiclawcloud embedder: marshal: %w", err)
 	}
 
 	requestID := uuid.New().String()
 	headers := utils.Sign(e.appID, e.apiKey, requestID, string(bodyBytes))
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodPost, e.baseURL+weKnoraCloudEmbedPath, bytes.NewReader(bodyBytes))
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, e.baseURL+semiClawCloudEmbedPath, bytes.NewReader(bodyBytes))
 	if err != nil {
-		return nil, fmt.Errorf("weknoracloud embedder: create request: %w", err)
+		return nil, fmt.Errorf("semiclawcloud embedder: create request: %w", err)
 	}
 	req.Header.Set("Content-Type", "application/json")
 	for k, v := range headers {
@@ -104,21 +104,21 @@ func (e *WeKnoraCloudEmbedder) BatchEmbed(ctx context.Context, texts []string) (
 
 	resp, err := e.client.Do(req)
 	if err != nil {
-		return nil, fmt.Errorf("weknoracloud embedder: do request: %w", err)
+		return nil, fmt.Errorf("semiclawcloud embedder: do request: %w", err)
 	}
 	defer resp.Body.Close()
 
 	respBytes, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return nil, fmt.Errorf("weknoracloud embedder: read response: %w", err)
+		return nil, fmt.Errorf("semiclawcloud embedder: read response: %w", err)
 	}
 	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("weknoracloud embedder: status %d: %s", resp.StatusCode, string(respBytes))
+		return nil, fmt.Errorf("semiclawcloud embedder: status %d: %s", resp.StatusCode, string(respBytes))
 	}
 
-	var embedResp weKnoraCloudEmbedResponse
+	var embedResp semiClawCloudEmbedResponse
 	if err := json.Unmarshal(respBytes, &embedResp); err != nil {
-		return nil, fmt.Errorf("weknoracloud embedder: unmarshal: %w", err)
+		return nil, fmt.Errorf("semiclawcloud embedder: unmarshal: %w", err)
 	}
 
 	result := make([][]float32, len(texts))
@@ -130,21 +130,21 @@ func (e *WeKnoraCloudEmbedder) BatchEmbed(ctx context.Context, texts []string) (
 	return result, nil
 }
 
-func (e *WeKnoraCloudEmbedder) BatchEmbedWithPool(ctx context.Context, model Embedder, texts []string) ([][]float32, error) {
+func (e *SemiClawCloudEmbedder) BatchEmbedWithPool(ctx context.Context, model Embedder, texts []string) ([][]float32, error) {
 	return e.BatchEmbed(ctx, texts)
 }
 
-func (e *WeKnoraCloudEmbedder) SetSupportsDimensionOverride(supported bool) {
+func (e *SemiClawCloudEmbedder) SetSupportsDimensionOverride(supported bool) {
 	e.supportsDimensionOverride = supported
 }
 
-func (e *WeKnoraCloudEmbedder) effectiveModelName() string {
+func (e *SemiClawCloudEmbedder) effectiveModelName() string {
 	if e.remoteModelName != "" {
 		return e.remoteModelName
 	}
 	return e.modelName
 }
 
-func (e *WeKnoraCloudEmbedder) GetModelName() string { return e.modelName }
-func (e *WeKnoraCloudEmbedder) GetModelID() string   { return e.modelID }
-func (e *WeKnoraCloudEmbedder) GetDimensions() int   { return e.dimensions }
+func (e *SemiClawCloudEmbedder) GetModelName() string { return e.modelName }
+func (e *SemiClawCloudEmbedder) GetModelID() string   { return e.modelID }
+func (e *SemiClawCloudEmbedder) GetDimensions() int   { return e.dimensions }

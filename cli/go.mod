@@ -1,9 +1,8 @@
-module github.com/Tencent/WeKnora/cli
+module github.com/vagawind/semiclaw/cli
 
 go 1.26.0
 
 require (
-	github.com/Tencent/WeKnora/client v0.0.0-00010101000000-000000000000
 	github.com/charmbracelet/huh v1.0.0
 	github.com/itchyny/gojq v0.12.19
 	github.com/mattn/go-isatty v0.0.22
@@ -12,6 +11,7 @@ require (
 	github.com/spf13/cobra v1.10.2
 	github.com/spf13/pflag v1.0.10
 	github.com/stretchr/testify v1.11.1
+	github.com/vagawind/semiclaw/client v0.0.0-00010101000000-000000000000
 	github.com/zalando/go-keyring v0.2.8
 	gopkg.in/yaml.v3 v3.0.1
 )
@@ -58,4 +58,4 @@ require (
 
 // In-repo SDK module: cli pulls the local client/ until both modules ship
 // independent tagged versions.
-replace github.com/Tencent/WeKnora/client => ../client
+replace github.com/vagawind/semiclaw/client => ../client

@@ -192,8 +192,8 @@ func TestOssEnsureBucket_CreateFails(t *testing.T) {
 		t.Fatalf("newOSSClient() error: %v", err)
 	}
 
-	// Should fail with invalid credentials
-	err = ossEnsureBucket(client, "test-bucket")
+	// Use a unique bucket name so IsBucketExist returns false and PutBucket is attempted.
+	err = ossEnsureBucket(client, "this-bucket-definitely-does-not-exist-create-fails-12345")
 	if err == nil {
 		t.Error("ossEnsureBucket with invalid credentials should return an error")
 	}

@@ -1,11 +1,11 @@
 package router
 
 import (
-	"github.com/Tencent/WeKnora/internal/config"
-	"github.com/Tencent/WeKnora/internal/handler"
-	"github.com/Tencent/WeKnora/internal/middleware"
-	"github.com/Tencent/WeKnora/internal/types"
-	"github.com/Tencent/WeKnora/internal/types/interfaces"
+	"github.com/vagawind/semiclaw/internal/config"
+	"github.com/vagawind/semiclaw/internal/handler"
+	"github.com/vagawind/semiclaw/internal/middleware"
+	"github.com/vagawind/semiclaw/internal/types"
+	"github.com/vagawind/semiclaw/internal/types/interfaces"
 	"github.com/gin-gonic/gin"
 )
 
@@ -34,7 +34,7 @@ import (
 //	      Viewer" hold uniformly.
 //
 //	NO  — Tenant-wide infrastructure: Model, VectorStore, IM channel,
-//	      WebSearchProvider, DataSource, MCPService, WeKnoraCloud
+//	      WebSearchProvider, DataSource, MCPService, SemiClawCloud
 //	      credentials.
 //	      => Mutating routes use Admin().
 //	      There is no "creator-of-the-vector-store" concept; configuring

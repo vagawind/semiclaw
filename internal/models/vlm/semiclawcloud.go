@@ -10,15 +10,15 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/Tencent/WeKnora/internal/logger"
-	"github.com/Tencent/WeKnora/internal/models/utils"
+	"github.com/vagawind/semiclaw/internal/logger"
+	"github.com/vagawind/semiclaw/internal/models/utils"
 	"github.com/google/uuid"
 )
 
-const weKnoraCloudVLMPath = "/api/v1/chat/completions"
+const semiClawCloudVLMPath = "/api/v1/chat/completions"
 
-// WeKnoraCloudVLM implements VLM via the WeKnoraCloud API.
-type WeKnoraCloudVLM struct {
+// SemiClawCloudVLM implements VLM via the SemiClawCloud API.
+type SemiClawCloudVLM struct {
 	modelName       string
 	remoteModelName string
 	modelID         string
@@ -28,13 +28,13 @@ type WeKnoraCloudVLM struct {
 	client          *http.Client
 }
 
-// NewWeKnoraCloudVLM creates a WeKnoraCloud-backed VLM instance.
-func NewWeKnoraCloudVLM(config *Config) (*WeKnoraCloudVLM, error) {
+// NewSemiClawCloudVLM creates a SemiClawCloud-backed VLM instance.
+func NewSemiClawCloudVLM(config *Config) (*SemiClawCloudVLM, error) {
 	if config.AppID == "" {
-		return nil, fmt.Errorf("WeKnoraCloud VLM: AppID is required")
+		return nil, fmt.Errorf("SemiClawCloud VLM: AppID is required")
 	}
 	if config.AppSecret == "" {
-		return nil, fmt.Errorf("WeKnoraCloud VLM: AppSecret is required")
+		return nil, fmt.Errorf("SemiClawCloud VLM: AppSecret is required")
 	}
 	remoteModelName := ""
 	if config.Extra != nil {
@@ -44,7 +44,7 @@ func NewWeKnoraCloudVLM(config *Config) (*WeKnoraCloudVLM, error) {
 			}
 		}
 	}
-	return &WeKnoraCloudVLM{
+	return &SemiClawCloudVLM{
 		modelName:       config.ModelName,
 		remoteModelName: remoteModelName,
 		modelID:         config.ModelID,
@@ -55,30 +55,30 @@ func NewWeKnoraCloudVLM(config *Config) (*WeKnoraCloudVLM, error) {
 	}, nil
 }
 
-type weKnoraCloudVLMContentPart struct {
+type semiClawCloudVLMContentPart struct {
 	Type     string                      `json:"type"`
 	Text     string                      `json:"text,omitempty"`
-	ImageURL *weKnoraCloudVLMImageURL    `json:"image_url,omitempty"`
+	ImageURL *semiClawCloudVLMImageURL    `json:"image_url,omitempty"`
 }
 
-type weKnoraCloudVLMImageURL struct {
+type semiClawCloudVLMImageURL struct {
 	URL string `json:"url"`
 }
 
-type weKnoraCloudVLMMessage struct {
+type semiClawCloudVLMMessage struct {
 	Role    string      `json:"role"`
 	Content interface{} `json:"content"`
 }
 
-type weKnoraCloudVLMRequest struct {
+type semiClawCloudVLMRequest struct {
 	Model       string                   `json:"model"`
-	Messages    []weKnoraCloudVLMMessage `json:"messages"`
+	Messages    []semiClawCloudVLMMessage `json:"messages"`
 	MaxTokens   int                      `json:"max_tokens,omitempty"`
 	Temperature float64                  `json:"temperature,omitempty"`
 	Stream      bool                     `json:"stream"`
 }
 
-type weKnoraCloudVLMResponse struct {
+type semiClawCloudVLMResponse struct {
 	Choices []struct {
 		Message struct {
 			Content string `json:"content"`
@@ -86,11 +86,11 @@ type weKnoraCloudVLMResponse struct {
 	} `json:"choices"`
 }
 
-// Predict sends images with a text prompt to the WeKnoraCloud API.
-func (v *WeKnoraCloudVLM) Predict(ctx context.Context, imgBytesList [][]byte, prompt string) (string, error) {
-	var parts []weKnoraCloudVLMContentPart
+// Predict sends images with a text prompt to the SemiClawCloud API.
+func (v *SemiClawCloudVLM) Predict(ctx context.Context, imgBytesList [][]byte, prompt string) (string, error) {
+	var parts []semiClawCloudVLMContentPart
 
-	parts = append(parts, weKnoraCloudVLMContentPart{
+	parts = append(parts, semiClawCloudVLMContentPart{
 		Type: "text",
 		Text: prompt,
 	})
@@ -100,18 +100,18 @@ func (v *WeKnoraCloudVLM) Predict(ctx context.Context, imgBytesList [][]byte, pr
 			mimeType := detectImageMIME(imgBytes)
 			b64 := base64.StdEncoding.EncodeToString(imgBytes)
 			dataURI := fmt.Sprintf("data:%s;base64,%s", mimeType, b64)
-			parts = append(parts, weKnoraCloudVLMContentPart{
+			parts = append(parts, semiClawCloudVLMContentPart{
 				Type: "image_url",
-				ImageURL: &weKnoraCloudVLMImageURL{
+				ImageURL: &semiClawCloudVLMImageURL{
 					URL: dataURI,
 				},
 			})
 		}
 	}
 
-	reqBody := weKnoraCloudVLMRequest{
+	reqBody := semiClawCloudVLMRequest{
 		Model: v.effectiveModelName(),
-		Messages: []weKnoraCloudVLMMessage{
+		Messages: []semiClawCloudVLMMessage{
 			{
 				Role:    "user",
 				Content: parts,
@@ -124,15 +124,15 @@ func (v *WeKnoraCloudVLM) Predict(ctx context.Context, imgBytesList [][]byte, pr
 
 	bodyBytes, err := json.Marshal(reqBody)
 	if err != nil {
-		return "", fmt.Errorf("weknoracloud VLM: marshal: %w", err)
+		return "", fmt.Errorf("semiclawcloud VLM: marshal: %w", err)
 	}
 
 	requestID := uuid.New().String()
 	headers := utils.Sign(v.appID, v.apiKey, requestID, string(bodyBytes))
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodPost, v.baseURL+weKnoraCloudVLMPath, bytes.NewReader(bodyBytes))
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, v.baseURL+semiClawCloudVLMPath, bytes.NewReader(bodyBytes))
 	if err != nil {
-		return "", fmt.Errorf("weknoracloud VLM: create request: %w", err)
+		return "", fmt.Errorf("semiclawcloud VLM: create request: %w", err)
 	}
 	req.Header.Set("Content-Type", "application/json")
 	for k, hv := range headers {
@@ -143,42 +143,42 @@ func (v *WeKnoraCloudVLM) Predict(ctx context.Context, imgBytesList [][]byte, pr
 	for _, img := range imgBytesList {
 		totalImageSize += len(img)
 	}
-	logger.Infof(ctx, "[VLM] Calling WeKnoraCloud API, model=%s, baseURL=%s, numImages=%d, totalImageSize=%d",
+	logger.Infof(ctx, "[VLM] Calling SemiClawCloud API, model=%s, baseURL=%s, numImages=%d, totalImageSize=%d",
 		v.effectiveModelName(), v.baseURL, len(imgBytesList), totalImageSize)
 
 	resp, err := v.client.Do(req)
 	if err != nil {
-		return "", fmt.Errorf("weknoracloud VLM: do request: %w", err)
+		return "", fmt.Errorf("semiclawcloud VLM: do request: %w", err)
 	}
 	defer resp.Body.Close()
 
 	respBytes, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return "", fmt.Errorf("weknoracloud VLM: read response: %w", err)
+		return "", fmt.Errorf("semiclawcloud VLM: read response: %w", err)
 	}
 	if resp.StatusCode != http.StatusOK {
-		return "", fmt.Errorf("weknoracloud VLM: status %d: %s", resp.StatusCode, string(respBytes))
+		return "", fmt.Errorf("semiclawcloud VLM: status %d: %s", resp.StatusCode, string(respBytes))
 	}
 
-	var vlmResp weKnoraCloudVLMResponse
+	var vlmResp semiClawCloudVLMResponse
 	if err := json.Unmarshal(respBytes, &vlmResp); err != nil {
-		return "", fmt.Errorf("weknoracloud VLM: unmarshal: %w", err)
+		return "", fmt.Errorf("semiclawcloud VLM: unmarshal: %w", err)
 	}
 	if len(vlmResp.Choices) == 0 {
-		return "", fmt.Errorf("weknoracloud VLM: no choices in response")
+		return "", fmt.Errorf("semiclawcloud VLM: no choices in response")
 	}
 
 	content := vlmResp.Choices[0].Message.Content
-	logger.Infof(ctx, "[VLM] WeKnoraCloud response received, len=%d", len(content))
+	logger.Infof(ctx, "[VLM] SemiClawCloud response received, len=%d", len(content))
 	return content, nil
 }
 
-func (v *WeKnoraCloudVLM) effectiveModelName() string {
+func (v *SemiClawCloudVLM) effectiveModelName() string {
 	if v.remoteModelName != "" {
 		return v.remoteModelName
 	}
 	return v.modelName
 }
 
-func (v *WeKnoraCloudVLM) GetModelName() string { return v.modelName }
-func (v *WeKnoraCloudVLM) GetModelID() string   { return v.modelID }
+func (v *SemiClawCloudVLM) GetModelName() string { return v.modelName }
+func (v *SemiClawCloudVLM) GetModelID() string   { return v.modelID }

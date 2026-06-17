@@ -9,7 +9,7 @@ import (
 	"github.com/opensearch-project/opensearch-go/v4"
 	osapi "github.com/opensearch-project/opensearch-go/v4/opensearchapi"
 
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/types"
 )
 
 // NewOpenSearchClient builds a TLS-hardened, pool-tuned *osapi.Client for

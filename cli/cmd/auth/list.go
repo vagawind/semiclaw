@@ -7,10 +7,10 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/Tencent/WeKnora/cli/internal/cmdutil"
-	"github.com/Tencent/WeKnora/cli/internal/format"
-	"github.com/Tencent/WeKnora/cli/internal/iostreams"
-	"github.com/Tencent/WeKnora/cli/internal/output"
+	"github.com/vagawind/semiclaw/cli/internal/cmdutil"
+	"github.com/vagawind/semiclaw/cli/internal/format"
+	"github.com/vagawind/semiclaw/cli/internal/iostreams"
+	"github.com/vagawind/semiclaw/cli/internal/output"
 )
 
 type ListOptions struct{}
@@ -29,9 +29,9 @@ type listEntry struct {
 	Current bool   `json:"current"`
 }
 
-// NewCmdList builds `weknora auth list`. Per-host enumeration: render one
+// NewCmdList builds `semiclaw auth list`. Per-host enumeration: render one
 // row per registered profile, marking the active one. Reads only
-// ~/.config/weknora/config.yaml - no network, no keyring touch.
+// ~/.config/semiclaw/config.yaml - no network, no keyring touch.
 func NewCmdList(f *cmdutil.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "list",
@@ -50,7 +50,7 @@ func NewCmdList(f *cmdutil.Factory) *cobra.Command {
 	cmdutil.AddFormatFlag(cmd, authListFields...)
 	cmdutil.SetAgentHelp(cmd, cmdutil.AgentHelp{
 		UsedFor:  "list configured profiles and their credential mode (bearer / api-key)",
-		Examples: []string{"weknora auth list", "weknora auth list --jq '.data[].name'"},
+		Examples: []string{"semiclaw auth list", "semiclaw auth list --jq '.data[].name'"},
 		Output:   "envelope.data is an array of profiles with name, host, mode, and which is active",
 	})
 	return cmd
@@ -78,7 +78,7 @@ func runList(fopts *cmdutil.FormatOptions, f *cmdutil.Factory) error {
 		return fopts.Emit(iostreams.IO.Out, entries, meta)
 	}
 	if len(entries) == 0 {
-		fmt.Fprintln(iostreams.IO.Out, "No profiles configured. Run `weknora auth login` to create one.")
+		fmt.Fprintln(iostreams.IO.Out, "No profiles configured. Run `semiclaw auth login` to create one.")
 		return nil
 	}
 	tw := tabwriter.NewWriter(iostreams.IO.Out, 0, 0, 2, ' ', 0)

@@ -33,55 +33,55 @@ import (
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 
-	"github.com/Tencent/WeKnora/internal/agent/approval"
-	"github.com/Tencent/WeKnora/internal/application/repository"
-	memoryRepo "github.com/Tencent/WeKnora/internal/application/repository/memory/neo4j"
-	dorisRepo "github.com/Tencent/WeKnora/internal/application/repository/retriever/doris"
-	elasticsearchRepoV7 "github.com/Tencent/WeKnora/internal/application/repository/retriever/elasticsearch/v7"
-	elasticsearchRepoV8 "github.com/Tencent/WeKnora/internal/application/repository/retriever/elasticsearch/v8"
-	milvusRepo "github.com/Tencent/WeKnora/internal/application/repository/retriever/milvus"
-	neo4jRepo "github.com/Tencent/WeKnora/internal/application/repository/retriever/neo4j"
-	openSearchRepo "github.com/Tencent/WeKnora/internal/application/repository/retriever/opensearch"
-	postgresRepo "github.com/Tencent/WeKnora/internal/application/repository/retriever/postgres"
-	qdrantRepo "github.com/Tencent/WeKnora/internal/application/repository/retriever/qdrant"
-	sqliteRetrieverRepo "github.com/Tencent/WeKnora/internal/application/repository/retriever/sqlite"
-	tencentVectorDBRepo "github.com/Tencent/WeKnora/internal/application/repository/retriever/tencentvectordb"
-	weaviateRepo "github.com/Tencent/WeKnora/internal/application/repository/retriever/weaviate"
-	"github.com/Tencent/WeKnora/internal/application/service"
-	chatpipeline "github.com/Tencent/WeKnora/internal/application/service/chat_pipeline"
-	"github.com/Tencent/WeKnora/internal/application/service/file"
-	memoryService "github.com/Tencent/WeKnora/internal/application/service/memory"
-	"github.com/Tencent/WeKnora/internal/application/service/retriever"
-	"github.com/Tencent/WeKnora/internal/config"
-	"github.com/Tencent/WeKnora/internal/database"
-	"github.com/Tencent/WeKnora/internal/datasource"
-	feishuConnector "github.com/Tencent/WeKnora/internal/datasource/connector/feishu"
-	notionConnector "github.com/Tencent/WeKnora/internal/datasource/connector/notion"
-	yuqueConnector "github.com/Tencent/WeKnora/internal/datasource/connector/yuque"
-	"github.com/Tencent/WeKnora/internal/event"
-	"github.com/Tencent/WeKnora/internal/handler"
-	"github.com/Tencent/WeKnora/internal/handler/session"
-	imPkg "github.com/Tencent/WeKnora/internal/im"
-	"github.com/Tencent/WeKnora/internal/im/dingtalk"
-	"github.com/Tencent/WeKnora/internal/im/feishu"
-	"github.com/Tencent/WeKnora/internal/im/mattermost"
-	"github.com/Tencent/WeKnora/internal/im/slack"
-	"github.com/Tencent/WeKnora/internal/im/telegram"
-	"github.com/Tencent/WeKnora/internal/im/wechat"
-	"github.com/Tencent/WeKnora/internal/im/wecom"
-	"github.com/Tencent/WeKnora/internal/infrastructure/docparser"
-	infra_web_search "github.com/Tencent/WeKnora/internal/infrastructure/web_search"
-	"github.com/Tencent/WeKnora/internal/logger"
-	"github.com/Tencent/WeKnora/internal/mcp"
-	"github.com/Tencent/WeKnora/internal/models/chat"
-	"github.com/Tencent/WeKnora/internal/models/embedding"
-	"github.com/Tencent/WeKnora/internal/models/utils/ollama"
-	"github.com/Tencent/WeKnora/internal/router"
-	"github.com/Tencent/WeKnora/internal/stream"
-	"github.com/Tencent/WeKnora/internal/tracing/langfuse"
-	"github.com/Tencent/WeKnora/internal/types"
-	"github.com/Tencent/WeKnora/internal/types/interfaces"
-	secutils "github.com/Tencent/WeKnora/internal/utils"
+	"github.com/vagawind/semiclaw/internal/agent/approval"
+	"github.com/vagawind/semiclaw/internal/application/repository"
+	memoryRepo "github.com/vagawind/semiclaw/internal/application/repository/memory/neo4j"
+	dorisRepo "github.com/vagawind/semiclaw/internal/application/repository/retriever/doris"
+	elasticsearchRepoV7 "github.com/vagawind/semiclaw/internal/application/repository/retriever/elasticsearch/v7"
+	elasticsearchRepoV8 "github.com/vagawind/semiclaw/internal/application/repository/retriever/elasticsearch/v8"
+	milvusRepo "github.com/vagawind/semiclaw/internal/application/repository/retriever/milvus"
+	neo4jRepo "github.com/vagawind/semiclaw/internal/application/repository/retriever/neo4j"
+	openSearchRepo "github.com/vagawind/semiclaw/internal/application/repository/retriever/opensearch"
+	postgresRepo "github.com/vagawind/semiclaw/internal/application/repository/retriever/postgres"
+	qdrantRepo "github.com/vagawind/semiclaw/internal/application/repository/retriever/qdrant"
+	sqliteRetrieverRepo "github.com/vagawind/semiclaw/internal/application/repository/retriever/sqlite"
+	tencentVectorDBRepo "github.com/vagawind/semiclaw/internal/application/repository/retriever/tencentvectordb"
+	weaviateRepo "github.com/vagawind/semiclaw/internal/application/repository/retriever/weaviate"
+	"github.com/vagawind/semiclaw/internal/application/service"
+	chatpipeline "github.com/vagawind/semiclaw/internal/application/service/chat_pipeline"
+	"github.com/vagawind/semiclaw/internal/application/service/file"
+	memoryService "github.com/vagawind/semiclaw/internal/application/service/memory"
+	"github.com/vagawind/semiclaw/internal/application/service/retriever"
+	"github.com/vagawind/semiclaw/internal/config"
+	"github.com/vagawind/semiclaw/internal/database"
+	"github.com/vagawind/semiclaw/internal/datasource"
+	feishuConnector "github.com/vagawind/semiclaw/internal/datasource/connector/feishu"
+	notionConnector "github.com/vagawind/semiclaw/internal/datasource/connector/notion"
+	yuqueConnector "github.com/vagawind/semiclaw/internal/datasource/connector/yuque"
+	"github.com/vagawind/semiclaw/internal/event"
+	"github.com/vagawind/semiclaw/internal/handler"
+	"github.com/vagawind/semiclaw/internal/handler/session"
+	imPkg "github.com/vagawind/semiclaw/internal/im"
+	"github.com/vagawind/semiclaw/internal/im/dingtalk"
+	"github.com/vagawind/semiclaw/internal/im/feishu"
+	"github.com/vagawind/semiclaw/internal/im/mattermost"
+	"github.com/vagawind/semiclaw/internal/im/slack"
+	"github.com/vagawind/semiclaw/internal/im/telegram"
+	"github.com/vagawind/semiclaw/internal/im/wechat"
+	"github.com/vagawind/semiclaw/internal/im/wecom"
+	"github.com/vagawind/semiclaw/internal/infrastructure/docparser"
+	infra_web_search "github.com/vagawind/semiclaw/internal/infrastructure/web_search"
+	"github.com/vagawind/semiclaw/internal/logger"
+	"github.com/vagawind/semiclaw/internal/mcp"
+	"github.com/vagawind/semiclaw/internal/models/chat"
+	"github.com/vagawind/semiclaw/internal/models/embedding"
+	"github.com/vagawind/semiclaw/internal/models/utils/ollama"
+	"github.com/vagawind/semiclaw/internal/router"
+	"github.com/vagawind/semiclaw/internal/stream"
+	"github.com/vagawind/semiclaw/internal/tracing/langfuse"
+	"github.com/vagawind/semiclaw/internal/types"
+	"github.com/vagawind/semiclaw/internal/types/interfaces"
+	secutils "github.com/vagawind/semiclaw/internal/utils"
 	"github.com/tencent/vectordatabase-sdk-go/tcvectordb"
 	"github.com/weaviate/weaviate-go-client/v5/weaviate"
 	"github.com/weaviate/weaviate-go-client/v5/weaviate/auth"
@@ -193,7 +193,7 @@ func BuildContainer(container *dig.Container) *dig.Container {
 	must(container.Provide(service.NewEvaluationService))
 	must(container.Provide(service.NewUserService))
 	must(container.Provide(service.NewSystemSettingService))
-	must(container.Provide(service.NewWeKnoraCloudService))
+	must(container.Provide(service.NewSemiClawCloudService))
 
 	// Extract services - register individual extracters with names
 	must(container.Provide(service.NewChunkExtractService, dig.Name("chunkExtractor")))
@@ -347,7 +347,7 @@ func BuildContainer(container *dig.Container) *dig.Container {
 	must(container.Invoke(registerIMAdapterFactories))
 	must(container.Provide(handler.NewIMHandler))
 	must(container.Provide(handler.NewEmbedChannelHandler))
-	must(container.Provide(handler.NewWeKnoraCloudHandler))
+	must(container.Provide(handler.NewSemiClawCloudHandler))
 	logger.Debugf(ctx, "[Container] HTTP handlers registered")
 
 	// Wire the chat package's local image resolver so multimodal chat can read
@@ -508,7 +508,7 @@ func initDatabase(cfg *config.Config) (*gorm.DB, error) {
 	case "sqlite":
 		dbPath := os.Getenv("DB_PATH")
 		if dbPath == "" {
-			dbPath = "./data/weknora.db"
+			dbPath = "./data/semiclaw.db"
 		}
 		if dir := filepath.Dir(dbPath); dir != "." && dir != "" {
 			if err := os.MkdirAll(dir, 0o755); err != nil {
@@ -740,7 +740,7 @@ func initFileService(cfg *config.Config) (interfaces.FileService, error) {
 		}
 		pathPrefix := os.Getenv("S3_PATH_PREFIX")
 		if pathPrefix == "" {
-			pathPrefix = "weknora/"
+			pathPrefix = "semiclaw/"
 		}
 		return file.NewS3FileService(
 			os.Getenv("S3_ENDPOINT"),
@@ -760,7 +760,7 @@ func initFileService(cfg *config.Config) (interfaces.FileService, error) {
 		obsRegion := os.Getenv("OBS_REGION")
 		obsPathPrefix := os.Getenv("OBS_PATH_PREFIX")
 		if obsPathPrefix == "" {
-			obsPathPrefix = "weknora/"
+			obsPathPrefix = "semiclaw/"
 		}
 		return file.NewObsFileService(
 			os.Getenv("OBS_ENDPOINT"),
@@ -780,7 +780,7 @@ func initFileService(cfg *config.Config) (interfaces.FileService, error) {
 		}
 		pathPrefix := os.Getenv("OSS_PATH_PREFIX")
 		if pathPrefix == "" {
-			pathPrefix = "weknora/"
+			pathPrefix = "semiclaw/"
 		}
 		return file.NewOssFileServiceWithTempBucket(
 			os.Getenv("OSS_ENDPOINT"),
@@ -1049,7 +1049,7 @@ func initRetrieveEngineRegistry(
 		}
 		dorisDatabase := os.Getenv("DORIS_DATABASE")
 		if dorisDatabase == "" {
-			dorisDatabase = "weknora"
+			dorisDatabase = "semiclaw"
 		}
 		dorisUsername := os.Getenv("DORIS_USERNAME")
 		if dorisUsername == "" {

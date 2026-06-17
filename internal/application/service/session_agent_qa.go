@@ -7,12 +7,12 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/Tencent/WeKnora/internal/agent/tools"
-	"github.com/Tencent/WeKnora/internal/event"
-	"github.com/Tencent/WeKnora/internal/logger"
-	"github.com/Tencent/WeKnora/internal/models/chat"
-	"github.com/Tencent/WeKnora/internal/models/rerank"
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/agent/tools"
+	"github.com/vagawind/semiclaw/internal/event"
+	"github.com/vagawind/semiclaw/internal/logger"
+	"github.com/vagawind/semiclaw/internal/models/chat"
+	"github.com/vagawind/semiclaw/internal/models/rerank"
+	"github.com/vagawind/semiclaw/internal/types"
 )
 
 // AgentQA performs agent-based question answering with conversation history and streaming support
@@ -315,7 +315,7 @@ func (s *sessionService) configureSkillsFromAgent(
 		return
 	}
 	// When sandbox is disabled, skills cannot be enabled (no script execution environment)
-	sandboxMode := os.Getenv("WEKNORA_SANDBOX_MODE")
+	sandboxMode := os.Getenv("SEMICLAW_SANDBOX_MODE")
 	if sandboxMode == "" || sandboxMode == "disabled" {
 		agentConfig.SkillsEnabled = false
 		agentConfig.SkillDirs = nil

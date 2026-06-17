@@ -10,7 +10,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Tencent/WeKnora/cli/internal/cmdutil"
+	"github.com/vagawind/semiclaw/cli/internal/cmdutil"
 )
 
 // TestAllReferencedCodesAreRegistered scans cli/cmd/ for every literal use of

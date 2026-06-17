@@ -53,8 +53,8 @@ curl --location 'http://localhost:8080/api/v1/knowledge-bases' \
 --header 'Content-Type: application/json' \
 --header 'X-API-Key: sk-xxxxx' \
 --data '{
-    "name": "weknora",
-    "description": "weknora description",
+    "name": "semiclaw",
+    "description": "semiclaw description",
     "type": "document",
     "is_temporary": false,
     "chunking_config": {
@@ -115,8 +115,8 @@ curl --location 'http://localhost:8080/api/v1/knowledge-bases' \
 {
     "data": {
         "id": "b5829e4a-3845-4624-a7fb-ea3b35e843b0",
-        "name": "weknora",
-        "description": "weknora description",
+        "name": "semiclaw",
+        "description": "semiclaw description",
         "type": "document",
         "is_temporary": false,
         "tenant_id": 1,
@@ -276,8 +276,8 @@ curl --location --request PUT 'http://localhost:8080/api/v1/knowledge-bases/b582
 --header 'Content-Type: application/json' \
 --header 'X-API-Key: sk-xxxxx' \
 --data '{
-    "name": "weknora new",
-    "description": "weknora description new",
+    "name": "semiclaw new",
+    "description": "semiclaw description new",
     "config": {
         "chunking_config": {
             "chunk_size": 1000,

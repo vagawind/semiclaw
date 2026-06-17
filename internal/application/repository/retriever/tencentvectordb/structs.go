@@ -10,8 +10,8 @@ import (
 const (
 	envTencentVectorDBDatabase   = "TENCENT_VECTORDB_DATABASE"
 	envTencentVectorDBCollection = "TENCENT_VECTORDB_COLLECTION"
-	defaultDatabaseName          = "weknora"
-	defaultCollectionName        = "weknora_embeddings"
+	defaultDatabaseName          = "semiclaw"
+	defaultCollectionName        = "semiclaw_embeddings"
 
 	fieldID              = "id"
 	fieldVector          = "vector"
