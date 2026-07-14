@@ -1273,12 +1273,6 @@ onBeforeRouteUpdate((to, from, next) => {
     }
 }
 
-@media (prefers-reduced-motion: reduce) {
-    .chat-global-wait__spinner {
-        animation: none;
-    }
-}
-
 @import '../../components/css/suggested-questions.less';
 
 .suggested-questions-container {
