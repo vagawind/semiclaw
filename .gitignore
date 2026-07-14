@@ -37,6 +37,7 @@ data/files/
 data/semiclaw.db
 data/semiclaw.db-wal
 data/semiclaw.db-shm
+skills-lock.json
 
 web/
 
