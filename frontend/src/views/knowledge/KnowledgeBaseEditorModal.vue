@@ -669,7 +669,7 @@ const initFormData = (type: 'document' | 'faq' = 'document') => {
       language: ''
     },
     nodeExtractConfig: {
-      enabled: false,
+      enabled: true,
       text: '',
       tags: [] as string[],
       nodes: [] as Array<{
@@ -695,7 +695,7 @@ const initFormData = (type: 'document' | 'faq' = 'document') => {
       vectorEnabled: true,
       keywordEnabled: true,
       wikiEnabled: false,
-      graphEnabled: false,
+      graphEnabled: true,
     },
     // Vector-store binding. Empty string means "use the env-configured
     // store"; create mode defaults to that, edit mode loads the
@@ -992,6 +992,10 @@ const handleQuestionGenerationUpdate = (config: any) => {
 const handleNodeExtractUpdate = (config: any) => {
   if (formData.value) {
     formData.value.nodeExtractConfig = { ...config }
+    // Keep indexing strategy in sync with extract toggle (IsGraphEnabled requires both)
+    if (formData.value.indexingStrategy) {
+      formData.value.indexingStrategy.graphEnabled = !!config?.enabled
+    }
   }
 }
 
