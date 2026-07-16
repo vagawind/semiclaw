@@ -20,13 +20,14 @@ type IndexingStrategy struct {
 }
 
 // DefaultIndexingStrategy returns the default strategy matching the legacy behavior:
-// vector and keyword indexing enabled, wiki and graph disabled.
+// vector and keyword indexing enabled; knowledge graph enabled by default (requires Neo4j);
+// wiki disabled.
 func DefaultIndexingStrategy() IndexingStrategy {
 	return IndexingStrategy{
 		VectorEnabled:  true,
 		KeywordEnabled: true,
 		WikiEnabled:    false,
-		GraphEnabled:   false,
+		GraphEnabled:   true,
 	}
 }
 
