@@ -41,7 +41,7 @@ func TestRAGFullLoop(t *testing.T) {
 	bin := buildBinary(t)
 	xdg := t.TempDir()
 
-	// Inject host + token as WEKNORA_HOST / WEKNORA_TOKEN env vars. The
+	// Inject host + token as SEMICLAW_HOST / SEMICLAW_TOKEN env vars. The
 	// CLI's env-credential path (buildClientFromEnv) takes precedence
 	// over profile config, so this bypasses the secrets-store dance
 	// entirely — no keychain access, no file:// ref plumbing. This is
@@ -49,8 +49,8 @@ func TestRAGFullLoop(t *testing.T) {
 	env := append(os.Environ(),
 		"XDG_CONFIG_HOME="+xdg,
 		"XDG_CACHE_HOME="+filepath.Join(xdg, "cache"),
-		"WEKNORA_HOST="+host,
-		"WEKNORA_TOKEN="+token,
+		"SEMICLAW_HOST="+host,
+		"SEMICLAW_TOKEN="+token,
 		// SDK debug off - explicit so the CI run isn't noisy.
 		"SEMICLAW_LOG_LEVEL=error",
 	)
@@ -59,8 +59,8 @@ func TestRAGFullLoop(t *testing.T) {
 	// The CLI now requires explicit model binding so uploaded docs are
 	// immediately searchable. Use the server's builtin model IDs (they
 	// exist on every deployment that configures builtin_models.yaml).
-	embeddingModel := envOr("WEKNORA_E2E_EMBEDDING_MODEL", "Qwen/Qwen3-Embedding-8B")
-	chatModel := envOr("WEKNORA_E2E_CHAT_MODEL", "deepseek-ai/DeepSeek-V3.2")
+	embeddingModel := envOr("SEMICLAW_E2E_EMBEDDING_MODEL", "Qwen/Qwen3-Embedding-8B")
+	chatModel := envOr("SEMICLAW_E2E_CHAT_MODEL", "deepseek-ai/DeepSeek-V3.2")
 	kbName := prefix + fmt.Sprintf("%d", time.Now().UnixNano())
 	var created struct {
 		OK   bool `json:"ok"`

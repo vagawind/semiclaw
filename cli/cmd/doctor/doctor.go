@@ -404,12 +404,12 @@ func buildServices(f *cmdutil.Factory) (Services, error) {
 // mirror the client builder (buildClientFromEnv) so doctor probes the host the
 // real commands actually connect to; tier 1 is a doctor-local test/dev knob:
 //
-//  1. WEKNORA_BASE_URL — doctor-only probe override (used by tests); NOT read
+//  1. SEMICLAW_BASE_URL — doctor-only probe override (used by tests); NOT read
 //     by the client builder, so setting it points doctor at a host no real
 //     command uses. Kept for test/dev harnesses; leave unset in normal use.
-//  2. WEKNORA_HOST — when stateless env credentials (WEKNORA_TOKEN /
-//     WEKNORA_API_KEY) are in effect, i.e. the headless agent path. Without
-//     this, `WEKNORA_API_KEY=… WEKNORA_HOST=… weknora doctor` falsely reported
+//  2. SEMICLAW_HOST — when stateless env credentials (SEMICLAW_TOKEN /
+//     SEMICLAW_API_KEY) are in effect, i.e. the headless agent path. Without
+//     this, `SEMICLAW_API_KEY=… SEMICLAW_HOST=… semiclaw doctor` falsely reported
 //     "no host configured" and exited 1 while every other command worked.
 //  3. active profile host — the configured default.
 func resolveDoctorHost(cfg *config.Config) string {
@@ -417,7 +417,14 @@ func resolveDoctorHost(cfg *config.Config) string {
 	if ctx, ok := cfg.Profiles[cfg.CurrentProfile]; ok {
 		host = ctx.Host
 	}
-	// SEMICLAW_BASE_URL still wins as a test/dev override; production reads host.
+	// Mirror buildClientFromEnv: when env credentials are active, SEMICLAW_HOST
+	// overrides the profile host so doctor probes the same target as real cmds.
+	if active, _ := cmdutil.EnvCredential(); active {
+		if h := strings.TrimSpace(os.Getenv("SEMICLAW_HOST")); h != "" {
+			host = h
+		}
+	}
+	// SEMICLAW_BASE_URL always wins as a test/dev override.
 	if v := os.Getenv("SEMICLAW_BASE_URL"); v != "" {
 		host = v
 	}

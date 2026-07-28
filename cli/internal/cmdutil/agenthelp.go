@@ -33,7 +33,7 @@ type AgentHelp struct {
 
 // agentHelpAnnotation stores the marshaled AgentHelp on the command so the
 // `weknora schema` command can introspect any command's contract without
-// invoking its help func (and toggling WEKNORA_AGENT_HELP). Shares the
+// invoking its help func (and toggling SEMICLAW_AGENT_HELP). Shares the
 // annotations map with SetRisk (distinct keys).
 const agentHelpAnnotation = "weknora.agent_help"
 
@@ -48,7 +48,7 @@ const agentHelpAnnotation = "weknora.agent_help"
 //
 // The AgentHelp is also recorded as a JSON annotation so `weknora schema` can
 // surface it as a first-class, discoverable command (not only via the
-// WEKNORA_AGENT_HELP env toggle on --help).
+// SEMICLAW_AGENT_HELP env toggle on --help).
 func SetAgentHelp(cmd *cobra.Command, ah AgentHelp) {
 	if b, err := json.Marshal(ah); err == nil {
 		if cmd.Annotations == nil {

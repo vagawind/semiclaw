@@ -1,6 +1,6 @@
 package format
 
-import sdk "github.com/Tencent/WeKnora/client"
+import sdk "github.com/vagawind/semiclaw/client"
 
 	sdk "github.com/vagawind/semiclaw/client"
 )

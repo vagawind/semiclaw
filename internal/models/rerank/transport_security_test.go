@@ -6,7 +6,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	secutils "github.com/Tencent/WeKnora/internal/utils"
+	secutils "github.com/vagawind/semiclaw/internal/utils"
 )
 
 func withRerankSSRFWhitelist(t *testing.T, raw string) {

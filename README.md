@@ -186,7 +186,7 @@ semiclaw doc upload notes.md
 semiclaw chat "summarise the design doc"
 ```
 
-For headless / CI use, set `WEKNORA_API_KEY` + `WEKNORA_HOST` and skip
+For headless / CI use, set `SEMICLAW_API_KEY` + `SEMICLAW_HOST` and skip
 `auth login` entirely — no credentials written to disk.
 
 See [`cli/README.md`](./cli/README.md) for install + 5-minute quickstart and

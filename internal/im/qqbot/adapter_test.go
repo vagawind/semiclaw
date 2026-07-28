@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/Tencent/WeKnora/internal/im"
-	secutils "github.com/Tencent/WeKnora/internal/utils"
+	"github.com/vagawind/semiclaw/internal/im"
+	secutils "github.com/vagawind/semiclaw/internal/utils"
 )
 
 func withQQBotSSRFWhitelist(t *testing.T, whitelist string) {

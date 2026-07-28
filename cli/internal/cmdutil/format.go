@@ -159,9 +159,9 @@ func mapJQError(err error) error {
 // human-readable output with `--format text`.
 func (o *FormatOptions) ResolveDefault(tty bool) {
 	o.TTY = tty
-	// Apply WEKNORA_FORMAT before the hard default so the documented
+	// Apply SEMICLAW_FORMAT before the hard default so the documented
 	// precedence holds: explicit --format (already set on o.Mode by
-	// CheckFormatFlag) > WEKNORA_FORMAT > DefaultFormatMode. FromEnv is a
+	// CheckFormatFlag) > SEMICLAW_FORMAT > DefaultFormatMode. FromEnv is a
 	// no-op when --format was passed. Folded in here because nearly every
 	// command calls ResolveDefault but only a couple called FromEnv, so the
 	// env var was silently ignored on success output across the CLI.

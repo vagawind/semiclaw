@@ -3,9 +3,9 @@ package agent
 import (
 	"strings"
 
-	"github.com/Tencent/WeKnora/internal/models/chat"
-	"github.com/Tencent/WeKnora/internal/searchutil"
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/models/chat"
+	"github.com/vagawind/semiclaw/internal/searchutil"
+	"github.com/vagawind/semiclaw/internal/types"
 )
 
 const agentRetrievedImageRequirementMarker = "## Retrieved Image Output Requirement"

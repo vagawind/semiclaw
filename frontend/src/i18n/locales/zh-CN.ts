@@ -6799,7 +6799,7 @@ export default {
         },
         env: {
           title: "配置环境变量",
-          desc: "在终端或 ~/.zshrc、~/.bashrc 中设置 WEKNORA_BASE_URL 与 WEKNORA_API_KEY。下方示例已填入当前 API 地址，请将 API Key 替换为实际值。",
+          desc: "在终端或 ~/.zshrc、~/.bashrc 中设置 SEMICLAW_BASE_URL 与 SEMICLAW_API_KEY。下方示例已填入当前 API 地址，请将 API Key 替换为实际值。",
         },
         install: {
           title: "安装 Skill",

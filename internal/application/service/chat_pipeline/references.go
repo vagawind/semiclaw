@@ -4,9 +4,9 @@ import (
 	"context"
 	"strings"
 
-	"github.com/Tencent/WeKnora/internal/llmreference"
-	"github.com/Tencent/WeKnora/internal/models/chat"
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/llmreference"
+	"github.com/vagawind/semiclaw/internal/models/chat"
+	"github.com/vagawind/semiclaw/internal/types"
 )
 
 // prepareMessagesWithReferences replaces the pipeline's positional context IDs

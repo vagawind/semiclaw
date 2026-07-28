@@ -115,7 +115,7 @@ func (h *AuthHandler) resolveDefaultTenantMode(ctx context.Context) types.Tenant
 		mode = h.systemSettingSvc.GetString(
 			ctx,
 			"auth.default_tenant_mode",
-			"WEKNORA_AUTH_DEFAULT_TENANT_MODE",
+			"SEMICLAW_AUTH_DEFAULT_TENANT_MODE",
 			def,
 		)
 	}

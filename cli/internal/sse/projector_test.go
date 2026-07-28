@@ -5,8 +5,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Tencent/WeKnora/cli/internal/sse"
-	sdk "github.com/Tencent/WeKnora/client"
+	"github.com/vagawind/semiclaw/cli/internal/sse"
+	sdk "github.com/vagawind/semiclaw/client"
 )
 
 func TestProjector_DefaultKeepsOnlyAnswerEvents(t *testing.T) {

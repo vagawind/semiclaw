@@ -3,8 +3,8 @@ package tools
 import (
 	"context"
 
-	"github.com/Tencent/WeKnora/internal/types"
-	"github.com/Tencent/WeKnora/internal/types/interfaces"
+	"github.com/vagawind/semiclaw/internal/types"
+	"github.com/vagawind/semiclaw/internal/types/interfaces"
 )
 
 type knowledgeTagsFetcher func(context.Context, []string) (map[string][]*types.KnowledgeTag, error)

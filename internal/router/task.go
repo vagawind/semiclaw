@@ -227,7 +227,7 @@ func NewSharedAsynqServer(svc interfaces.SystemSettingService) *asynq.Server {
 
 // NewWikiAsynqServer builds the dedicated wiki pool: QueueWiki only. It runs
 // the shared handler mux but only ever pulls wiki tasks, so its concurrency
-// budget (WEKNORA_WIKI_ASYNQ_CONCURRENCY, default 8) is spent exclusively on
+// budget (SEMICLAW_WIKI_ASYNQ_CONCURRENCY, default 8) is spent exclusively on
 // wiki generation. This is the hard capacity isolation that prevents the parse
 // pipeline from starving wiki (and vice-versa) during concurrent uploads.
 func NewWikiAsynqServer(svc interfaces.SystemSettingService) *asynq.Server {

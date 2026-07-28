@@ -422,6 +422,15 @@ func (h *WebSearchProviderHandler) doTestSearch(ctx context.Context, providerTyp
 		return err
 	}
 	if len(results) == 0 {
+		// SearXNG is self-hosted: a valid JSON response means the Instance URL
+		// is reachable. Empty results usually come from upstream engine
+		// timeouts/CAPTCHAs (geo/network), not a wrong base_url — treat as OK.
+		if types.WebSearchProviderType(providerType) == types.WebSearchProviderTypeSearxng {
+			logger.Warnf(ctx, "[WebSearch][Test] searxng connectivity OK but 0 results: %v",
+				infra_web_search.EmptyTestResultsError(providerType, searchProvider))
+			logger.Infof(ctx, "[WebSearch][Test] succeeded: type=searxng (connectivity)")
+			return nil
+		}
 		err := infra_web_search.EmptyTestResultsError(providerType, searchProvider)
 		logger.Warnf(ctx, "[WebSearch][Test] %v", err)
 		return err

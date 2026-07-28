@@ -38,8 +38,8 @@ CLI history before v0.3 is recorded in the project root
   embedding model is bound); `kb create` hints the fix when it is false.
 - `model create` / `model update` / `model delete` (`update` rotates key /
   base-url in place, preserving the id).
-- Stateless env-credential auth: `WEKNORA_API_KEY` / `WEKNORA_TOKEN` +
-  `WEKNORA_HOST`, a zero-disk path for headless / agent use. `auth logout` now
+- Stateless env-credential auth: `SEMICLAW_API_KEY` / `SEMICLAW_TOKEN` +
+  `SEMICLAW_HOST`, a zero-disk path for headless / agent use. `auth logout` now
   keeps the profile registered (use `profile remove` to delete it entirely).
 - `meta.total_count` on paginated list / search output (full result size before
   client-side `--limit` truncation).

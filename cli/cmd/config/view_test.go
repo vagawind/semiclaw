@@ -7,10 +7,10 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/Tencent/WeKnora/cli/internal/cmdutil"
-	"github.com/Tencent/WeKnora/cli/internal/config"
-	"github.com/Tencent/WeKnora/cli/internal/iostreams"
-	sdk "github.com/Tencent/WeKnora/client"
+	"github.com/vagawind/semiclaw/cli/internal/cmdutil"
+	"github.com/vagawind/semiclaw/cli/internal/config"
+	"github.com/vagawind/semiclaw/cli/internal/iostreams"
+	sdk "github.com/vagawind/semiclaw/client"
 )
 
 type viewEnvelope struct {
@@ -101,7 +101,7 @@ func networkFreeFactory(t *testing.T) *cmdutil.Factory {
 	return f
 }
 
-// TestConfigView_EnvCredentialSurfaced: when WEKNORA_API_KEY + WEKNORA_HOST are
+// TestConfigView_EnvCredentialSurfaced: when SEMICLAW_API_KEY + SEMICLAW_HOST are
 // set, config view reports the env override (auth_source + the env host), not
 // the bypassed config profile's host.
 func TestConfigView_EnvCredentialSurfaced(t *testing.T) {
@@ -111,10 +111,10 @@ func TestConfigView_EnvCredentialSurfaced(t *testing.T) {
 		Profiles:       map[string]config.Profile{"prod": {Host: "https://configured.example.com"}},
 	}
 	require.NoError(t, config.Save(cfg))
-	t.Setenv("WEKNORA_API_KEY", "sk-test")
-	t.Setenv("WEKNORA_HOST", "https://env-override.example.com")
+	t.Setenv("SEMICLAW_API_KEY", "sk-test")
+	t.Setenv("SEMICLAW_HOST", "https://env-override.example.com")
 
 	env := runViewJSON(t, networkFreeFactory(t))
-	assert.Contains(t, env.Data.AuthSource, "WEKNORA_API_KEY env")
+	assert.Contains(t, env.Data.AuthSource, "SEMICLAW_API_KEY env")
 	assert.Equal(t, "https://env-override.example.com", env.Data.Host, "host must be the env override, not the profile host")
 }

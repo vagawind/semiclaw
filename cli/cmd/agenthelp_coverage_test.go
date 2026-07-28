@@ -44,7 +44,7 @@ func TestEveryLeafCommandHasAgentHelp(t *testing.T) {
 	}
 }
 
-// renderAgentHelp runs a leaf's help under WEKNORA_AGENT_HELP=1 and decodes the
+// renderAgentHelp runs a leaf's help under SEMICLAW_AGENT_HELP=1 and decodes the
 // machine blob (used_for / output / examples) an agent would read.
 func renderAgentHelp(t *testing.T, c *cobra.Command) struct {
 	UsedFor  string   `json:"used_for"`
@@ -71,7 +71,7 @@ func renderAgentHelp(t *testing.T, c *cobra.Command) struct {
 // envelope (e.g. deletes emit {id, deleted:true}); an empty Output is a contract
 // gap, not a valid state. Sibling drift guard to the agent-help test above.
 func TestEveryLeafCommandDeclaresOutput(t *testing.T) {
-	t.Setenv("WEKNORA_AGENT_HELP", "1")
+	t.Setenv("SEMICLAW_AGENT_HELP", "1")
 	root := NewRootCmd(cmdutil.New())
 
 	var missing []string
@@ -91,7 +91,7 @@ func TestEveryLeafCommandDeclaresOutput(t *testing.T) {
 // TestEveryLeafCommandHasExample enforces that every leaf ships at least one
 // runnable example — agents learn invocation shape from examples, not prose.
 func TestEveryLeafCommandHasExample(t *testing.T) {
-	t.Setenv("WEKNORA_AGENT_HELP", "1")
+	t.Setenv("SEMICLAW_AGENT_HELP", "1")
 	root := NewRootCmd(cmdutil.New())
 
 	var missing []string

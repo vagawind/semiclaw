@@ -96,7 +96,7 @@ func runToken(f *cmdutil.Factory, fopts *cmdutil.FormatOptions) error {
 	// erroring on the absence of a stored profile.
 	if active, kind := cmdutil.EnvCredential(); active {
 		mode := ModeBearer
-		if kind == "WEKNORA_API_KEY" {
+		if kind == "SEMICLAW_API_KEY" {
 			mode = ModeAPIKey
 		}
 		return emitToken(fopts, os.Getenv(kind), mode, "(env)")

@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"testing"
 
-	sdk "github.com/Tencent/WeKnora/client"
+	sdk "github.com/vagawind/semiclaw/client"
 	"github.com/stretchr/testify/assert"
 )
 

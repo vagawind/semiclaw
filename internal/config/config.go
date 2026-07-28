@@ -837,7 +837,7 @@ func applyAuthAndTenantDefaults(cfg *Config) {
 	if strings.TrimSpace(cfg.Auth.RegistrationMode) == "" {
 		cfg.Auth.RegistrationMode = AuthRegistrationModeSelfServe
 	}
-	if value := strings.TrimSpace(os.Getenv("WEKNORA_AUTH_DEFAULT_TENANT_MODE")); value != "" {
+	if value := strings.TrimSpace(os.Getenv("SEMICLAW_AUTH_DEFAULT_TENANT_MODE")); value != "" {
 		cfg.Auth.DefaultTenantMode = value
 	}
 	if strings.TrimSpace(cfg.Auth.DefaultTenantMode) == "" {

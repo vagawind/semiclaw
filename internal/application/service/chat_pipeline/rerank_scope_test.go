@@ -3,7 +3,7 @@ package chatpipeline
 import (
 	"testing"
 
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/types"
 )
 
 func TestRerankFallbackMinScoreForExplicitScope(t *testing.T) {

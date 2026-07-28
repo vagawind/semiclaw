@@ -4,10 +4,10 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/Tencent/WeKnora/internal/handler"
-	sessionhandler "github.com/Tencent/WeKnora/internal/handler/session"
-	"github.com/Tencent/WeKnora/internal/middleware"
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/handler"
+	sessionhandler "github.com/vagawind/semiclaw/internal/handler/session"
+	"github.com/vagawind/semiclaw/internal/middleware"
+	"github.com/vagawind/semiclaw/internal/types"
 	"github.com/gin-gonic/gin"
 )
 

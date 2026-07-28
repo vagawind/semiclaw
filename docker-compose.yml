@@ -80,12 +80,10 @@ services:
       - GIN_MODE=${GIN_MODE:-release}
       # 时区，默认为Asia/Shanghai
       - TZ=${TZ:-Asia/Shanghai}
-      # 文档处理语言（问题/摘要生成）。优先级：此环境变量（部署级覆盖，非空即生效）
-      # > Accept-Language 请求头 > 内置默认值 (zh-CN)。留空则跟随请求方 Accept-Language。
-      - WEKNORA_LANGUAGE=${WEKNORA_LANGUAGE:-}
+      # 文档处理语言见下方 SEMICLAW_LANGUAGE（默认 zh-CN）。
       # gin 信任的代理 CIDR（逗号分隔）；显式设为空字符串则禁用代理信任。
       # 默认信任 loopback + 私网段（容器网络内 nginx 已覆盖）
-      # - WEKNORA_TRUSTED_PROXIES=${WEKNORA_TRUSTED_PROXIES:-}
+      # - SEMICLAW_TRUSTED_PROXIES=${SEMICLAW_TRUSTED_PROXIES:-}
       # 启动时自动执行数据库迁移；设为 false 禁用，默认启用
       - AUTO_MIGRATE=${AUTO_MIGRATE:-true}
       # 本地存储后端生成下载链接用的外部可达 URL（IM 渠道 local 后端必填）
@@ -106,17 +104,17 @@ services:
       # 禁止新用户注册（生产建议 true）
       - DISABLE_REGISTRATION=${DISABLE_REGISTRATION:-false}
       # 公开注册后的默认空间策略：create_personal（默认，自动创建个人空间）/ tenantless
-      - WEKNORA_AUTH_DEFAULT_TENANT_MODE=${WEKNORA_AUTH_DEFAULT_TENANT_MODE:-create_personal}
+      - SEMICLAW_AUTH_DEFAULT_TENANT_MODE=${SEMICLAW_AUTH_DEFAULT_TENANT_MODE:-create_personal}
       # 是否允许普通用户登录后主动创建空间（默认 true；false 仅能邀请加入，超管不受影响）
-      - WEKNORA_TENANT_SELF_SERVICE_CREATION_ENABLED=${WEKNORA_TENANT_SELF_SERVICE_CREATION_ENABLED:-true}
+      - SEMICLAW_TENANT_SELF_SERVICE_CREATION_ENABLED=${SEMICLAW_TENANT_SELF_SERVICE_CREATION_ENABLED:-true}
       # 启用跨租户访问（需配合用户的 CanAccessAllTenants 权限；默认 false
-      - WEKNORA_TENANT_ENABLE_CROSS_TENANT_ACCESS=${WEKNORA_TENANT_ENABLE_CROSS_TENANT_ACCESS:-false}
+      - SEMICLAW_TENANT_ENABLE_CROSS_TENANT_ACCESS=${SEMICLAW_TENANT_ENABLE_CROSS_TENANT_ACCESS:-false}
       # 新建空间默认存储配额（GB，默认 10）
-      - WEKNORA_TENANT_DEFAULT_STORAGE_QUOTA_GB=${WEKNORA_TENANT_DEFAULT_STORAGE_QUOTA_GB:-10}
+      - SEMICLAW_TENANT_DEFAULT_STORAGE_QUOTA_GB=${SEMICLAW_TENANT_DEFAULT_STORAGE_QUOTA_GB:-10}
       # 租户邀请链接 TTL（Go duration，默认 168h=7 天）
-      - WEKNORA_INVITATION_TTL=${WEKNORA_INVITATION_TTL:-168h}
+      - SEMICLAW_INVITATION_TTL=${SEMICLAW_INVITATION_TTL:-168h}
       # 审计日志保留天数（0 禁用清理，默认 90）
-      - WEKNORA_AUDIT_RETENTION_DAYS=${WEKNORA_AUDIT_RETENTION_DAYS:-90}
+      - SEMICLAW_AUDIT_RETENTION_DAYS=${SEMICLAW_AUDIT_RETENTION_DAYS:-90}
       # 数据库设置
       - DB_DRIVER=${DB_DRIVER:-postgres}
       - DB_HOST=${DB_HOST:-postgres}
@@ -249,8 +247,8 @@ services:
       # VLM 单次 HTTP 请求超时（秒，默认 180）
       - VLM_HTTP_TIMEOUT_SECONDS=${VLM_HTTP_TIMEOUT_SECONDS:-}
       # LLM 流原始转储（排查上下文问题；1 启用，默认目录 ~/.weknora/investigate/llm-stream）
-      - WEKNORA_LLM_STREAM_RAW_DUMP=${WEKNORA_LLM_STREAM_RAW_DUMP:-}
-      - WEKNORA_LLM_STREAM_RAW_DUMP_DIR=${WEKNORA_LLM_STREAM_RAW_DUMP_DIR:-}
+      - SEMICLAW_LLM_STREAM_RAW_DUMP=${SEMICLAW_LLM_STREAM_RAW_DUMP:-}
+      - SEMICLAW_LLM_STREAM_RAW_DUMP_DIR=${SEMICLAW_LLM_STREAM_RAW_DUMP_DIR:-}
       - STREAM_MANAGER_TYPE=${STREAM_MANAGER_TYPE:-}
       - REDIS_ADDR=${REDIS_ADDR:-redis:6379}
       - REDIS_USERNAME=${REDIS_USERNAME:-}
@@ -261,9 +259,9 @@ services:
       - REDIS_TLS_SERVER_NAME=${REDIS_TLS_SERVER_NAME:-}
       - REDIS_TLS_INSECURE_SKIP_VERIFY=${REDIS_TLS_INSECURE_SKIP_VERIFY:-}
       # Redis 频道命名空间后缀（多部署共享同一 Redis 时隔离用）
-      - WEKNORA_REDIS_NAMESPACE=${WEKNORA_REDIS_NAMESPACE:-}
+      - SEMICLAW_REDIS_NAMESPACE=${SEMICLAW_REDIS_NAMESPACE:-}
       # Asynq 客户端 Redis 读写超时（毫秒，默认 500）
-      - WEKNORA_REDIS_OP_TIMEOUT_MS=${WEKNORA_REDIS_OP_TIMEOUT_MS:-}
+      - SEMICLAW_REDIS_OP_TIMEOUT_MS=${SEMICLAW_REDIS_OP_TIMEOUT_MS:-}
       # 知识图谱唯一开关是 NEO4J_ENABLE（见下方）。ENABLE_GRAPH_RAG 自 v0.1.6 起已被
       # NEO4J_ENABLE 取代，Go 主应用不再读取，此处不再透传。
       - NEO4J_ENABLE=${NEO4J_ENABLE:-}
@@ -277,6 +275,8 @@ services:
       # （TENANT_AES_KEY / CRYPTO_MASTER_KEY / CRYPTO_SALT 已废弃：v0.4.0 起加密统一
       #   改用 SYSTEM_AES_KEY，Go 主应用不再读取这三个变量。）
       - SYSTEM_AES_KEY=${SYSTEM_AES_KEY:-}
+      # 旧镜像 create-tenant API key 加密仍读此变量（16/24/32 字节）
+      - TENANT_AES_KEY=${TENANT_AES_KEY:-}
       - SSRF_WHITELIST=${SSRF_WHITELIST:-}
       # 保留原始 URL 的图片域名白名单（逗号分隔，不替换为 provider://）
       - IMAGE_HOST_KEEP_URL=${IMAGE_HOST_KEEP_URL:-}
@@ -291,22 +291,24 @@ services:
       # doris-be: Stream Load follows FE→BE redirects that must receive Basic
       # credentials on whitelisted BE hosts.
       - SSRF_WHITELIST_EXTRA=${SSRF_WHITELIST_EXTRA:-searxng,qdrant,milvus,weaviate,doris-fe,doris-be}
+      # 新建空间自动配置 SearXNG（空则跳过）
+      - SEARXNG_DEFAULT_INSTANCE_URL=${SEARXNG_DEFAULT_INSTANCE_URL:-}
       - CONCURRENCY_POOL_SIZE=${CONCURRENCY_POOL_SIZE:-5}
       - JWT_SECRET=${JWT_SECRET:-}
       # File size limit (in MB)
       - MAX_FILE_SIZE_MB=${MAX_FILE_SIZE_MB:-50}
       # 文档处理任务总超时（Go duration，默认 2h）
-      - WEKNORA_DOCUMENT_PROCESS_TIMEOUT=${WEKNORA_DOCUMENT_PROCESS_TIMEOUT:-}
+      - SEMICLAW_DOCUMENT_PROCESS_TIMEOUT=${SEMICLAW_DOCUMENT_PROCESS_TIMEOUT:-}
       # 单次 DocReader RPC 超时（默认 30m，须小于上一项）
-      - WEKNORA_DOCREADER_CALL_TIMEOUT=${WEKNORA_DOCREADER_CALL_TIMEOUT:-}
+      - SEMICLAW_DOCREADER_CALL_TIMEOUT=${SEMICLAW_DOCREADER_CALL_TIMEOUT:-}
       # 知识库巡检回收（回收卡在 processing 的脏数据；false 禁用，不建议）
-      - WEKNORA_HOUSEKEEPING_ENABLED=${WEKNORA_HOUSEKEEPING_ENABLED:-}
+      - SEMICLAW_HOUSEKEEPING_ENABLED=${SEMICLAW_HOUSEKEEPING_ENABLED:-}
       # 自定义 Skills 目录（挂载后指定，免重建镜像）
-      - WEKNORA_SKILLS_DIR=${WEKNORA_SKILLS_DIR:-}
-      - WEKNORA_CHAT_ATTACHMENT_TTL_HOURS=${WEKNORA_CHAT_ATTACHMENT_TTL_HOURS:-24}
-      - WEKNORA_CHAT_ATTACHMENT_WAIT_TIMEOUT_SEC=${WEKNORA_CHAT_ATTACHMENT_WAIT_TIMEOUT_SEC:-60}
-      - WEKNORA_CHAT_ATTACHMENT_OCR_CONCURRENCY=${WEKNORA_CHAT_ATTACHMENT_OCR_CONCURRENCY:-8}
-      - WEKNORA_CHAT_ATTACHMENT_OCR_MAX_PAGES=${WEKNORA_CHAT_ATTACHMENT_OCR_MAX_PAGES:-8}
+      - SEMICLAW_SKILLS_DIR=${SEMICLAW_SKILLS_DIR:-}
+      - SEMICLAW_CHAT_ATTACHMENT_TTL_HOURS=${SEMICLAW_CHAT_ATTACHMENT_TTL_HOURS:-24}
+      - SEMICLAW_CHAT_ATTACHMENT_WAIT_TIMEOUT_SEC=${SEMICLAW_CHAT_ATTACHMENT_WAIT_TIMEOUT_SEC:-60}
+      - SEMICLAW_CHAT_ATTACHMENT_OCR_CONCURRENCY=${SEMICLAW_CHAT_ATTACHMENT_OCR_CONCURRENCY:-8}
+      - SEMICLAW_CHAT_ATTACHMENT_OCR_MAX_PAGES=${SEMICLAW_CHAT_ATTACHMENT_OCR_MAX_PAGES:-8}
       # Agent Skills Sandbox
       - SEMICLAW_SANDBOX_MODE=${SEMICLAW_SANDBOX_MODE:-docker}
       - SEMICLAW_SANDBOX_TIMEOUT=${SEMICLAW_SANDBOX_TIMEOUT:-60}
@@ -525,11 +527,11 @@ services:
     # Bind to loopback by default; override SEARXNG_BIND=0.0.0.0 only after
     # rotating SEARXNG_SECRET and (optionally) re-enabling limiter in settings.yml.
     ports:
-      - "${SEARXNG_BIND:-127.0.0.1}:${SEARXNG_PORT:-8888}:8080"
+      - "${SEARXNG_BIND:-127.0.0.1}:${SEARXNG_PORT:-8880}:8080"
     volumes:
       - searxng_config:/etc/searxng
     environment:
-      - SEARXNG_BASE_URL=http://localhost:${SEARXNG_PORT:-8888}/
+      - SEARXNG_BASE_URL=http://localhost:${SEARXNG_PORT:-8880}/
       - INSTANCE_NAME=semiclaw-searxng
       # Default value lets `docker compose --profile searxng up` work zero-config.
       # Override via .env (e.g. `openssl rand -hex 32`) before exposing the

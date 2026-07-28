@@ -9,7 +9,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/Tencent/WeKnora/cli/internal/cmdutil"
+	"github.com/vagawind/semiclaw/cli/internal/cmdutil"
 )
 
 // TestLeafCommandsDeclareRequiredPositional guards the agent-first contract: a
@@ -21,7 +21,7 @@ import (
 //
 // Sibling of TestEveryLeafCommandHasAgentHelp / the dry-run coverage guard.
 func TestLeafCommandsDeclareRequiredPositional(t *testing.T) {
-	t.Setenv("WEKNORA_AGENT_HELP", "1")
+	t.Setenv("SEMICLAW_AGENT_HELP", "1")
 	root := NewRootCmd(cmdutil.New())
 
 	var missing []string

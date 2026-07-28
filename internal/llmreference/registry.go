@@ -14,8 +14,8 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/Tencent/WeKnora/internal/models/chat"
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/models/chat"
+	"github.com/vagawind/semiclaw/internal/types"
 )
 
 const sourceAliasProtocolPrompt = `

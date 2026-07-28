@@ -8,11 +8,11 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/Tencent/WeKnora/cli/internal/cmdutil"
-	"github.com/Tencent/WeKnora/cli/internal/iostreams"
-	"github.com/Tencent/WeKnora/cli/internal/output"
-	"github.com/Tencent/WeKnora/cli/internal/text"
-	sdk "github.com/Tencent/WeKnora/client"
+	"github.com/vagawind/semiclaw/cli/internal/cmdutil"
+	"github.com/vagawind/semiclaw/cli/internal/iostreams"
+	"github.com/vagawind/semiclaw/cli/internal/output"
+	"github.com/vagawind/semiclaw/cli/internal/text"
+	sdk "github.com/vagawind/semiclaw/client"
 )
 
 // messageListFields enumerates the projectable scalar fields of sdk.Message

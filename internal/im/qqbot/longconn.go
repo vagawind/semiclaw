@@ -7,8 +7,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/Tencent/WeKnora/internal/im"
-	"github.com/Tencent/WeKnora/internal/logger"
+	"github.com/vagawind/semiclaw/internal/im"
+	"github.com/vagawind/semiclaw/internal/logger"
 	ws "github.com/gorilla/websocket"
 )
 

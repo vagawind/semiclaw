@@ -6,8 +6,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Tencent/WeKnora/internal/errors"
-	"github.com/Tencent/WeKnora/internal/utils"
+	"github.com/vagawind/semiclaw/internal/errors"
+	"github.com/vagawind/semiclaw/internal/utils"
 	"gorm.io/gorm"
 )
 

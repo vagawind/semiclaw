@@ -38,7 +38,7 @@ func TestValidateSearxngBaseURL(t *testing.T) {
 		{name: "bad scheme", url: "ftp://searxng:8080", wantErr: true},
 		{name: "with query", url: "http://127.0.0.1:8080/?x=1", wantErr: true},
 		{name: "with fragment", url: "http://127.0.0.1:8080/#frag", wantErr: true},
-		{name: "loopback ok via whitelist", url: "http://127.0.0.1:8888", wantErr: false},
+		{name: "loopback ok via whitelist", url: "http://127.0.0.1:8880", wantErr: false},
 	}
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {

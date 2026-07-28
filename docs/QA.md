@@ -343,7 +343,7 @@ SystemAdmin 可在 **系统管理 → 平台 API Key** 创建 `scope_type=platfo
 0.7.0 新增系统管理员的**运行时任务队列面板**与 **Worker 池治理**。文档处理从单一聚合池改为分阶段独立池（core / 后处理 / enrichment / maintenance）+ 弹性共享池，Wiki 独立治理：
 
 - 在 **系统设置 → 运行时队列** 查看队列深度、按模型并发统计、失败任务详情，并可手动重试。
-- 可通过 `WEKNORA_ASYNQ_*_CONCURRENCY` 与 `asynq.*_concurrency` 系统设置调整各池并发（需重启服务）；`model.max_concurrency` 用于约束单模型后台并发。
+- 可通过 `SEMICLAW_ASYNQ_*_CONCURRENCY` 与 `asynq.*_concurrency` 系统设置调整各池并发（需重启服务）；`model.max_concurrency` 用于约束单模型后台并发。
 - 详见 [`docs/worker-pool-governance.md`](./worker-pool-governance.md)。注意：Worker 并发只是调度预算，仍受模型配额、DocReader 容量、向量库与数据库连接数限制。
 
 ## 31. 对话中如何临时上传图片/文档做一次性问答？

@@ -9,7 +9,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/types"
 	"github.com/redis/go-redis/v9"
 )
 
@@ -80,7 +80,7 @@ func newOAuthStateStore(rdb *redis.Client) *oauthStateStore {
 }
 
 func (s *oauthStateStore) key(state string) string {
-	ns := strings.TrimSpace(os.Getenv("WEKNORA_REDIS_NAMESPACE"))
+	ns := strings.TrimSpace(os.Getenv("SEMICLAW_REDIS_NAMESPACE"))
 	if ns != "" {
 		return "weknora:mcp_oauth_state:" + ns + ":" + state
 	}

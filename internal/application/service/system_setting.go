@@ -136,7 +136,7 @@ var registry = map[string]settingSpec{
 	},
 	"auth.default_tenant_mode": {
 		Type:     "string",
-		EnvName:  "WEKNORA_AUTH_DEFAULT_TENANT_MODE",
+		EnvName:  "SEMICLAW_AUTH_DEFAULT_TENANT_MODE",
 		Default:  "create_personal",
 		Enum:     []string{"create_personal", "tenantless"},
 		Category: "auth",
@@ -160,7 +160,7 @@ var registry = map[string]settingSpec{
 	},
 	"tenant.self_service_creation_enabled": {
 		Type:     "bool",
-		EnvName:  "WEKNORA_TENANT_SELF_SERVICE_CREATION_ENABLED",
+		EnvName:  "SEMICLAW_TENANT_SELF_SERVICE_CREATION_ENABLED",
 		Default:  true,
 		Category: "tenant",
 		Description: "是否允许非超管用户主动创建空间。关闭后，普通用户只能通过邀请加入已有空间；" +
@@ -196,7 +196,7 @@ var registry = map[string]settingSpec{
 	},
 	"asynq.postprocess_concurrency": {
 		Type:            "int",
-		EnvName:         "WEKNORA_ASYNQ_POSTPROCESS_CONCURRENCY",
+		EnvName:         "SEMICLAW_ASYNQ_POSTPROCESS_CONCURRENCY",
 		Default:         int64(types.DefaultPostProcessWorkerConcurrency),
 		Category:        "worker",
 		RequiresRestart: true,
@@ -204,7 +204,7 @@ var registry = map[string]settingSpec{
 	},
 	"asynq.enrichment_concurrency": {
 		Type:            "int",
-		EnvName:         "WEKNORA_ASYNQ_ENRICHMENT_CONCURRENCY",
+		EnvName:         "SEMICLAW_ASYNQ_ENRICHMENT_CONCURRENCY",
 		Default:         int64(types.DefaultEnrichmentWorkerConcurrency),
 		Category:        "worker",
 		RequiresRestart: true,
@@ -212,7 +212,7 @@ var registry = map[string]settingSpec{
 	},
 	"asynq.maintenance_concurrency": {
 		Type:            "int",
-		EnvName:         "WEKNORA_ASYNQ_MAINTENANCE_CONCURRENCY",
+		EnvName:         "SEMICLAW_ASYNQ_MAINTENANCE_CONCURRENCY",
 		Default:         int64(types.DefaultMaintenanceWorkerConcurrency),
 		Category:        "worker",
 		RequiresRestart: true,
@@ -220,7 +220,7 @@ var registry = map[string]settingSpec{
 	},
 	"asynq.shared_concurrency": {
 		Type:            "int",
-		EnvName:         "WEKNORA_ASYNQ_SHARED_CONCURRENCY",
+		EnvName:         "SEMICLAW_ASYNQ_SHARED_CONCURRENCY",
 		Default:         int64(types.DefaultSharedWorkerConcurrency),
 		Category:        "worker",
 		RequiresRestart: true,
@@ -229,10 +229,10 @@ var registry = map[string]settingSpec{
 	// asynq.wiki_concurrency is the size of the DEDICATED wiki worker pool,
 	// separate from the upstream pools. Read once when the wiki asynq server
 	// starts — changing it in the UI requires a process restart. Mirrors
-	// WEKNORA_WIKI_ASYNQ_CONCURRENCY (default 8).
+	// SEMICLAW_WIKI_ASYNQ_CONCURRENCY (default 8).
 	"asynq.wiki_concurrency": {
 		Type:            "int",
-		EnvName:         "WEKNORA_WIKI_ASYNQ_CONCURRENCY",
+		EnvName:         "SEMICLAW_WIKI_ASYNQ_CONCURRENCY",
 		Default:         int64(types.DefaultWikiWorkerConcurrency),
 		Category:        "worker",
 		RequiresRestart: true,
@@ -246,11 +246,11 @@ var registry = map[string]settingSpec{
 	// limiter governor; a runtime bridge (applyModelMaxConcurrency) pushes UI
 	// edits into limiter.SetGlobalLimit so no restart is needed. Individual
 	// models may override this via their own max_concurrency parameter.
-	// Mirrors WEKNORA_MODEL_MAX_CONCURRENCY (default 32). 0/negative disables
+	// Mirrors SEMICLAW_MODEL_MAX_CONCURRENCY (default 32). 0/negative disables
 	// the default cap.
 	"model.max_concurrency": {
 		Type:     "int",
-		EnvName:  "WEKNORA_MODEL_MAX_CONCURRENCY",
+		EnvName:  "SEMICLAW_MODEL_MAX_CONCURRENCY",
 		Default:  int64(32),
 		Category: "worker",
 		Description: "后台任务（文档入库/富化）对单个模型的默认并发上限，按模型 ID 全副本共享。" +
@@ -494,7 +494,7 @@ func (s *systemSettingService) applySSRFWhitelist(ctx context.Context) {
 // Called at preload (initial sync), after Update (this replica's edit), and
 // after reload (peer's edit via pubsub).
 func (s *systemSettingService) applyModelMaxConcurrency(ctx context.Context) {
-	limit := int(s.GetInt(ctx, "model.max_concurrency", "WEKNORA_MODEL_MAX_CONCURRENCY", 32))
+	limit := int(s.GetInt(ctx, "model.max_concurrency", "SEMICLAW_MODEL_MAX_CONCURRENCY", 32))
 	limiter.SetGlobalLimit(limit)
 	logger.Infof(ctx, "[system_settings] model.max_concurrency applied (limit=%d)", limit)
 }

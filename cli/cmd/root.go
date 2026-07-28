@@ -226,7 +226,7 @@ func addGlobalFlags(cmd *cobra.Command) {
 	// instead of being rejected as "unknown flag" exit 2 by cobra. Commands
 	// that don't produce JSON output (e.g. `completion bash`) ignore the flag
 	// rather than error — the unified agent contract is worth the trade.
-	pf.String("format", "", "Output format: text | json | ndjson (default: json; env: WEKNORA_FORMAT)")
+	pf.String("format", "", "Output format: text | json | ndjson (default: json; env: SEMICLAW_FORMAT)")
 	pf.StringP("jq", "q", "", "Filter JSON output using a jq `expression` (requires --format json|ndjson)")
 }
 

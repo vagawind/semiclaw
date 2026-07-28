@@ -11,7 +11,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Tencent/WeKnora/internal/im"
+	"github.com/vagawind/semiclaw/internal/im"
 	ws "github.com/gorilla/websocket"
 )
 

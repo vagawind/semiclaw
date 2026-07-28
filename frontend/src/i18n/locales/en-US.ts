@@ -6746,7 +6746,7 @@ export default {
         },
         env: {
           title: 'Configure environment',
-          desc: 'Set WEKNORA_BASE_URL and WEKNORA_API_KEY in your shell or ~/.zshrc / ~/.bashrc. The example below uses your current API base URL—replace the API Key with your actual value.',
+          desc: 'Set SEMICLAW_BASE_URL and SEMICLAW_API_KEY in your shell or ~/.zshrc / ~/.bashrc. The example below uses your current API base URL—replace the API Key with your actual value.',
         },
         install: {
           title: 'Install the skill',

@@ -423,24 +423,24 @@ func TestResolveKB_Chain(t *testing.T) {
 	})
 }
 
-// TestBuildClientFromEnv covers the stateless env-credential path: WEKNORA_TOKEN
-// / WEKNORA_API_KEY build an ephemeral client with no config/keyring access.
+// TestBuildClientFromEnv covers the stateless env-credential path: SEMICLAW_TOKEN
+// / SEMICLAW_API_KEY build an ephemeral client with no config/keyring access.
 func TestBuildClientFromEnv(t *testing.T) {
 	emptyCfg := &Factory{Config: func() (*config.Config, error) { return &config.Config{}, nil }}
 
 	t.Run("no env vars falls through to profile path", func(t *testing.T) {
-		t.Setenv("WEKNORA_TOKEN", "")
-		t.Setenv("WEKNORA_API_KEY", "")
+		t.Setenv("SEMICLAW_TOKEN", "")
+		t.Setenv("SEMICLAW_API_KEY", "")
 		c, handled, err := buildClientFromEnv(emptyCfg)
 		assert.False(t, handled, "no env creds must fall through")
 		assert.Nil(t, c)
 		assert.NoError(t, err)
 	})
 
-	t.Run("api key + WEKNORA_HOST builds a client", func(t *testing.T) {
-		t.Setenv("WEKNORA_TOKEN", "")
-		t.Setenv("WEKNORA_API_KEY", "sk-test")
-		t.Setenv("WEKNORA_HOST", "https://kb.example.com")
+	t.Run("api key + SEMICLAW_HOST builds a client", func(t *testing.T) {
+		t.Setenv("SEMICLAW_TOKEN", "")
+		t.Setenv("SEMICLAW_API_KEY", "sk-test")
+		t.Setenv("SEMICLAW_HOST", "https://kb.example.com")
 		c, handled, err := buildClientFromEnv(emptyCfg)
 		assert.True(t, handled)
 		require.NoError(t, err)
@@ -448,9 +448,9 @@ func TestBuildClientFromEnv(t *testing.T) {
 	})
 
 	t.Run("token set but no host is a typed input error", func(t *testing.T) {
-		t.Setenv("WEKNORA_API_KEY", "")
-		t.Setenv("WEKNORA_TOKEN", "jwt-token")
-		t.Setenv("WEKNORA_HOST", "")
+		t.Setenv("SEMICLAW_API_KEY", "")
+		t.Setenv("SEMICLAW_TOKEN", "jwt-token")
+		t.Setenv("SEMICLAW_HOST", "")
 		c, handled, err := buildClientFromEnv(emptyCfg)
 		assert.True(t, handled, "env creds set → handled even on host error")
 		assert.Nil(t, c)
@@ -459,10 +459,10 @@ func TestBuildClientFromEnv(t *testing.T) {
 		assert.Equal(t, CodeInputInvalidArgument, ce.Code)
 	})
 
-	t.Run("host falls back to the active profile when WEKNORA_HOST unset", func(t *testing.T) {
-		t.Setenv("WEKNORA_API_KEY", "")
-		t.Setenv("WEKNORA_TOKEN", "jwt-token")
-		t.Setenv("WEKNORA_HOST", "")
+	t.Run("host falls back to the active profile when SEMICLAW_HOST unset", func(t *testing.T) {
+		t.Setenv("SEMICLAW_API_KEY", "")
+		t.Setenv("SEMICLAW_TOKEN", "jwt-token")
+		t.Setenv("SEMICLAW_HOST", "")
 		f := &Factory{Config: func() (*config.Config, error) {
 			return &config.Config{
 				CurrentProfile: "p",

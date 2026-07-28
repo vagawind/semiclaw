@@ -3,7 +3,7 @@ package asr
 import (
 	"testing"
 
-	secutils "github.com/Tencent/WeKnora/internal/utils"
+	secutils "github.com/vagawind/semiclaw/internal/utils"
 )
 
 func withASRSSRFWhitelist(t *testing.T, raw string) {

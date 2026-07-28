@@ -3,13 +3,15 @@ package service
 import (
 	"context"
 	"errors"
+	"os"
+	"strings"
 	"time"
 
+	werrors "github.com/vagawind/semiclaw/internal/errors"
+	infra_web_search "github.com/vagawind/semiclaw/internal/infrastructure/web_search"
 	"github.com/vagawind/semiclaw/internal/logger"
 	"github.com/vagawind/semiclaw/internal/types"
 	"github.com/vagawind/semiclaw/internal/types/interfaces"
-	"github.com/vagawind/semiclaw/internal/utils"
-	werrors "github.com/vagawind/semiclaw/internal/errors"
 )
 
 // ListTenantsParams defines parameters for listing tenants with filtering and pagination
@@ -22,13 +24,22 @@ type ListTenantsParams struct {
 
 // tenantService implements the TenantService interface
 type tenantService struct {
-	repo        interfaces.TenantRepository // Repository for tenant data operations
-	storageRepo interfaces.StorageBackendRepository
+	repo                   interfaces.TenantRepository // Repository for tenant data operations
+	storageRepo            interfaces.StorageBackendRepository
+	webSearchProviderRepo  interfaces.WebSearchProviderRepository
 }
 
 // NewTenantService creates a new tenant service instance
-func NewTenantService(repo interfaces.TenantRepository, storageRepo interfaces.StorageBackendRepository) interfaces.TenantService {
-	return &tenantService{repo: repo, storageRepo: storageRepo}
+func NewTenantService(
+	repo interfaces.TenantRepository,
+	storageRepo interfaces.StorageBackendRepository,
+	webSearchProviderRepo interfaces.WebSearchProviderRepository,
+) interfaces.TenantService {
+	return &tenantService{
+		repo:                  repo,
+		storageRepo:           storageRepo,
+		webSearchProviderRepo: webSearchProviderRepo,
+	}
 }
 
 // CreateTenant creates a new tenant
@@ -68,6 +79,11 @@ func (s *tenantService) CreateTenant(ctx context.Context, tenant *types.Tenant) 
 		_ = s.repo.DeleteTenant(ctx, tenant.ID)
 		return nil, err
 	}
+	// Best-effort: optional SearXNG (or other self-hosted) default search provider.
+	// Failure must not roll back the tenant — search is optional vs storage.
+	if err := s.createDefaultWebSearchProvider(ctx, tenant); err != nil {
+		logger.Warnf(ctx, "Failed to create default web search provider for tenant %d: %v", tenant.ID, err)
+	}
 
 	logger.Infof(ctx, "Tenant created successfully, ID: %d, name: %s", tenant.ID, tenant.Name)
 	return tenant, nil
@@ -97,6 +113,44 @@ func (s *tenantService) createDefaultStorageBackend(ctx context.Context, tenant 
 		_ = s.storageRepo.Delete(ctx, tenant.ID, backend.ID)
 		return err
 	}
+	return nil
+}
+
+// createDefaultWebSearchProvider seeds a workspace-default SearXNG provider when
+// SEARXNG_DEFAULT_INSTANCE_URL is set (e.g. http://searxng:8080 in docker compose).
+// Empty env keeps previous behaviour (no provider until configured in Settings).
+func (s *tenantService) createDefaultWebSearchProvider(ctx context.Context, tenant *types.Tenant) error {
+	if s.webSearchProviderRepo == nil || tenant == nil {
+		return nil
+	}
+	baseURL := strings.TrimSpace(os.Getenv("SEARXNG_DEFAULT_INSTANCE_URL"))
+	if baseURL == "" {
+		return nil
+	}
+	if err := infra_web_search.ValidateSearxngBaseURL(baseURL); err != nil {
+		return err
+	}
+	existing, err := s.webSearchProviderRepo.GetDefault(ctx, tenant.ID)
+	if err != nil {
+		return err
+	}
+	if existing != nil {
+		return nil
+	}
+	provider := &types.WebSearchProviderEntity{
+		TenantID:    tenant.ID,
+		Name:        "SearXNG",
+		Provider:    types.WebSearchProviderTypeSearxng,
+		Description: "Default self-hosted web search",
+		Parameters: types.WebSearchProviderParameters{
+			BaseURL: baseURL,
+		},
+		IsDefault: true,
+	}
+	if err := s.webSearchProviderRepo.Create(ctx, provider); err != nil {
+		return err
+	}
+	logger.Infof(ctx, "Default SearXNG web search provider created for tenant %d (%s)", tenant.ID, baseURL)
 	return nil
 }
 

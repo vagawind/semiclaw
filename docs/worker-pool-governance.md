@@ -31,14 +31,14 @@ the same core/enrichment queues; one task is still processed by one worker.
 
 All settings are available under System settings and require a service restart:
 
-- `asynq.core_concurrency` / `WEKNORA_ASYNQ_CORE_CONCURRENCY`
-- `asynq.postprocess_concurrency` / `WEKNORA_ASYNQ_POSTPROCESS_CONCURRENCY`
-- `asynq.enrichment_concurrency` / `WEKNORA_ASYNQ_ENRICHMENT_CONCURRENCY`
-- `asynq.maintenance_concurrency` / `WEKNORA_ASYNQ_MAINTENANCE_CONCURRENCY`
-- `asynq.shared_concurrency` / `WEKNORA_ASYNQ_SHARED_CONCURRENCY`
-- `asynq.wiki_concurrency` / `WEKNORA_WIKI_ASYNQ_CONCURRENCY`
+- `asynq.core_concurrency` / `SEMICLAW_ASYNQ_CORE_CONCURRENCY`
+- `asynq.postprocess_concurrency` / `SEMICLAW_ASYNQ_POSTPROCESS_CONCURRENCY`
+- `asynq.enrichment_concurrency` / `SEMICLAW_ASYNQ_ENRICHMENT_CONCURRENCY`
+- `asynq.maintenance_concurrency` / `SEMICLAW_ASYNQ_MAINTENANCE_CONCURRENCY`
+- `asynq.shared_concurrency` / `SEMICLAW_ASYNQ_SHARED_CONCURRENCY`
+- `asynq.wiki_concurrency` / `SEMICLAW_WIKI_ASYNQ_CONCURRENCY`
 
-The old aggregate `asynq.concurrency` / `WEKNORA_ASYNQ_CONCURRENCY` setting is
+The old aggregate `asynq.concurrency` / `SEMICLAW_ASYNQ_CONCURRENCY` setting is
 retired. Deployments that set it must migrate to the explicit pool settings.
 Persisted old rows are ignored and hidden from the System settings page so they
 cannot be mistaken for an effective runtime control.

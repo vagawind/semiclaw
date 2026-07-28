@@ -44,7 +44,7 @@ func TestApplyAuthAndTenantDefaults_DisableRegistrationDrivesRegistrationMode(t 
 
 func TestApplyAuthAndTenantDefaults_SelfServiceTenantCreation(t *testing.T) {
 	t.Run("defaults enabled", func(t *testing.T) {
-		t.Setenv("WEKNORA_TENANT_SELF_SERVICE_CREATION_ENABLED", "")
+		t.Setenv("SEMICLAW_TENANT_SELF_SERVICE_CREATION_ENABLED", "")
 		cfg := &Config{Tenant: &TenantConfig{}}
 
 		applyAuthAndTenantDefaults(cfg)
@@ -55,7 +55,7 @@ func TestApplyAuthAndTenantDefaults_SelfServiceTenantCreation(t *testing.T) {
 	})
 
 	t.Run("environment disables yaml default", func(t *testing.T) {
-		t.Setenv("WEKNORA_TENANT_SELF_SERVICE_CREATION_ENABLED", "false")
+		t.Setenv("SEMICLAW_TENANT_SELF_SERVICE_CREATION_ENABLED", "false")
 		on := true
 		cfg := &Config{Tenant: &TenantConfig{SelfServiceCreationEnabled: &on}}
 
@@ -69,7 +69,7 @@ func TestApplyAuthAndTenantDefaults_SelfServiceTenantCreation(t *testing.T) {
 
 func TestApplyAuthAndTenantDefaults_DefaultTenantMode(t *testing.T) {
 	t.Run("historical default creates a personal tenant", func(t *testing.T) {
-		t.Setenv("WEKNORA_AUTH_DEFAULT_TENANT_MODE", "")
+		t.Setenv("SEMICLAW_AUTH_DEFAULT_TENANT_MODE", "")
 		cfg := &Config{Auth: &AuthConfig{}}
 
 		applyAuthAndTenantDefaults(cfg)
@@ -80,7 +80,7 @@ func TestApplyAuthAndTenantDefaults_DefaultTenantMode(t *testing.T) {
 	})
 
 	t.Run("environment overrides yaml", func(t *testing.T) {
-		t.Setenv("WEKNORA_AUTH_DEFAULT_TENANT_MODE", AuthDefaultTenantModeTenantless)
+		t.Setenv("SEMICLAW_AUTH_DEFAULT_TENANT_MODE", AuthDefaultTenantModeTenantless)
 		cfg := &Config{Auth: &AuthConfig{DefaultTenantMode: AuthDefaultTenantModeCreatePersonal}}
 
 		applyAuthAndTenantDefaults(cfg)
@@ -91,7 +91,7 @@ func TestApplyAuthAndTenantDefaults_DefaultTenantMode(t *testing.T) {
 	})
 
 	t.Run("invalid environment value fails validation", func(t *testing.T) {
-		t.Setenv("WEKNORA_AUTH_DEFAULT_TENANT_MODE", "create_magic")
+		t.Setenv("SEMICLAW_AUTH_DEFAULT_TENANT_MODE", "create_magic")
 		cfg := &Config{Auth: &AuthConfig{}}
 
 		applyAuthAndTenantDefaults(cfg)

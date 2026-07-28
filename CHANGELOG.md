@@ -78,7 +78,7 @@ All notable changes to this project will be documented in this file.
 - **IMPROVED**: **Terminology** — user-facing "tenant" labels renamed to "workspace" across the UI and i18n.
 - **IMPROVED**: **Chat streaming** — unified streaming wait indicators across chat and embed, follow-up suggestion loading and answer-toolbar timing polished, references drawer closed on session switch, and enforced retrieved-image output in answers.
 - **IMPROVED**: **Frontend resilience** — hardened settings `localStorage` load to prevent white-screen from corrupted state; shared document action menu and card-view components extracted; Wiki badge on KB cards; responsive doc filter bar.
-- **IMPROVED**: **Infrastructure config** — infrastructure host/port configurable via env vars in docker-compose; remote infrastructure supported via `.env.local`; `WEKNORA_MODEL_MAX_CONCURRENCY` defaulted to 32.
+- **IMPROVED**: **Infrastructure config** — infrastructure host/port configurable via env vars in docker-compose; remote infrastructure supported via `.env.local`; `SEMICLAW_MODEL_MAX_CONCURRENCY` defaulted to 32.
 - **IMPROVED**: **docreader** — SSRF utility and safe HTTP client added; legacy doc-payload detection; parser routing tests.
 
 ### Bug Fixes

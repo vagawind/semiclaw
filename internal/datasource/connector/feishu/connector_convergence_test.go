@@ -9,7 +9,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/types"
 )
 
 // statefulFeishu is a fake Feishu server whose per-node export outcome can be

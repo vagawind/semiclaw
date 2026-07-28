@@ -6728,7 +6728,7 @@ export default {
         api: { title: "API 자격 증명", desc: "설정 → API 정보에서 API Key와 주소를 복사하세요." },
         env: {
           title: "환경 변수 설정",
-          desc: "셸 또는 ~/.zshrc, ~/.bashrc에 WEKNORA_BASE_URL과 WEKNORA_API_KEY를 설정하세요. 아래 예시는 현재 API 주소를 사용하며, API Key는 실제 값으로 바꾸세요.",
+          desc: "셸 또는 ~/.zshrc, ~/.bashrc에 SEMICLAW_BASE_URL과 SEMICLAW_API_KEY를 설정하세요. 아래 예시는 현재 API 주소를 사용하며, API Key는 실제 값으로 바꾸세요.",
         },
         install: {
           title: "Skill 설치",

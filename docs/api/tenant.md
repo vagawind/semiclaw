@@ -112,7 +112,7 @@ curl --location 'http://localhost:8080/api/v1/tenants/search?keyword=semiclaw&pa
 
 创建一个新的空间。**默认不会**自动发放 API Key；请在创建后通过 `POST /tenants/:id/api-keys` 创建密钥。从旧版本升级时，原有 `tenants.api_key` 会迁移到 `tenant_api_keys` 表并继续可用，直至被吊销。
 
-> **兼容旧行为（可选）**：如需恢复旧版「创建空间即下发默认 API Key」的行为，可将系统设置 `tenant.auto_create_api_key` 置为 `true`（或设置环境变量 `WEKNORA_TENANT_AUTO_CREATE_API_KEY=true`）。开启后，创建空间会自动生成一个 `full_access` 权限的 API Key，并在响应体 `data.api_key` 中返回其明文 token（仅本次创建响应返回，请妥善保存）。默认 `false`。
+> **兼容旧行为（可选）**：如需恢复旧版「创建空间即下发默认 API Key」的行为，可将系统设置 `tenant.auto_create_api_key` 置为 `true`（或设置环境变量 `SEMICLAW_TENANT_AUTO_CREATE_API_KEY=true`）。开启后，创建空间会自动生成一个 `full_access` 权限的 API Key，并在响应体 `data.api_key` 中返回其明文 token（仅本次创建响应返回，请妥善保存）。默认 `false`。
 
 **参数说明（请求体）**:
 
@@ -181,7 +181,7 @@ curl --location 'http://localhost:8080/api/v1/tenants' \
 }
 ```
 
-当开启 `tenant.auto_create_api_key`（或 `WEKNORA_TENANT_AUTO_CREATE_API_KEY=true`）时，响应的 `data` 中会额外包含 `api_key` 字段（`full_access` 密钥的明文 token）：
+当开启 `tenant.auto_create_api_key`（或 `SEMICLAW_TENANT_AUTO_CREATE_API_KEY=true`）时，响应的 `data` 中会额外包含 `api_key` 字段（`full_access` 密钥的明文 token）：
 
 ```json
 {

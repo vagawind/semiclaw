@@ -9,11 +9,11 @@ import (
 	"strings"
 	"time"
 
-	filesvc "github.com/Tencent/WeKnora/internal/application/service/file"
-	apperrors "github.com/Tencent/WeKnora/internal/errors"
-	"github.com/Tencent/WeKnora/internal/types"
-	"github.com/Tencent/WeKnora/internal/types/interfaces"
-	secutils "github.com/Tencent/WeKnora/internal/utils"
+	filesvc "github.com/vagawind/semiclaw/internal/application/service/file"
+	apperrors "github.com/vagawind/semiclaw/internal/errors"
+	"github.com/vagawind/semiclaw/internal/types"
+	"github.com/vagawind/semiclaw/internal/types/interfaces"
+	secutils "github.com/vagawind/semiclaw/internal/utils"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 )

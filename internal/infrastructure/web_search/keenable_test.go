@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/types"
 )
 
 func TestKeenableProvider_Search_Keyless(t *testing.T) {

@@ -6551,7 +6551,7 @@ export default {
         api: { title: 'API-учётные данные', desc: 'Скопируйте API Key и URL в «Настройки → API-информация».' },
         env: {
           title: 'Переменные окружения',
-          desc: 'Задайте WEKNORA_BASE_URL и WEKNORA_API_KEY в shell или ~/.zshrc / ~/.bashrc. Пример ниже использует текущий API URL — замените API Key на фактическое значение.',
+          desc: 'Задайте SEMICLAW_BASE_URL и SEMICLAW_API_KEY в shell или ~/.zshrc / ~/.bashrc. Пример ниже использует текущий API URL — замените API Key на фактическое значение.',
         },
         install: {
           title: 'Установка Skill',

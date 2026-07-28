@@ -114,8 +114,8 @@ func New() *Factory {
 // credentials are available so the user gets the right hint to run
 // `semiclaw auth login`.
 func buildClient(f *Factory) (*sdk.Client, error) {
-	// Env-credential injection: WEKNORA_TOKEN (bearer) or WEKNORA_API_KEY, with
-	// WEKNORA_HOST (or the active profile's host), builds an ephemeral client
+	// Env-credential injection: SEMICLAW_TOKEN (bearer) or SEMICLAW_API_KEY, with
+	// SEMICLAW_HOST (or the active profile's host), builds an ephemeral client
 	// that bypasses config.yaml + the keyring — the stateless headless / CI /
 	// agent path (no disk writes, no `auth login`).
 	if c, handled, err := buildClientFromEnv(f); handled {
@@ -197,39 +197,39 @@ func buildClient(f *Factory) (*sdk.Client, error) {
 
 // EnvCredential reports whether stateless env credentials are in effect and
 // which kind. Used by `auth status` / `config view` so their host / profile
-// output reflects that the env credential (and WEKNORA_HOST) — not the config
+// output reflects that the env credential (and SEMICLAW_HOST) — not the config
 // profile — is what actually authenticated the client. Mirrors buildClientFromEnv's
-// precedence (WEKNORA_TOKEN wins over WEKNORA_API_KEY).
+// precedence (SEMICLAW_TOKEN wins over SEMICLAW_API_KEY).
 func EnvCredential() (active bool, kind string) {
-	if strings.TrimSpace(os.Getenv("WEKNORA_TOKEN")) != "" {
-		return true, "WEKNORA_TOKEN"
+	if strings.TrimSpace(os.Getenv("SEMICLAW_TOKEN")) != "" {
+		return true, "SEMICLAW_TOKEN"
 	}
-	if strings.TrimSpace(os.Getenv("WEKNORA_API_KEY")) != "" {
-		return true, "WEKNORA_API_KEY"
+	if strings.TrimSpace(os.Getenv("SEMICLAW_API_KEY")) != "" {
+		return true, "SEMICLAW_API_KEY"
 	}
 	return false, ""
 }
 
-// buildClientFromEnv builds an ephemeral SDK client from WEKNORA_TOKEN (bearer
-// JWT) or WEKNORA_API_KEY when either is set, bypassing config.yaml + the
+// buildClientFromEnv builds an ephemeral SDK client from SEMICLAW_TOKEN (bearer
+// JWT) or SEMICLAW_API_KEY when either is set, bypassing config.yaml + the
 // keyring entirely — the stateless path for headless / CI / agent use. Returns
 // handled=false (fall through to the profile path) when neither var is set.
 //
-// Host resolution: WEKNORA_HOST, else the active profile's host (so env creds
+// Host resolution: SEMICLAW_HOST, else the active profile's host (so env creds
 // can target an already-configured host without re-specifying it). When a token
 // is supplied, no 401→refresh transport is attached — env creds are ephemeral,
-// so a 401 propagates for the caller to supply a fresh token. WEKNORA_TOKEN
-// wins over WEKNORA_API_KEY if both are set.
+// so a 401 propagates for the caller to supply a fresh token. SEMICLAW_TOKEN
+// wins over SEMICLAW_API_KEY if both are set.
 func buildClientFromEnv(f *Factory) (client *sdk.Client, handled bool, err error) {
-	token := strings.TrimSpace(os.Getenv("WEKNORA_TOKEN"))
-	apiKey := strings.TrimSpace(os.Getenv("WEKNORA_API_KEY"))
+	token := strings.TrimSpace(os.Getenv("SEMICLAW_TOKEN"))
+	apiKey := strings.TrimSpace(os.Getenv("SEMICLAW_API_KEY"))
 	if token == "" && apiKey == "" {
 		return nil, false, nil
 	}
-	host := strings.TrimSpace(os.Getenv("WEKNORA_HOST"))
+	host := strings.TrimSpace(os.Getenv("SEMICLAW_HOST"))
 	if host == "" {
 		// Best-effort fallback to the active profile's host; ignore config
-		// errors so env creds + WEKNORA_HOST stay usable with no config at all.
+		// errors so env creds + SEMICLAW_HOST stay usable with no config at all.
 		if cfg, cerr := f.Config(); cerr == nil && cfg != nil {
 			if prof, ok := cfg.Profiles[cfg.CurrentProfile]; ok {
 				host = prof.Host
@@ -238,8 +238,8 @@ func buildClientFromEnv(f *Factory) (client *sdk.Client, handled bool, err error
 	}
 	if host == "" {
 		return nil, true, NewError(CodeInputInvalidArgument,
-			"WEKNORA_TOKEN / WEKNORA_API_KEY is set but no host is available").
-			WithHint("set WEKNORA_HOST (e.g. https://kb.example.com) or configure a profile host")
+			"SEMICLAW_TOKEN / SEMICLAW_API_KEY is set but no host is available").
+			WithHint("set SEMICLAW_HOST (e.g. https://kb.example.com) or configure a profile host")
 	}
 	if token != "" {
 		return sdk.NewClient(host, sdk.WithBearerToken(token)), true, nil

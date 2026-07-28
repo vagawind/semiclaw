@@ -34,7 +34,7 @@ ui:
 search:
   safe_search: 0
   autocomplete: ""
-  default_lang: "auto"
+  default_lang: "zh-CN"
   ban_time_on_fail: 5
   max_ban_time_on_fail: 120
   formats:
@@ -42,8 +42,43 @@ search:
     - json
 
 outgoing:
-  request_timeout: 6.0
-  max_request_timeout: 10.0
+  # Slightly higher than defaults: some CN-reachable engines need more than 6s.
+  request_timeout: 8.0
+  max_request_timeout: 12.0
   pool_connections: 100
   pool_maxsize: 20
   enable_http2: true
+
+# Prefer engines that work on restricted egress (e.g. mainland China).
+# Google / DDG / Brave / Startpage / Wikipedia often ConnectTimeout here and
+# cause SemiClaw's "test connection" to see 0 results even when SearXNG itself
+# is healthy. Disable those by default; operators can re-enable as needed.
+engines:
+  - name: google
+    disabled: true
+  - name: google news
+    disabled: true
+  - name: google images
+    disabled: true
+  - name: google cse
+    disabled: true
+  - name: duckduckgo
+    disabled: true
+  - name: brave
+    disabled: true
+  - name: startpage
+    disabled: true
+  - name: wikipedia
+    disabled: true
+  - name: bing
+    disabled: true
+  - name: baidu
+    # Often CAPTCHA-suspended from datacenter IPs.
+    disabled: true
+  - name: sogou
+    disabled: false
+  - name: 360search
+    disabled: false
+  - name: quark
+    # Often CAPTCHA-suspended from datacenter IPs.
+    disabled: true

@@ -57,11 +57,11 @@ services:
     # Local dev: bind to loopback by default; the host-side SemiClaw process
     # reaches it at http://127.0.0.1:${SEARXNG_PORT}.
     ports:
-      - "${SEARXNG_BIND:-127.0.0.1}:${SEARXNG_PORT:-8888}:8080"
+      - "${SEARXNG_BIND:-127.0.0.1}:${SEARXNG_PORT:-8880}:8080"
     volumes:
       - searxng_config_dev:/etc/searxng
     environment:
-      - SEARXNG_BASE_URL=http://localhost:${SEARXNG_PORT:-8888}/
+      - SEARXNG_BASE_URL=http://localhost:${SEARXNG_PORT:-8880}/
       - INSTANCE_NAME=semiclaw-searxng-dev
       # See docker-compose.yml for rationale on the default secret.
       - SEARXNG_SECRET=${SEARXNG_SECRET:-semiclaw-default-searxng-secret-rotate-before-exposing-publicly}
