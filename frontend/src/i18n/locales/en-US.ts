@@ -2036,7 +2036,7 @@ export default {
     firstTime: 'New to SemiClaw?',
     registerSuccess: 'Registration successful! The system has created an exclusive tenant for you, please login',
     registerFailed: 'Registration failed',
-    subtitle: 'RAG Q&A, ReAct Agent and Wiki — an LLM-powered enterprise knowledge framework',
+    subtitle: 'RAG Q&A, ReAct Agent and Knowledge Graph — an LLM-powered industry-grade expert brain',
     registerSubtitle: 'Create your account and start using WeKnora',
     emailPlaceholder: 'Enter email address',
     passwordPlaceholder: 'Enter password (8-32 characters, including letters and numbers)',
