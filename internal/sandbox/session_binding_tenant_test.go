@@ -6,7 +6,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/types"
 )
 
 func newTenantKeyTestManager(t *testing.T) (*SessionBoundManager, *fakeRemoteClient) {

@@ -4,9 +4,9 @@ import (
 	"context"
 	"errors"
 
-	"github.com/Tencent/WeKnora/internal/application/repository"
-	"github.com/Tencent/WeKnora/internal/logger"
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/application/repository"
+	"github.com/vagawind/semiclaw/internal/logger"
+	"github.com/vagawind/semiclaw/internal/types"
 )
 
 // fetchKnowledgeData gets knowledge data in batch.

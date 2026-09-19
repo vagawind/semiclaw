@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/Tencent/WeKnora/internal/application/repository"
-	"github.com/Tencent/WeKnora/internal/types"
-	ifaces "github.com/Tencent/WeKnora/internal/types/interfaces"
+	"github.com/vagawind/semiclaw/internal/application/repository"
+	"github.com/vagawind/semiclaw/internal/types"
+	ifaces "github.com/vagawind/semiclaw/internal/types/interfaces"
 	"github.com/stretchr/testify/require"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"

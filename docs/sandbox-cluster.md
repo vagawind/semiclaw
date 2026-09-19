@@ -1,17 +1,17 @@
-# WeKnora 沙箱集群与标准模板
+# SemiClaw 沙箱集群与标准模板
 
-本文面向部署和平台管理员，说明如何把 CubeSandbox 或 E2B 接入 WeKnora。Docker、CubeSandbox、E2B 都在同一个空间设置页面通过同一套配置与检查接口管理；只有远端后端需要本文所述的集群和模板准备。普通智能体使用者不需要搭建模板，也不应该逐项猜测运行环境。
+本文面向部署和平台管理员，说明如何把 CubeSandbox 或 E2B 接入 SemiClaw。Docker、CubeSandbox、E2B 都在同一个空间设置页面通过同一套配置与检查接口管理；只有远端后端需要本文所述的集群和模板准备。普通智能体使用者不需要搭建模板，也不应该逐项猜测运行环境。
 
 ## 谁负责什么
 
 | 角色 | 职责 |
 | --- | --- |
-| WeKnora 发布流程 | 维护 `docker/Dockerfile.sandbox`，发布与 WeKnora 版本匹配的 `wechatopenai/weknora-sandbox` 镜像 |
+| SemiClaw 发布流程 | 维护 `docker/Dockerfile.sandbox`，发布与 SemiClaw 版本匹配的 `vagawind/semiclaw-sandbox` 镜像 |
 | 集群管理员 | 部署 CubeSandbox 或开通 E2B，并保证控制面模板 API 可用 |
 | 空间管理员 | 在“设置 → 沙箱后端”中填写集群地址和凭据，先完成连接验证，再选择接口返回的模板 |
 | 智能体管理员 | 在智能体的 Skills 配置中选择已经验证过的沙箱后端 |
 
-“WeKnora 标准模板”指模板内容由 WeKnora 维护，并不代表所有集群共享同一个模板 ID。CubeSandbox 的模板 ID、E2B 的模板 ID/别名都属于具体集群或账号；跨集群硬编码一个 ID 会指向不存在或内容不一致的模板。
+“SemiClaw 标准模板”指模板内容由 SemiClaw 维护，并不代表所有集群共享同一个模板 ID。CubeSandbox 的模板 ID、E2B 的模板 ID/别名都属于具体集群或账号；跨集群硬编码一个 ID 会指向不存在或内容不一致的模板。
 
 ## 标准模板包含什么
 
@@ -21,9 +21,9 @@
 - Node.js 20、npm 与 npx；
 - jq 及基础 Shell 工具；
 - `/workspace` 工作目录；
-- UID 1000 的 `user` 账号（E2B 模板约定的账号名，保留供按名字寻址的工具与 `sudo` 使用；WeKnora 执行脚本与文件操作默认用的是 root，见 `DefaultSandboxExecUser`）。
+- UID 1000 的 `user` 账号（E2B 模板约定的账号名，保留供按名字寻址的工具与 `sudo` 使用；SemiClaw 执行脚本与文件操作默认用的是 root，见 `DefaultSandboxExecUser`）。
 
-生产环境应使用与 WeKnora 相同的版本标签，不建议长期指向 `latest`。Skills 新增系统依赖时，应先更新标准镜像并重新注册模板，再切换集群的默认模板 ID。
+生产环境应使用与 SemiClaw 相同的版本标签，不建议长期指向 `latest`。Skills 新增系统依赖时，应先更新标准镜像并重新注册模板，再切换集群的默认模板 ID。
 
 ### 镜像变体
 
@@ -31,14 +31,14 @@
 
 | 变体 | 标签 | 用途 |
 | --- | --- | --- |
-| `sandbox`（默认） | `wechatopenai/weknora-sandbox:<版本>` | Docker 后端的会话容器镜像；同时作为 E2B CLI 模板的基础镜像 |
-| `cube` | `wechatopenai/weknora-sandbox:<版本>-cube` | CubeSandbox CLI 模板 |
-| `desktop` | `wechatopenai/weknora-sandbox:<版本>-desktop` | E2B 图形桌面模板的基础镜像 |
-| `desktop-cube` | `wechatopenai/weknora-sandbox:<版本>-desktop-cube` | CubeSandbox 图形桌面模板 |
+| `sandbox`（默认） | `vagawind/semiclaw-sandbox:<版本>` | Docker 后端的会话容器镜像；同时作为 E2B CLI 模板的基础镜像 |
+| `cube` | `vagawind/semiclaw-sandbox:<版本>-cube` | CubeSandbox CLI 模板 |
+| `desktop` | `vagawind/semiclaw-sandbox:<版本>-desktop` | E2B 图形桌面模板的基础镜像 |
+| `desktop-cube` | `vagawind/semiclaw-sandbox:<版本>-desktop-cube` | CubeSandbox 图形桌面模板 |
 
 区别在于 Cube 变体额外注入了 envd。Cube 直接把 OCI 镜像变成模板，并以 `GET :49983/health` 探活，这个端点只有 envd 提供；不带 envd 的镜像建模板必然以 `connection refused` 失败。E2B 不需要这个变体，因为它的构建流程会自行注入 envd；Docker 后端则完全不需要 envd，也**尚未**使用 `desktop` 变体。详见 [Cube 自带镜像接入](https://cubesandbox.com/zh/guide/tutorials/bring-your-own-image.html)。图形桌面的中继、票据与安全约束见 [沙箱图形桌面](./sandbox-desktop.md)。
 
-Cube 变体只发布 linux/amd64——envd 的来源镜像 `cubesandbox-base` 没有 arm64，Cube 自身的 PVM 形态也只支持 x86_64。变体内 envd 以 root 运行，脚本按请求指定的账号执行；WeKnora 默认显式指定 root。
+Cube 变体只发布 linux/amd64——envd 的来源镜像 `cubesandbox-base` 没有 arm64，Cube 自身的 PVM 形态也只支持 x86_64。变体内 envd 以 root 运行，脚本按请求指定的账号执行；SemiClaw 默认显式指定 root。
 
 ## CubeSandbox
 
@@ -61,20 +61,20 @@ Cube 变体只发布 linux/amd64——envd 的来源镜像 `cubesandbox-base` �
 
 安装脚本会把 CubeMaster、Cubelet、CubeShim 作为宿主机进程运行，因此**不能在没有 systemd 的容器化环境里部署**。CI 容器、无 init 系统的开发机请改用 K8s 形态或另找一台主机。
 
-### 制作模板并对接 WeKnora
+### 制作模板并对接 SemiClaw
 
 1. 按 [CubeSandbox Quick Start](https://github.com/TencentCloud/CubeSandbox/blob/master/docs/zh/guide/quickstart.md) 完成控制面、计算节点、CubeProxy 与域名解析。生产环境还需按官方文档完成鉴权、TLS、网络策略与多节点部署。
-2. 在 WeKnora 的空间设置中填写 CubeAPI、CubeProxy、sandbox domain 和可选 API Key。需要自定义 guest DNS 时填写「DNS 服务器」（须为 IP）；留空则使用集群默认。若这些端点位于 RFC1918/loopback 网络，显式打开“允许访问私网集群地址”。
-3. 点击“连接并继续”。WeKnora 先验证控制面地址与凭据，通过后才进入模板步骤并列出集群模板。**不会自动创建桌面模板**。没有 WeKnora 标准（CLI）模板时在占位卡片上点「创建」，会从 `wechatopenai/weknora-sandbox:main-cube` 发起构建。需要图形桌面时再点桌面占位卡片上的「创建」（XFCE 镜像更重，E2B 为 4CPU/4GB，Cube 可写层 8G）。改 DNS 或需要换镜像时在对应卡片上点「重建」：优先对现有模板做 in-place rebuild（模板 ID 不变）；只有 redo 被拒绝时才先建新模板、成功后再删旧的。已安装 Skill 的配置（以及同一集群上其它已装 Skill 的配置）不能重建，也不能在 CLI / 桌面之间切换。失败模板同样用「重建」（CubeMaster 拒绝 redo、错误码 130400 时尤其需要）。
+2. 在 SemiClaw 的空间设置中填写 CubeAPI、CubeProxy、sandbox domain 和可选 API Key。需要自定义 guest DNS 时填写「DNS 服务器」（须为 IP）；留空则使用集群默认。若这些端点位于 RFC1918/loopback 网络，显式打开“允许访问私网集群地址”。
+3. 点击“连接并继续”。SemiClaw 先验证控制面地址与凭据，通过后才进入模板步骤并列出集群模板。**不会自动创建桌面模板**。没有 SemiClaw 标准（CLI）模板时在占位卡片上点「创建」，会从 `vagawind/semiclaw-sandbox:main-cube` 发起构建。需要图形桌面时再点桌面占位卡片上的「创建」（XFCE 镜像更重，E2B 为 4CPU/4GB，Cube 可写层 8G）。改 DNS 或需要换镜像时在对应卡片上点「重建」：优先对现有模板做 in-place rebuild（模板 ID 不变）；只有 redo 被拒绝时才先建新模板、成功后再删旧的。已安装 Skill 的配置（以及同一集群上其它已装 Skill 的配置）不能重建，也不能在 CLI / 桌面之间切换。失败模板同样用「重建」（CubeMaster 拒绝 redo、错误码 130400 时尤其需要）。
 4. 模板构建状态会自动刷新。状态变为 `READY` 后才可选择并进入运行配置；界面显示模板名称、状态和版本，配置内部才保存该集群自己的 `template_id`。
 
-标准模板保留 uid 1000 的 `user` 兼容账号；WeKnora 默认显式以 root 执行脚本与文件操作。模板应提供可写的 `/workspace`，运行前会准备 `input`、`output` 和本次工作目录。技能安装的维护调用只准备其工作目录。自定义只读挂载仍限制 root 的写入。
+标准模板保留 uid 1000 的 `user` 兼容账号；SemiClaw 默认显式以 root 执行脚本与文件操作。模板应提供可写的 `/workspace`，运行前会准备 `input`、`output` 和本次工作目录。技能安装的维护调用只准备其工作目录。自定义只读挂载仍限制 root 的写入。
 
-多实例 WeKnora 必须配置 Redis，以共享 session 到 sandbox 的绑定，以及桌面中继的「上次 sandbox ID」（技能安装重建后跨副本仍能发出 `SANDBOX_REBUILT`）。只有单实例开发环境才应使用内存绑定。
+多实例 SemiClaw 必须配置 Redis，以共享 session 到 sandbox 的绑定，以及桌面中继的「上次 sandbox ID」（技能安装重建后跨副本仍能发出 `SANDBOX_REBUILT`）。只有单实例开发环境才应使用内存绑定。
 
 ### 验证
 
-界面上的“连接验证”只覆盖控制面，“完整验证”会真实创建、执行并销毁一个沙箱。要覆盖 WeKnora 实际依赖的全部语义（会话内状态保持、shell_exec 复用同一沙箱、附件暂存、产物收集、执行超时），在能访问集群的机器上跑一致性测试：
+界面上的“连接验证”只覆盖控制面，“完整验证”会真实创建、执行并销毁一个沙箱。要覆盖 SemiClaw 实际依赖的全部语义（会话内状态保持、shell_exec 复用同一沙箱、附件暂存、产物收集、执行超时），在能访问集群的机器上跑一致性测试：
 
 ```bash
 CUBE_API_URL=http://127.0.0.1:33000 \
@@ -90,12 +90,12 @@ go test -tags=integration ./internal/sandbox -run Integration -count=1 -v
 | 现象 | 排查方向 |
 | --- | --- |
 | 连接验证失败 | CubeAPI 地址是否是控制面端口（不是 Dashboard 端口）；私网地址是否已打开“允许访问私网集群地址” |
-| 连接通过但执行报数据面错误 | CubeProxy 地址与 sandbox domain 是否与集群 `CUBE_API_SANDBOX_DOMAIN` 一致；Proxy 是否对 WeKnora 可达 |
+| 连接通过但执行报数据面错误 | CubeProxy 地址与 sandbox domain 是否与集群 `CUBE_API_SANDBOX_DOMAIN` 一致；Proxy 是否对 SemiClaw 可达 |
 | 模板长期停在构建中 | 镜像体积与网络；用 `cubemastercli tpl watch --job-id <id>` 看真实进度 |
 | 模板构建失败 | 卡片上会显示集群返回的失败原因。未安装 Skill 时可点「重建」删掉失败模板并用当前配置新建；仅刷新列表不会再自动重建。已安装 Skill 的配置会拒绝重建，请新建沙箱 |
-| 失败原因含 `TOOMANYREQUESTS` / Docker Hub 限流 | Cube 节点匿名拉 `wechatopenai/weknora-sandbox` 触发了 Hub 限额。等限额恢复后再刷新，或在节点上 `docker login` 后重试 |
+| 失败原因含 `TOOMANYREQUESTS` / Docker Hub 限流 | Cube 节点匿名拉 `vagawind/semiclaw-sandbox` 触发了 Hub 限额。等限额恢复后再刷新，或在节点上 `docker login` 后重试 |
 | 失败原因是 `Get "http://<IP>:49983/health": connect: connection refused` | 模板镜像里没有 envd。确认建模板用的是 `-cube` 变体镜像；若已是该变体，再查 Cube 沙箱网段（默认 `192.168.0.0/18`）是否与物理内网冲突 |
-| 沙箱能执行但「出网可用」失败 | 先看模板「公网访问」是否开启；WeKnora 标准模板构建会带 `allowInternetAccess`。guest DNS 来自标准模板构建时写入的 `dns`（设置页「DNS 服务器」/`dns_servers`）。留空时 Cubelet 会落到 `119.29.29.29`；私网或云上 UDP 53 到不了公网 DNS 时，填 Cube 宿主机 `/etc/resolv.conf` 里能用的地址，并避开 CubeVS 默认拒绝的 `10/8`、`172.16/12`、`192.168/16`。未安装 Skill 时，已有标准模板改 DNS 后在 weknora 卡片上点「重建」；已装 Skill 的配置请新建沙箱。其次 Cube 把沙箱 80/443 TPROXY 到 `192.168.0.1:8080/8443`，宿主机占用 `0.0.0.0:8080` 时 cube-egress 起不来。探测目标 `1.1.1.1` 在腾讯云也经常不通，国内目标可达即可 |
+| 沙箱能执行但「出网可用」失败 | 先看模板「公网访问」是否开启；SemiClaw 标准模板构建会带 `allowInternetAccess`。guest DNS 来自标准模板构建时写入的 `dns`（设置页「DNS 服务器」/`dns_servers`）。留空时 Cubelet 会落到 `119.29.29.29`；私网或云上 UDP 53 到不了公网 DNS 时，填 Cube 宿主机 `/etc/resolv.conf` 里能用的地址，并避开 CubeVS 默认拒绝的 `10/8`、`172.16/12`、`192.168/16`。未安装 Skill 时，已有标准模板改 DNS 后在 semiclaw 卡片上点「重建」；已装 Skill 的配置请新建沙箱。其次 Cube 把沙箱 80/443 TPROXY 到 `192.168.0.1:8080/8443`，宿主机占用 `0.0.0.0:8080` 时 cube-egress 起不来。探测目标 `1.1.1.1` 在腾讯云也经常不通，国内目标可达即可 |
 | 会话重连后状态丢失 | 多副本部署是否配置了 Redis 绑定存储；沙箱是否已被空闲 TTL 回收 |
 
 ### 已知限制
@@ -108,7 +108,7 @@ go test -tags=integration ./internal/sandbox -run Integration -count=1 -v
 
 ## E2B 及其它 E2B 兼容实现
 
-E2B 官方托管服务、自建 E2B Infrastructure，以及任意实现 E2B 协议的控制面（例如 Kubernetes 上以容器隔离的 Agent-Sandbox）都通过同一个 E2B 配置接入；自建集群通常还要填写 `proxy_url` 数据面网关，详见 [沙箱协议接入说明](./sandbox-protocol.md)。填写 API Key 后先执行“连接并继续”，流程与 Cube 相同：验证连接后列出账号可见模板；缺少 `weknora` 时点「创建 WeKnora 标准模板」，通过 E2B Template API 从标准镜像启动后台构建。自建部署还需填写 API URL 和 sandbox domain；E2B 上游通过 Terraform 提供 AWS、GCP 等部署方式，具体以 [E2B self-hosting guide](https://github.com/e2b-dev/infra/blob/main/self-host.md) 和 [E2B Template 文档](https://e2b.dev/docs/template/quickstart) 为准。
+E2B 官方托管服务、自建 E2B Infrastructure，以及任意实现 E2B 协议的控制面（例如 Kubernetes 上以容器隔离的 Agent-Sandbox）都通过同一个 E2B 配置接入；自建集群通常还要填写 `proxy_url` 数据面网关，详见 [沙箱协议接入说明](./sandbox-protocol.md)。填写 API Key 后先执行“连接并继续”，流程与 Cube 相同：验证连接后列出账号可见模板；缺少 `semiclaw` 时点「创建 SemiClaw 标准模板」，通过 E2B Template API 从标准镜像启动后台构建。自建部署还需填写 API URL 和 sandbox domain；E2B 上游通过 Terraform 提供 AWS、GCP 等部署方式，具体以 [E2B self-hosting guide](https://github.com/e2b-dev/infra/blob/main/self-host.md) 和 [E2B Template 文档](https://e2b.dev/docs/template/quickstart) 为准。
 
 ## 在设置页面完成接入
 
@@ -121,8 +121,8 @@ E2B 官方托管服务、自建 E2B Infrastructure，以及任意实现 E2B 协�
 
 ## 上线检查
 
-- 模板版本与 WeKnora 版本匹配，且不依赖浮动的 `latest`；
-- WeKnora 到控制面、Proxy 和 sandbox domain 的 DNS、TLS 与防火墙均已打通；
+- 模板版本与 SemiClaw 版本匹配，且不依赖浮动的 `latest`；
+- SemiClaw 到控制面、Proxy 和 sandbox domain 的 DNS、TLS 与防火墙均已打通；
 - 多实例部署已配置 Redis；
 - API Key 只通过密钥管理或加密配置保存；
 - “连接验证”和“完整验证”均通过；

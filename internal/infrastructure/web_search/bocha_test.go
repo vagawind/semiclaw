@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/types"
 )
 
 func TestBochaProviderSearch(t *testing.T) {
@@ -24,7 +24,7 @@ func TestBochaProviderSearch(t *testing.T) {
 		if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
 			t.Fatal(err)
 		}
-		if request.Query != "WeKnora" || request.Freshness != "oneWeek" || !request.Summary || request.Count != 2 {
+		if request.Query != "SemiClaw" || request.Freshness != "oneWeek" || !request.Summary || request.Count != 2 {
 			t.Fatalf("unexpected request: %+v", request)
 		}
 		w.Header().Set("Content-Type", "application/json")
@@ -37,7 +37,7 @@ func TestBochaProviderSearch(t *testing.T) {
 	defer server.Close()
 
 	bocha := &BochaProvider{client: server.Client(), baseURL: server.URL, apiKey: "sk-test", freshness: "oneWeek", summary: true}
-	results, err := bocha.Search(context.Background(), " WeKnora ", 2, true)
+	results, err := bocha.Search(context.Background(), " SemiClaw ", 2, true)
 	if err != nil {
 		t.Fatal(err)
 	}

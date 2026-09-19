@@ -1,12 +1,12 @@
 #!/bin/sh
-# Idempotent desktop stack for WeKnora sandbox images.
+# Idempotent desktop stack for SemiClaw sandbox images.
 # Safe to re-run after pause/resume; serialised with flock so concurrent Exec
 # (dual tabs, retries, multiple replicas) cannot split the VNC secret.
 set -eu
 export DISPLAY=:0
 # UTF-8 for every daemon this script starts (XFCE session, xfce4-terminal,
 # mousepad). Without it they inherit POSIX/C from python:slim and UTF-8
-# files render as mojibake; the WeKnora terminal tab is unaffected because
+# files render as mojibake; the SemiClaw terminal tab is unaffected because
 # it is drawn in the browser. Prefer an image-provided LANG, fall back here
 # so a wrapped older image still starts a UTF-8 session.
 export LANG="${LANG:-C.UTF-8}"
@@ -137,7 +137,7 @@ port_open 5900 || \
 #    path that bypasses CubeProxy. Port-guarded for the same reason as 7.
 port_open 6080 || \
   spawn websockify websockify --auth-plugin BasicHTTPAuth \
-             --auth-source "weknora:$(cat /run/desktop/secret)" \
+             --auth-source "semiclaw:$(cat /run/desktop/secret)" \
              --heartbeat 30 6080 127.0.0.1:5900
 
 # 9. Wait for ready (lock held so waiters queue instead of starting twice).

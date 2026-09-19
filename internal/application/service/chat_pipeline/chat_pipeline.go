@@ -3,7 +3,7 @@ package chatpipeline
 import (
 	"context"
 
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/types"
 )
 
 // Plugin defines the interface for chat pipeline plugins

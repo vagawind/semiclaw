@@ -7,11 +7,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Tencent/WeKnora/internal/agent/tools"
-	"github.com/Tencent/WeKnora/internal/application/repository"
-	fileService "github.com/Tencent/WeKnora/internal/application/service/file"
-	"github.com/Tencent/WeKnora/internal/types"
-	"github.com/Tencent/WeKnora/internal/types/interfaces"
+	"github.com/vagawind/semiclaw/internal/agent/tools"
+	"github.com/vagawind/semiclaw/internal/application/repository"
+	fileService "github.com/vagawind/semiclaw/internal/application/service/file"
+	"github.com/vagawind/semiclaw/internal/types"
+	"github.com/vagawind/semiclaw/internal/types/interfaces"
 	"github.com/stretchr/testify/require"
 )
 

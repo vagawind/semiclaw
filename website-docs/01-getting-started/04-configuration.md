@@ -1,6 +1,6 @@
 # 配置详解
 
-WeKnora 的配置由四层组成，**优先级从低到高**：
+SemiClaw 的配置由四层组成，**优先级从低到高**：
 
 | 层 | 位置 | 用途 |
 | --- | --- | --- |
@@ -92,8 +92,8 @@ flowchart LR
 | `chunk_overlap` | int | 50 | 分块重叠 |
 | `split_markers` | []string | `["\n\n", "\n", "。"]` | 分割标记 |
 | `keep_separator` | bool | false | 保留分隔符 |
-| `document_process_timeout` | duration | 2h | 单文档处理任务总超时（env `WEKNORA_DOCUMENT_PROCESS_TIMEOUT` 可覆盖） |
-| `docreader_call_timeout` | duration | 30m | 单次 DocReader RPC 超时（env `WEKNORA_DOCREADER_CALL_TIMEOUT`），须小于上一项 |
+| `document_process_timeout` | duration | 2h | 单文档处理任务总超时（env `SEMICLAW_DOCUMENT_PROCESS_TIMEOUT` 可覆盖） |
+| `docreader_call_timeout` | duration | 30m | 单次 DocReader RPC 超时（env `SEMICLAW_DOCREADER_CALL_TIMEOUT`），须小于上一项 |
 | `image_processing.enable_multimodal` | bool | true | 上传时启用图片多模态处理（OCR/Caption） |
 
 > 每个知识库的 `ChunkingConfig` 会覆盖这里的全局默认值。
@@ -107,9 +107,9 @@ flowchart LR
 | 名称 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | `enable_cross_tenant_access` | bool | false | 允许具备 `CanAccessAllTenants` 的用户跨空间访问（内网可开） |
-| `enable_rbac` | *bool | true | 空间角色强制鉴权；显式 `false` 进入仅记录不拦截的灰度模式（env `WEKNORA_TENANT_ENABLE_RBAC`） |
-| `max_owned_per_user` | int | 0（走 handler 默认） | 单个非超管可自建空间数上限；<0 关闭限制（env `WEKNORA_TENANT_MAX_OWNED_PER_USER`） |
-| `self_service_creation_enabled` | *bool | true | 普通用户能否自建空间（env `WEKNORA_TENANT_SELF_SERVICE_CREATION_ENABLED`） |
+| `enable_rbac` | *bool | true | 空间角色强制鉴权；显式 `false` 进入仅记录不拦截的灰度模式（env `SEMICLAW_TENANT_ENABLE_RBAC`） |
+| `max_owned_per_user` | int | 0（走 handler 默认） | 单个非超管可自建空间数上限；<0 关闭限制（env `SEMICLAW_TENANT_MAX_OWNED_PER_USER`） |
+| `self_service_creation_enabled` | *bool | true | 普通用户能否自建空间（env `SEMICLAW_TENANT_SELF_SERVICE_CREATION_ENABLED`） |
 | `default_session_name` / `default_session_title` / `default_session_description` | string | 空 | 新会话默认文案 |
 
 ### 结构体支持但默认文件未写出的段
@@ -119,9 +119,9 @@ flowchart LR
 | 段 | 结构体 | 关键字段与默认值 |
 | --- | --- | --- |
 | `auth` | `AuthConfig` | `registration_mode`：`self_serve`（默认）/ `invite_only`（`DISABLE_REGISTRATION=true` 时强制）；`default_tenant_mode`：`create_personal`（默认）/ `tenantless` |
-| `audit` | `AuditConfig` | `retention_days`：审计日志保留天数，段落省略时默认 90；0 禁用清理；<0 校验报错（env `WEKNORA_AUDIT_RETENTION_DAYS`） |
+| `audit` | `AuditConfig` | `retention_days`：审计日志保留天数，段落省略时默认 90；0 禁用清理；<0 校验报错（env `SEMICLAW_AUDIT_RETENTION_DAYS`） |
 | `oidc_auth` | `OIDCAuthConfig` | `enable`、`issuer_url`、`jwks_uri`、`discovery_url`（缺省由 issuer 拼 `/.well-known/openid-configuration`）、`client_id`、`client_secret`、`authorization_endpoint`、`token_endpoint`、`user_info_endpoint`、`scopes`（默认 `openid profile email`）、`user_info_mapping.username`（默认 `name`）/`email`（默认 `email`）；全部可用 `OIDC_AUTH_*` 环境变量覆盖 |
-| `agent` | `AgentConfig` | `llm_call_timeout`：单次 LLM 调用超时秒数（默认 120，env `WEKNORA_AGENT_LLM_TIMEOUT`）；`tool_approval_timeout_seconds`：MCP 工具人工审批等待（默认 600，env `WEKNORA_AGENT_TOOL_APPROVAL_TIMEOUT`） |
+| `agent` | `AgentConfig` | `llm_call_timeout`：单次 LLM 调用超时秒数（默认 120，env `SEMICLAW_AGENT_LLM_TIMEOUT`）；`tool_approval_timeout_seconds`：MCP 工具人工审批等待（默认 600，env `SEMICLAW_AGENT_TOOL_APPROVAL_TIMEOUT`） |
 | `im` | `IMConfig` | IM 渠道 QA 并发：`workers`（5）、`global_max_workers`（0=不限，需 Redis）、`max_queue_size`（50）、`max_per_user`（3）、`rate_limit_window`（60s）、`rate_limit_max`（10） |
 | `docreader` | `DocReaderConfig` | `addr`（gRPC 地址如 `docreader:50051` 或 HTTP base URL）、`transport`：`grpc`（默认）/ `http`；通常用 env `DOCREADER_ADDR` / `DOCREADER_TRANSPORT` |
 | `vector_database` | `VectorDatabaseConfig` | `driver`（通常用 env `RETRIEVE_DRIVER`） |
@@ -142,10 +142,10 @@ flowchart LR
 | `LOG_LEVEL` / `LOG_PATH` / `LOG_FORMAT` | debug / 空 / 空 | 日志级别、文件路径（空则仅 stdout）、自定义格式 |
 | `LLM_DEBUG_LOG` | false | true 时在 LOG_PATH 同目录写 `llm_debug.log` |
 | `TZ` | Asia/Shanghai | 时区 |
-| `WEKNORA_LANGUAGE` | 空 | 文档处理语言（问题/摘要生成）。优先级：本变量 > 请求的 `Accept-Language` > 内置 `zh-CN`。文档处理语言可独立于界面语言设置，例如使用英文界面处理韩文文档 |
+| `SEMICLAW_LANGUAGE` | 空 | 文档处理语言（问题/摘要生成）。优先级：本变量 > 请求的 `Accept-Language` > 内置 `zh-CN`。文档处理语言可独立于界面语言设置，例如使用英文界面处理韩文文档 |
 | `AUTO_MIGRATE` | true | 启动时自动执行数据库迁移 |
 | `AUTO_RECOVER_DIRTY` | true | 自动修复 golang-migrate 的 dirty 状态（上次迁移中断留下的）。手工排查迁移问题时应临时设为 false，否则启动会自动改写迁移版本记录，见[数据库与迁移](../06-development/02-database-schema.md) |
-| `WEKNORA_TRUSTED_PROXIES` | 空 | gin 信任代理 CIDR（逗号分隔） |
+| `SEMICLAW_TRUSTED_PROXIES` | 空 | gin 信任代理 CIDR（逗号分隔） |
 | `MAX_SKILL_BUNDLE_SIZE_MB` | 256 MiB（默认不小于 MAX_FILE_SIZE_MB，上限 512 MiB） | 技能 ZIP 上传与来源下载上限；反向代理请求体限制也需足够大 |
 | `MAX_FILE_SIZE_MB` | 50 | 上传文件大小限制（app/frontend/docreader 三处共用） |
 | `CONCURRENCY_POOL_SIZE` | 5 | 通用并发池 |
@@ -155,7 +155,7 @@ flowchart LR
 `APP_EXTERNAL_URL` 影响 IM 渠道能否渲染知识库图片。IM 平台需要拿到公网 http(s) URL，二选一：
 
 1. 存储后端本身公网可达（对象存储用公网 endpoint，或把 `MINIO_ENDPOINT` 设成公网 host），此时 `resource://` 回退到后端预签名 URL，不需要本变量；
-2. 设置 `APP_EXTERNAL_URL`，`resource://` 图片被改写成 `<APP_EXTERNAL_URL>/r/<token>` 走 WeKnora 自身（需要 nginx 代理 `/r/`，官方前端镜像已内置该 location）。
+2. 设置 `APP_EXTERNAL_URL`，`resource://` 图片被改写成 `<APP_EXTERNAL_URL>/r/<token>` 走 SemiClaw 自身（需要 nginx 代理 `/r/`，官方前端镜像已内置该 location）。
 
 默认的 MinIO 内网部署与 `local` 后端都只能走第二种。IM 渠道已启用但本变量为空时，服务启动会打印一次 WARN；改写结果若不是 http(s) URL 会保留原引用并记录可操作的告警，而不是发出 IM 端无法访问的链接。
 
@@ -171,8 +171,8 @@ flowchart LR
 | `STREAM_MANAGER_TYPE` | 空（compose 实际走 redis） | `redis` / `memory` |
 | `REDIS_ADDR` / `REDIS_USERNAME` / `REDIS_PASSWORD` / `REDIS_DB` / `REDIS_PREFIX` | redis:6379 / … | Redis 连接 |
 | `REDIS_USE_TLS` | false | **启用 TLS 的总开关**，托管 Redis（如 AWS ElastiCache）需要打开；`REDIS_TLS_SERVER_NAME` 指定校验与 SNI 用的服务器名（地址是 IP 时有用），`REDIS_TLS_INSECURE_SKIP_VERIFY` 跳过证书校验（不安全，仅自签证书的开发环境用） |
-| `WEKNORA_REDIS_NAMESPACE` | 空 | 多部署共用 Redis 时的频道命名空间后缀 |
-| `WEKNORA_ASYNQ_CORE_CONCURRENCY` 等 | 8 / 2 / 12 / 4 / 6 | Asynq 各队列并发（core/postprocess/enrichment/maintenance/shared），另有 `WEKNORA_WIKI_ASYNQ_CONCURRENCY=8`、`WEKNORA_MODEL_MAX_CONCURRENCY=32` |
+| `SEMICLAW_REDIS_NAMESPACE` | 空 | 多部署共用 Redis 时的频道命名空间后缀 |
+| `SEMICLAW_ASYNQ_CORE_CONCURRENCY` 等 | 8 / 2 / 12 / 4 / 6 | Asynq 各队列并发（core/postprocess/enrichment/maintenance/shared），另有 `SEMICLAW_WIKI_ASYNQ_CONCURRENCY=8`、`SEMICLAW_MODEL_MAX_CONCURRENCY=32` |
 
 ### 检索引擎与向量库
 
@@ -180,8 +180,8 @@ flowchart LR
 | --- | --- | --- |
 | `RETRIEVE_DRIVER` | postgres | 检索引擎：`postgres` / `elasticsearch_v7` / `elasticsearch_v8` / `qdrant` / `milvus` / `weaviate` / `opensearch` / `doris` / `tencent_vectordb` / `sqlite`（Lite）；可逗号分隔多引擎并行 |
 | `ELASTICSEARCH_ADDR/USERNAME/PASSWORD/INDEX` | 空 | Elasticsearch |
-| `QDRANT_HOST/PORT/COLLECTION/API_KEY/USE_TLS` | qdrant / 6334 / weknora_embeddings / 空 / false | Qdrant |
-| `MILVUS_ADDRESS/COLLECTION/METRIC_TYPE/...` | milvus:19530 / weknora_embeddings / IP | Milvus |
+| `QDRANT_HOST/PORT/COLLECTION/API_KEY/USE_TLS` | qdrant / 6334 / semiclaw_embeddings / 空 / false | Qdrant |
+| `MILVUS_ADDRESS/COLLECTION/METRIC_TYPE/...` | milvus:19530 / semiclaw_embeddings / IP | Milvus |
 | `OPENSEARCH_ADDR/USERNAME/PASSWORD/INDEX/INSECURE_SKIP_VERIFY` | 空 | OpenSearch |
 | `WEAVIATE_HOST/GRPC_ADDRESS/SCHEME/AUTH_ENABLED/API_KEY` | 空 | Weaviate |
 | `DORIS_ADDR/HTTP_PORT/DATABASE/USERNAME/PASSWORD/TABLE_PREFIX/COMPAT_MODE` | 空 | Apache Doris 4.1+ |
@@ -211,7 +211,7 @@ AWS S3 的 `S3_ACCESS_KEY` / `S3_SECRET_KEY` 可以**同时留空**，此时走 
 | `BATCH_EMBED_SIZE` | 空 | 批量 embedding 大小 |
 | `VLM_HTTP_TIMEOUT_SECONDS` | 180 | VLM 单次请求超时 |
 | `BUILTIN_MODELS_CONFIG` | config/builtin_models.yaml | 内置模型声明文件路径（见下文） |
-| `WEKNORA_LLM_STREAM_RAW_DUMP` / `_DIR` | 空 | LLM 流原始转储（排障用） |
+| `SEMICLAW_LLM_STREAM_RAW_DUMP` / `_DIR` | 空 | LLM 流原始转储（排障用） |
 
 ### 认证、租户与安全
 
@@ -220,19 +220,19 @@ AWS S3 的 `S3_ACCESS_KEY` / `S3_SECRET_KEY` 可以**同时留空**，此时走 
 | `JWT_SECRET` | 空 | JWT 签名密钥（必填） |
 | `SYSTEM_AES_KEY` | 空 | 敏感字段落盘加密的 AES-256 主密钥，**必须 32 字节**；丢失则已加密数据（租户 API Key、模型 key、向量库凭证等）不可恢复。v0.4.0 起取代 `TENANT_AES_KEY`/`CRYPTO_MASTER_KEY`/`CRYPTO_SALT` |
 | `DISABLE_REGISTRATION` | false | true 时强制 `registration_mode=invite_only` |
-| `WEKNORA_AUTH_DEFAULT_TENANT_MODE` | create_personal | 注册后建空间策略（`create_personal` / `tenantless`） |
-| `WEKNORA_TENANT_ENABLE_RBAC` | （默认 true） | 空间角色强制鉴权开关 |
-| `WEKNORA_TENANT_ENABLE_CROSS_TENANT_ACCESS` | false | 跨空间访问 |
-| `WEKNORA_TENANT_SELF_SERVICE_CREATION_ENABLED` | true | 普通用户自建空间 |
-| `WEKNORA_TENANT_MAX_OWNED_PER_USER` | 空 | 自建空间上限 |
-| `WEKNORA_TENANT_AUTO_CREATE_API_KEY` | false | 建空间时自动下发 full_access API Key（兼容旧行为） |
-| `WEKNORA_TENANT_DEFAULT_STORAGE_QUOTA_GB` | 10 | 新空间默认存储配额 |
-| `WEKNORA_AUTH_COMPLEX_PASSWORD_ENABLED` | false | 复杂密码策略：大小写字母、数字、特殊字符；系统设置 auth.complex_password_enabled 优先 |
-| `WEKNORA_TENANT_AUTO_ACCEPT_INVITATION` | false | 邮箱邀请已有账号直接加入；系统设置 tenant.auto_accept_invitation 优先 |
+| `SEMICLAW_AUTH_DEFAULT_TENANT_MODE` | create_personal | 注册后建空间策略（`create_personal` / `tenantless`） |
+| `SEMICLAW_TENANT_ENABLE_RBAC` | （默认 true） | 空间角色强制鉴权开关 |
+| `SEMICLAW_TENANT_ENABLE_CROSS_TENANT_ACCESS` | false | 跨空间访问 |
+| `SEMICLAW_TENANT_SELF_SERVICE_CREATION_ENABLED` | true | 普通用户自建空间 |
+| `SEMICLAW_TENANT_MAX_OWNED_PER_USER` | 空 | 自建空间上限 |
+| `SEMICLAW_TENANT_AUTO_CREATE_API_KEY` | false | 建空间时自动下发 full_access API Key（兼容旧行为） |
+| `SEMICLAW_TENANT_DEFAULT_STORAGE_QUOTA_GB` | 10 | 新空间默认存储配额 |
+| `SEMICLAW_AUTH_COMPLEX_PASSWORD_ENABLED` | false | 复杂密码策略：大小写字母、数字、特殊字符；系统设置 auth.complex_password_enabled 优先 |
+| `SEMICLAW_TENANT_AUTO_ACCEPT_INVITATION` | false | 邮箱邀请已有账号直接加入；系统设置 tenant.auto_accept_invitation 优先 |
 | `OIDC_AUTH_JWKS_URI` | 空 | id_token 验签公钥集；可经 discovery 补全，与 issuer/audience/有效期共同校验 |
-| `WEKNORA_INVITATION_TTL` | 168h | 邀请链接有效期 |
-| `WEKNORA_AUDIT_RETENTION_DAYS` | 90 | 审计日志保留天数 |
-| `WEKNORA_BOOTSTRAP_SYSTEM_ADMIN_EMAIL` | 空 | 引导第一个系统管理员。**不会创建用户**：该邮箱需先自行注册，下次启动时若部署内还没有任何系统管理员，才把它提升；已有管理员后本变量不再生效。详见[租户、用户与认证授权](../03-features/01-tenant-auth.md) |
+| `SEMICLAW_INVITATION_TTL` | 168h | 邀请链接有效期 |
+| `SEMICLAW_AUDIT_RETENTION_DAYS` | 90 | 审计日志保留天数 |
+| `SEMICLAW_BOOTSTRAP_SYSTEM_ADMIN_EMAIL` | 空 | 引导第一个系统管理员。**不会创建用户**：该邮箱需先自行注册，下次启动时若部署内还没有任何系统管理员，才把它提升；已有管理员后本变量不再生效。详见[租户、用户与认证授权](../03-features/01-tenant-auth.md) |
 | `OIDC_AUTH_ENABLE` 及 `OIDC_AUTH_*` / `OIDC_USER_INFO_MAPPING_*` | false / 空 | OIDC 单点登录全套配置 |
 | `SSRF_WHITELIST` / `SSRF_WHITELIST_EXTRA` | 空 / `searxng,qdrant,milvus,weaviate,doris-fe,doris-be` | 出站请求 SSRF 白名单（app 与 docreader 共用） |
 | `IMAGE_HOST_KEEP_URL` | 空 | 保留原始 URL 的图片域名白名单 |
@@ -255,12 +255,12 @@ AWS S3 的 `S3_ACCESS_KEY` / `S3_SECRET_KEY` 可以**同时留空**，此时走 
 | 名称 | 默认值 | 说明 |
 | --- | --- | --- |
 | Sandbox 配置 | 设置页按空间维护 | 后端、凭据、模板、超时和私网访问策略按空间保存 |
-| `WEKNORA_SANDBOX_DOCKER_ENABLED` | false | Docker 沙箱后端回退开关。系统管理员也可在「设置 → 系统设置」打开（DB 优先，立即生效）。默认关闭，因为本机 `docker.sock` 等同宿主机 root |
-| `WEKNORA_AGENT_LLM_TIMEOUT` | 120s | Agent 单次 LLM 调用超时（Go duration 或纯数字秒） |
-| `WEKNORA_AGENT_TOOL_APPROVAL_TIMEOUT` / `_FAIL_OPEN` | 600s / fail-close | MCP 工具人工审批等待与失败策略 |
-| `WEKNORA_CHAT_ATTACHMENT_TTL_HOURS` / `_WAIT_TIMEOUT_SEC` / `_OCR_CONCURRENCY` / `_OCR_MAX_PAGES` | 24 / 60 / 8 / 8 | 聊天附件解析保留时长、等待超时与 OCR 并发/页数上限 |
-| `WEKNORA_HOUSEKEEPING_ENABLED` | 启用 | 回收卡在 processing 的脏数据 |
-| `WEKNORA_DOCUMENT_PROCESS_TIMEOUT` / `WEKNORA_DOCREADER_CALL_TIMEOUT` | 2h / 30m | 文档处理任务与单次 RPC 超时 |
+| `SEMICLAW_SANDBOX_DOCKER_ENABLED` | false | Docker 沙箱后端回退开关。系统管理员也可在「设置 → 系统设置」打开（DB 优先，立即生效）。默认关闭，因为本机 `docker.sock` 等同宿主机 root |
+| `SEMICLAW_AGENT_LLM_TIMEOUT` | 120s | Agent 单次 LLM 调用超时（Go duration 或纯数字秒） |
+| `SEMICLAW_AGENT_TOOL_APPROVAL_TIMEOUT` / `_FAIL_OPEN` | 600s / fail-close | MCP 工具人工审批等待与失败策略 |
+| `SEMICLAW_CHAT_ATTACHMENT_TTL_HOURS` / `_WAIT_TIMEOUT_SEC` / `_OCR_CONCURRENCY` / `_OCR_MAX_PAGES` | 24 / 60 / 8 / 8 | 聊天附件解析保留时长、等待超时与 OCR 并发/页数上限 |
+| `SEMICLAW_HOUSEKEEPING_ENABLED` | 启用 | 回收卡在 processing 的脏数据 |
+| `SEMICLAW_DOCUMENT_PROCESS_TIMEOUT` / `SEMICLAW_DOCREADER_CALL_TIMEOUT` | 2h / 30m | 文档处理任务与单次 RPC 超时 |
 
 沙箱后端、网络策略、脚本开关与个人环境变量使用空间配置/API 管理，见[技能与沙箱](../03-features/22-skills-sandbox.md)。长期记忆与自动标签均默认关闭，分别使用租户 memory_config 和知识库 auto_tag_config，不用全局环境变量替代各空间配置。
 
@@ -277,19 +277,19 @@ AWS S3 的 `S3_ACCESS_KEY` / `S3_SECRET_KEY` 可以**同时留空**，此时走 
 | 名称 | 默认值 | 说明 |
 | --- | --- | --- |
 | `SEARXNG_PORT` | 8888 | 宿主机端口 |
-| `SEARXNG_BIND` | 127.0.0.1 | **默认只监听本机**。WeKnora 打包的配置关掉了 SearXNG 自身的限流（否则后端会被节流），所以不应直接暴露到 LAN；确实要开放请显式改成 `0.0.0.0` 并自行加固 |
+| `SEARXNG_BIND` | 127.0.0.1 | **默认只监听本机**。SemiClaw 打包的配置关掉了 SearXNG 自身的限流（否则后端会被节流），所以不应直接暴露到 LAN；确实要开放请显式改成 `0.0.0.0` 并自行加固 |
 | `SEARXNG_SECRET` | 空 | 入口脚本用它替换 `settings.yml` 里的 `secret_key`，对外开放时必须设 |
 
 自建 SearXNG 时记得把 `127.0.0.1` 加进 `SSRF_WHITELIST`，否则后端的 SSRF 防护会拦掉本机地址。用法见[网络搜索与网页抓取](../03-features/11-web-search.md)。
 
-**MCP Server**（把 WeKnora 暴露给 Claude Desktop 等 MCP 客户端，`--profile full`）：
+**MCP Server**（把 SemiClaw 暴露给 Claude Desktop 等 MCP 客户端，`--profile full`）：
 
 | 名称 | 默认值 | 说明 |
 | --- | --- | --- |
-| `WEKNORA_API_KEY` | 空 | mcp-server 反过来调 WeKnora REST 用的 Key，在「设置 → API Keys」生成 |
+| `SEMICLAW_API_KEY` | 空 | mcp-server 反过来调 SemiClaw REST 用的 Key，在「设置 → API Keys」生成 |
 | `MCP_SERVER_AUTH_TOKEN` | 空 | **HTTP/SSE 传输必填**，缺失时进程直接拒绝启动；客户端以 `Authorization: Bearer` 携带 |
-| `WEKNORA_CHAT_TIMEOUT` | 300 | 调 WeKnora REST 的读超时（秒） |
-| `WEKNORA_VERIFY_SSL` | true | 是否校验后端 TLS 证书，自签证书可设 false |
+| `SEMICLAW_CHAT_TIMEOUT` | 300 | 调 SemiClaw REST 的读超时（秒） |
+| `SEMICLAW_VERIFY_SSL` | true | 是否校验后端 TLS 证书，自签证书可设 false |
 | `MCP_ALLOWED_UPLOAD_DIRS` | 空 | 允许上传的目录白名单（逗号分隔），留空即禁用文件上传工具 |
 
 完整说明见 [MCP 集成](../03-features/08-mcp.md)。

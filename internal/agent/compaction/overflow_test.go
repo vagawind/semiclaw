@@ -4,11 +4,11 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/types"
 	"github.com/stretchr/testify/assert"
 )
 
-// Real error strings from the providers WeKnora talks to. An overflow read as
+// Real error strings from the providers SemiClaw talks to. An overflow read as
 // a generic failure ends the turn; read as transient it retries the identical
 // oversized request until the attempts run out.
 func TestIsOverflowError(t *testing.T) {

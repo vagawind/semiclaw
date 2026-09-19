@@ -11,11 +11,11 @@ import (
 	"github.com/redis/go-redis/v9"
 	"gorm.io/gorm"
 
-	apperrors "github.com/Tencent/WeKnora/internal/errors"
-	"github.com/Tencent/WeKnora/internal/logger"
-	"github.com/Tencent/WeKnora/internal/sandbox"
-	"github.com/Tencent/WeKnora/internal/types"
-	"github.com/Tencent/WeKnora/internal/types/interfaces"
+	apperrors "github.com/vagawind/semiclaw/internal/errors"
+	"github.com/vagawind/semiclaw/internal/logger"
+	"github.com/vagawind/semiclaw/internal/sandbox"
+	"github.com/vagawind/semiclaw/internal/types"
+	"github.com/vagawind/semiclaw/internal/types/interfaces"
 )
 
 // newSandboxManager is deliberately disabled. Every executable backend now
@@ -31,9 +31,9 @@ func selectSessionBindingStore(
 	redisClient *redis.Client,
 	requireRedis bool,
 ) (sandbox.SessionSandboxBindingStore, string, error) {
-	namespace := strings.TrimSpace(os.Getenv("WEKNORA_REDIS_NAMESPACE"))
+	namespace := strings.TrimSpace(os.Getenv("SEMICLAW_REDIS_NAMESPACE"))
 	if namespace == "" {
-		namespace = "weknora"
+		namespace = "semiclaw"
 	}
 	if redisClient != nil {
 		store, err := sandbox.NewRedisSessionSandboxBindingStore(redisClient, namespace)

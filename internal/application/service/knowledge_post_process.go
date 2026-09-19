@@ -8,12 +8,12 @@ import (
 	"sort"
 	"time"
 
-	"github.com/Tencent/WeKnora/internal/application/access"
-	"github.com/Tencent/WeKnora/internal/infrastructure/docparser"
-	"github.com/Tencent/WeKnora/internal/logger"
-	"github.com/Tencent/WeKnora/internal/tracing/langfuse"
-	"github.com/Tencent/WeKnora/internal/types"
-	"github.com/Tencent/WeKnora/internal/types/interfaces"
+	"github.com/vagawind/semiclaw/internal/application/access"
+	"github.com/vagawind/semiclaw/internal/infrastructure/docparser"
+	"github.com/vagawind/semiclaw/internal/logger"
+	"github.com/vagawind/semiclaw/internal/tracing/langfuse"
+	"github.com/vagawind/semiclaw/internal/types"
+	"github.com/vagawind/semiclaw/internal/types/interfaces"
 	"github.com/hibiken/asynq"
 	"github.com/redis/go-redis/v9"
 )

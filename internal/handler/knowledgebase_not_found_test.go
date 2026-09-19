@@ -11,11 +11,11 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/Tencent/WeKnora/internal/application/repository"
-	apperrors "github.com/Tencent/WeKnora/internal/errors"
-	"github.com/Tencent/WeKnora/internal/middleware"
-	"github.com/Tencent/WeKnora/internal/types"
-	"github.com/Tencent/WeKnora/internal/types/interfaces"
+	"github.com/vagawind/semiclaw/internal/application/repository"
+	apperrors "github.com/vagawind/semiclaw/internal/errors"
+	"github.com/vagawind/semiclaw/internal/middleware"
+	"github.com/vagawind/semiclaw/internal/types"
+	"github.com/vagawind/semiclaw/internal/types/interfaces"
 )
 
 // validateAndGetKnowledgeBase (knowledgebase.go) and the four sibling

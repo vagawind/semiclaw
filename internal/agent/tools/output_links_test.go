@@ -7,8 +7,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Tencent/WeKnora/internal/sandbox"
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/sandbox"
+	"github.com/vagawind/semiclaw/internal/types"
 	"github.com/stretchr/testify/require"
 )
 
@@ -31,7 +31,7 @@ func (f *outputLinkExecutor) ListSessionFiles(_ context.Context, sessionID, dir 
 }
 
 func TestShellOutputLinksUseChangedFilesAndDoNotReplay(t *testing.T) {
-	t.Setenv("WEKNORA_SKILL_OUTPUT_DIR", "/workspace/output")
+	t.Setenv("SEMICLAW_SKILL_OUTPUT_DIR", "/workspace/output")
 	old := sandbox.RemoteDirEntry{Path: "/workspace/output/deck.pptx", Type: sandbox.RemoteEntryFile, Size: 100, ModTime: time.Unix(1, 0)}
 	next := old
 	next.ModTime = time.Unix(2, 0)
@@ -60,7 +60,7 @@ func TestShellOutputLinksUseChangedFilesAndDoNotReplay(t *testing.T) {
 }
 
 func TestShellOutputLinksOmitUnverifiedOutputs(t *testing.T) {
-	t.Setenv("WEKNORA_SKILL_OUTPUT_DIR", "/workspace/output")
+	t.Setenv("SEMICLAW_SKILL_OUTPUT_DIR", "/workspace/output")
 	created := sandbox.RemoteDirEntry{Path: "/workspace/output/deck.pptx", Type: sandbox.RemoteEntryFile, Size: 10, ModTime: time.Unix(2, 0)}
 	t.Run("inspection failed", func(t *testing.T) {
 		executor := &outputLinkExecutor{
@@ -97,14 +97,14 @@ func TestShellOutputLinksOmitUnverifiedOutputs(t *testing.T) {
 }
 
 func TestOutputLinksEscapeNamesAndStayInsideOutputDirectory(t *testing.T) {
-	t.Setenv("WEKNORA_SKILL_OUTPUT_DIR", "/workspace/output")
+	t.Setenv("SEMICLAW_SKILL_OUTPUT_DIR", "/workspace/output")
 	links := sandboxOutputLinks("/workspace/output/report [1](final).pdf", "/workspace/script.py", "/workspace/output/../input/a.pdf")
 	require.Equal(t, []string{"sandbox:report%20%5B1%5D%28final%29.pdf"}, links)
 	require.Equal(t, []string{"sandbox:比赛信息.pptx"}, sandboxOutputLinks("/workspace/output/比赛信息.pptx"))
 }
 
 func TestFileMutationToolsReturnDirectHTMLDeliverables(t *testing.T) {
-	t.Setenv("WEKNORA_SKILL_OUTPUT_DIR", "/workspace/output")
+	t.Setenv("SEMICLAW_SKILL_OUTPUT_DIR", "/workspace/output")
 	sink := &fakeSandboxFileSink{}
 	for _, filePath := range []string{"/workspace/output/report.html", "/workspace/scratch.html"} {
 		result, err := NewWriteSandboxFileTool(sink, 0).Execute(sandboxFileTestContext(), mustWriteSandboxArgs(filePath, "old"))

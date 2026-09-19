@@ -5,8 +5,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Tencent/WeKnora/internal/types"
-	"github.com/Tencent/WeKnora/internal/types/interfaces"
+	"github.com/vagawind/semiclaw/internal/types"
+	"github.com/vagawind/semiclaw/internal/types/interfaces"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/require"
 )
@@ -148,7 +148,7 @@ func TestAReviewThatChangesNothingSaysWhy(t *testing.T) {
 	_, err := svc.repo.EnsureSubject(ctx, scope)
 	require.NoError(t, err)
 	seedItem(t, svc, ctx, scope, types.MemoryKindInterest, "小微SDK设备接入", "小微SDK设备接入", "i-a")
-	seedItem(t, svc, ctx, scope, types.MemoryKindInterest, "WeKnora混合检索", "WeKnora混合检索", "i-b")
+	seedItem(t, svc, ctx, scope, types.MemoryKindInterest, "SemiClaw混合检索", "SemiClaw混合检索", "i-b")
 
 	result, err := svc.ConsolidateNow(ctx)
 	require.NoError(t, err)

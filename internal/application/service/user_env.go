@@ -7,9 +7,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Tencent/WeKnora/internal/application/repository"
-	apperrors "github.com/Tencent/WeKnora/internal/errors"
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/application/repository"
+	apperrors "github.com/vagawind/semiclaw/internal/errors"
+	"github.com/vagawind/semiclaw/internal/types"
 )
 
 // Where the value a skill would actually receive comes from. The three states

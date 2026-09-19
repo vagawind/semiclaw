@@ -7,8 +7,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Tencent/WeKnora/internal/datasource"
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/datasource"
+	"github.com/vagawind/semiclaw/internal/types"
 )
 
 const (

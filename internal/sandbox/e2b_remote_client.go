@@ -19,7 +19,7 @@ import (
 	"github.com/gorilla/websocket"
 	e2b "github.com/matiasinsaurralde/go-e2b"
 
-	"github.com/Tencent/WeKnora/internal/logger"
+	"github.com/vagawind/semiclaw/internal/logger"
 )
 
 // E2BRemoteClient implements RemoteSandboxClient on top of the go-e2b client.
@@ -161,7 +161,7 @@ func (h *e2bRemoteHandle) Metadata() map[string]string {
 
 // TrafficAccessToken implements RemoteInboundTokenCarrier. E2B issues it only
 // in the create response; go-e2b keeps the field but never sends the header,
-// so both persisting it and attaching it are WeKnora's job.
+// so both persisting it and attaching it are SemiClaw's job.
 func (h *e2bRemoteHandle) TrafficAccessToken() string {
 	if h == nil || h.sandbox == nil {
 		return ""
@@ -184,7 +184,7 @@ func (c *E2BRemoteClient) Capabilities() RemoteSandboxCapabilities {
 		// E2B stores snapshots as templates, so a snapshot ID can be handed
 		// straight back as CreateOptions.TemplateID.
 		SupportsSnapshots: true,
-		// E2B has no named-volume mount API that WeKnora can use; advertising
+		// E2B has no named-volume mount API that SemiClaw can use; advertising
 		// it would let a workspace configure a mount that never appears.
 		SupportsVolumes: false,
 		// envd exposes an interactive PTY service that go-e2b wraps.
@@ -223,9 +223,9 @@ func (c *E2BRemoteClient) ListTemplates(ctx context.Context) ([]RemoteTemplate, 
 		} else if len(item.Aliases) > 0 && strings.TrimSpace(item.Aliases[0]) != "" {
 			name = strings.TrimSpace(item.Aliases[0])
 		}
-		standard, desktop := classifyWeKnoraTemplate(name, "")
+		standard, desktop := classifySemiClawTemplate(name, "")
 		for _, candidate := range append(append([]string(nil), item.Aliases...), item.Names...) {
-			s, d := classifyWeKnoraTemplate(candidate, "")
+			s, d := classifySemiClawTemplate(candidate, "")
 			if d {
 				standard, desktop = false, true
 				break
@@ -366,7 +366,7 @@ func isE2BTemplateBuildPending(status string) bool {
 	}
 }
 
-// EnsureStandardTemplate returns the cluster's WeKnora template, building it
+// EnsureStandardTemplate returns the cluster's SemiClaw template, building it
 // when absent. A failed or untagged template is not returned as is: it can
 // never spawn a sandbox, so it falls through to the build below. E2B resolves
 // the build by name, so that is a rebuild of the same template rather than a
@@ -384,7 +384,7 @@ func (c *E2BRemoteClient) EnsureStandardTemplate(ctx context.Context) (*RemoteTe
 	return c.buildStandardTemplate(ctx)
 }
 
-// ReplaceStandardTemplate starts a new WeKnora-template build from the current
+// ReplaceStandardTemplate starts a new SemiClaw-template build from the current
 // spec. E2B resolves builds by name, so this is often a rebuild of the same
 // ID. The previous template stays listed until the caller has persisted a
 // spawnable replacement and called DeleteSupersededStandardTemplates: deleting
@@ -394,7 +394,7 @@ func (c *E2BRemoteClient) ReplaceStandardTemplate(ctx context.Context) (*RemoteT
 	return c.buildStandardTemplate(ctx)
 }
 
-// EnsureDesktopTemplate returns the cluster's WeKnora desktop template,
+// EnsureDesktopTemplate returns the cluster's SemiClaw desktop template,
 // building it when absent. It is a sibling of EnsureStandardTemplate: a
 // cluster may hold both, and the admin picks which ID a config boots.
 func (c *E2BRemoteClient) EnsureDesktopTemplate(ctx context.Context) (*RemoteTemplate, error) {
@@ -441,7 +441,7 @@ func (c *E2BRemoteClient) DeleteSupersededDesktopTemplates(ctx context.Context, 
 	return nil
 }
 
-// DeleteSupersededStandardTemplates drops WeKnora templates other than keepID.
+// DeleteSupersededStandardTemplates drops SemiClaw templates other than keepID.
 func (c *E2BRemoteClient) DeleteSupersededStandardTemplates(ctx context.Context, keepID string) error {
 	keepID = strings.TrimSpace(keepID)
 	if keepID == "" {
@@ -468,11 +468,11 @@ func (c *E2BRemoteClient) DeleteSupersededStandardTemplates(ctx context.Context,
 
 // e2bPtyPromptOverrideCmd re-sources the image prompt after E2B's
 // template provisioner appends `PS1='\w $ '` to bashrc. Harmless if the
-// image already sources /etc/weknora/pty-prompt.sh (PROMPT_COMMAND wins
+// image already sources /etc/semiclaw/pty-prompt.sh (PROMPT_COMMAND wins
 // either way); required when rebuilding from an older image that does not.
-const e2bPtyPromptOverrideCmd = `. /etc/weknora/pty-prompt.sh 2>/dev/null; ` +
-	`for f in /root/.bashrc /home/user/.bashrc /etc/profile.d/zz-weknora-prompt.sh; do ` +
-	`grep -q /etc/weknora/pty-prompt.sh "$f" 2>/dev/null || echo '. /etc/weknora/pty-prompt.sh' >> "$f"; ` +
+const e2bPtyPromptOverrideCmd = `. /etc/semiclaw/pty-prompt.sh 2>/dev/null; ` +
+	`for f in /root/.bashrc /home/user/.bashrc /etc/profile.d/zz-semiclaw-prompt.sh; do ` +
+	`grep -q /etc/semiclaw/pty-prompt.sh "$f" 2>/dev/null || echo '. /etc/semiclaw/pty-prompt.sh' >> "$f"; ` +
 	`done`
 
 func (c *E2BRemoteClient) buildStandardTemplate(ctx context.Context) (*RemoteTemplate, error) {

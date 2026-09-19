@@ -226,9 +226,9 @@ type ArtifactBlobState = { blobByKey: Map<string, string>; inflight: Map<string,
 const artifactBlobState: ArtifactBlobState = (() => {
   const fresh = (): ArtifactBlobState => ({ blobByKey: new Map(), inflight: new Map() });
   if (typeof window === 'undefined') return fresh();
-  const scope = window as typeof window & { __weknoraArtifactBlobCacheV1__?: ArtifactBlobState };
-  scope.__weknoraArtifactBlobCacheV1__ ||= fresh();
-  return scope.__weknoraArtifactBlobCacheV1__;
+  const scope = window as typeof window & { __semiclawArtifactBlobCacheV1__?: ArtifactBlobState };
+  scope.__semiclawArtifactBlobCacheV1__ ||= fresh();
+  return scope.__semiclawArtifactBlobCacheV1__;
 })();
 
 function blobCacheKey(ctx: ArtifactRefContext, index: number): string {

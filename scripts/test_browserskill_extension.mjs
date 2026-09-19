@@ -137,7 +137,7 @@ try {
         const tabs=await chrome.tabs.query({windowId:window.id,active:true});
         const windows=await chrome.windows.getAll({windowTypes:['normal']});
         const groups=await chrome.tabGroups.query({windowId:window.id});
-        return {windowId:window.id,tabId:tabs[0].id,windowCount:windows.length,labeled:groups.some(g=>g.title?.startsWith('WeKnora'))};
+        return {windowId:window.id,tabId:tabs[0].id,windowCount:windows.length,labeled:groups.some(g=>g.title?.startsWith('SemiClaw'))};
       });
       const background = current.windowId === initial.windowId && current.tabId === initial.tabId && current.windowCount === 1 && current.labeled;
       process.stdout.write(JSON.stringify(background ? {background} : {background, initial, current}) + '\n');

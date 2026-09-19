@@ -4,7 +4,7 @@
 
 ## 总体架构：双执行模式 {#_1-总体架构-双执行模式}
 
-WeKnora 有两种任务执行模式，通过部署形态选择：
+SemiClaw 有两种任务执行模式，通过部署形态选择：
 
 - **asynq 模式（标准部署）**：任务经 `asynq.Client` 序列化为 JSON payload 写入 Redis 队列，由多个独立的 `asynq.Server`（worker pool）消费。`internal/router/task.go` 中 `RunAsynqServer()` 构建统一的 `asynq.ServeMux` 并在 6 个 pool 上运行。
 - **Lite 模式（单机 / macOS App，无 Redis）**：`internal/router/sync_task.go` 的 `SyncTaskExecutor` 实现同一个 `interfaces.TaskEnqueuer` 接口，`Enqueue` 直接把任务派发到 goroutine 执行，支持 `ProcessIn`（延迟）与 `MaxRetry` 选项；重试为线性退避（`attempt * 5s`，上限 30s）。
@@ -27,7 +27,7 @@ WeKnora 有两种任务执行模式，通过部署形态选择：
 | 多模态子任务计数器 | 图片子任务完成计数（DECR），最后一个 attempt 触发 finalize | `image_multimodal` 相关服务 |
 | 限流 | 滑动窗口限流 ZSET（见可观测性文档） | `internal/ratelimit/limiter.go` |
 
-Redis 连接参数来自环境变量 `REDIS_ADDR` / `REDIS_USERNAME` / `REDIS_PASSWORD` / `REDIS_DB` / TLS 配置。读写超时由 `WEKNORA_REDIS_OP_TIMEOUT_MS` 控制，默认 500ms（写超时为其 2 倍以吸收队头阻塞）：
+Redis 连接参数来自环境变量 `REDIS_ADDR` / `REDIS_USERNAME` / `REDIS_PASSWORD` / `REDIS_DB` / TLS 配置。读写超时由 `SEMICLAW_REDIS_OP_TIMEOUT_MS` 控制，默认 500ms（写超时为其 2 倍以吸收队头阻塞）：
 
 ```go
 // internal/router/task.go
@@ -84,12 +84,12 @@ opt := &asynq.RedisClientOpt{
 
 | Pool | 默认并发 | 消费队列（权重） | 配置键 / 环境变量 |
 | --- | --- | --- | --- |
-| `core` | 8 | `default`(1)、`chat_attachment`(3) | `asynq.core_concurrency` / `WEKNORA_ASYNQ_CORE_CONCURRENCY` |
-| `postprocess` | 2 | `postprocess`(1) | `asynq.postprocess_concurrency` / `WEKNORA_ASYNQ_POSTPROCESS_CONCURRENCY` |
-| `enrichment` | 12 | `summary`(2)、`multimodal`(1)、`graph`(1)、`question`(1)、`memory`(1) | `asynq.enrichment_concurrency` / `WEKNORA_ASYNQ_ENRICHMENT_CONCURRENCY` |
-| `maintenance` | 4 | `sync`(2)、`low`(1) | `asynq.maintenance_concurrency` / `WEKNORA_ASYNQ_MAINTENANCE_CONCURRENCY` |
-| `shared`（弹性层） | 6 | core + enrichment 中 `SharedWeight > 0` 的队列 | `asynq.shared_concurrency` / `WEKNORA_ASYNQ_SHARED_CONCURRENCY` |
-| `wiki` | 8 | `wiki`(1) | `asynq.wiki_concurrency` / `WEKNORA_WIKI_ASYNQ_CONCURRENCY` |
+| `core` | 8 | `default`(1)、`chat_attachment`(3) | `asynq.core_concurrency` / `SEMICLAW_ASYNQ_CORE_CONCURRENCY` |
+| `postprocess` | 2 | `postprocess`(1) | `asynq.postprocess_concurrency` / `SEMICLAW_ASYNQ_POSTPROCESS_CONCURRENCY` |
+| `enrichment` | 12 | `summary`(2)、`multimodal`(1)、`graph`(1)、`question`(1)、`memory`(1) | `asynq.enrichment_concurrency` / `SEMICLAW_ASYNQ_ENRICHMENT_CONCURRENCY` |
+| `maintenance` | 4 | `sync`(2)、`low`(1) | `asynq.maintenance_concurrency` / `SEMICLAW_ASYNQ_MAINTENANCE_CONCURRENCY` |
+| `shared`（弹性层） | 6 | core + enrichment 中 `SharedWeight > 0` 的队列 | `asynq.shared_concurrency` / `SEMICLAW_ASYNQ_SHARED_CONCURRENCY` |
+| `wiki` | 8 | `wiki`(1) | `asynq.wiki_concurrency` / `SEMICLAW_WIKI_ASYNQ_CONCURRENCY` |
 
 设计要点（源码注释均可佐证）：
 
@@ -280,7 +280,7 @@ stateDiagram-v2
 
 ### 兜底：housekeeping 清扫 {#_7-3-兜底-housekeeping-清扫}
 
-`internal/application/service/knowledge_housekeeping.go`：cron 每 5 分钟（`0 */5 * * * *`）扫描卡在 `pending`/`processing`/`finalizing` 超过 stale 阈值的知识行并标记 failed。这是 asynq 重试、死信回调、multimodal finalize 之外的最后防线（worker 被 kill 在 handler 中间、defer 没跑到等场景）。清扫结合 span 心跳、`updated_at` 与 `TaskInspector.HasQueuedTasksForKnowledge`，避免误杀"积压但未孤儿"的行。可用 `WEKNORA_HOUSEKEEPING_ENABLED=false` 关闭。
+`internal/application/service/knowledge_housekeeping.go`：cron 每 5 分钟（`0 */5 * * * *`）扫描卡在 `pending`/`processing`/`finalizing` 超过 stale 阈值的知识行并标记 failed。这是 asynq 重试、死信回调、multimodal finalize 之外的最后防线（worker 被 kill 在 handler 中间、defer 没跑到等场景）。清扫结合 span 心跳、`updated_at` 与 `TaskInspector.HasQueuedTasksForKnowledge`，避免误杀"积压但未孤儿"的行。可用 `SEMICLAW_HOUSEKEEPING_ENABLED=false` 关闭。
 
 ## 事件总线（`internal/event`） {#_8-事件总线-internal-event}
 

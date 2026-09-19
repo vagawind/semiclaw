@@ -10,8 +10,8 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/Tencent/WeKnora/internal/types"
-	secutils "github.com/Tencent/WeKnora/internal/utils"
+	"github.com/vagawind/semiclaw/internal/types"
+	secutils "github.com/vagawind/semiclaw/internal/utils"
 )
 
 // TestMain whitelists loopback for SSRF so the httptest servers (127.0.0.1)

@@ -3,8 +3,8 @@ package service
 import (
 	"context"
 
-	apperrors "github.com/Tencent/WeKnora/internal/errors"
-	"github.com/Tencent/WeKnora/internal/types"
+	apperrors "github.com/vagawind/semiclaw/internal/errors"
+	"github.com/vagawind/semiclaw/internal/types"
 )
 
 func (s *knowledgeTagService) requireTagWrite(

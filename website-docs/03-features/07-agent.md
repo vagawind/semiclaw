@@ -530,7 +530,7 @@ var ToolCapabilityRequirements = map[string]ToolRequirement{
 
 `skills_selection_mode` 为 all/selected/none；selected 由 selected_skills 指定。运行时仅暴露所选沙箱中已安装且可用的技能。`@技能` 只把已授权的提及记录为本轮优先项，不收窄原白名单，也不会授权一个原本不可用的技能。
 
-统一入口为 `read_file` 和 `shell_exec(skill_name=..., command=...)`；旧 `read_skill`、`execute_skill_script` 不再注册。技能文件 URI 不是 shell 路径；执行包内脚本使用读取结果给出的目录或 `$WEKNORA_SKILL_DIR`。未选择空间沙箱配置时，脚本执行不可用。
+统一入口为 `read_file` 和 `shell_exec(skill_name=..., command=...)`；旧 `read_skill`、`execute_skill_script` 不再注册。技能文件 URI 不是 shell 路径；执行包内脚本使用读取结果给出的目录或 `$SEMICLAW_SKILL_DIR`。未选择空间沙箱配置时，脚本执行不可用。
 
 #### 会话环境与文件 {#_5-2-会话环境与文件}
 
@@ -581,7 +581,7 @@ MCP 工具审批由 `internal/agent/approval/gate.go` 实现。
 
 **审批范围**：审批门（`approval.MCPApproval`）**只接入 MCP 工具**——`MCPTool.Execute`（`internal/agent/tools/mcp_tool.go`）在真正调用 MCP 服务前询问 `gate.NeedsApproval(tenantID, serviceID, toolName)`；内置工具不走审批。哪些 MCP 工具需要审批由 `Checker`（DB 中的 `MCPToolApprovalService`，经 `approval.Adapter` 适配）按租户+服务+工具名判定。
 
-**Fail-close 默认**：`NeedsApproval` 的检查器出错时默认**要求审批**（对 HITL 特性更安全）；可用环境变量 `WEKNORA_AGENT_TOOL_APPROVAL_FAIL_OPEN=true` 恢复旧的放行行为。
+**Fail-close 默认**：`NeedsApproval` 的检查器出错时默认**要求审批**（对 HITL 特性更安全）；可用环境变量 `SEMICLAW_AGENT_TOOL_APPROVAL_FAIL_OPEN=true` 恢复旧的放行行为。
 
 **审批流程**（`RequestAndWait`）：
 
@@ -593,7 +593,7 @@ MCP 工具审批由 `internal/agent/approval/gate.go` 实现。
 
 **长等待与超时的配合**：普通工具执行有 60s 超时，但审批可能等更久。引擎在 `ToolExecContext.ApprovalCtx` 中传入**不含** per-tool 超时的轮级 ctx 供审批等待使用；批准后 MCPTool 再从 `ApprovalCtx` 派生一个全新的执行超时窗口，避免审批耗尽预算导致刚批准就超时。
 
-**跨实例支持**：waiter 存在发起等待的实例内存里；配置 Redis 后，`Resolve` 在本地未命中时通过 Pub/Sub 频道 `weknora:mcp_approval:resolve`（可加 `WEKNORA_REDIS_NAMESPACE` 后缀隔离多部署）广播到所有副本，由持有 waiter 的实例投递，并经带 nonce 的 per-pending 回复频道回 ack，使 HTTP 层能准确区分 `ok` / `not_found` / `tenant_mismatch` / `user_mismatch` / `already_resolved`。无 Redis 时退化为单进程语义（需要粘性会话）。
+**跨实例支持**：waiter 存在发起等待的实例内存里；配置 Redis 后，`Resolve` 在本地未命中时通过 Pub/Sub 频道 `semiclaw:mcp_approval:resolve`（可加 `SEMICLAW_REDIS_NAMESPACE` 后缀隔离多部署）广播到所有副本，由持有 waiter 的实例投递，并经带 nonce 的 per-pending 回复频道回 ack，使 HTTP 层能准确区分 `ok` / `not_found` / `tenant_mismatch` / `user_mismatch` / `already_resolved`。无 Redis 时退化为单进程语义（需要粘性会话）。
 
 **授权校验**：`Resolve` 时校验 tenant 匹配；waiter 注册了 `userID` 时调用者必须携带相同的非空 userID（空视为不匹配，fail-close），防止旁人替会话主人批准。
 

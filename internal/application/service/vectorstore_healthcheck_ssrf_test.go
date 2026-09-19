@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/types"
 )
 
 func TestTestConnection_MilvusBlocksUnsafeAddrAtDialSink(t *testing.T) {
@@ -34,7 +34,7 @@ func TestTestConnection_DorisBlocksUnsafeAddrAtDialSink(t *testing.T) {
 
 	_, err := svc.TestConnection(ctx, types.DorisRetrieverEngineType, types.ConnectionConfig{
 		Addr:     "169.254.169.254:9030",
-		Database: "weknora",
+		Database: "semiclaw",
 		Username: "root",
 	})
 	if err == nil {

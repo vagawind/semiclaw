@@ -11,14 +11,14 @@ const (
 	// SkillsImageRoot is where installed skills live inside the snapshot image.
 	// It is outside /workspace on purpose: /workspace is per-session scratch
 	// and is wiped before every snapshot.
-	SkillsImageRoot = "/opt/weknora/tenant/skills"
+	SkillsImageRoot = "/opt/semiclaw/tenant/skills"
 
 	// SkillsManifestPath lists what the image claims to contain. It is a
 	// troubleshooting aid, never the source of truth for execution.
 	SkillsManifestPath = SkillsImageRoot + "/.manifest.json"
 )
 
-const skillShellArgv0 = "weknora-skill"
+const skillShellArgv0 = "semiclaw-skill"
 
 // ErrInvalidSkillName is returned when a skill name would escape SkillsImageRoot
 // or is not a single path segment.
@@ -63,7 +63,7 @@ func SkillRequirementsPath(skillName string) string {
 	if err != nil {
 		return ""
 	}
-	return path.Join(dir, ".weknora", "requirements.json")
+	return path.Join(dir, ".semiclaw", "requirements.json")
 }
 
 // RunnableWorkspaceScript reports whether scriptPath is a session-writable
@@ -87,7 +87,7 @@ func RunnableWorkspaceScript(scriptPath string) (string, bool) {
 // ValidatedSessionOutputDir normalises a configured artifact directory and
 // reports whether it may be used.
 //
-// It is the single gate for every WEKNORA_SKILL_OUTPUT_DIR override, wherever
+// It is the single gate for every SEMICLAW_SKILL_OUTPUT_DIR override, wherever
 // it comes from: the host environment the app reads at startup, or a tenant's
 // sandbox config. Without it the two disagreed — execution validated the path
 // and fell back to SessionOutputRoot, while the tools and the artifact
@@ -102,7 +102,7 @@ func ValidatedSessionOutputDir(dir string) (string, bool) {
 }
 
 // ValidatedImageSkillDir reports whether skillDir is exactly one installed
-// skill directory under SkillsImageRoot (for example /opt/weknora/tenant/skills/pdf).
+// skill directory under SkillsImageRoot (for example /opt/semiclaw/tenant/skills/pdf).
 func ValidatedImageSkillDir(skillDir string) (string, bool) {
 	clean := path.Clean(strings.TrimSpace(skillDir))
 	expected, err := SkillDirFor(path.Base(clean))
@@ -211,5 +211,5 @@ func SkillInterpreterCommand(skillDir, scriptPath string) (string, []string) {
 // SkillCommandPath is shared by normal skill execution and installation verification.
 func SkillCommandPath(dir string) string {
 	return path.Join(dir, ".venv", "bin") + ":" +
-		path.Join(dir, "node_modules", ".bin") + ":" + path.Join(dir, ".weknora", "bin")
+		path.Join(dir, "node_modules", ".bin") + ":" + path.Join(dir, ".semiclaw", "bin")
 }

@@ -12,7 +12,7 @@ esac
 source_commit=5aaa36bf79a201ec40b277ce6c24f2ce23ce37ca
 mkdir -p "$output_dir"
 output_dir="$(cd "$output_dir" && pwd)"
-build_dir="$(mktemp -d /tmp/weknora-bsk-build.XXXXXX)"
+build_dir="$(mktemp -d /tmp/semiclaw-bsk-build.XXXXXX)"
 trap 'rm -rf "$build_dir"' EXIT
 
 git clone --no-checkout https://github.com/Tencent/BrowserSkill.git "$build_dir/source"
@@ -24,7 +24,7 @@ git -C "$build_dir/source" apply "$repo_root/patches/browserskill/remote-extensi
   npx --yes pnpm@10.17.0 install --frozen-lockfile
   npx --yes pnpm@10.17.0 ext:build:zip
 )
-cp "$build_dir/source/apps/extension/dist/browser-skillextension-0.2.1-chrome.zip" "$output_dir/browser-skill-weknora-0.2.1.zip"
+cp "$build_dir/source/apps/extension/dist/browser-skillextension-0.2.1-chrome.zip" "$output_dir/browser-skill-semiclaw-0.2.1.zip"
 cp "$build_dir/source/LICENSE" "$output_dir/BrowserSkill-LICENSE"
 
 # Download the server's native daemon using the release's pinned checksums.
@@ -38,7 +38,7 @@ if sys.argv[3]:
     arch = {'amd64': 'x64', 'arm64': 'arm64'}[target_arch]
 key = f'{os_name}-{arch}'
 if key not in release['assets']:
-    raise SystemExit('The WeKnora daemon adapter currently requires macOS or Linux')
+    raise SystemExit('The SemiClaw daemon adapter currently requires macOS or Linux')
 asset = release['assets'][key]
 with urllib.request.urlopen(asset['url'], timeout=60) as response:
     data = response.read()

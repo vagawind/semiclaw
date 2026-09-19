@@ -3,8 +3,8 @@ package interfaces
 import (
 	"context"
 
-	"github.com/Tencent/WeKnora/internal/models/embedding"
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/models/embedding"
+	"github.com/vagawind/semiclaw/internal/types"
 )
 
 // RetrieveEngine defines the retrieve engine interface

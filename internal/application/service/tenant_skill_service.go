@@ -11,10 +11,10 @@ import (
 	"github.com/robfig/cron/v3"
 	"golang.org/x/sync/singleflight"
 
-	"github.com/Tencent/WeKnora/internal/application/repository"
-	"github.com/Tencent/WeKnora/internal/common/redislock"
-	"github.com/Tencent/WeKnora/internal/sandbox"
-	"github.com/Tencent/WeKnora/internal/types/interfaces"
+	"github.com/vagawind/semiclaw/internal/application/repository"
+	"github.com/vagawind/semiclaw/internal/common/redislock"
+	"github.com/vagawind/semiclaw/internal/sandbox"
+	"github.com/vagawind/semiclaw/internal/types/interfaces"
 )
 
 // skillImageLockLease bounds how long one install/remove may hold the config
@@ -189,7 +189,7 @@ func (s *TenantSkillService) withSkillLock(ctx context.Context, key string, fn f
 }
 
 func skillImageLockKey(tenantID uint64, configID string) string {
-	return fmt.Sprintf("weknora-skill-image-lock:%d:%s", tenantID, configID)
+	return fmt.Sprintf("semiclaw-skill-image-lock:%d:%s", tenantID, configID)
 }
 
 // clock is this service's time source. Tests inject one; a service built

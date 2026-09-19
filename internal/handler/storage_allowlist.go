@@ -1,6 +1,6 @@
 package handler
 
-import "github.com/Tencent/WeKnora/internal/storageallowlist"
+import "github.com/vagawind/semiclaw/internal/storageallowlist"
 
 func getSupportedStorageProviders() []string {
 	return storageallowlist.Supported()

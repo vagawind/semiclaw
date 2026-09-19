@@ -5,7 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/Tencent/WeKnora/internal/handler"
+	"github.com/vagawind/semiclaw/internal/handler"
 )
 
 // Models are tenant-wide infrastructure (LLM credentials, embeddings,
@@ -143,7 +143,7 @@ func RegisterMCPServiceRoutes(
 	// MCP OAuth provider redirect. Registered OUTSIDE the /mcp-services group
 	// to avoid a static-vs-":id" route conflict, and left unauthenticated
 	// (allow-listed in middleware/auth.go) because the third-party browser
-	// redirect carries no WeKnora bearer — the single-use state authenticates.
+	// redirect carries no SemiClaw bearer — the single-use state authenticates.
 	r.GET("/mcp-oauth/callback", oauthHandler.Callback)
 
 	mcpServices := g.apiKeyGroup(r.Group("/mcp-services"), apiKeyManageMCPServices(apiKeyFullAccess()))
@@ -333,11 +333,11 @@ func RegisterDataSourceRoutes(
 	}
 }
 
-// RegisterWeKnoraCloudRoutes 注册 WeKnoraCloud 初始化路由
-// RegisterWeKnoraCloudRoutes registers the WeKnoraCloud credential
+// RegisterSemiClawCloudRoutes 注册 SemiClawCloud 初始化路由
+// RegisterSemiClawCloudRoutes registers the SemiClawCloud credential
 // management endpoints. SaveCredentials persists external SaaS keys
 // for the tenant (Admin+), Status is a low-risk readiness probe (Viewer+).
-func RegisterWeKnoraCloudRoutes(r *gin.RouterGroup, handler *handler.WeKnoraCloudHandler, g *rbacGuards) {
-	g.apiKeyRoute(r, http.MethodPost, "/weknoracloud/credentials", apiKeyManageModels(apiKeyFullAccess()), g.Admin(), handler.SaveCredentials)
-	g.apiKeyRoute(r, http.MethodGet, "/models/weknoracloud/status", apiKeyManageModels(apiKeyFullAccess()), g.Viewer(), handler.Status)
+func RegisterSemiClawCloudRoutes(r *gin.RouterGroup, handler *handler.SemiClawCloudHandler, g *rbacGuards) {
+	g.apiKeyRoute(r, http.MethodPost, "/semiclawcloud/credentials", apiKeyManageModels(apiKeyFullAccess()), g.Admin(), handler.SaveCredentials)
+	g.apiKeyRoute(r, http.MethodGet, "/models/semiclawcloud/status", apiKeyManageModels(apiKeyFullAccess()), g.Viewer(), handler.Status)
 }

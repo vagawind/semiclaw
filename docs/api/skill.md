@@ -295,7 +295,7 @@ curl --location --request DELETE 'http://localhost:8080/api/v1/me/env-vars/skill
 
 ### PUT / DELETE `/me/env-vars/sandbox` - 设置或删除自己的配置级变量
 
-配置级变量不依附于任何技能，名称自定，会注入本人在该沙箱配置上的每一次技能脚本与 shell 命令。`WEKNORA_` 前缀与 `PATH` 等保留名会被拒绝。
+配置级变量不依附于任何技能，名称自定，会注入本人在该沙箱配置上的每一次技能脚本与 shell 命令。`SEMICLAW_` 前缀与 `PATH` 等保留名会被拒绝。
 
 ```curl
 curl --location --request PUT 'http://localhost:8080/api/v1/me/env-vars/sandbox' \

@@ -9,7 +9,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Tencent/WeKnora/internal/utils"
+	"github.com/vagawind/semiclaw/internal/utils"
 	"gorm.io/gorm"
 )
 
@@ -106,7 +106,7 @@ type Tenant struct {
 	WebSearchConfig *WebSearchConfig `yaml:"web_search_config"   json:"web_search_config"   gorm:"type:jsonb"`
 	// Parser engine config overrides (MinerU endpoint, API key, etc.). Used when parsing documents; overrides env.
 	ParserEngineConfig *ParserEngineConfig `yaml:"parser_engine_config" json:"parser_engine_config" gorm:"type:jsonb"`
-	// Credentials config: third-party provider credentials (e.g. WeKnoraCloud AppID/AppSecret)
+	// Credentials config: third-party provider credentials (e.g. SemiClawCloud AppID/AppSecret)
 	Credentials *CredentialsConfig `yaml:"credentials" json:"credentials" gorm:"type:jsonb"`
 	// Storage engine config: parameters for Local, MinIO, COS. Used for document/file storage and docreader.
 	StorageEngineConfig *StorageEngineConfig `yaml:"storage_engine_config" json:"storage_engine_config" gorm:"type:jsonb"`
@@ -184,12 +184,12 @@ func (c *RetrieverEngines) Scan(value interface{}) error {
 // Stored as a single JSONB column; each provider is a nested object so new
 // providers can be added without schema changes.
 type CredentialsConfig struct {
-	WeKnoraCloud *WeKnoraCloudCredentials `json:"weknoracloud,omitempty"`
+	SemiClawCloud *SemiClawCloudCredentials `json:"semiclawcloud,omitempty"`
 }
 
-// WeKnoraCloudCredentials stores WeKnoraCloud AppID and AppSecret.
+// SemiClawCloudCredentials stores SemiClawCloud AppID and AppSecret.
 // AppSecret is AES-256 encrypted before persisting to database.
-type WeKnoraCloudCredentials struct {
+type SemiClawCloudCredentials struct {
 	AppID     string `json:"app_id"`
 	AppSecret string `json:"app_secret"`
 }
@@ -251,15 +251,15 @@ func (c *APIPrincipalConfig) Scan(value interface{}) error {
 	return nil
 }
 
-// GetWeKnoraCloud returns the WeKnoraCloud credentials, or nil if not configured.
-func (c *CredentialsConfig) GetWeKnoraCloud() *WeKnoraCloudCredentials {
-	if c == nil || c.WeKnoraCloud == nil {
+// GetSemiClawCloud returns the SemiClawCloud credentials, or nil if not configured.
+func (c *CredentialsConfig) GetSemiClawCloud() *SemiClawCloudCredentials {
+	if c == nil || c.SemiClawCloud == nil {
 		return nil
 	}
-	if c.WeKnoraCloud.AppID == "" || c.WeKnoraCloud.AppSecret == "" {
+	if c.SemiClawCloud.AppID == "" || c.SemiClawCloud.AppSecret == "" {
 		return nil
 	}
-	return c.WeKnoraCloud
+	return c.SemiClawCloud
 }
 
 // Value implements the driver.Valuer interface for CredentialsConfig
@@ -268,10 +268,10 @@ func (c *CredentialsConfig) Value() (driver.Value, error) {
 		return nil, nil
 	}
 	cp := *c
-	if cp.WeKnoraCloud != nil && cp.WeKnoraCloud.AppSecret != "" {
+	if cp.SemiClawCloud != nil && cp.SemiClawCloud.AppSecret != "" {
 		if key := utils.GetAESKey(); key != nil {
-			if encrypted, err := utils.EncryptAESGCM(cp.WeKnoraCloud.AppSecret, key); err == nil {
-				cp.WeKnoraCloud = &WeKnoraCloudCredentials{AppID: cp.WeKnoraCloud.AppID, AppSecret: encrypted}
+			if encrypted, err := utils.EncryptAESGCM(cp.SemiClawCloud.AppSecret, key); err == nil {
+				cp.SemiClawCloud = &SemiClawCloudCredentials{AppID: cp.SemiClawCloud.AppID, AppSecret: encrypted}
 			}
 		}
 	}
@@ -290,12 +290,12 @@ func (c *CredentialsConfig) Scan(value interface{}) error {
 	if err := json.Unmarshal(b, c); err != nil {
 		return err
 	}
-	if c.WeKnoraCloud != nil {
-		if plain, ok := utils.DecryptStoredSecretLenient(c.WeKnoraCloud.AppSecret); ok {
-			c.WeKnoraCloud.AppSecret = plain
+	if c.SemiClawCloud != nil {
+		if plain, ok := utils.DecryptStoredSecretLenient(c.SemiClawCloud.AppSecret); ok {
+			c.SemiClawCloud.AppSecret = plain
 		} else {
-			log.Printf("[crypto] tenant credentials we_knora_cloud.app_secret: decrypt failed (SYSTEM_AES_KEY missing/rotated?), treating as unconfigured")
-			c.WeKnoraCloud.AppSecret = ""
+			log.Printf("[crypto] tenant credentials semi_claw_cloud.app_secret: decrypt failed (SYSTEM_AES_KEY missing/rotated?), treating as unconfigured")
+			c.SemiClawCloud.AppSecret = ""
 		}
 	}
 	return nil
@@ -634,7 +634,7 @@ type TenantSandboxConfig struct {
 	DefaultTimeoutSec int `json:"default_timeout_sec,omitempty"`
 
 	// TerminalIdleDisconnectSec is how long an interactive terminal or
-	// desktop may go without user activity before WeKnora closes the
+	// desktop may go without user activity before SemiClaw closes the
 	// connection so the sandbox can pause on its provider TTL. Terminal
 	// counts keystrokes and PTY output; desktop counts mouse and keyboard.
 	// 0 uses the built-in default (15 minutes). Not an identity field.
@@ -726,7 +726,7 @@ type E2BSandboxConfig struct {
 	// "<port>-<sandboxID>.<sandbox_domain>" through public DNS and TLS, so it
 	// needs no value here. Self-hosted E2B-compatible control planes usually
 	// serve every sandbox from one gateway address and expect the sandbox
-	// authority in the Host header; setting this makes WeKnora dial the
+	// authority in the Host header; setting this makes SemiClaw dial the
 	// gateway directly instead of requiring wildcard DNS and a certificate
 	// for the sandbox domain. An "http://" gateway also downgrades the
 	// data-plane scheme, which the E2B SDK otherwise pins to https.
@@ -745,7 +745,7 @@ type E2BSandboxConfig struct {
 //
 // The daemon endpoint is deliberately the only connection field, and TLS
 // material is referenced by path rather than stored here. Client certificates
-// are deployment infrastructure mounted onto the WeKnora host; keeping them
+// are deployment infrastructure mounted onto the SemiClaw host; keeping them
 // out of the database keeps them out of backups, exports and API responses.
 type DockerSandboxConfig struct {
 	Image string `json:"image,omitempty"`
@@ -754,7 +754,7 @@ type DockerSandboxConfig struct {
 	// unix socket.
 	Host string `json:"host,omitempty"`
 
-	// TLSCertPath is a directory on the WeKnora host containing ca.pem,
+	// TLSCertPath is a directory on the SemiClaw host containing ca.pem,
 	// cert.pem and key.pem. Required when Host is a TCP endpoint.
 	TLSCertPath string `json:"tls_cert_path,omitempty"`
 
@@ -799,7 +799,7 @@ type VolumeMountConfig struct {
 	Enabled bool `json:"enabled"`
 
 	// MountPath is the sandbox-internal path where the volume is mounted.
-	// Default: /weknora/tenant/skills (customizable per use case).
+	// Default: /semiclaw/tenant/skills (customizable per use case).
 	MountPath string `json:"mount_path,omitempty"`
 
 	// Provider identifies the volume backend. Currently "e2b" or "cube".
@@ -810,7 +810,7 @@ type VolumeMountConfig struct {
 	VolumeID string `json:"volume_id,omitempty"`
 
 	// VolumeName is the human-readable volume name, e.g.
-	// "weknora-tenant-<id>-skills".
+	// "semiclaw-tenant-<id>-skills".
 	VolumeName string `json:"volume_name,omitempty"`
 
 	// VolumeOwnerFingerprint = sha256(provider + APIKey + APIURL).

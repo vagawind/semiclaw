@@ -14,7 +14,7 @@ import { createServer } from 'node:http'
 /** Emit one OpenAI streaming chunk. */
 function chunk(response, model, delta, finishReason = null) {
   const payload = {
-    id: 'chatcmpl-weknora-e2e',
+    id: 'chatcmpl-semiclaw-e2e',
     object: 'chat.completion.chunk',
     created: Math.floor(Date.now() / 1000),
     model,
@@ -76,8 +76,8 @@ function calledTools(messages) {
  * @returns the base URL (with `/v1`), the recorded requests, and a close function.
  */
 export async function startFakeModel(options = {}) {
-  const searchTool = options.searchTool ?? 'weknora_search'
-  const readTool = options.readTool ?? 'weknora_read_document'
+  const searchTool = options.searchTool ?? 'semiclaw_search'
+  const readTool = options.readTool ?? 'semiclaw_read_document'
   const requests = []
 
   const server = createServer((request, response) => {
@@ -125,7 +125,7 @@ export async function startFakeModel(options = {}) {
       // Answer strictly from what the tools returned, so the transcript proves
       // the retrieved bytes reached the model rather than a canned string.
       const grounding = results.join('\n').replace(/\s+/g, ' ').trim().slice(0, 400)
-      streamText(response, body.model, `根据 WeKnora 知识库检索结果回答：${grounding}`)
+      streamText(response, body.model, `根据 SemiClaw 知识库检索结果回答：${grounding}`)
     })
   })
 

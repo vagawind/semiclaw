@@ -1,5 +1,5 @@
 # Build from the repository root with:
-#   docker build -t weknora-site website-docs
+#   docker build -t semiclaw-site website-docs
 # No host Node.js installation or prebuilt static-site/ is required.
 FROM node:24-bookworm-slim AS builder
 RUN apt-get update \

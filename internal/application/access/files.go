@@ -6,9 +6,9 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/Tencent/WeKnora/internal/types"
-	"github.com/Tencent/WeKnora/internal/types/interfaces"
-	secutils "github.com/Tencent/WeKnora/internal/utils"
+	"github.com/vagawind/semiclaw/internal/types"
+	"github.com/vagawind/semiclaw/internal/types/interfaces"
+	secutils "github.com/vagawind/semiclaw/internal/utils"
 )
 
 // FileAccess is a request-local result, produced before storage is opened.

@@ -10,10 +10,10 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/Tencent/WeKnora/cli/internal/cmdutil"
-	"github.com/Tencent/WeKnora/cli/internal/iostreams"
-	"github.com/Tencent/WeKnora/cli/internal/prompt"
-	sdk "github.com/Tencent/WeKnora/client"
+	"github.com/vagawind/semiclaw/cli/internal/cmdutil"
+	"github.com/vagawind/semiclaw/cli/internal/iostreams"
+	"github.com/vagawind/semiclaw/cli/internal/prompt"
+	sdk "github.com/vagawind/semiclaw/client"
 )
 
 type fakeInitSvc struct {
@@ -103,7 +103,7 @@ func (s *readbackErrSvc) GetInitializationConfig(_ context.Context, _ string) (*
 // keyed off the sub's own name (unlike withRootHarnessKB which is hardcoded to
 // `update`).
 func withRootKB(sub *cobra.Command, args ...string) *cobra.Command {
-	root := &cobra.Command{Use: "weknora"}
+	root := &cobra.Command{Use: "semiclaw"}
 	pf := root.PersistentFlags()
 	pf.BoolP("yes", "y", false, "")
 	pf.String("format", "", "")

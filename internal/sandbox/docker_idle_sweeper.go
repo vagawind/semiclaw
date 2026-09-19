@@ -27,14 +27,14 @@ import (
 	"sync"
 	"time"
 
-	"github.com/Tencent/WeKnora/internal/logger"
+	"github.com/vagawind/semiclaw/internal/logger"
 	"github.com/moby/moby/client"
 )
 
 // dockerIdleTTLLabel records the TTL each container was created with, so a
 // sweep triggered by one workspace config never applies its own TTL to a
 // container belonging to another.
-const dockerIdleTTLLabel = "com.weknora.sandbox.idle-ttl-seconds"
+const dockerIdleTTLLabel = "com.semiclaw.sandbox.idle-ttl-seconds"
 
 // dockerSweepMinInterval bounds how often one daemon is swept, no matter how
 // many requests trigger it. Sweeping is a list plus one stat per container;
@@ -200,7 +200,7 @@ func (s *dockerIdleSweeper) lastActivity(
 	return summary.StartedAt.UTC()
 }
 
-// dockerActivityClockSkew is how far ahead of WeKnora the daemon's clock may
+// dockerActivityClockSkew is how far ahead of SemiClaw the daemon's clock may
 // run before a marker is treated as forged. The marker is stamped by the
 // daemon host while the comparison happens here, and the two are not
 // necessarily the same machine.

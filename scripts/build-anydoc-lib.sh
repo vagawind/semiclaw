@@ -58,7 +58,7 @@ prepare_patched_anydoc() {
   # fail deep inside cargo's patch resolution instead of here. Cargo.toml is
   # required too: a truncated leftover with only the marker would otherwise
   # skip the copy and fail with "failed to read .../Cargo.toml".
-  if [ -f "$dest/.weknora-patched" ] && [ "$(cat "$dest/.weknora-patched")" = "$anydoc_version" ] && [ -f "$dest/Cargo.toml" ]; then
+  if [ -f "$dest/.semiclaw-patched" ] && [ "$(cat "$dest/.semiclaw-patched")" = "$anydoc_version" ] && [ -f "$dest/Cargo.toml" ]; then
     return
   fi
 
@@ -91,7 +91,7 @@ prepare_patched_anydoc() {
   fi
   sed -i.bak 's/^use render::markdown::document_to_markdown;/pub use render::markdown::document_to_markdown;/' "$dest/src/lib.rs"
   rm -f "$dest/src/lib.rs.bak"
-  printf '%s\n' "$anydoc_version" > "$dest/.weknora-patched"
+  printf '%s\n' "$anydoc_version" > "$dest/.semiclaw-patched"
   rm -rf "$crate_dir/.anydoc-unpack" "$crate_dir/.anydoc-$anydoc_version.crate"
 }
 
@@ -100,7 +100,7 @@ prepare_patched_anydoc() {
 go_version=$(sed -n 's/^const Version = "\([^"]*\)".*/\1/p' "$crate_dir/version.go" | head -1)
 if [ "$go_version" != "$anydoc_version" ]; then
   echo "error: version.go says '$go_version' but Cargo.toml pins anydoc '$anydoc_version'." >&2
-  echo "Bump both: the Go constant is the version WeKnora records for parsed documents." >&2
+  echo "Bump both: the Go constant is the version SemiClaw records for parsed documents." >&2
   exit 1
 fi
 
@@ -117,4 +117,4 @@ mkdir -p "$dest"
 cp "$crate_dir/target/$target/release/$lib_name" "$dest/$lib_name"
 
 echo "Wrote $dest/$lib_name"
-echo "Build WeKnora with the archive: go build -tags anydoc ./cmd/server"
+echo "Build SemiClaw with the archive: go build -tags anydoc ./cmd/server"

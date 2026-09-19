@@ -8,12 +8,12 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/Tencent/WeKnora/internal/agent/compaction"
-	agenttools "github.com/Tencent/WeKnora/internal/agent/tools"
-	"github.com/Tencent/WeKnora/internal/event"
-	"github.com/Tencent/WeKnora/internal/modelcontext"
-	"github.com/Tencent/WeKnora/internal/models/chat"
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/agent/compaction"
+	agenttools "github.com/vagawind/semiclaw/internal/agent/tools"
+	"github.com/vagawind/semiclaw/internal/event"
+	"github.com/vagawind/semiclaw/internal/modelcontext"
+	"github.com/vagawind/semiclaw/internal/models/chat"
+	"github.com/vagawind/semiclaw/internal/types"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -153,7 +153,7 @@ func TestStreamMCPAnswerRejectsUnretrievedKnowledgeCitations(t *testing.T) {
 	engine := newTestEngine(t, model)
 	engine.knowledgeBasesInfo = []*KnowledgeBaseInfo{{
 		ID: "faq-kb", Name: "FAQ TEST", Type: "faq", RecentDocs: []RecentDocInfo{
-			{ChunkID: "faq-1", Title: "什么是 WeKnora？", FAQStandardQuestion: "什么是 WeKnora？"},
+			{ChunkID: "faq-1", Title: "什么是 SemiClaw？", FAQStandardQuestion: "什么是 SemiClaw？"},
 			{ChunkID: "faq-2", Title: "如何创建知识库？", FAQStandardQuestion: "如何创建知识库？"},
 		},
 	}}

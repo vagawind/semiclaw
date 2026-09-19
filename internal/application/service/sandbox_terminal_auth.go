@@ -6,10 +6,10 @@ import (
 	"strings"
 	"time"
 
-	apprepo "github.com/Tencent/WeKnora/internal/application/repository"
-	apperrors "github.com/Tencent/WeKnora/internal/errors"
-	"github.com/Tencent/WeKnora/internal/types"
-	"github.com/Tencent/WeKnora/internal/types/interfaces"
+	apprepo "github.com/vagawind/semiclaw/internal/application/repository"
+	apperrors "github.com/vagawind/semiclaw/internal/errors"
+	"github.com/vagawind/semiclaw/internal/types"
+	"github.com/vagawind/semiclaw/internal/types/interfaces"
 )
 
 // ErrTerminalAuthDenied is a definite authorization failure for an open

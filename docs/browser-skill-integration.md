@@ -1,13 +1,13 @@
 # BrowserSkill 本机浏览器接入
 
-WeKnora 使用 Tencent/BrowserSkill 的官方 daemon 和扩展执行浏览器操作，通过 `local_browser` 薄工具适配接入，无需沙箱、浏览器技能包或用户运行本机命令。
+SemiClaw 使用 Tencent/BrowserSkill 的官方 daemon 和扩展执行浏览器操作，通过 `local_browser` 薄工具适配接入，无需沙箱、浏览器技能包或用户运行本机命令。
 
 ## 使用流程
 
 1. Docker 部署使用包含 BrowserSkill 的 app 和 frontend 镜像，默认从用户当前页面生成连接地址。原生部署需先运行 `./scripts/build_browserskill.sh`，配置下面的两个文件路径并重启服务。
 2. 用户在个人设置 → 浏览器连接下载配套扩展，解压后在 Chrome 扩展程序页面加载。当前没有商店发布版本。
 3. 在设置页复制一次性配对链接，粘贴到扩展的「远程连接」，核对服务器并连接。同一空间内多个对话共用设备授权。
-4. 回到对话描述浏览器任务。首次工具调用默认打开独立任务窗口，后续仅切换该窗口内的任务标签。可在扩展中改用后台标签组，此时在现有 Chrome 窗口创建绿色「WeKnora」标签组，模型切换目标标签不会切走用户正在看的页面。
+4. 回到对话描述浏览器任务。首次工具调用默认打开独立任务窗口，后续仅切换该窗口内的任务标签。可在扩展中改用后台标签组，此时在现有 Chrome 窗口创建绿色「SemiClaw」标签组，模型切换目标标签不会切走用户正在看的页面。
 5. 主对话小预览可按住标题栏上下、左右拖动，也可定位任务标签、暂停操作、继续操作或结束浏览器任务。暂停中断当前浏览器调用并保留页面，结束会关闭任务新建标签、归还借用标签；这些按钮只控制当前对话的浏览器，不会停止整段对话或撤销浏览器配对。请求人工帮助时先显示提示；不会自动激活标签或窗口。借用已有标签必须经过原生确认，归还时解除控制，保留原位置。
 
 浏览器操作期间，从当前任务页通过新窗口链接（包括 `rel=noopener`）或 `window.open` 打开的标签，会按来源登记到当前任务，移入任务窗口或标签组，并在结束时一起回收。后台标签组模式下，若 Chrome 默认激活新标签，扩展会恢复此前查看的标签；浏览器原生激活可能带来短暂切换。任务空闲时手动新建或拖入标签组的页面不会自动获得任务归属。
@@ -42,11 +42,11 @@ WeKnora 使用 Tencent/BrowserSkill 的官方 daemon 和扩展执行浏览器操
 
 结果卡片展示控制台消息与堆栈、网络请求状态与错误、脚本返回值及具体失败原因；较长结果会截断并提示。小预览展示最近动作、动作耗时、已知页面地址和最近错误；页面地址去掉账号、查询参数和片段。耗时在动作执行期间更新，结束后固定。
 
-支持 Document Picture-in-Picture 的浏览器可点击预览标题栏的“弹出悬浮窗”，把同一个预览和暂停、继续、结束按钮移到置顶窗口。切换标签页时继续同步画面；关闭悬浮窗或点击“返回对话小窗”会恢复页内预览，不结束浏览器任务。任务结束、切换会话或离开对话页面时关闭该会话的悬浮窗。此功能依赖安全上下文（HTTPS 或本机 localhost）及用户点击；不支持的浏览器保留页内小窗，打开失败时显示提示并允许重试。悬浮窗依赖原页面，不能在关闭 WeKnora 页面后独立运行。
+支持 Document Picture-in-Picture 的浏览器可点击预览标题栏的“弹出悬浮窗”，把同一个预览和暂停、继续、结束按钮移到置顶窗口。切换标签页时继续同步画面；关闭悬浮窗或点击“返回对话小窗”会恢复页内预览，不结束浏览器任务。任务结束、切换会话或离开对话页面时关闭该会话的悬浮窗。此功能依赖安全上下文（HTTPS 或本机 localhost）及用户点击；不支持的浏览器保留页内小窗，打开失败时显示提示并允许重试。悬浮窗依赖原页面，不能在关闭 SemiClaw 页面后独立运行。
 
 模型调用采用扁平参数，例如 `{"method":"navigate","url":"https://example.com"}`、`{"method":"click","ref":"e3"}`、`{"method":"observe"}`。Schema 不再提供 `params` 字段，旧的嵌套格式直接拒绝。服务端校验所选动作的必填字段、字段类型及定位条件，再将参数转换为 BrowserSkill 原生 RPC 信封；会话和设备 ID 始终由服务端绑定。
 
-`wait_ms` 的外层参数为 `duration_ms`，范围 0–10000 毫秒；工具描述、参数 schema 和执行前校验保持一致。命令超时或中断后暂停任务，不自动重放点击/提交。前端显示具体浏览器动作与可读错误，结果卡片分别展示网页内容、截图或标签列表，不展示原始协议 JSON。标签组统一显示 WeKnora，不再附带内部任务 ID。
+`wait_ms` 的外层参数为 `duration_ms`，范围 0–10000 毫秒；工具描述、参数 schema 和执行前校验保持一致。命令超时或中断后暂停任务，不自动重放点击/提交。前端显示具体浏览器动作与可读错误，结果卡片分别展示网页内容、截图或标签列表，不展示原始协议 JSON。标签组统一显示 SemiClaw，不再附带内部任务 ID。
 
 ## 构建与部署
 
@@ -56,14 +56,14 @@ WeKnora 使用 Tencent/BrowserSkill 的官方 daemon 和扩展执行浏览器操
 
 ### Docker 部署
 
-`docker/Dockerfile.app` 在独立 Node 构建阶段生成配套扩展，按目标 `linux/amd64` 或 `linux/arm64` 下载 daemon，并将 `bsk`、扩展 ZIP 和许可证复制到运行镜像的 `/opt/weknora/browserskill/`。镜像已预设 `BROWSERSKILL_BINARY` 和 `BROWSERSKILL_EXTENSION_PATH`，无需安装 Chrome 或启用沙箱。不要用宿主机的 macOS `bsk` 替换容器中的 Linux 文件。
+`docker/Dockerfile.app` 在独立 Node 构建阶段生成配套扩展，按目标 `linux/amd64` 或 `linux/arm64` 下载 daemon，并将 `bsk`、扩展 ZIP 和许可证复制到运行镜像的 `/opt/semiclaw/browserskill/`。镜像已预设 `BROWSERSKILL_BINARY` 和 `BROWSERSKILL_EXTENSION_PATH`，无需安装 Chrome 或启用沙箱。不要用宿主机的 macOS `bsk` 替换容器中的 Linux 文件。
 
-默认无需设置 `BROWSERSKILL_PUBLIC_URL`。设置页在申请配对时提交 `window.location.origin`，服务端保留域名和端口，将 HTTPS 转为 WSS（本机 HTTP 转为 WS），追加 `/api/v1/local-browser/extension`。例如访问 `https://weknora.example.com:8443`，自动生成 `wss://weknora.example.com:8443/api/v1/local-browser/extension`。地址不依赖反向代理传递的内部 Host 或协议。
+默认无需设置 `BROWSERSKILL_PUBLIC_URL`。设置页在申请配对时提交 `window.location.origin`，服务端保留域名和端口，将 HTTPS 转为 WSS（本机 HTTP 转为 WS），追加 `/api/v1/local-browser/extension`。例如访问 `https://semiclaw.example.com:8443`，自动生成 `wss://semiclaw.example.com:8443/api/v1/local-browser/extension`。地址不依赖反向代理传递的内部 Host 或协议。
 
 仅当网关使用独立域名、自定义代理路径等特殊部署时，在 `.env` 显式覆盖：
 
 ```dotenv
-BROWSERSKILL_PUBLIC_URL=wss://weknora.example.com/api/v1/local-browser/extension
+BROWSERSKILL_PUBLIC_URL=wss://semiclaw.example.com/api/v1/local-browser/extension
 ```
 
 将 app 和 frontend 更新到包含本次修改的镜像后，使用 `docker compose up -d app frontend` 重新创建服务；`docker compose restart` 不会加载修改后的环境变量。需要关闭此功能时，在 `.env` 显式设置 `BROWSERSKILL_BINARY=`。
@@ -75,8 +75,8 @@ BROWSERSKILL_PUBLIC_URL=wss://weknora.example.com/api/v1/local-browser/extension
 构建需要 Git、Node.js（镜像使用 Node 24）和 Python 3，以及访问固定的上游源码、npm 依赖和发行包的网络。执行 `./scripts/build_browserskill.sh` 后，将产物复制到下列路径，或将变量改为产物的实际绝对路径。连接地址同样默认从页面自动生成：
 
 ```dotenv
-BROWSERSKILL_BINARY=/opt/weknora/browserskill/bsk
-BROWSERSKILL_EXTENSION_PATH=/opt/weknora/browserskill/browser-skill-weknora-0.2.1.zip
+BROWSERSKILL_BINARY=/opt/semiclaw/browserskill/bsk
+BROWSERSKILL_EXTENSION_PATH=/opt/semiclaw/browserskill/browser-skill-semiclaw-0.2.1.zip
 ```
 
 构建脚本第二个参数可指定目标平台，例如 `./scripts/build_browserskill.sh ./artifacts/browserskill-linux linux/amd64`；不传时按宿主机系统和架构下载。
@@ -127,6 +127,6 @@ Agent 模式的输入框提供“本机浏览器”开关，可与联网搜索�
 
 ### 标签组回收
 
-后台标签组模式在结束任务时，先将明确归属于任务的标签移出分组，再关闭这些标签；不会按名称清理所有 WeKnora 分组，也不会移出用户后来加入的标签。取消分组失败时保留任务供重试，不报告清理成功。独立窗口模式不创建标签组。旧版本已经保存且关闭的历史分组不会追溯删除，需要用户在 Chrome 中选择“删除分组”；关闭书签栏显示仅隐藏入口，不等于删除。
+后台标签组模式在结束任务时，先将明确归属于任务的标签移出分组，再关闭这些标签；不会按名称清理所有 SemiClaw 分组，也不会移出用户后来加入的标签。取消分组失败时保留任务供重试，不报告清理成功。独立窗口模式不创建标签组。旧版本已经保存且关闭的历史分组不会追溯删除，需要用户在 Chrome 中选择“删除分组”；关闭书签栏显示仅隐藏入口，不等于删除。
 
 Chrome 公开扩展 API 不提供直接删除历史已保存分组的接口。移出分组再关闭利用的是本地分组成员变更路径，参见 [Chromium LocalTabGroupListener](https://chromium.googlesource.com/chromium/src/+/f4e2f70d6dd6d88f0ccb887c1935f0cba9fb802f/chrome/browser/ui/tabs/saved_tab_groups/local_tab_group_listener.cc)。跨设备同步和用户已有历史分组仍需真实 Chrome 验收。

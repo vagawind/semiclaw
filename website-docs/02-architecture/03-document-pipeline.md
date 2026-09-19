@@ -4,7 +4,7 @@
 
 ## 总体架构 {#_1-总体架构}
 
-WeKnora 的入库链路是一条**基于 Asynq（Redis）的分布式异步管道**。HTTP Handler 只负责落库与入队，所有耗时工作（解析、向量化、LLM 富化）都由独立的 Worker 池消费队列完成。
+SemiClaw 的入库链路是一条**基于 Asynq（Redis）的分布式异步管道**。HTTP Handler 只负责落库与入队，所有耗时工作（解析、向量化、LLM 富化）都由独立的 Worker 池消费队列完成。
 
 ```mermaid
 flowchart TD
@@ -266,7 +266,7 @@ Worker 消费 `TypeDocumentProcess` 后按五个规范化阶段推进，每个�
    - **builtin**：通过 gRPC（`docparser/grpc_parser.go`）或 HTTP（`http_parser.go`）调用 Python **docreader** 服务；
    - **simple**：Go 原生解析 md/txt/csv/json/图片/音频（`builtin_converter.go`，CSV→Markdown 表格、JSON→递归分割的代码块，图片/音频转占位引用）；
    - **anydoc**：Go 进程内解析 docx/doc/pptx/ppt/xlsx/xls/odf/rtf/epub/csv/pdf（`anydoc_reader.go`），底层是通过 cgo 链接的 anydoc Rust 库。office 文档的嵌入图按文档模型插回 Markdown 原位；无文字层的扫描件 PDF 在 DocReader 可用时回退到 builtin 整页渲染。仅在带 `anydoc` 构建标签的二进制中可用，其余构建里该引擎在引擎列表中显示为不可用；
-   - **weknoracloud / mineru / mineru_cloud / paddleocr_vl / paddleocr_vl_cloud**：HTTP 转换器（`engines.go` 注册，按 `mineru_endpoint`、`mineru_api_key`、`paddleocr_vl_endpoint` 等配置判定可用性）。
+   - **semiclawcloud / mineru / mineru_cloud / paddleocr_vl / paddleocr_vl_cloud**：HTTP 转换器（`engines.go` 注册，按 `mineru_endpoint`、`mineru_api_key`、`paddleocr_vl_endpoint` 等配置判定可用性）。
 
 引擎目录集中在 `internal/infrastructure/docparser/engines.go`：每个引擎同时声明元数据（名称、描述、文件类型、可用性探针）与 `NewReader` 工厂，`docparser.NewReader` 按名字分发，未注册的名字（如只存在于 docreader 的 `markitdown`）落到 docreader 客户端。
 5. 文件模式：从 `FileService.GetFile(payload.FilePath)` 读回字节填入 `ReadRequest.FileContent`。
@@ -435,7 +435,7 @@ stateDiagram-v2
 
 ## Housekeeping 自愈（knowledge_housekeeping.go） {#_8-housekeeping-自愈-knowledge-housekeeping-go}
 
-后台每 **5 分钟**一轮（`WEKNORA_HOUSEKEEPING_ENABLED` 可关闭），修复因 worker 崩溃 / Redis 丢任务导致的僵尸状态：
+后台每 **5 分钟**一轮（`SEMICLAW_HOUSEKEEPING_ENABLED` 可关闭），修复因 worker 崩溃 / Redis 丢任务导致的僵尸状态：
 
 **Sweep A —— 卡死知识恢复**，三阶段过滤：
 

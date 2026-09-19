@@ -3,10 +3,10 @@ package chatpipeline
 import (
 	"context"
 
-	"github.com/Tencent/WeKnora/internal/event"
-	"github.com/Tencent/WeKnora/internal/tracing/langfuse"
-	"github.com/Tencent/WeKnora/internal/types"
-	"github.com/Tencent/WeKnora/internal/types/interfaces"
+	"github.com/vagawind/semiclaw/internal/event"
+	"github.com/vagawind/semiclaw/internal/tracing/langfuse"
+	"github.com/vagawind/semiclaw/internal/types"
+	"github.com/vagawind/semiclaw/internal/types/interfaces"
 )
 
 // emitMemoryRecalled tells the client which memories this turn saw. Best

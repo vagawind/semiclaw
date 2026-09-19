@@ -5,8 +5,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Tencent/WeKnora/internal/types"
-	"github.com/Tencent/WeKnora/internal/types/interfaces"
+	"github.com/vagawind/semiclaw/internal/types"
+	"github.com/vagawind/semiclaw/internal/types/interfaces"
 	"github.com/alicebob/miniredis/v2"
 	"github.com/stretchr/testify/require"
 )

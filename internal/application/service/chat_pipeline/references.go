@@ -4,9 +4,9 @@ import (
 	"context"
 	"strings"
 
-	"github.com/Tencent/WeKnora/internal/modelcontext"
-	"github.com/Tencent/WeKnora/internal/models/chat"
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/modelcontext"
+	"github.com/vagawind/semiclaw/internal/models/chat"
+	"github.com/vagawind/semiclaw/internal/types"
 )
 
 // prepareMessagesWithModelContext replaces positional retrieval IDs with

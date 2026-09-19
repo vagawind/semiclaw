@@ -1,14 +1,14 @@
 package chat
 
 import (
-	"github.com/Tencent/WeKnora/internal/models/provider"
+	"github.com/vagawind/semiclaw/internal/models/provider"
 	"github.com/sashabaranov/go-openai"
 )
 
 // completionTokenField is the single Chat Completions wire name for a
 // completion budget. OpenAI treats max_tokens and max_completion_tokens as
 // mutually exclusive; gateways such as Volcengine Ark reject requests that
-// carry both (Tencent/WeKnora#3014).
+// carry both (vagawind/semiclaw#3014).
 type completionTokenField string
 
 const (
@@ -36,7 +36,7 @@ func (o *ChatOptions) CompletionBudget() int {
 //
 // Default is max_completion_tokens (OpenAI Chat Completions, Azure, Ark),
 // matching Pi. Only providers whose docs (or Pi's catalog) use the legacy
-// name stay on max_tokens. WeKnora-only hosts that document max_tokens
+// name stay on max_tokens. SemiClaw-only hosts that document max_tokens
 // (LKEAP) are listed here too. Unknown OpenAI-compat hosts — including
 // Aliyun DashScope — keep the default. GPT-5 / o-series always use
 // max_completion_tokens.

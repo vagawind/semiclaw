@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/Tencent/WeKnora/internal/models/provider"
+	"github.com/vagawind/semiclaw/internal/models/provider"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -21,7 +21,7 @@ func TestChatOptionsCompletionBudget(t *testing.T) {
 func TestWireCompletionTokenField(t *testing.T) {
 	// Every AllProviders() name must be classified here so a new vendor cannot
 	// silently inherit the default. Match Pi's polarity: default
-	// max_completion_tokens; only documented max_tokens hosts (plus WeKnora
+	// max_completion_tokens; only documented max_tokens hosts (plus SemiClaw
 	// self-hosted / LKEAP, which Pi does not catalog) are exceptions.
 	want := map[provider.ProviderName]completionTokenField{
 		provider.ProviderDeepSeek:     completionTokenFieldMaxTokens,
@@ -38,7 +38,7 @@ func TestWireCompletionTokenField(t *testing.T) {
 		provider.ProviderAliyun:       completionTokenFieldMaxCompletionTokens,
 		provider.ProviderLiteLLM:      completionTokenFieldMaxCompletionTokens,
 		provider.ProviderGemini:       completionTokenFieldMaxCompletionTokens,
-		provider.ProviderWeKnoraCloud: completionTokenFieldMaxCompletionTokens,
+		provider.ProviderSemiClawCloud: completionTokenFieldMaxCompletionTokens,
 		provider.ProviderHunyuan:      completionTokenFieldMaxCompletionTokens,
 		provider.ProviderMiniMax:      completionTokenFieldMaxCompletionTokens,
 		provider.ProviderOpenRouter:   completionTokenFieldMaxCompletionTokens,

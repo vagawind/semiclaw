@@ -162,7 +162,7 @@ func TestCubeRemoteClientListTemplatesSurfacesLastError(t *testing.T) {
 			"templateID": "tpl-broken",
 			"status":     "FAILED",
 			"imageInfo":  DefaultDockerImage,
-			"lastError":  "pull access denied for wechatopenai/weknora-sandbox",
+			"lastError":  "pull access denied for vagawind/semiclaw-sandbox",
 		}},
 		nil,
 	))
@@ -170,7 +170,7 @@ func TestCubeRemoteClientListTemplatesSurfacesLastError(t *testing.T) {
 	templates, err := client.ListTemplates(context.Background())
 	require.NoError(t, err)
 	require.Len(t, templates, 1)
-	require.Equal(t, "pull access denied for wechatopenai/weknora-sandbox", templates[0].Error)
+	require.Equal(t, "pull access denied for vagawind/semiclaw-sandbox", templates[0].Error)
 }
 
 // Cube stores snapshots in the template store. The settings step is for
@@ -180,13 +180,13 @@ func TestCubeRemoteClientListTemplatesHidesSnapPrefixedIDs(t *testing.T) {
 	client := newCubeTemplateClient(t, cubeCatalogHandler(
 		[]map[string]any{
 			{
-				"templateID": "tpl-weknora",
-				"name":       "weknora",
+				"templateID": "tpl-semiclaw",
+				"name":       "semiclaw",
 				"status":     "READY",
 			},
 			{
 				"templateID": "snap-1546901f7e5e40bdb8794c78",
-				"aliases":    []string{"weknora-sk-c838ac20-g2"},
+				"aliases":    []string{"semiclaw-sk-c838ac20-g2"},
 				"status":     "READY",
 			},
 			{
@@ -200,7 +200,7 @@ func TestCubeRemoteClientListTemplatesHidesSnapPrefixedIDs(t *testing.T) {
 	templates, err := client.ListTemplates(context.Background())
 	require.NoError(t, err)
 	require.Len(t, templates, 1)
-	require.Equal(t, "tpl-weknora", templates[0].ID)
+	require.Equal(t, "tpl-semiclaw", templates[0].ID)
 }
 
 // Snapshot IDs that do not use the snap- prefix still belong to GET
@@ -208,18 +208,18 @@ func TestCubeRemoteClientListTemplatesHidesSnapPrefixedIDs(t *testing.T) {
 func TestCubeRemoteClientListTemplatesHidesListedSnapshots(t *testing.T) {
 	client := newCubeTemplateClient(t, cubeCatalogHandler(
 		[]map[string]any{
-			{"templateID": "tpl-weknora", "name": "weknora", "status": "READY"},
-			{"templateID": "abc123unprefixed", "aliases": []string{"weknora-sk-cfg-g1"}, "status": "READY"},
+			{"templateID": "tpl-semiclaw", "name": "semiclaw", "status": "READY"},
+			{"templateID": "abc123unprefixed", "aliases": []string{"semiclaw-sk-cfg-g1"}, "status": "READY"},
 		},
 		[]map[string]any{
-			{"snapshotID": "abc123unprefixed", "names": []string{"weknora-sk-cfg-g1"}},
+			{"snapshotID": "abc123unprefixed", "names": []string{"semiclaw-sk-cfg-g1"}},
 		},
 	))
 
 	templates, err := client.ListTemplates(context.Background())
 	require.NoError(t, err)
 	require.Len(t, templates, 1)
-	require.Equal(t, "tpl-weknora", templates[0].ID)
+	require.Equal(t, "tpl-semiclaw", templates[0].ID)
 }
 
 func TestCubeRemoteClientListTemplatesKeepsTemplatesWhenSnapshotListFails(t *testing.T) {
@@ -227,7 +227,7 @@ func TestCubeRemoteClientListTemplatesKeepsTemplatesWhenSnapshotListFails(t *tes
 		switch r.URL.Path {
 		case "/templates":
 			writeJSON(w, http.StatusOK, []map[string]any{
-				{"templateID": "tpl-weknora", "status": "READY"},
+				{"templateID": "tpl-semiclaw", "status": "READY"},
 				{"templateID": "snap-orphan", "status": "READY"},
 			})
 		case "/snapshots":
@@ -240,7 +240,7 @@ func TestCubeRemoteClientListTemplatesKeepsTemplatesWhenSnapshotListFails(t *tes
 	templates, err := client.ListTemplates(context.Background())
 	require.NoError(t, err)
 	require.Len(t, templates, 1)
-	require.Equal(t, "tpl-weknora", templates[0].ID)
+	require.Equal(t, "tpl-semiclaw", templates[0].ID)
 }
 
 func TestCubeTemplateIsSnapshot(t *testing.T) {
@@ -248,7 +248,7 @@ func TestCubeTemplateIsSnapshot(t *testing.T) {
 	require.True(t, cubeTemplateIsSnapshot("snap-1", nil))
 	require.True(t, cubeTemplateIsSnapshot("SNAP-1", nil))
 	require.True(t, cubeTemplateIsSnapshot("listed-id", listed))
-	require.False(t, cubeTemplateIsSnapshot("tpl-weknora", listed))
+	require.False(t, cubeTemplateIsSnapshot("tpl-semiclaw", listed))
 	require.False(t, cubeTemplateIsSnapshot("", listed))
 }
 
@@ -271,7 +271,7 @@ func cubeCatalogHandler(templates, snapshots []map[string]any) http.HandlerFunc 
 	}
 }
 
-// The bug this guards: an unnamed WeKnora template was invisible to the
+// The bug this guards: an unnamed SemiClaw template was invisible to the
 // idempotency check, so every visit to the template step queued another build.
 func TestCubeRemoteClientEnsureStandardTemplateSkipsBuildForNamelessTemplate(t *testing.T) {
 	var builds atomic.Int32
@@ -586,18 +586,18 @@ func TestCubeTemplateImageIsRecognisedAsStandard(t *testing.T) {
 func TestIsStandardTemplateImage(t *testing.T) {
 	for _, image := range []string{
 		DefaultDockerImage,
-		"wechatopenai/weknora-sandbox",
-		"docker.io/wechatopenai/weknora-sandbox:latest",
-		"docker.io/wechatopenai/weknora-sandbox@sha256:abc",
-		"registry.internal:5000/wechatopenai/weknora-sandbox:v1",
+		"vagawind/semiclaw-sandbox",
+		"docker.io/vagawind/semiclaw-sandbox:latest",
+		"docker.io/vagawind/semiclaw-sandbox@sha256:abc",
+		"registry.internal:5000/vagawind/semiclaw-sandbox:v1",
 	} {
 		require.True(t, isStandardTemplateImage(image), image)
 	}
 	for _, image := range []string{
 		"",
 		"python:3.11",
-		"wechatopenai/weknora-docreader:latest",
-		"someone-else/weknora-sandbox:latest",
+		"vagawind/semiclaw-docreader:latest",
+		"someone-else/semiclaw-sandbox:latest",
 	} {
 		require.False(t, isStandardTemplateImage(image), image)
 	}

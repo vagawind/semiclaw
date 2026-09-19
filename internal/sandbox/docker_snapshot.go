@@ -14,10 +14,10 @@ const (
 	// snapshot is committed into. It is not a registry path: these tags are
 	// never pulled, and ListTemplates hides anything under it so an admin
 	// cannot pick a baked skill image as the config's base template.
-	dockerSkillSnapshotRepo = "weknora-skill"
+	dockerSkillSnapshotRepo = "semiclaw-skill"
 
-	dockerSkillSnapshotLabel       = "com.weknora.sandbox.skill-snapshot"
-	dockerSkillSnapshotSourceLabel = "com.weknora.sandbox.skill-snapshot-source"
+	dockerSkillSnapshotLabel       = "com.semiclaw.sandbox.skill-snapshot"
+	dockerSkillSnapshotSourceLabel = "com.semiclaw.sandbox.skill-snapshot-source"
 )
 
 // CreateSnapshot commits the container's filesystem into a tagged local image.
@@ -41,7 +41,7 @@ func (c *DockerRemoteClient) CreateSnapshot(
 
 	committed, err := c.api.ContainerCommit(ctx, id, client.ContainerCommitOptions{
 		Reference: reference,
-		Comment:   "weknora skill snapshot",
+		Comment:   "semiclaw skill snapshot",
 		Changes: []string{
 			"LABEL " + dockerSkillSnapshotLabel + "=true",
 			"LABEL " + dockerSkillSnapshotSourceLabel + "=" + id,

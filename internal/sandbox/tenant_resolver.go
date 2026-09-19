@@ -32,7 +32,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/types"
 )
 
 // ErrSandboxConfigNotFound means the referenced config is gone (deleted, or

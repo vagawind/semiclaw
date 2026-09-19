@@ -10,22 +10,22 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/types"
 )
 
 const (
-	remoteMetadataTenantID       = "weknora_tenant_id"
-	remoteMetadataSessionID      = "weknora_session_id"
-	remoteMetadataBindingVersion = "weknora_binding_version"
-	remoteMetadataProvider       = "weknora_provider"
+	remoteMetadataTenantID       = "semiclaw_tenant_id"
+	remoteMetadataSessionID      = "semiclaw_session_id"
+	remoteMetadataBindingVersion = "semiclaw_binding_version"
+	remoteMetadataProvider       = "semiclaw_provider"
 
 	// remoteMetadataConfigID records which sandbox config created the sandbox.
 	// Two configs in one workspace may share a provider account, so cleanup
 	// must filter by config as well as tenant/session ownership.
-	remoteMetadataConfigID = "weknora_sandbox_config_id"
+	remoteMetadataConfigID = "semiclaw_sandbox_config_id"
 )
 
-// ErrSandboxSessionDeleted reports that the owning WeKnora session no longer
+// ErrSandboxSessionDeleted reports that the owning SemiClaw session no longer
 // exists. Callers must not execute work with the returned nil handle.
 var ErrSandboxSessionDeleted = errors.New("sandbox session no longer exists")
 

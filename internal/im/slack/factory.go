@@ -6,9 +6,9 @@ import (
 
 	slackpkg "github.com/slack-go/slack"
 
-	"github.com/Tencent/WeKnora/internal/im"
-	"github.com/Tencent/WeKnora/internal/logger"
-	secutils "github.com/Tencent/WeKnora/internal/utils"
+	"github.com/vagawind/semiclaw/internal/im"
+	"github.com/vagawind/semiclaw/internal/logger"
+	secutils "github.com/vagawind/semiclaw/internal/utils"
 )
 
 // NewFactory returns an im.AdapterFactory for Slack channels.

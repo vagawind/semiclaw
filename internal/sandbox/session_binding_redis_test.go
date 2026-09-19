@@ -77,8 +77,8 @@ func TestRedisSessionSandboxBindingUsesHashTagAndNoTTL(t *testing.T) {
 	bindingKey := store.bindingKey(key)
 	lockKey := store.lockKey(key)
 
-	require.Equal(t, "weknora:sandbox:session:{test:42:session-a}:binding", bindingKey)
-	require.Equal(t, "weknora:sandbox:session:{test:42:session-a}:create-lock", lockKey)
+	require.Equal(t, "semiclaw:sandbox:session:{test:42:session-a}:binding", bindingKey)
+	require.Equal(t, "semiclaw:sandbox:session:{test:42:session-a}:create-lock", lockKey)
 
 	created, err := store.Create(context.Background(), key, validSessionSandboxBinding(key, "sandbox-a"))
 	require.NoError(t, err)

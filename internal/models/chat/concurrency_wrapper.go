@@ -3,8 +3,8 @@ package chat
 import (
 	"context"
 
-	"github.com/Tencent/WeKnora/internal/models/limiter"
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/models/limiter"
+	"github.com/vagawind/semiclaw/internal/types"
 )
 
 // Model provider budgets are the real bottleneck shared by every LLM-backed

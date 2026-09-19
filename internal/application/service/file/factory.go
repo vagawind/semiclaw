@@ -5,9 +5,9 @@ import (
 	"os"
 	"strings"
 
-	"github.com/Tencent/WeKnora/internal/types"
-	"github.com/Tencent/WeKnora/internal/types/interfaces"
-	secutils "github.com/Tencent/WeKnora/internal/utils"
+	"github.com/vagawind/semiclaw/internal/types"
+	"github.com/vagawind/semiclaw/internal/types/interfaces"
+	secutils "github.com/vagawind/semiclaw/internal/utils"
 )
 
 // NewFileServiceFromStorageConfig builds a provider-specific FileService from tenant storage config.
@@ -74,7 +74,7 @@ func NewFileServiceFromStorageConfig(
 		}
 		pathPrefix := strings.TrimSpace(sec.COS.PathPrefix)
 		if pathPrefix == "" {
-			pathPrefix = "weknora"
+			pathPrefix = "semiclaw"
 		}
 		svc, err := NewCosFileServiceWithTempBucket(sec.COS.BucketName, sec.COS.Region, sec.COS.SecretID, sec.COS.SecretKey, pathPrefix, sec.COS.TempBucketName, sec.COS.TempRegion)
 		return svc, p, err
@@ -91,7 +91,7 @@ func NewFileServiceFromStorageConfig(
 		}
 		pathPrefix := strings.TrimSpace(sec.S3.PathPrefix)
 		if pathPrefix == "" {
-			pathPrefix = "weknora/"
+			pathPrefix = "semiclaw/"
 		}
 		svc, err := NewS3FileServiceWithOptions(sec.S3.Endpoint, sec.S3.AccessKey, sec.S3.SecretKey, sec.S3.BucketName, sec.S3.Region, pathPrefix, sec.S3.ForcePathStyle)
 		return svc, p, err
@@ -126,7 +126,7 @@ func NewFileServiceFromStorageConfig(
 			obsPathPrefix = strings.TrimSpace(os.Getenv("OBS_PATH_PREFIX"))
 		}
 		if obsPathPrefix == "" {
-			obsPathPrefix = "weknora/"
+			obsPathPrefix = "semiclaw/"
 		}
 		if obsEndpoint == "" || obsAccessKey == "" || obsSecretKey == "" || obsBucketName == "" {
 			return nil, p, fmt.Errorf("incomplete obs config")
@@ -143,7 +143,7 @@ func NewFileServiceFromStorageConfig(
 		}
 		pathPrefix := strings.TrimSpace(sec.OSS.PathPrefix)
 		if pathPrefix == "" {
-			pathPrefix = "weknora/"
+			pathPrefix = "semiclaw/"
 		}
 		var svc interfaces.FileService
 		var err error
@@ -167,7 +167,7 @@ func NewFileServiceFromStorageConfig(
 		}
 		pathPrefix := strings.TrimSpace(sec.KS3.PathPrefix)
 		if pathPrefix == "" {
-			pathPrefix = "weknora/"
+			pathPrefix = "semiclaw/"
 		}
 		svc, err := NewKS3FileService(sec.KS3.Endpoint, sec.KS3.Region, sec.KS3.AccessKey, sec.KS3.SecretKey, sec.KS3.BucketName, pathPrefix)
 		return svc, p, err

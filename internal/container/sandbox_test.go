@@ -11,8 +11,8 @@ import (
 	"github.com/stretchr/testify/require"
 	"gorm.io/gorm"
 
-	"github.com/Tencent/WeKnora/internal/sandbox"
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/sandbox"
+	"github.com/vagawind/semiclaw/internal/types"
 )
 
 func TestSelectSessionBindingStorePrefersRedis(t *testing.T) {

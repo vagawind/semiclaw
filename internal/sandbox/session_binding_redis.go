@@ -12,7 +12,7 @@ import (
 
 	"github.com/redis/go-redis/v9"
 
-	"github.com/Tencent/WeKnora/internal/common/redislock"
+	"github.com/vagawind/semiclaw/internal/common/redislock"
 )
 
 const (
@@ -233,7 +233,7 @@ func (s *RedisSessionSandboxBindingStore) ReplaceTrafficTokenIfMatch(
 }
 
 // WithLifecycleLock serializes create, recover, replace, and delete transitions
-// across all WeKnora processes sharing Redis.
+// across all SemiClaw processes sharing Redis.
 func (s *RedisSessionSandboxBindingStore) WithLifecycleLock(
 	ctx context.Context,
 	key SessionSandboxKey,
@@ -284,7 +284,7 @@ func (s *RedisSessionSandboxBindingStore) listTenantBindingKeys(
 	tenantID uint64,
 ) ([]SessionSandboxKey, error) {
 	prefix := fmt.Sprintf(
-		"weknora:sandbox:session:{%s:%d:", s.namespace, tenantID,
+		"semiclaw:sandbox:session:{%s:%d:", s.namespace, tenantID,
 	)
 	const suffix = "}:binding"
 	pattern := escapeRedisGlob(prefix) + "*" + suffix
@@ -434,17 +434,17 @@ func (s *RedisSessionSandboxBindingStore) ConsumeTurnRebuild(
 }
 
 func (s *RedisSessionSandboxBindingStore) turnKey(key SessionSandboxKey) string {
-	return "weknora:sandbox:session:{" + s.hashTag(key) + "}:turn"
+	return "semiclaw:sandbox:session:{" + s.hashTag(key) + "}:turn"
 }
 
 func (s *RedisSessionSandboxBindingStore) bindingKey(key SessionSandboxKey) string {
-	return "weknora:sandbox:session:{" + s.hashTag(key) + "}:binding"
+	return "semiclaw:sandbox:session:{" + s.hashTag(key) + "}:binding"
 }
 
 func (s *RedisSessionSandboxBindingStore) lockKey(key SessionSandboxKey) string {
 	// Keep the historical suffix used by the saved multi-node Cube
 	// implementation so rolling upgrades serialize on the same lock.
-	return "weknora:sandbox:session:{" + s.hashTag(key) + "}:create-lock"
+	return "semiclaw:sandbox:session:{" + s.hashTag(key) + "}:create-lock"
 }
 
 func (s *RedisSessionSandboxBindingStore) hashTag(key SessionSandboxKey) string {
@@ -458,11 +458,11 @@ var (
 
 func validateRedisNamespace(namespace string) error {
 	if strings.ContainsAny(namespace, "{}") {
-		return errors.New("WEKNORA_REDIS_NAMESPACE must not contain braces")
+		return errors.New("SEMICLAW_REDIS_NAMESPACE must not contain braces")
 	}
 	for _, r := range namespace {
 		if unicode.IsControl(r) {
-			return errors.New("WEKNORA_REDIS_NAMESPACE must not contain control characters")
+			return errors.New("SEMICLAW_REDIS_NAMESPACE must not contain control characters")
 		}
 	}
 	return nil

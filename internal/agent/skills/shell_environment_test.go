@@ -5,8 +5,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Tencent/WeKnora/internal/sandbox"
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/sandbox"
+	"github.com/vagawind/semiclaw/internal/types"
 	"github.com/stretchr/testify/require"
 )
 
@@ -23,7 +23,7 @@ func TestShellEnvironmentSelectsOnlyAllowedInstalledSkills(t *testing.T) {
 	require.NoError(t, err)
 	require.Contains(t, wrapped, sandbox.ShellQuote(command))
 	require.Contains(t, wrapped, "/pdf/.venv/bin")
-	require.Contains(t, wrapped, "/pdf/.weknora/bin")
+	require.Contains(t, wrapped, "/pdf/.semiclaw/bin")
 	require.Contains(t, wrapped, "--noprofile --norc")
 	require.Equal(t, "caller", actual["TOKEN"])
 	require.Equal(t, "/workspace/custom", actual["PYTHONPATH"],

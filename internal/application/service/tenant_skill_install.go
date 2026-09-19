@@ -16,16 +16,16 @@ import (
 	"github.com/google/uuid"
 	"gorm.io/gorm"
 
-	"github.com/Tencent/WeKnora/internal/agent/skills"
-	"github.com/Tencent/WeKnora/internal/agent/tools"
-	apperrors "github.com/Tencent/WeKnora/internal/errors"
-	"github.com/Tencent/WeKnora/internal/event"
-	"github.com/Tencent/WeKnora/internal/logger"
-	"github.com/Tencent/WeKnora/internal/models/chat"
-	"github.com/Tencent/WeKnora/internal/sandbox"
-	"github.com/Tencent/WeKnora/internal/tracing/langfuse"
-	"github.com/Tencent/WeKnora/internal/types"
-	"github.com/Tencent/WeKnora/internal/types/interfaces"
+	"github.com/vagawind/semiclaw/internal/agent/skills"
+	"github.com/vagawind/semiclaw/internal/agent/tools"
+	apperrors "github.com/vagawind/semiclaw/internal/errors"
+	"github.com/vagawind/semiclaw/internal/event"
+	"github.com/vagawind/semiclaw/internal/logger"
+	"github.com/vagawind/semiclaw/internal/models/chat"
+	"github.com/vagawind/semiclaw/internal/sandbox"
+	"github.com/vagawind/semiclaw/internal/tracing/langfuse"
+	"github.com/vagawind/semiclaw/internal/types"
+	"github.com/vagawind/semiclaw/internal/types/interfaces"
 )
 
 const (
@@ -44,7 +44,7 @@ const (
 	// skillSeedArchivePath is the single remote write used to land a skill's
 	// files. Writing each file with MakeDir+WriteFile is two round trips per
 	// entry, which is why a 50-file skill crawled through "seeding 12/56".
-	skillSeedArchivePath = sandbox.SkillsImageRoot + "/.weknora-seed.tar"
+	skillSeedArchivePath = sandbox.SkillsImageRoot + "/.semiclaw-seed.tar"
 
 	// skillInstallVerifyRounds bounds the installer conversation.
 	//
@@ -1127,7 +1127,7 @@ func describeExecFailure(res *sandbox.ExecuteResult) string {
 // installExecutor resolves the one executor every command of an install runs
 // through. It goes through the capability accessor rather than a bare type
 // assertion so a manager that cannot run install-mode shell reports no
-// capability instead of attempting the install on the WeKnora host.
+// capability instead of attempting the install on the SemiClaw host.
 func installExecutor(mgr sandbox.Manager) (sandbox.SessionInstallShellExecutor, error) {
 	executor := sessionSandboxInstallShellExecutor(mgr)
 	if executor == nil {
@@ -1640,7 +1640,7 @@ func currentSnapshotID(cfgEntity *types.TenantSandboxConfigEntity) string {
 }
 
 func skillSnapshotNamePrefix(tenantID uint64, configID string) string {
-	return fmt.Sprintf("weknora-sk-t%d-%s", tenantID, compactConfigID(configID))
+	return fmt.Sprintf("semiclaw-sk-t%d-%s", tenantID, compactConfigID(configID))
 }
 
 // nextSnapshotGeneration is one past both the live pointer and every ledger
@@ -1687,9 +1687,9 @@ func compactConfigID(id string) string {
 	return strings.ToLower(strings.ReplaceAll(strings.TrimSpace(id), "-", ""))
 }
 
-// weknoraSkillSnapshotName pulls the weknora-sk-… token out of a provider
+// semiclawSkillSnapshotName pulls the semiclaw-sk-… token out of a provider
 // listing. Cube and E2B echo it in Names; Docker embeds it in the image tag.
-func weknoraSkillSnapshotName(raw string) string {
+func semiclawSkillSnapshotName(raw string) string {
 	s := strings.TrimSpace(raw)
 	s = strings.TrimPrefix(s, "docker.io/")
 	if i := strings.LastIndex(s, "/"); i >= 0 {
@@ -1698,14 +1698,14 @@ func weknoraSkillSnapshotName(raw string) string {
 	if cut := strings.IndexByte(s, ':'); cut >= 0 {
 		s = s[:cut]
 	}
-	if strings.HasPrefix(s, "weknora-sk-") {
+	if strings.HasPrefix(s, "semiclaw-sk-") {
 		return s
 	}
 	return ""
 }
 
 // snapshotsNotFromOtherConfig drops provider listings that already name a
-// different WeKnora config. Cube, E2B and Docker all ListSnapshots across the
+// different SemiClaw config. Cube, E2B and Docker all ListSnapshots across the
 // whole account/daemon, so without this a reconcile of one config would treat
 // every other config's image as an extra, and an abandoned-build match could
 // bind to the wrong snapshot.
@@ -1732,17 +1732,17 @@ func snapshotBelongsToOtherConfig(snap sandbox.RemoteSnapshotRef, prefix string)
 	needle := prefix + "-g"
 	sawForeign := false
 	for _, candidate := range append([]string{snap.ID}, snap.Names...) {
-		name := weknoraSkillSnapshotName(candidate)
+		name := semiclawSkillSnapshotName(candidate)
 		if name == "" {
 			continue
 		}
 		if strings.HasPrefix(name, needle) {
 			return false
 		}
-		// New-format names are weknora-sk-t<tenant>-<config>-gN. Legacy
-		// weknora-sk-<short>-gN names are left alone so a row written before
+		// New-format names are semiclaw-sk-t<tenant>-<config>-gN. Legacy
+		// semiclaw-sk-<short>-gN names are left alone so a row written before
 		// the prefix existed can still be matched.
-		rest := strings.TrimPrefix(name, "weknora-sk-")
+		rest := strings.TrimPrefix(name, "semiclaw-sk-")
 		if len(rest) > 1 && rest[0] == 't' && rest[1] >= '0' && rest[1] <= '9' {
 			sawForeign = true
 		}
@@ -1757,7 +1757,7 @@ func buildInstallPrompt(skillDir string, bundle *SkillBundle, tools map[string]s
 		skillMD = string(bundle.Files["SKILL.md"])
 		requirementsPath = sandbox.SkillRequirementsPath(bundle.Name)
 	}
-	return fmt.Sprintf(`Install this WeKnora skill into the sandbox image.
+	return fmt.Sprintf(`Install this SemiClaw skill into the sandbox image.
 
 Skill directory: %s
 %s
@@ -1785,9 +1785,9 @@ Hard requirements:
   a value you invent would be stored as this workspace's real credential. If one environment
   variable is required, set required to true; if it is optional, set required to false. If the
   skill needs no environment variables, write {"env":[]}.
-  Do not declare WEKNORA_SKILL_DIR, WEKNORA_SKILL_OUTPUT_DIR, WEKNORA_SKILL_HISTORY_ROOT or
-  WEKNORA_SESSION_INPUT_DIR: the sandbox injects those. Other WEKNORA_* names the skill reads
-  (WEKNORA_API_KEY, WEKNORA_BASE_URL, WEKNORA_HOST, WEKNORA_TOKEN, WEKNORA_KB_ID) MUST be declared.
+  Do not declare SEMICLAW_SKILL_DIR, SEMICLAW_SKILL_OUTPUT_DIR, SEMICLAW_SKILL_HISTORY_ROOT or
+  SEMICLAW_SESSION_INPUT_DIR: the sandbox injects those. Other SEMICLAW_* names the skill reads
+  (SEMICLAW_API_KEY, SEMICLAW_BASE_URL, SEMICLAW_HOST, SEMICLAW_TOKEN, SEMICLAW_KB_ID) MUST be declared.
 
 On-demand / optional extras MUST be installed now. Every chat session starts
 from the image this install produces, and whatever a session installs dies with

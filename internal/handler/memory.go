@@ -7,11 +7,11 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/Tencent/WeKnora/internal/application/service/memory"
-	apperrors "github.com/Tencent/WeKnora/internal/errors"
-	"github.com/Tencent/WeKnora/internal/logger"
-	"github.com/Tencent/WeKnora/internal/types"
-	"github.com/Tencent/WeKnora/internal/types/interfaces"
+	"github.com/vagawind/semiclaw/internal/application/service/memory"
+	apperrors "github.com/vagawind/semiclaw/internal/errors"
+	"github.com/vagawind/semiclaw/internal/logger"
+	"github.com/vagawind/semiclaw/internal/types"
+	"github.com/vagawind/semiclaw/internal/types/interfaces"
 )
 
 // MemoryHandler exposes the caller's own long-term memory.
@@ -415,7 +415,7 @@ func (h *MemoryHandler) Export(c *gin.Context) {
 			break
 		}
 	}
-	c.Header("Content-Disposition", `attachment; filename="weknora-memories.json"`)
+	c.Header("Content-Disposition", `attachment; filename="semiclaw-memories.json"`)
 	c.JSON(http.StatusOK, gin.H{
 		"success": true,
 		"total":   total,

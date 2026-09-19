@@ -33,67 +33,67 @@ import (
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 
-	"github.com/Tencent/WeKnora/internal/agent/approval"
-	"github.com/Tencent/WeKnora/internal/application/repository"
-	dorisRepo "github.com/Tencent/WeKnora/internal/application/repository/retriever/doris"
-	elasticsearchRepoV7 "github.com/Tencent/WeKnora/internal/application/repository/retriever/elasticsearch/v7"
-	elasticsearchRepoV8 "github.com/Tencent/WeKnora/internal/application/repository/retriever/elasticsearch/v8"
-	milvusRepo "github.com/Tencent/WeKnora/internal/application/repository/retriever/milvus"
-	neo4jRepo "github.com/Tencent/WeKnora/internal/application/repository/retriever/neo4j"
-	openSearchRepo "github.com/Tencent/WeKnora/internal/application/repository/retriever/opensearch"
-	postgresRepo "github.com/Tencent/WeKnora/internal/application/repository/retriever/postgres"
-	qdrantRepo "github.com/Tencent/WeKnora/internal/application/repository/retriever/qdrant"
-	sqliteRetrieverRepo "github.com/Tencent/WeKnora/internal/application/repository/retriever/sqlite"
-	tencentVectorDBRepo "github.com/Tencent/WeKnora/internal/application/repository/retriever/tencentvectordb"
-	weaviateRepo "github.com/Tencent/WeKnora/internal/application/repository/retriever/weaviate"
-	"github.com/Tencent/WeKnora/internal/application/service"
-	chatpipeline "github.com/Tencent/WeKnora/internal/application/service/chat_pipeline"
-	"github.com/Tencent/WeKnora/internal/application/service/file"
-	"github.com/Tencent/WeKnora/internal/application/service/memory"
-	"github.com/Tencent/WeKnora/internal/application/service/retriever"
-	"github.com/Tencent/WeKnora/internal/browserskill"
-	"github.com/Tencent/WeKnora/internal/common"
-	"github.com/Tencent/WeKnora/internal/config"
-	"github.com/Tencent/WeKnora/internal/database"
-	"github.com/Tencent/WeKnora/internal/datasource"
-	confluenceConnector "github.com/Tencent/WeKnora/internal/datasource/connector/confluence"
-	dingtalkConnector "github.com/Tencent/WeKnora/internal/datasource/connector/dingtalk"
-	"github.com/Tencent/WeKnora/internal/datasource/connector/feishu/core"
-	"github.com/Tencent/WeKnora/internal/datasource/connector/feishu/drive"
-	"github.com/Tencent/WeKnora/internal/datasource/connector/feishu/wiki"
-	gitlabConnector "github.com/Tencent/WeKnora/internal/datasource/connector/gitlab"
-	imaConnector "github.com/Tencent/WeKnora/internal/datasource/connector/ima"
-	notionConnector "github.com/Tencent/WeKnora/internal/datasource/connector/notion"
-	rssConnector "github.com/Tencent/WeKnora/internal/datasource/connector/rss"
-	yuqueConnector "github.com/Tencent/WeKnora/internal/datasource/connector/yuque"
-	"github.com/Tencent/WeKnora/internal/event"
-	"github.com/Tencent/WeKnora/internal/handler"
-	"github.com/Tencent/WeKnora/internal/handler/session"
-	imPkg "github.com/Tencent/WeKnora/internal/im"
-	"github.com/Tencent/WeKnora/internal/im/dingtalk"
-	"github.com/Tencent/WeKnora/internal/im/feishu"
-	"github.com/Tencent/WeKnora/internal/im/mattermost"
-	"github.com/Tencent/WeKnora/internal/im/qqbot"
-	"github.com/Tencent/WeKnora/internal/im/slack"
-	"github.com/Tencent/WeKnora/internal/im/telegram"
-	"github.com/Tencent/WeKnora/internal/im/wechat"
-	"github.com/Tencent/WeKnora/internal/im/wecom"
-	"github.com/Tencent/WeKnora/internal/im/yunzhijia"
-	"github.com/Tencent/WeKnora/internal/infrastructure/docparser"
-	infra_web_search "github.com/Tencent/WeKnora/internal/infrastructure/web_search"
-	"github.com/Tencent/WeKnora/internal/logger"
-	"github.com/Tencent/WeKnora/internal/mcp"
-	"github.com/Tencent/WeKnora/internal/models/chat"
-	"github.com/Tencent/WeKnora/internal/models/embedding"
-	"github.com/Tencent/WeKnora/internal/models/limiter"
-	"github.com/Tencent/WeKnora/internal/models/utils/ollama"
-	"github.com/Tencent/WeKnora/internal/router"
-	"github.com/Tencent/WeKnora/internal/storageallowlist"
-	"github.com/Tencent/WeKnora/internal/stream"
-	"github.com/Tencent/WeKnora/internal/tracing/langfuse"
-	"github.com/Tencent/WeKnora/internal/types"
-	"github.com/Tencent/WeKnora/internal/types/interfaces"
-	secutils "github.com/Tencent/WeKnora/internal/utils"
+	"github.com/vagawind/semiclaw/internal/agent/approval"
+	"github.com/vagawind/semiclaw/internal/application/repository"
+	dorisRepo "github.com/vagawind/semiclaw/internal/application/repository/retriever/doris"
+	elasticsearchRepoV7 "github.com/vagawind/semiclaw/internal/application/repository/retriever/elasticsearch/v7"
+	elasticsearchRepoV8 "github.com/vagawind/semiclaw/internal/application/repository/retriever/elasticsearch/v8"
+	milvusRepo "github.com/vagawind/semiclaw/internal/application/repository/retriever/milvus"
+	neo4jRepo "github.com/vagawind/semiclaw/internal/application/repository/retriever/neo4j"
+	openSearchRepo "github.com/vagawind/semiclaw/internal/application/repository/retriever/opensearch"
+	postgresRepo "github.com/vagawind/semiclaw/internal/application/repository/retriever/postgres"
+	qdrantRepo "github.com/vagawind/semiclaw/internal/application/repository/retriever/qdrant"
+	sqliteRetrieverRepo "github.com/vagawind/semiclaw/internal/application/repository/retriever/sqlite"
+	tencentVectorDBRepo "github.com/vagawind/semiclaw/internal/application/repository/retriever/tencentvectordb"
+	weaviateRepo "github.com/vagawind/semiclaw/internal/application/repository/retriever/weaviate"
+	"github.com/vagawind/semiclaw/internal/application/service"
+	chatpipeline "github.com/vagawind/semiclaw/internal/application/service/chat_pipeline"
+	"github.com/vagawind/semiclaw/internal/application/service/file"
+	"github.com/vagawind/semiclaw/internal/application/service/memory"
+	"github.com/vagawind/semiclaw/internal/application/service/retriever"
+	"github.com/vagawind/semiclaw/internal/browserskill"
+	"github.com/vagawind/semiclaw/internal/common"
+	"github.com/vagawind/semiclaw/internal/config"
+	"github.com/vagawind/semiclaw/internal/database"
+	"github.com/vagawind/semiclaw/internal/datasource"
+	confluenceConnector "github.com/vagawind/semiclaw/internal/datasource/connector/confluence"
+	dingtalkConnector "github.com/vagawind/semiclaw/internal/datasource/connector/dingtalk"
+	"github.com/vagawind/semiclaw/internal/datasource/connector/feishu/core"
+	"github.com/vagawind/semiclaw/internal/datasource/connector/feishu/drive"
+	"github.com/vagawind/semiclaw/internal/datasource/connector/feishu/wiki"
+	gitlabConnector "github.com/vagawind/semiclaw/internal/datasource/connector/gitlab"
+	imaConnector "github.com/vagawind/semiclaw/internal/datasource/connector/ima"
+	notionConnector "github.com/vagawind/semiclaw/internal/datasource/connector/notion"
+	rssConnector "github.com/vagawind/semiclaw/internal/datasource/connector/rss"
+	yuqueConnector "github.com/vagawind/semiclaw/internal/datasource/connector/yuque"
+	"github.com/vagawind/semiclaw/internal/event"
+	"github.com/vagawind/semiclaw/internal/handler"
+	"github.com/vagawind/semiclaw/internal/handler/session"
+	imPkg "github.com/vagawind/semiclaw/internal/im"
+	"github.com/vagawind/semiclaw/internal/im/dingtalk"
+	"github.com/vagawind/semiclaw/internal/im/feishu"
+	"github.com/vagawind/semiclaw/internal/im/mattermost"
+	"github.com/vagawind/semiclaw/internal/im/qqbot"
+	"github.com/vagawind/semiclaw/internal/im/slack"
+	"github.com/vagawind/semiclaw/internal/im/telegram"
+	"github.com/vagawind/semiclaw/internal/im/wechat"
+	"github.com/vagawind/semiclaw/internal/im/wecom"
+	"github.com/vagawind/semiclaw/internal/im/yunzhijia"
+	"github.com/vagawind/semiclaw/internal/infrastructure/docparser"
+	infra_web_search "github.com/vagawind/semiclaw/internal/infrastructure/web_search"
+	"github.com/vagawind/semiclaw/internal/logger"
+	"github.com/vagawind/semiclaw/internal/mcp"
+	"github.com/vagawind/semiclaw/internal/models/chat"
+	"github.com/vagawind/semiclaw/internal/models/embedding"
+	"github.com/vagawind/semiclaw/internal/models/limiter"
+	"github.com/vagawind/semiclaw/internal/models/utils/ollama"
+	"github.com/vagawind/semiclaw/internal/router"
+	"github.com/vagawind/semiclaw/internal/storageallowlist"
+	"github.com/vagawind/semiclaw/internal/stream"
+	"github.com/vagawind/semiclaw/internal/tracing/langfuse"
+	"github.com/vagawind/semiclaw/internal/types"
+	"github.com/vagawind/semiclaw/internal/types/interfaces"
+	secutils "github.com/vagawind/semiclaw/internal/utils"
 	"github.com/tencent/vectordatabase-sdk-go/tcvectordb"
 	"github.com/weaviate/weaviate-go-client/v5/weaviate"
 	"github.com/weaviate/weaviate-go-client/v5/weaviate/auth"
@@ -232,7 +232,7 @@ func BuildContainer(container *dig.Container) *dig.Container {
 	must(container.Provide(func(s *service.TenantSandboxConfigService) service.WorkspaceSandboxPolicy {
 		return s
 	}))
-	must(container.Provide(service.NewWeKnoraCloudService))
+	must(container.Provide(service.NewSemiClawCloudService))
 
 	// Extract services - register individual extracters with names
 	must(container.Provide(service.NewChunkExtractService, dig.Name("chunkExtractor")))
@@ -466,7 +466,7 @@ func BuildContainer(container *dig.Container) *dig.Container {
 	must(container.Invoke(registerIMService))
 	must(container.Provide(handler.NewIMHandler))
 	must(container.Provide(handler.NewEmbedChannelHandler))
-	must(container.Provide(handler.NewWeKnoraCloudHandler))
+	must(container.Provide(handler.NewSemiClawCloudHandler))
 	logger.Debugf(ctx, "[Container] HTTP handlers registered")
 
 	// Wire the chat package's local image resolver so multimodal chat can read
@@ -570,7 +570,7 @@ func initLangfuse() (*langfuse.Manager, error) {
 }
 
 // defaultModelMaxConcurrency is the per-model cap on concurrent background
-// (ingestion/enrichment) chat calls when WEKNORA_MODEL_MAX_CONCURRENCY /
+// (ingestion/enrichment) chat calls when SEMICLAW_MODEL_MAX_CONCURRENCY /
 // model.max_concurrency is unset. summary / question / graph enrichment all
 // share the same model, so this bounds their combined pressure on one provider
 // across every replica. Interactive chat is never gated.
@@ -585,7 +585,7 @@ func resolveModelMaxConcurrency(ss interfaces.SystemSettingService) int {
 		return defaultModelMaxConcurrency
 	}
 	return int(ss.GetInt(context.Background(), "model.max_concurrency",
-		"WEKNORA_MODEL_MAX_CONCURRENCY", int64(defaultModelMaxConcurrency)))
+		"SEMICLAW_MODEL_MAX_CONCURRENCY", int64(defaultModelMaxConcurrency)))
 }
 
 // registerModelConcurrencyLimiter builds the Redis-backed per-model background
@@ -706,7 +706,7 @@ func initDatabase(cfg *config.Config) (*gorm.DB, error) {
 	case "sqlite":
 		dbPath := os.Getenv("DB_PATH")
 		if dbPath == "" {
-			dbPath = "./data/weknora.db"
+			dbPath = "./data/semiclaw.db"
 		}
 		if dir := filepath.Dir(dbPath); dir != "." && dir != "" {
 			if err := os.MkdirAll(dir, 0o755); err != nil {
@@ -1056,7 +1056,7 @@ func initRawFileService(_ *config.Config) (interfaces.FileService, error) {
 		}
 		pathPrefix := os.Getenv("S3_PATH_PREFIX")
 		if pathPrefix == "" {
-			pathPrefix = "weknora/"
+			pathPrefix = "semiclaw/"
 		}
 		return file.NewS3FileService(
 			os.Getenv("S3_ENDPOINT"),
@@ -1076,7 +1076,7 @@ func initRawFileService(_ *config.Config) (interfaces.FileService, error) {
 		obsRegion := os.Getenv("OBS_REGION")
 		obsPathPrefix := os.Getenv("OBS_PATH_PREFIX")
 		if obsPathPrefix == "" {
-			obsPathPrefix = "weknora/"
+			obsPathPrefix = "semiclaw/"
 		}
 		return file.NewObsFileService(
 			os.Getenv("OBS_ENDPOINT"),
@@ -1096,7 +1096,7 @@ func initRawFileService(_ *config.Config) (interfaces.FileService, error) {
 		}
 		pathPrefix := os.Getenv("OSS_PATH_PREFIX")
 		if pathPrefix == "" {
-			pathPrefix = "weknora/"
+			pathPrefix = "semiclaw/"
 		}
 		return file.NewOssFileServiceWithTempBucket(
 			os.Getenv("OSS_ENDPOINT"),
@@ -1369,7 +1369,7 @@ func initRetrieveEngineRegistry(
 		}
 		dorisDatabase := os.Getenv("DORIS_DATABASE")
 		if dorisDatabase == "" {
-			dorisDatabase = "weknora"
+			dorisDatabase = "semiclaw"
 		}
 		dorisUsername := os.Getenv("DORIS_USERNAME")
 		if dorisUsername == "" {

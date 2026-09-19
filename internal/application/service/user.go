@@ -22,12 +22,12 @@ import (
 	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 
-	apprepo "github.com/Tencent/WeKnora/internal/application/repository"
-	"github.com/Tencent/WeKnora/internal/config"
-	"github.com/Tencent/WeKnora/internal/logger"
-	"github.com/Tencent/WeKnora/internal/types"
-	"github.com/Tencent/WeKnora/internal/types/interfaces"
-	secutils "github.com/Tencent/WeKnora/internal/utils"
+	apprepo "github.com/vagawind/semiclaw/internal/application/repository"
+	"github.com/vagawind/semiclaw/internal/config"
+	"github.com/vagawind/semiclaw/internal/logger"
+	"github.com/vagawind/semiclaw/internal/types"
+	"github.com/vagawind/semiclaw/internal/types/interfaces"
+	secutils "github.com/vagawind/semiclaw/internal/utils"
 )
 
 var (
@@ -81,7 +81,7 @@ const (
 func getJwtSecret() string {
 	jwtSecretOnce.Do(func() {
 		envSecret := strings.TrimSpace(os.Getenv("JWT_SECRET"))
-		if envSecret != "" && envSecret != "weknora-jwt-secret" && envSecret != "CHANGE-ME-jwt-secret" {
+		if envSecret != "" && envSecret != "semiclaw-jwt-secret" && envSecret != "CHANGE-ME-jwt-secret" {
 			jwtSecret = envSecret
 			return
 		}

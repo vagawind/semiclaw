@@ -18,7 +18,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/Tencent/WeKnora/internal/logger"
+	"github.com/vagawind/semiclaw/internal/logger"
 	"github.com/redis/go-redis/v9"
 )
 
@@ -26,7 +26,7 @@ import (
 // short enough that a leaked query string is not a session.
 const DefaultSandboxDesktopTicketTTL = 2 * time.Minute
 
-const desktopTicketRedisPrefix = "weknora:desktop-ticket:"
+const desktopTicketRedisPrefix = "semiclaw:desktop-ticket:"
 
 // ErrDesktopTicketInvalid covers unknown, expired, and already-consumed
 // tickets. They are one error on purpose: telling them apart would let a

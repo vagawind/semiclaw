@@ -8,10 +8,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Tencent/WeKnora/internal/datasource"
-	"github.com/Tencent/WeKnora/internal/datasource/connector/feishu/core"
-	"github.com/Tencent/WeKnora/internal/logger"
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/datasource"
+	"github.com/vagawind/semiclaw/internal/datasource/connector/feishu/core"
+	"github.com/vagawind/semiclaw/internal/logger"
+	"github.com/vagawind/semiclaw/internal/types"
 )
 
 // Connector implements the datasource.Connector interface for Feishu and, with
@@ -58,7 +58,7 @@ func (c *Connector) Validate(ctx context.Context, config *types.DataSourceConfig
 //   - parentID == "spaceID:nodeToken" → list the direct children of that node.
 //
 // Eagerly recursing the whole tree here used to time out for large wikis
-// (Tencent/WeKnora#1672); the recursive walk now happens only at sync time.
+// (vagawind/semiclaw#1672); the recursive walk now happens only at sync time.
 func (c *Connector) ListResources(
 	ctx context.Context, config *types.DataSourceConfig, parentID string,
 ) ([]types.Resource, error) {
@@ -196,7 +196,7 @@ func (c *Connector) FetchIncremental(ctx context.Context, config *types.DataSour
 // and incremental paths: with cursor == nil it fetches everything, and with a
 // cursor it skips nodes whose recorded edit time is unchanged - the same
 // mechanism that lets a sync which timed out mid-traversal resume from the last
-// checkpoint instead of restarting (Tencent/WeKnora#2136).
+// checkpoint instead of restarting (vagawind/semiclaw#2136).
 //
 // The per-node loop lives in the shared engine (engine.go); this shell only
 // wires the wiki NodeOps adapter.

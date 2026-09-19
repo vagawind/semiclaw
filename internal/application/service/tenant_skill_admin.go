@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"fmt"
 
-	apperrors "github.com/Tencent/WeKnora/internal/errors"
-	"github.com/Tencent/WeKnora/internal/types"
+	apperrors "github.com/vagawind/semiclaw/internal/errors"
+	"github.com/vagawind/semiclaw/internal/types"
 )
 
 // ListUsableSkills returns the installed skills a chat turn can actually

@@ -11,9 +11,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Tencent/WeKnora/internal/logger"
-	"github.com/Tencent/WeKnora/internal/types/interfaces"
-	"github.com/Tencent/WeKnora/internal/utils"
+	"github.com/vagawind/semiclaw/internal/logger"
+	"github.com/vagawind/semiclaw/internal/types/interfaces"
+	"github.com/vagawind/semiclaw/internal/utils"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/credentials"
@@ -39,7 +39,7 @@ func newS3Client(endpoint, accessKey, secretKey, bucketName, region, pathPrefix 
 
 	// With no explicit AK/SK, keep the AWS default credential chain intact. This
 	// supports IAM roles for EC2/ECS/EKS (IRSA), web identity, shared config, and
-	// environment credentials without persisting long-lived keys in WeKnora.
+	// environment credentials without persisting long-lived keys in SemiClaw.
 	loadOptions := []func(*config.LoadOptions) error{config.WithRegion(region)}
 	if accessKey != "" || secretKey != "" {
 		if accessKey == "" || secretKey == "" {

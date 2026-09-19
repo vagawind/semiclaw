@@ -19,7 +19,7 @@ import (
 	"time"
 
 	"connectrpc.com/connect"
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/types"
 	e2b "github.com/matiasinsaurralde/go-e2b"
 	"github.com/stretchr/testify/require"
 )
@@ -397,12 +397,12 @@ func TestE2BRemoteClientCreateSnapshot(t *testing.T) {
 	handle, err := client.Create(ctx, RemoteCreateRequest{TemplateID: "template-a"})
 	require.NoError(t, err)
 
-	ref, err := client.CreateSnapshot(ctx, handle.ID(), "weknora-sk-cfg1-g1")
+	ref, err := client.CreateSnapshot(ctx, handle.ID(), "semiclaw-sk-cfg1-g1")
 
 	require.NoError(t, err)
 	require.Equal(t, "snap-1", ref.ID)
-	require.Equal(t, []string{"weknora-sk-cfg1-g1"}, ref.Names)
-	require.Equal(t, "weknora-sk-cfg1-g1", mock.snapshotCreateBody["name"])
+	require.Equal(t, []string{"semiclaw-sk-cfg1-g1"}, ref.Names)
+	require.Equal(t, "semiclaw-sk-cfg1-g1", mock.snapshotCreateBody["name"])
 	require.Equal(t, int32(1), mock.connectCount.Load())
 }
 
@@ -465,9 +465,9 @@ func TestE2BRemoteClientListSnapshotsPagesAllResults(t *testing.T) {
 	require.NoError(t, err)
 	second, err := client.Create(ctx, RemoteCreateRequest{TemplateID: "template-a"})
 	require.NoError(t, err)
-	firstRef, err := client.CreateSnapshot(ctx, first.ID(), "weknora-sk-cfg1-g1")
+	firstRef, err := client.CreateSnapshot(ctx, first.ID(), "semiclaw-sk-cfg1-g1")
 	require.NoError(t, err)
-	secondRef, err := client.CreateSnapshot(ctx, first.ID(), "weknora-sk-cfg2-g1")
+	secondRef, err := client.CreateSnapshot(ctx, first.ID(), "semiclaw-sk-cfg2-g1")
 	require.NoError(t, err)
 	_, err = client.CreateSnapshot(ctx, second.ID(), "other")
 	require.NoError(t, err)
@@ -490,8 +490,8 @@ func TestE2BRemoteClientListTemplatesReconcilesStandardTemplateBuildStatus(t *te
 			writeJSON(w, http.StatusOK, []map[string]any{{
 				"templateID":  "template-ready",
 				"buildID":     "build-success",
-				"names":       []string{"project/weknora"},
-				"aliases":     []string{"weknora"},
+				"names":       []string{"project/semiclaw"},
+				"aliases":     []string{"semiclaw"},
 				"buildStatus": "waiting",
 				"envdVersion": "0.4.0",
 			}})
@@ -520,7 +520,7 @@ func TestE2BRemoteClientListTemplatesReconcilesStandardTemplateBuildStatus(t *te
 	require.NoError(t, err)
 	require.Len(t, templates, 1)
 	require.True(t, templates[0].Standard)
-	require.Equal(t, "project/weknora", templates[0].Name)
+	require.Equal(t, "project/semiclaw", templates[0].Name)
 	require.Equal(t, "ready", templates[0].Status)
 	require.Equal(t, int32(1), statusRequests.Load())
 }
@@ -535,7 +535,7 @@ func TestE2BRemoteClientListTemplatesIgnoresOlderSuccessfulBuild(t *testing.T) {
 			writeJSON(w, http.StatusOK, []map[string]any{{
 				"templateID":  "template-queued",
 				"buildID":     "build-queued",
-				"names":       []string{"project/weknora"},
+				"names":       []string{"project/semiclaw"},
 				"buildStatus": "waiting",
 			}})
 		case "/templates/template-queued/builds/build-queued/status":
@@ -547,7 +547,7 @@ func TestE2BRemoteClientListTemplatesIgnoresOlderSuccessfulBuild(t *testing.T) {
 		case "/templates/template-queued":
 			writeJSON(w, http.StatusOK, map[string]any{
 				"templateID": "template-queued",
-				"names":      []string{"project/weknora"},
+				"names":      []string{"project/semiclaw"},
 				"builds": []map[string]any{
 					{"buildID": "build-queued", "status": "waiting"},
 					{"buildID": "build-older", "status": "success"},
@@ -583,7 +583,7 @@ func TestE2BRemoteClientListTemplatesKeepsPendingWithoutBuildReference(t *testin
 			writeJSON(w, http.StatusOK, []map[string]any{{
 				"templateID":  "template-unbuilt",
 				"buildID":     "00000000-0000-0000-0000-000000000000",
-				"names":       []string{"project/weknora"},
+				"names":       []string{"project/semiclaw"},
 				"buildStatus": "building",
 				"spawnCount":  0,
 			}})
@@ -617,7 +617,7 @@ func TestE2BRemoteClientListTemplatesKeepsPendingWithoutSuccessfulBuild(t *testi
 			writeJSON(w, http.StatusOK, []map[string]any{{
 				"templateID":  "template-fresh",
 				"buildID":     "build-fresh",
-				"names":       []string{"project/weknora"},
+				"names":       []string{"project/semiclaw"},
 				"buildStatus": "building",
 			}})
 		case "/templates/template-fresh/builds/build-fresh/status":
@@ -662,7 +662,7 @@ func TestE2BRemoteClientListTemplatesReportsUntaggedBuilds(t *testing.T) {
 			writeJSON(w, http.StatusOK, []map[string]any{{
 				"templateID":  "template-untagged",
 				"buildID":     "00000000-0000-0000-0000-000000000000",
-				"names":       []string{"project/weknora"},
+				"names":       []string{"project/semiclaw"},
 				"buildStatus": "waiting",
 				"buildCount":  2,
 			}})
@@ -702,7 +702,7 @@ func TestE2BRemoteClientListTemplatesKeepsPendingOnFirstBuild(t *testing.T) {
 			writeJSON(w, http.StatusOK, []map[string]any{{
 				"templateID":  "template-first",
 				"buildID":     "00000000-0000-0000-0000-000000000000",
-				"names":       []string{"project/weknora"},
+				"names":       []string{"project/semiclaw"},
 				"buildStatus": "building",
 				"buildCount":  1,
 			}})
@@ -739,7 +739,7 @@ func TestE2BRemoteClientListTemplatesIgnoresSpawnCount(t *testing.T) {
 			writeJSON(w, http.StatusOK, []map[string]any{{
 				"templateID":  "template-spawned",
 				"buildID":     "build-x",
-				"names":       []string{"weknora"},
+				"names":       []string{"semiclaw"},
 				"buildStatus": "waiting",
 				"spawnCount":  4,
 			}})
@@ -817,12 +817,12 @@ func TestE2BRemoteClientListTemplatesMarksDesktopSibling(t *testing.T) {
 		writeJSON(w, http.StatusOK, []map[string]any{
 			{
 				"templateID":  "tpl-cli",
-				"names":       []string{"weknora"},
+				"names":       []string{"semiclaw"},
 				"buildStatus": "ready",
 			},
 			{
 				"templateID":  "tpl-desktop",
-				"names":       []string{"weknora-desktop"},
+				"names":       []string{"semiclaw-desktop"},
 				"buildStatus": "ready",
 			},
 		})
@@ -898,7 +898,7 @@ func TestE2BEnsureDesktopTemplateBuildsDesktopImage(t *testing.T) {
 		case r.Method == http.MethodGet && r.URL.Path == "/templates":
 			writeJSON(w, http.StatusOK, []map[string]any{{
 				"templateID":  "tpl-cli",
-				"names":       []string{"weknora"},
+				"names":       []string{"semiclaw"},
 				"buildStatus": "ready",
 			}})
 		case r.Method == http.MethodPost && r.URL.Path == "/v3/templates":

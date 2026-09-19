@@ -1,8 +1,8 @@
 package router
 
 import (
-	"github.com/Tencent/WeKnora/internal/handler"
-	"github.com/Tencent/WeKnora/internal/sandbox"
+	"github.com/vagawind/semiclaw/internal/handler"
+	"github.com/vagawind/semiclaw/internal/sandbox"
 )
 
 func deploymentCapabilitiesFromRouter(params RouterParams) handler.DeploymentCapabilitiesData {

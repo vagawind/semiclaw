@@ -14,10 +14,10 @@ import (
 	"time"
 	"unicode/utf8"
 
-	"github.com/Tencent/WeKnora/internal/datasource/connector/feishu/core"
-	"github.com/Tencent/WeKnora/internal/logger"
-	"github.com/Tencent/WeKnora/internal/types"
-	secutils "github.com/Tencent/WeKnora/internal/utils"
+	"github.com/vagawind/semiclaw/internal/datasource/connector/feishu/core"
+	"github.com/vagawind/semiclaw/internal/logger"
+	"github.com/vagawind/semiclaw/internal/types"
+	secutils "github.com/vagawind/semiclaw/internal/utils"
 )
 
 func TestMain(m *testing.M) {
@@ -451,7 +451,7 @@ func TestConnectorListResources(t *testing.T) {
 
 // TestConnectorListResources_LazyLoadsOneLevel verifies that ListResources loads
 // the wiki tree lazily — only the requested level — instead of recursing the whole
-// tree up front (Tencent/WeKnora#1672).
+// tree up front (vagawind/semiclaw#1672).
 func TestConnectorListResources_LazyLoadsOneLevel(t *testing.T) {
 	topNodes := []core.WikiNode{
 		{NodeToken: "nt-root", ObjToken: "obj-root", ObjType: "docx", Title: "Root", HasChild: true, ObjEditTime: "100"},
@@ -1873,7 +1873,7 @@ func TestFeishuCursorRoundTrip(t *testing.T) {
 }
 
 // TestSupportedImageExt covers every arm of the sniff table: the png/jpg/gif
-// formats WeKnora accepts (aligned with isValidFileType's image set), and the
+// formats SemiClaw accepts (aligned with isValidFileType's image set), and the
 // unsupported case which must return ok=false while still surfacing the detected
 // content type so the caller can log it without re-sniffing.
 func TestSupportedImageExt(t *testing.T) {

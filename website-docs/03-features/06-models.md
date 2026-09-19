@@ -81,7 +81,7 @@ const (
 | `supports_vision` | bool | false | Chat 模型是否接受图片多模态输入 |
 | `context_window` | int | 0（回落到 200000） | 对话/VLM 上下文窗口（token）。智能体压缩历史按此上限工作；留空使用默认 200K。应填写服务实际支持的窗口大小，过高会导致压缩无法及时触发 |
 | `max_concurrency` | int | 0（回落到全局 `model.max_concurrency`） | 该模型后台任务并发上限（仅 chat/vlm/embedding 生效） |
-| `app_id` / `app_secret` | string | 空 | WeKnoraCloud 专用凭证，`app_secret` AES 加密存储 |
+| `app_id` / `app_secret` | string | 空 | SemiClawCloud 专用凭证，`app_secret` AES 加密存储 |
 
 模型级字段还包括 `name`（运行期实际调用的模型名）、`display_name`、`type`、`source`、`is_default`（同一 `(tenant_id, type)` 桶内唯一默认）、`is_builtin`、`managed_by`、`status`（`active` / `downloading` / `download_failed`）。
 
@@ -93,7 +93,7 @@ const (
 | `POST /models` / `GET /models` / `GET /models/:id` / `PUT /models/:id` / `DELETE /models/:id` | 模型 CRUD |
 | `PUT /models/:id/credentials`、`DELETE /models/:id/credentials/:field` | 凭证子资源；`PUT /models/:id` 请求体中的 `api_key` 会被强制忽略并告警 |
 | `POST /models/:id/debug` | 模型调试（见下文） |
-| `GET /models/weknoracloud/status` | WeKnoraCloud 凭证状态 |
+| `GET /models/semiclawcloud/status` | SemiClawCloud 凭证状态 |
 
 ### 模型健康检查 / 连通性测试
 
@@ -191,7 +191,7 @@ type Provider interface {
 | Provider 标识 | 名称 | 说明 |
 |---------------|------|------|
 | `generic` | Generic | 任意 OpenAI 兼容 / 自定义部署（默认兜底） |
-| `weknoracloud` | WeKnoraCloud | WeKnora 云服务（硬编码 `https://weknora.weixin.qq.com`，使用 AppID/AppSecret 凭证） |
+| `weknoracloud` | SemiClawCloud | SemiClaw 云服务（硬编码 `https://weknora.weixin.qq.com`，使用 AppID/AppSecret 凭证） |
 | `aliyun` | 阿里云 DashScope | |
 | `zhipu` | 智谱 AI（GLM 系列） | |
 | `volcengine` | 火山引擎 Ark | |
@@ -241,8 +241,8 @@ func NewRemoteChat(config *ChatConfig) (Chat, error) {
 - **Ollama**（`source=local`）：`chat/ollama.go`、`embedding/ollama.go`、`vlm/ollama.go` 通过 `internal/models/utils/ollama` 的 `OllamaService` 直连本机 Ollama。
 - **Anthropic**：`chat/anthropic.go` 实现 Messages 协议。
 - **其余远程厂商**：统一走 `chat/remote_api.go` 的 OpenAI 兼容 Chat Completions 实现，厂商差异（thinking 编码、参数兼容等）由构造时解析的 `providerAdapter` 处理。
-- **Embedding** 有更多专用实现：阿里云多模态（`tongyi-embedding-vision-*` 走 DashScope 专用端点，纯文本模型自动改写为 `/compatible-mode/v1` OpenAI 兼容端点）、Volcengine 多模态、Jina、Azure OpenAI、NVIDIA、Gemini、Zhipu、WeKnoraCloud，其余为 OpenAI 兼容（`embedding/openai.go`）。
-- **Rerank** 专用实现：Aliyun、Zhipu、Jina、NVIDIA、WeKnoraCloud、LKEAP、Volcengine，默认 `NewOpenAIReranker`（通用 `/rerank` 风格接口）。两个厂商有额外适配：
+- **Embedding** 有更多专用实现：阿里云多模态（`tongyi-embedding-vision-*` 走 DashScope 专用端点，纯文本模型自动改写为 `/compatible-mode/v1` OpenAI 兼容端点）、Volcengine 多模态、Jina、Azure OpenAI、NVIDIA、Gemini、Zhipu、SemiClawCloud，其余为 OpenAI 兼容（`embedding/openai.go`）。
+- **Rerank** 专用实现：Aliyun、Zhipu、Jina、NVIDIA、SemiClawCloud、LKEAP、Volcengine，默认 `NewOpenAIReranker`（通用 `/rerank` 风格接口）。两个厂商有额外适配：
   - **LKEAP**：腾讯云 `RunRerank` 限制单次最多 60 篇文档、Query 与 Docs 合计不超过 2000 字符。`lkeapRerankBatches` 按这两个上限自动切批并回填全局下标，调用方不用感知分批；单篇文档自身就超限时直接报错并指出下标。
   - **Volcengine**：候选集超过接口单次文档上限时自动切成多批**并发**打分再合并（并发上限见 `volcengineRerankMaxConcurrency`），不会静默截断候选。
   - **NVIDIA**：接口返回的是原始 logit 而非 [0,1] 概率。`normalizeNvidiaLogit` 用数值稳定的 sigmoid 归一化（负数走 `e^x/(1+e^x)` 分支避免溢出），否则 `RerankThreshold` 这类阈值配置在该厂商下完全失效。
@@ -259,7 +259,7 @@ flowchart TD
     F -->|"source = local"| OL["OllamaService<br/>(internal/models/utils/ollama)"]
     F -->|"source = remote"| PD{"provider 路由<br/>(显式 provider 或 DetectProvider)"}
     PD -->|"anthropic"| AN["AnthropicChat<br/>(Messages 协议)"]
-    PD -->|"weknoracloud"| WC["WeKnoraCloud 实现<br/>(AppID + AppSecret 签名)"]
+    PD -->|"weknoracloud"| WC["SemiClawCloud 实现<br/>(AppID + AppSecret 签名)"]
     PD -->|"其他厂商"| OA["RemoteAPIChat / OpenAIEmbedder ...<br/>(OpenAI 兼容 + providerAdapter)"]
     F --> W1["debug 包装<br/>(LLM_DEBUG 日志)"]
     W1 --> W2["Langfuse 包装<br/>(链路追踪)"]

@@ -1,13 +1,13 @@
-name: Build & Publish (dsh-weknora)
+name: Build & Publish (dsh-semiclaw)
 
-# Build, test, and publish the DeepSeek Harness plugin (packages/dsh-weknora/) to npm.
+# Build, test, and publish the DeepSeek Harness plugin (packages/dsh-semiclaw/) to npm.
 #
 # Three jobs:
 #   test      typecheck, unit tests, both halves of the contract, and a
 #             packaging check
 #   e2e       install the package into a throwaway dsh profile and drive real
 #             tool calls through the harness agent loop against a mock backend
-#   publish   on a `dsh-weknora-v*` tag only, publish to npm with provenance
+#   publish   on a `dsh-semiclaw-v*` tag only, publish to npm with provenance
 #
 # The e2e job pins the harness version so a plugin change is the only thing that
 # can turn it red. The weekly drift job runs the same check against dsh@latest and
@@ -18,13 +18,13 @@ on:
   push:
     branches: [main]
     tags:
-      - "dsh-weknora-v*"
+      - "dsh-semiclaw-v*"
     paths:
-      - "packages/dsh-weknora/**"
+      - "packages/dsh-semiclaw/**"
       - ".github/workflows/dsh-plugin.yml"
   pull_request:
     paths:
-      - "packages/dsh-weknora/**"
+      - "packages/dsh-semiclaw/**"
       - ".github/workflows/dsh-plugin.yml"
   schedule:
     # Monday 03:00 UTC: catch a harness release that breaks the plugin.
@@ -40,11 +40,11 @@ permissions:
 
 env:
   # The harness release this plugin is verified against. Bump it together with
-  # the compatibility note in packages/dsh-weknora/README.md.
+  # the compatibility note in packages/dsh-semiclaw/README.md.
   DSH_PINNED_SPEC: "@deepseek-ai/dsh@0.1.0-rc.8"
   # The contract's Go half lives in this repository's module. app.yml runs it
   # only for a Go diff, so a change to the fixture or to the plugin alone would
-  # otherwise skip the side that checks WeKnora still serves those calls.
+  # otherwise skip the side that checks SemiClaw still serves those calls.
   GO_VERSION: "1.26"
   # `dsh plugin add` shells out to pnpm to install into the profile, and the
   # runner image ships only npm and yarn. The profile it writes carries its
@@ -58,7 +58,7 @@ jobs:
     timeout-minutes: 15
     defaults:
       run:
-        working-directory: packages/dsh-weknora
+        working-directory: packages/dsh-semiclaw
     steps:
       - uses: actions/checkout@v6
 
@@ -66,7 +66,7 @@ jobs:
         with:
           node-version: "24"
           cache: npm
-          cache-dependency-path: packages/dsh-weknora/package-lock.json
+          cache-dependency-path: packages/dsh-semiclaw/package-lock.json
 
       - name: Install dependencies
         run: npm ci || npm install
@@ -85,9 +85,9 @@ jobs:
           go-version: ${{ env.GO_VERSION }}
           cache: true
 
-      - name: Contract tests against WeKnora's Go types
+      - name: Contract tests against SemiClaw's Go types
         working-directory: ${{ github.workspace }}
-        run: go test ./packages/dsh-weknora/contract/...
+        run: go test ./packages/dsh-semiclaw/contract/...
 
       - name: Pack and verify the published file list
         run: |
@@ -117,7 +117,7 @@ jobs:
     timeout-minutes: 25
     defaults:
       run:
-        working-directory: packages/dsh-weknora
+        working-directory: packages/dsh-semiclaw
     steps:
       - uses: actions/checkout@v6
 
@@ -125,7 +125,7 @@ jobs:
         with:
           node-version: "24"
           cache: npm
-          cache-dependency-path: packages/dsh-weknora/package-lock.json
+          cache-dependency-path: packages/dsh-semiclaw/package-lock.json
 
       - uses: pnpm/action-setup@v4
         with:
@@ -149,15 +149,15 @@ jobs:
         env:
           DSH_PACKAGE_SPEC: ${{ env.DSH_PINNED_SPEC }}
           DSH_INSTALL_DIR: ${{ github.workspace }}/.cache/dsh-e2e-install
-          DSH_E2E_LOG: ${{ runner.temp }}/dsh-weknora-e2e.log
+          DSH_E2E_LOG: ${{ runner.temp }}/dsh-semiclaw-e2e.log
         run: node test/e2e/run-in-dsh.mjs
 
       - name: Upload the transcript
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: dsh-weknora-e2e-transcript
-          path: ${{ runner.temp }}/dsh-weknora-e2e.log
+          name: dsh-semiclaw-e2e-transcript
+          path: ${{ runner.temp }}/dsh-semiclaw-e2e.log
           if-no-files-found: ignore
 
   drift:
@@ -168,7 +168,7 @@ jobs:
     continue-on-error: true
     defaults:
       run:
-        working-directory: packages/dsh-weknora
+        working-directory: packages/dsh-semiclaw
     steps:
       - uses: actions/checkout@v6
 
@@ -176,7 +176,7 @@ jobs:
         with:
           node-version: "24"
           cache: npm
-          cache-dependency-path: packages/dsh-weknora/package-lock.json
+          cache-dependency-path: packages/dsh-semiclaw/package-lock.json
 
       - uses: pnpm/action-setup@v4
         with:
@@ -208,7 +208,7 @@ jobs:
   publish:
     name: Publish to npm
     needs: [test, e2e]
-    if: startsWith(github.ref, 'refs/tags/dsh-weknora-v')
+    if: startsWith(github.ref, 'refs/tags/dsh-semiclaw-v')
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
@@ -216,10 +216,10 @@ jobs:
       id-token: write
     environment:
       name: npm-publish
-      url: https://www.npmjs.com/package/@wxg-prc-cpg/dsh-weknora
+      url: https://www.npmjs.com/package/@wxg-prc-cpg/dsh-semiclaw
     defaults:
       run:
-        working-directory: packages/dsh-weknora
+        working-directory: packages/dsh-semiclaw
     steps:
       - uses: actions/checkout@v6
 
@@ -228,7 +228,7 @@ jobs:
           node-version: "24"
           registry-url: "https://registry.npmjs.org"
           cache: npm
-          cache-dependency-path: packages/dsh-weknora/package-lock.json
+          cache-dependency-path: packages/dsh-semiclaw/package-lock.json
 
       - name: Install dependencies
         run: npm ci || npm install
@@ -240,10 +240,10 @@ jobs:
         run: |
           set -e
           version="$(node -p "require('./package.json').version")"
-          expected="dsh-weknora-v${version}"
+          expected="dsh-semiclaw-v${version}"
           if [ "$GITHUB_REF_NAME" != "$expected" ]; then
             echo "::error::tag $GITHUB_REF_NAME does not name the packaged version $version (expected $expected)."
-            echo "::error::Bump packages/dsh-weknora/package.json, or retag — publishing here would ship a version the tag does not name."
+            echo "::error::Bump packages/dsh-semiclaw/package.json, or retag — publishing here would ship a version the tag does not name."
             exit 1
           fi
 

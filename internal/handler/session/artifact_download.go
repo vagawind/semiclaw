@@ -8,14 +8,14 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/Tencent/WeKnora/internal/application/access"
-	filesvc "github.com/Tencent/WeKnora/internal/application/service/file"
-	"github.com/Tencent/WeKnora/internal/errors"
-	"github.com/Tencent/WeKnora/internal/filetransport"
-	"github.com/Tencent/WeKnora/internal/logger"
-	"github.com/Tencent/WeKnora/internal/storageurl"
-	"github.com/Tencent/WeKnora/internal/types"
-	secutils "github.com/Tencent/WeKnora/internal/utils"
+	"github.com/vagawind/semiclaw/internal/application/access"
+	filesvc "github.com/vagawind/semiclaw/internal/application/service/file"
+	"github.com/vagawind/semiclaw/internal/errors"
+	"github.com/vagawind/semiclaw/internal/filetransport"
+	"github.com/vagawind/semiclaw/internal/logger"
+	"github.com/vagawind/semiclaw/internal/storageurl"
+	"github.com/vagawind/semiclaw/internal/types"
+	secutils "github.com/vagawind/semiclaw/internal/utils"
 	"github.com/gin-gonic/gin"
 )
 

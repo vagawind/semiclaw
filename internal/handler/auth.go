@@ -13,14 +13,14 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/Tencent/WeKnora/internal/application/service"
-	"github.com/Tencent/WeKnora/internal/config"
-	"github.com/Tencent/WeKnora/internal/errors"
-	"github.com/Tencent/WeKnora/internal/handler/dto"
-	"github.com/Tencent/WeKnora/internal/logger"
-	"github.com/Tencent/WeKnora/internal/types"
-	"github.com/Tencent/WeKnora/internal/types/interfaces"
-	secutils "github.com/Tencent/WeKnora/internal/utils"
+	"github.com/vagawind/semiclaw/internal/application/service"
+	"github.com/vagawind/semiclaw/internal/config"
+	"github.com/vagawind/semiclaw/internal/errors"
+	"github.com/vagawind/semiclaw/internal/handler/dto"
+	"github.com/vagawind/semiclaw/internal/logger"
+	"github.com/vagawind/semiclaw/internal/types"
+	"github.com/vagawind/semiclaw/internal/types/interfaces"
+	secutils "github.com/vagawind/semiclaw/internal/utils"
 )
 
 var liteSetupToken string
@@ -30,7 +30,7 @@ var liteSetupToken string
 func SetLiteSetupToken(token string) { liteSetupToken = token }
 
 const (
-	oidcNonceCookieName   = "weknora_oidc_nonce"
+	oidcNonceCookieName   = "semiclaw_oidc_nonce"
 	oidcNonceCookieMaxAge = 600
 )
 
@@ -135,7 +135,7 @@ func resolveDefaultTenantMode(
 		mode = systemSettingSvc.GetString(
 			ctx,
 			"auth.default_tenant_mode",
-			"WEKNORA_AUTH_DEFAULT_TENANT_MODE",
+			"SEMICLAW_AUTH_DEFAULT_TENANT_MODE",
 			def,
 		)
 	}
@@ -660,7 +660,7 @@ func (h *AuthHandler) GetCurrentUser(c *gin.Context) {
 	canCreateTenant := user.CanAccessAllTenants ||
 		resolveTenantSelfServiceCreationEnabled(ctx, h.configInfo, h.systemSettingSvc)
 	autoAcceptInvitation := h.systemSettingSvc != nil &&
-		h.systemSettingSvc.GetBool(ctx, "tenant.auto_accept_invitation", "WEKNORA_TENANT_AUTO_ACCEPT_INVITATION", false)
+		h.systemSettingSvc.GetBool(ctx, "tenant.auto_accept_invitation", "SEMICLAW_TENANT_AUTO_ACCEPT_INVITATION", false)
 	c.JSON(http.StatusOK, gin.H{
 		"success": true,
 		"data": gin.H{
@@ -911,12 +911,12 @@ func (h *AuthHandler) AutoSetup(c *gin.Context) {
 	}
 
 	if liteSetupToken == "" ||
-		subtle.ConstantTimeCompare([]byte(c.GetHeader("X-WeKnora-Desktop-Token")), []byte(liteSetupToken)) != 1 {
+		subtle.ConstantTimeCompare([]byte(c.GetHeader("X-SemiClaw-Desktop-Token")), []byte(liteSetupToken)) != 1 {
 		_ = c.Error(errors.NewUnauthorizedError("desktop authentication is required"))
 		return
 	}
 
-	const defaultEmail = "admin@weknora.local"
+	const defaultEmail = "admin@semiclaw.local"
 
 	user, _ := h.userService.GetUserByEmail(ctx, defaultEmail)
 	if user == nil {

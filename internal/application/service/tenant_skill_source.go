@@ -15,8 +15,8 @@ import (
 	"sync"
 	"time"
 
-	apperrors "github.com/Tencent/WeKnora/internal/errors"
-	secutils "github.com/Tencent/WeKnora/internal/utils"
+	apperrors "github.com/vagawind/semiclaw/internal/errors"
+	secutils "github.com/vagawind/semiclaw/internal/utils"
 )
 
 // ErrSkillSourceInvalid marks every rejection of a registry / git / URL
@@ -25,7 +25,7 @@ var ErrSkillSourceInvalid = errors.New("skill source is invalid")
 
 const (
 	defaultSkillRegistryOrigin = "https://clawhub.ai"
-	skillSourceUserAgent       = "WeKnora-SkillInstaller (+https://github.com/Tencent/WeKnora)"
+	skillSourceUserAgent       = "SemiClaw-SkillInstaller (+https://github.com/vagawind/semiclaw)"
 	skillSourceFetchTimeout    = 5 * time.Minute
 	skillSourceMaxHops         = 3
 )

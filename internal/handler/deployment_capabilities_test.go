@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Tencent/WeKnora/internal/sandbox"
+	"github.com/vagawind/semiclaw/internal/sandbox"
 )
 
 func TestDeploymentCapabilityKeysMatchFrontend(t *testing.T) {

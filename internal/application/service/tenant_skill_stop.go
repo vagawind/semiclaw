@@ -5,8 +5,8 @@ import (
 	"errors"
 	"fmt"
 
-	apperrors "github.com/Tencent/WeKnora/internal/errors"
-	"github.com/Tencent/WeKnora/internal/types"
+	apperrors "github.com/vagawind/semiclaw/internal/errors"
+	"github.com/vagawind/semiclaw/internal/types"
 )
 
 const skillInstallStoppedMessage = "安装已停止"

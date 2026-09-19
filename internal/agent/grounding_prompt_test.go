@@ -6,8 +6,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Tencent/WeKnora/internal/agent/tools"
-	"github.com/Tencent/WeKnora/internal/config"
+	"github.com/vagawind/semiclaw/internal/agent/tools"
+	"github.com/vagawind/semiclaw/internal/config"
 	"github.com/stretchr/testify/require"
 	"gopkg.in/yaml.v3"
 )

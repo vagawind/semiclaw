@@ -10,10 +10,10 @@ import (
 	"time"
 	"unicode/utf8"
 
-	webfetch "github.com/Tencent/WeKnora/internal/infrastructure/web_fetch"
-	"github.com/Tencent/WeKnora/internal/logger"
-	"github.com/Tencent/WeKnora/internal/types"
-	"github.com/Tencent/WeKnora/internal/utils"
+	webfetch "github.com/vagawind/semiclaw/internal/infrastructure/web_fetch"
+	"github.com/vagawind/semiclaw/internal/logger"
+	"github.com/vagawind/semiclaw/internal/types"
+	"github.com/vagawind/semiclaw/internal/utils"
 )
 
 const (

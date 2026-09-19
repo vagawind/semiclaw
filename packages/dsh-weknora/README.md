@@ -1,12 +1,12 @@
-# @wxg-prc-cpg/dsh-weknora
+# @wxg-prc-cpg/dsh-semiclaw
 
 English | [简体中文](./README_CN.md)
 
-[npm](https://www.npmjs.com/package/@wxg-prc-cpg/dsh-weknora)
+[npm](https://www.npmjs.com/package/@wxg-prc-cpg/dsh-semiclaw)
 
 A [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) (`dsh`) plugin that gives the harness agent
-first-class access to a [WeKnora](https://github.com/Tencent/WeKnora) knowledge base: hybrid retrieval, full document
-reading, and WeKnora's own composed answers with citations.
+first-class access to a [SemiClaw](https://github.com/vagawind/semiclaw) knowledge base: hybrid retrieval, full document
+reading, and SemiClaw's own composed answers with citations.
 
 dsh ships no retrieval, embedding or knowledge-base capability of its own — its search tools (`grep`, `glob`) read the
 workspace, and `web_search` reads the internet. This plugin fills that gap with your organization's documents.
@@ -15,19 +15,19 @@ workspace, and `web_search` reads the internet. This plugin fills that gap with 
 
 ```sh
 # from npm (recommended: installs prebuilt code, no build permission needed)
-dsh plugin --profile web add @wxg-prc-cpg/dsh-weknora
+dsh plugin --profile web add @wxg-prc-cpg/dsh-semiclaw
 
 # or from a checkout of this repository
-dsh plugin --profile web add ./packages/dsh-weknora
+dsh plugin --profile web add ./packages/dsh-semiclaw
 ```
 
 Then point it at your deployment. The shipped configuration layer reads environment variables, so the quickest start is:
 
 ```sh
-export WEKNORA_BASE_URL=https://weknora.example.com   # or http://localhost:8080
-export WEKNORA_API_KEY=sk-...                          # a WeKnora API key with `retrieve` (+ `chat` for ask)
-export WEKNORA_KNOWLEDGE_BASE_IDS=kb-123,kb-456        # optional default scope
-export WEKNORA_RESOURCE_URLS=public                    # default; `handle` keeps internal file refs
+export SEMICLAW_BASE_URL=https://semiclaw.example.com   # or http://localhost:8080
+export SEMICLAW_API_KEY=sk-...                          # a SemiClaw API key with `retrieve` (+ `chat` for ask)
+export SEMICLAW_KNOWLEDGE_BASE_IDS=kb-123,kb-456        # optional default scope
+export SEMICLAW_RESOURCE_URLS=public                    # default; `handle` keeps internal file refs
 dsh web
 ```
 
@@ -35,19 +35,19 @@ For anything beyond that, override the row from your profile's `cordis.patch.yml
 (`$DSH_HOME/profiles/<name>/cordis.patch.yml`):
 
 ```yaml
-- id: weknora
+- id: semiclaw
   config:
-    baseUrl: https://weknora.example.com
-    apiKey: !!js process.env.WEKNORA_API_KEY
+    baseUrl: https://semiclaw.example.com
+    apiKey: !!js process.env.SEMICLAW_API_KEY
     knowledgeBaseIds:
       - kb-product-docs
-    agentId: ''            # a WeKnora custom agent id makes `weknora_ask` use the ReAct pipeline
+    agentId: ''            # a SemiClaw custom agent id makes `semiclaw_ask` use the ReAct pipeline
     maxResults: 8
     maxChunkChars: 1200
     requestTimeoutMs: 30000
     chatTimeoutMs: 300000
     resourceUrls: handle   # default is `public` so cited images are directly loadable; `handle` keeps internal refs
-    toolPrefix: weknora    # rename the tools, e.g. to mount two deployments side by side
+    toolPrefix: semiclaw    # rename the tools, e.g. to mount two deployments side by side
     tools:
       listKnowledgeBases: true
       search: true
@@ -62,24 +62,24 @@ Mounting two deployments is two rows with two prefixes:
 
 ```yaml
 - insert:
-    - id: weknora-internal
-      name: "@wxg-prc-cpg/dsh-weknora"
+    - id: semiclaw-internal
+      name: "@wxg-prc-cpg/dsh-semiclaw"
       config: { baseUrl: https://kb.internal.example.com, toolPrefix: internal_kb }
-    - id: weknora-public
-      name: "@wxg-prc-cpg/dsh-weknora"
+    - id: semiclaw-public
+      name: "@wxg-prc-cpg/dsh-semiclaw"
       config: { baseUrl: https://kb.public.example.com, toolPrefix: public_kb }
 ```
 
 ## Tools
 
-| Tool | WeKnora endpoint | What the model gets |
+| Tool | SemiClaw endpoint | What the model gets |
 |---|---|---|
-| `weknora_list_knowledge_bases` | `GET /knowledge-bases` | Knowledge base names and ids, to report what exists or to narrow a later search |
-| `weknora_search` | `POST /knowledge-search` + `GET /knowledge/search` | Ranked passages verbatim, each with a `knowledge_id`, score and chunk index, plus any document the query names |
-| `weknora_read_document` | `GET /chunks/:knowledge_id` + `GET /knowledge/:id` | One document's passages reassembled in order, led by its title and summary, with paging |
-| `weknora_ask` | `POST /sessions` + `POST /knowledge-chat/:id` or `POST /agent-chat/:id` | WeKnora's own answer, its citations, the server-side tools it used, and a resumable `session_id` |
+| `semiclaw_list_knowledge_bases` | `GET /knowledge-bases` | Knowledge base names and ids, to report what exists or to narrow a later search |
+| `semiclaw_search` | `POST /knowledge-search` + `GET /knowledge/search` | Ranked passages verbatim, each with a `knowledge_id`, score and chunk index, plus any document the query names |
+| `semiclaw_read_document` | `GET /chunks/:knowledge_id` + `GET /knowledge/:id` | One document's passages reassembled in order, led by its title and summary, with paging |
+| `semiclaw_ask` | `POST /sessions` + `POST /knowledge-chat/:id` or `POST /agent-chat/:id` | SemiClaw's own answer, its citations, the server-side tools it used, and a resumable `session_id` |
 
-`weknora_search` is the workhorse: it returns the source text for the agent to reason over, which keeps the agent's own
+`semiclaw_search` is the workhorse: it returns the source text for the agent to reason over, which keeps the agent's own
 reasoning auditable. It answers two questions the model cannot always tell apart — *where is this discussed* and *where
 is the document called X* — by matching passage content and document names in the same call. A query that reads like a
 title additionally reports the documents it names, so a document whose wording differs from its own title is still
@@ -87,40 +87,40 @@ reachable.
 
 Scope works without configuration. An unscoped call is refused by the retrieval endpoint and answered from nothing by
 the RAG one, so when `knowledgeBaseIds` is empty the plugin resolves every knowledge base the credential can see and
-uses all of them, resolving that list once per process and sharing it between `weknora_search` and `weknora_ask`.
+uses all of them, resolving that list once per process and sharing it between `semiclaw_search` and `semiclaw_ask`.
 Making the model choose first would be worse: knowledge bases are frequently named too poorly to choose between.
 
-`weknora_ask` delegates the whole question to WeKnora. Reserve it for broad or synthesis questions spanning many
+`semiclaw_ask` delegates the whole question to SemiClaw. Reserve it for broad or synthesis questions spanning many
 documents, where retrieving passages yourself would take several rounds — it runs another model server-side, so it is
 slow, and it returns a conclusion rather than the evidence behind it. With `agentId` set it leaves the scope alone: a
 custom agent resolves its own from its KB selection mode, and ids sent from here would override that.
 
-`weknora_read_document` exists because retrieval returns fragments: once a passage looks right, the agent usually needs
+`semiclaw_read_document` exists because retrieval returns fragments: once a passage looks right, the agent usually needs
 its neighbours. Every search hit carries the `knowledge_id` that call needs, and page 1 leads with the document's title
-and WeKnora's generated summary so a long document can be judged without paging through it.
+and SemiClaw's generated summary so a long document can be judged without paging through it.
 
 In [Code Mode](https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/core/tools/README.md) the same tools
-are available as `await tools.weknora_search({ query })`, which is a good fit for multi-hop retrieval: one program can
+are available as `await tools.semiclaw_search({ query })`, which is a good fit for multi-hop retrieval: one program can
 fan out across ten sub-questions without ten model round trips.
 
 ## Permissions and data flow
 
-The plugin only reads. It never writes to WeKnora: no ingestion, no chunk edits, no deletion. A WeKnora API key scoped
-to `retrieve` is enough for three of the four tools; `weknora_ask` additionally needs `chat`, because it creates a
+The plugin only reads. It never writes to SemiClaw: no ingestion, no chunk edits, no deletion. A SemiClaw API key scoped
+to `retrieve` is enough for three of the four tools; `semiclaw_ask` additionally needs `chat`, because it creates a
 session and streams an answer.
 
 The key is sent as `X-API-Key`. Set `tenantId` as well if you use a platform-scoped key, which needs `X-Tenant-ID` to
-select a workspace. Errors are reported with the HTTP status and WeKnora's own reason, never with the key.
+select a workspace. Errors are reported with the HTTP status and SemiClaw's own reason, never with the key.
 
 Passage content is clipped to `maxChunkChars` before it reaches the model, so one oversized document cannot eat the
 context window. The clip is reported to the model (`truncated: true`) instead of silently hiding text.
 
-With the default `resourceUrls: public`, WeKnora rewrites cited `resource://` figures into directly loadable `http(s)`
+With the default `resourceUrls: public`, SemiClaw rewrites cited `resource://` figures into directly loadable `http(s)`
 URLs. Copy those Markdown images into the assistant reply and the dsh web UI will render the picture. A
-knowledge-base-restricted API key cannot receive public URLs (WeKnora answers 403); the plugin retries that call in
+knowledge-base-restricted API key cannot receive public URLs (SemiClaw answers 403); the plugin retries that call in
 handle mode and keeps using handles afterwards.
 
-The shipped configuration layer also reads `WEKNORA_RESOURCE_URLS` (`public` or `handle`).
+The shipped configuration layer also reads `SEMICLAW_RESOURCE_URLS` (`public` or `handle`).
 
 ## Configuration reference
 
@@ -130,13 +130,13 @@ The shipped configuration layer also reads `WEKNORA_RESOURCE_URLS` (`public` or 
 | `apiKey` | unset | `X-API-Key`; unset means an unauthenticated deployment |
 | `tenantId` | unset | `X-Tenant-ID`, required for platform-scoped keys |
 | `knowledgeBaseIds` | `[]` | Default scope when a call names none; empty means every knowledge base the credential can see |
-| `agentId` | unset | Sends `weknora_ask` to the ReAct pipeline |
+| `agentId` | unset | Sends `semiclaw_ask` to the ReAct pipeline |
 | `maxResults` | `8` | Also the ceiling for `max_results` and for cited references |
 | `maxChunkChars` | `1200` | Per-passage character budget |
 | `requestTimeoutMs` | `30000` | Retrieval and document reads |
-| `chatTimeoutMs` | `300000` | `weknora_ask`, which waits on WeKnora's own model calls |
-| `resourceUrls` | `public` | `public` returns directly loadable file URLs; `handle` keeps internal `resource://` refs. A knowledge-base-restricted API key is retried as `handle`. Override with `WEKNORA_RESOURCE_URLS`. |
-| `toolPrefix` | `weknora` | Tool-name prefix, `^[a-z][a-z0-9_]*$` |
+| `chatTimeoutMs` | `300000` | `semiclaw_ask`, which waits on SemiClaw's own model calls |
+| `resourceUrls` | `public` | `public` returns directly loadable file URLs; `handle` keeps internal `resource://` refs. A knowledge-base-restricted API key is retried as `handle`. Override with `SEMICLAW_RESOURCE_URLS`. |
+| `toolPrefix` | `semiclaw` | Tool-name prefix, `^[a-z][a-z0-9_]*$` |
 | `tools.*` | all `true` | Register fewer tools to spend fewer prompt tokens |
 
 ## Development
@@ -148,7 +148,7 @@ npm run typecheck
 ```
 
 The end-to-end check installs the package into a throwaway dsh profile, boots the headless profile against a mock
-WeKnora backend and a deterministic OpenAI-compatible model, and asserts that the harness really called the tools and
+SemiClaw backend and a deterministic OpenAI-compatible model, and asserts that the harness really called the tools and
 answered from what they returned:
 
 ```sh
@@ -161,17 +161,17 @@ dsh needs a Node build with zstd support (Node ≥ 22.15 or ≥ 24) for its sess
 because `dsh plugin add` installs into the profile through pnpm and the profile it writes keeps its settings in
 `pnpm-workspace.yaml`. The plugin itself runs on Node ≥ 20.11 and needs neither.
 
-`test/fixtures/api-contract.json` records every WeKnora call this plugin makes. `test/contract.test.mjs` asserts the
-plugin still emits exactly those calls, and `contract/contract_test.go` asserts WeKnora's real Go request and response
+`test/fixtures/api-contract.json` records every SemiClaw call this plugin makes. `test/contract.test.mjs` asserts the
+plugin still emits exactly those calls, and `contract/contract_test.go` asserts SemiClaw's real Go request and response
 types still accept and serve them — so a rename on either side fails CI instead of a user's agent.
 
 ## Compatibility
 
-Verified against dsh `0.1.0-rc.8` and WeKnora `0.8.0`. dsh is in developer preview and states that breaking changes
+Verified against dsh `0.1.0-rc.8` and SemiClaw `0.8.0`. dsh is in developer preview and states that breaking changes
 will happen; this package deliberately has **no runtime dependencies** and hands `ctx.tools.register()` a plain object,
 so it does not pin any harness package version. If a harness release changes the tool-definition contract, open an issue
 against this repository.
 
 ## License
 
-MIT, same as WeKnora and dsh.
+MIT, same as SemiClaw and dsh.

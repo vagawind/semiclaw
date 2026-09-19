@@ -9,7 +9,7 @@
 //
 //   - Session-sandbox capability: registration is feature-gated on the
 //     sandbox backend exposing SandboxCommandExecutor (Cube, E2B, Docker).
-//     shell_exec never runs on the WeKnora host.
+//     shell_exec never runs on the SemiClaw host.
 //   - Session-scoped: the sandbox is resolved from ToolExecContext.SessionID
 //     so the LLM cannot execute against a foreign session, and installed
 //     dependencies persist across subsequent tool calls in the same session.
@@ -41,11 +41,11 @@ import (
 	"time"
 	"unicode/utf8"
 
-	"github.com/Tencent/WeKnora/internal/agent/skills"
-	"github.com/Tencent/WeKnora/internal/logger"
-	"github.com/Tencent/WeKnora/internal/sandbox"
-	"github.com/Tencent/WeKnora/internal/types"
-	"github.com/Tencent/WeKnora/internal/utils"
+	"github.com/vagawind/semiclaw/internal/agent/skills"
+	"github.com/vagawind/semiclaw/internal/logger"
+	"github.com/vagawind/semiclaw/internal/sandbox"
+	"github.com/vagawind/semiclaw/internal/types"
+	"github.com/vagawind/semiclaw/internal/utils"
 )
 
 // SandboxCommandExecutor is the narrow, tool-facing subset of a session-aware
@@ -136,14 +136,14 @@ The sandbox belongs to this session alone; nothing here runs on the host.
 - skill_name selects a listed skill for this call. Installed skills use their Python virtualenv and Node modules;
   host resources are staged automatically and use the system runtime until a local .venv is created.
   Scoped credentials apply to both. Example: skill_name="pdf", command="python3 report.py".
-  Run bundled scripts via "$WEKNORA_SKILL_DIR/scripts/...". Omit skill_name for system commands.
+  Run bundled scripts via "$SEMICLAW_SKILL_DIR/scripts/...". Omit skill_name for system commands.
 - /workspace/input contains user attachments: preserve originals. /workspace/output is the only directory collected
   for download, so it takes finished deliverables only; keep scratch and intermediate files elsewhere under /workspace.
   apt-get is available when the sandbox network policy allows it; permanent dependencies belong in the skill installer.
 - Install extras with skill_name set and the default work_dir:
   ` + "`" + skillPythonPackageInstallCommand + "`" + ` (no pip needed), or
   ` + "`" + skillNodePackageInstallCommand + "`" + `.
-  If .venv is absent, create it with python3 -m venv --without-pip "${WEKNORA_SKILL_DIR:?}/.venv".
+  If .venv is absent, create it with python3 -m venv --without-pip "${SEMICLAW_SKILL_DIR:?}/.venv".
   Without uv, run the venv Python with -m ensurepip --upgrade before -m pip install.
   Changes live and die with this session.
 - Non-zero exit_code is a command result: inspect stderr before deciding whether a corrected call is useful. Transport failures/timeouts are tool failures. Changing tools does not change permissions; do not repeat a denied operation through another tool.

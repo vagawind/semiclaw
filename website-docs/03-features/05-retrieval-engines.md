@@ -28,7 +28,7 @@
 | Doris | `doris` | ANN HNSW inner_product/cosine | 倒排索引 MATCH_ANY | 倒排命中 | 建表声明 chinese parser | 每维一张表 | SQL 内 | 高 | 已有 Doris 数仓，检索与分析一体 |
 | 腾讯云 VectorDB | `tencent_vectordb` | HNSW COSINE | 稀疏向量 BM25（SPARSE_INVERTED） | BM25 | SDK SparseEncoder | 每维一个 collection | 应用侧 | 低（云托管） | 腾讯云托管、免运维 |
 
-> 说明：无论引擎自身是否提供"混合检索"，WeKnora 的混合始终是**上层统一的 RRF 融合**（`knowledgebase_search_fusion.go`）——向量与关键词各自独立检索，按 rank 加权合并（见 [混合检索打分与归一化](#_5-混合检索打分与归一化)），因此各引擎只需分别提供两类单模检索。
+> 说明：无论引擎自身是否提供"混合检索"，SemiClaw 的混合始终是**上层统一的 RRF 融合**（`knowledgebase_search_fusion.go`）——向量与关键词各自独立检索，按 rank 加权合并（见 [混合检索打分与归一化](#_5-混合检索打分与归一化)），因此各引擎只需分别提供两类单模检索。
 
 ## 配置方法汇总 {#_6-配置方法汇总}
 
@@ -38,12 +38,12 @@
 |----------|------|------|
 | `RETRIEVE_DRIVER` | `postgres` | 逗号分隔多驱动：`postgres` / `sqlite` / `elasticsearch_v7` / `elasticsearch_v8` / `opensearch` / `qdrant` / `milvus` / `weaviate` / `doris` / `tencent_vectordb`。多驱动时写操作广播到全部，检索按类型路由 |
 | `MULTI_STORE_RETRIEVE_TIMEOUT_SEC` | 30 | 多 store 并行检索每组超时 |
-| `ELASTICSEARCH_ADDR` / `_USERNAME` / `_PASSWORD` / `_INDEX` | — / `WeKnora` | ES v7/v8 共用 |
+| `ELASTICSEARCH_ADDR` / `_USERNAME` / `_PASSWORD` / `_INDEX` | — / `SemiClaw` | ES v7/v8 共用 |
 | `OPENSEARCH_ADDR` / `_USERNAME` / `_PASSWORD` / `_INDEX` / `_INSECURE_SKIP_VERIFY` | — | OpenSearch |
-| `QDRANT_HOST` / `_PORT` / `_COLLECTION` / `_API_KEY` / `_USE_TLS` | `localhost` / 6334 / `weknora_embeddings` | Qdrant（gRPC 端口） |
-| `MILVUS_ADDRESS` / `_COLLECTION` / `_METRIC_TYPE` / `_USERNAME` / `_PASSWORD` / `_DB_NAME` | `localhost:19530` / `weknora_embeddings` / `IP` | metric 改后需重建 collection |
+| `QDRANT_HOST` / `_PORT` / `_COLLECTION` / `_API_KEY` / `_USE_TLS` | `localhost` / 6334 / `semiclaw_embeddings` | Qdrant（gRPC 端口） |
+| `MILVUS_ADDRESS` / `_COLLECTION` / `_METRIC_TYPE` / `_USERNAME` / `_PASSWORD` / `_DB_NAME` | `localhost:19530` / `semiclaw_embeddings` / `IP` | metric 改后需重建 collection |
 | `WEAVIATE_HOST` / `_GRPC_ADDRESS` / `_SCHEME` / `_AUTH_ENABLED` / `_API_KEY` / `_COLLECTION` | `weaviate:8080` / `weaviate:50051` / `http` | 容器内用服务名 |
-| `DORIS_ADDR` / `_HTTP_PORT` / `_DATABASE` / `_USERNAME` / `_PASSWORD` / `_TABLE_PREFIX` / `_COMPAT_MODE` | `doris-fe:9030` / 8030 / `weknora` / `root` / — / `weknora_embeddings` / `auto` | Doris 4.1+；compat 模式建表后不可互换 |
+| `DORIS_ADDR` / `_HTTP_PORT` / `_DATABASE` / `_USERNAME` / `_PASSWORD` / `_TABLE_PREFIX` / `_COMPAT_MODE` | `doris-fe:9030` / 8030 / `semiclaw` / `root` / — / `semiclaw_embeddings` / `auto` | Doris 4.1+；compat 模式建表后不可互换 |
 | `TENCENT_VECTORDB_ADDR` / `_USERNAME` / `_API_KEY` / `_DATABASE` / `_COLLECTION` | — | 三项核心缺一跳过注册 |
 | `NEO4J_ENABLE` / `NEO4J_URI` / `_USERNAME` / `_PASSWORD` | `false` / `bolt://neo4j:7687` | 图谱检索（独立于向量引擎体系） |
 
@@ -136,7 +136,7 @@ flowchart TD
 
 #### Elasticsearch v8 {#_2-3-elasticsearch-v8}
 
-`internal/application/repository/retriever/elasticsearch/v8/repository.go`。typed client，单索引（`ELASTICSEARCH_INDEX`，默认 `WeKnora`），文档含 `dense_vector` embedding 字段。
+`internal/application/repository/retriever/elasticsearch/v8/repository.go`。typed client，单索引（`ELASTICSEARCH_INDEX`，默认 `SemiClaw`），文档含 `dense_vector` embedding 字段。
 
 - **向量检索**：`script_score` 查询，脚本 `cosineSimilarity(params.query_vector, 'embedding')`（Lucene 禁止负最终分，实际值域 [0,1]），threshold 过滤在应用侧。
 - **关键词检索**：`match` 查询 content 字段（BM25）。
@@ -145,7 +145,7 @@ flowchart TD
 
 #### Elasticsearch v7 — 仅关键词 {#_2-4-elasticsearch-v7-—-仅关键词}
 
-`internal/application/repository/retriever/elasticsearch/v7/repository.go`。注意：**`Support()` 只返回 `[keywords]`**——v7 驱动在 WeKnora 中仅作为 BM25 关键词引擎注册（代码中保留了 `script_score cosineSimilarity` 的向量查询构造，但能力声明不含 vector，Composite 不会把向量请求路由给它）。需向量检索时应搭配其他驱动（如 `RETRIEVE_DRIVER=postgres,elasticsearch_v7`）或升级 v8。
+`internal/application/repository/retriever/elasticsearch/v7/repository.go`。注意：**`Support()` 只返回 `[keywords]`**——v7 驱动在 SemiClaw 中仅作为 BM25 关键词引擎注册（代码中保留了 `script_score cosineSimilarity` 的向量查询构造，但能力声明不含 vector，Composite 不会把向量请求路由给它）。需向量检索时应搭配其他驱动（如 `RETRIEVE_DRIVER=postgres,elasticsearch_v7`）或升级 v8。
 
 #### OpenSearch {#_2-5-opensearch}
 
@@ -161,7 +161,7 @@ flowchart TD
 
 `internal/application/repository/retriever/qdrant/repository.go`。gRPC 客户端（默认端口 6334）。
 
-- **集合管理**：**每维度一个 collection**：`{QDRANT_COLLECTION|weknora_embeddings}_{dim}`，Distance=Cosine；payload 字段（kb_id/knowledge_id/chunk_id/tag_id 等）建 keyword 索引，content 建**多语言 tokenizer 的全文索引**。
+- **集合管理**：**每维度一个 collection**：`{QDRANT_COLLECTION|semiclaw_embeddings}_{dim}`，Distance=Cosine；payload 字段（kb_id/knowledge_id/chunk_id/tag_id 等）建 keyword 索引，content 建**多语言 tokenizer 的全文索引**。
 - **向量检索**：`Query` API，score 为归一化向量点积（≈cosine，IR embedding 下 [0,1]），threshold 由 score_threshold 下推。
 - **关键词检索**：`tokenizeQuery` 本地分词后对每个 token 构造 `MatchText(content, token)` 的 **should（OR）过滤**，用 `Scroll` 遍历所有匹配维度的 collection 取回；无 BM25 打分（命中即回，分数由上层 RRF 的 rank 决定）。
 - **过滤**：`getBaseFilter` 用 `MatchKeywords` 精确过滤 KB/knowledge/tag/is_enabled。
@@ -171,7 +171,7 @@ flowchart TD
 
 `internal/application/repository/retriever/milvus/repository.go`。
 
-- **集合管理**：每维度一个 collection（`{MILVUS_COLLECTION|weknora_embeddings}_{dim}`）。schema 含稠密向量 `embedding`（HNSW 索引，M=16 efConstruction=128，metric 由 `MILVUS_METRIC_TYPE` 决定：IP 默认 / COSINE / L2）与稀疏向量 `content_sparse` —— 通过 **内建 BM25 Function**（`entity.FunctionTypeBM25`）由 content 自动生成，配 `AutoIndex(BM25)`。新建 Collection 的 `content` 使用 Milvus 多语言分析器：英文 `english`、中文 `chinese`（内置 Jieba）、未知语言 `default`（ICU），并以 `language` 字段选择分析器。
+- **集合管理**：每维度一个 collection（`{MILVUS_COLLECTION|semiclaw_embeddings}_{dim}`）。schema 含稠密向量 `embedding`（HNSW 索引，M=16 efConstruction=128，metric 由 `MILVUS_METRIC_TYPE` 决定：IP 默认 / COSINE / L2）与稀疏向量 `content_sparse` —— 通过 **内建 BM25 Function**（`entity.FunctionTypeBM25`）由 content 自动生成，配 `AutoIndex(BM25)`。新建 Collection 的 `content` 使用 Milvus 多语言分析器：英文 `english`、中文 `chinese`（内置 Jieba）、未知语言 `default`（ICU），并以 `language` 字段选择分析器。
 - **向量检索**：`Search` + `WithANNSField(embedding)`，COSINE 模式原始值域 [-1,1]，是唯一需要 `(score+1)/2` 归一化的引擎。
 - **关键词检索**：对 `content_sparse` 做 BM25 稀疏向量检索（Milvus 2.5+ 原生全文检索），查询时根据问题文本的语言传入 `analyzer_name`。
 - **过滤**：`filter.go` 构造布尔表达式（kb/knowledge/tag/is_enabled）。
@@ -192,7 +192,7 @@ flowchart TD
 
 `internal/application/repository/retriever/doris/`（`repository.go` 699 行 + `schema.go` + `structs.go`）。MySQL 协议连 FE（9030），HTTP（8030）走 Stream Load（SSRF 安全客户端）。
 
-- **建表**：每维度一张表（前缀 `DORIS_TABLE_PREFIX|weknora_embeddings`），`schema.go` 生成 DDL：ANN 索引 HNSW + `inner_product`（写入/查询前对向量单位化，等价 cosine）；content 列建 **inverted 倒排索引并声明 chinese parser**（无需应用侧分词）。DDL 后轮询 ANN 索引就绪。
+- **建表**：每维度一张表（前缀 `DORIS_TABLE_PREFIX|semiclaw_embeddings`），`schema.go` 生成 DDL：ANN 索引 HNSW + `inner_product`（写入/查询前对向量单位化，等价 cosine）；content 列建 **inverted 倒排索引并声明 chinese parser**（无需应用侧分词）。DDL 后轮询 ANN 索引就绪。
 - **兼容模式** `DORIS_COMPAT_MODE`：`auto`（探测）/ `inner_product_duplicate`（DUPLICATE KEY 表 + `inner_product_approximate`）/ `legacy`（`1 - cosine_distance_approximate`）；建表后不可互换。
 - **向量检索**：`inner_product_approximate(embedding, query)`（单位化后即 cosine）或 legacy 公式，SQL LIMIT TopK。
 - **关键词检索**：`content MATCH_ANY ?` 走倒排索引。
@@ -203,7 +203,7 @@ flowchart TD
 
 `internal/application/repository/retriever/tencentvectordb/repository.go`。RpcClient，EventualConsistency，10s 超时。
 
-- **集合管理**：每维度一个 collection（`{TENCENT_VECTORDB_COLLECTION|weknora_embeddings}_{dim}`），索引三件套：稠密向量 HNSW+COSINE（M=16, efConstruction=200）、**稀疏向量 SPARSE_INVERTED+IP**（服务端 BM25）、标量 FILTER 索引（id 主键 + content/source/chunk/knowledge/kb/tag 过滤字段）。
+- **集合管理**：每维度一个 collection（`{TENCENT_VECTORDB_COLLECTION|semiclaw_embeddings}_{dim}`），索引三件套：稠密向量 HNSW+COSINE（M=16, efConstruction=200）、**稀疏向量 SPARSE_INVERTED+IP**（服务端 BM25）、标量 FILTER 索引（id 主键 + content/source/chunk/knowledge/kb/tag 过滤字段）。
 - **向量检索**：Search COSINE，SDK 值域 [-1,1]（IR embedding 实际 [0,1]）。
 - **关键词检索**：本地 `encoder.SparseEncoder`（BM25）把查询编码为稀疏向量，对 `sparse_vector` 字段做稀疏检索，遍历匹配维度的所有 collection。
 - 配置：`TENCENT_VECTORDB_ADDR` / `TENCENT_VECTORDB_USERNAME` / `TENCENT_VECTORDB_API_KEY` / `TENCENT_VECTORDB_DATABASE` / `TENCENT_VECTORDB_COLLECTION`。三项核心配置缺一则跳过注册。
@@ -214,7 +214,7 @@ flowchart TD
 
 ### Embedding 维度管理 {#_4-embedding-维度管理}
 
-WeKnora 允许不同 KB 使用不同 embedding 模型（维度各异），各引擎的维度隔离策略：
+SemiClaw 允许不同 KB 使用不同 embedding 模型（维度各异），各引擎的维度隔离策略：
 
 | 引擎 | 策略 |
 |------|------|

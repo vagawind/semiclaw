@@ -181,7 +181,7 @@ docker compose restart app
 
 ## 9. 如何开启和查看 Langfuse 可观测性追踪？
 
-WeKnora 支持通过 Langfuse 对 Agent 的 ReAct 循环、大模型 Token 消耗、工具调用以及异步任务流水线进行全链路追踪。
+SemiClaw 支持通过 Langfuse 对 Agent 的 ReAct 循环、大模型 Token 消耗、工具调用以及异步任务流水线进行全链路追踪。
 
 **开启步骤**：
 1. 准备一个可用的 Langfuse 实例（支持云端版或私有部署版）。
@@ -212,7 +212,7 @@ Wiki 模式允许 Agent 根据原始文档自动生成并维护一套结构化�
 - **API Key 调用**：`X-API-Key` 合成虚拟用户固定为所属空间的 `Admin`（仅删除空间需 `Owner`），脚本一般无需迁移。
 - **跨空间超管**：要 `User.CanAccessAllTenants=true` 且 `enable_cross_tenant_access=true`，并通过 `X-Tenant-ID` 切空间。
 
-如需临时回退到「仅审计、不拦截」灰度窗口，可在配置里设置 `tenant.enable_rbac=false`（或环境变量 `WEKNORA_TENANT_ENABLE_RBAC=false`）。完整的角色矩阵和归属链请见 [`docs/RBAC说明.md`](./RBAC说明.md)。
+如需临时回退到「仅审计、不拦截」灰度窗口，可在配置里设置 `tenant.enable_rbac=false`（或环境变量 `SEMICLAW_TENANT_ENABLE_RBAC=false`）。完整的角色矩阵和归属链请见 [`docs/RBAC说明.md`](./RBAC说明.md)。
 
 ## 12. 为什么登录后没有自动回到上次的工作区？
 
@@ -262,31 +262,31 @@ Wiki 模式允许 Agent 根据原始文档自动生成并维护一套结构化�
 
 ## 18. 上传时如何自定义解析配置（process_config）？
 
-0.6.2 起，文件 / URL / 文件夹上传可携带 `process_config`（`KnowledgeProcessOverrides`），在**本次批次**内覆盖知识库默认的解析引擎、分块、多模态（VLM / ASR）、问题生成、图谱抽取等设置，而不会改动 KB 全局配置。Web UI 在上传前会弹出确认对话框供调整；API 与 `weknora doc upload` 传同名 JSON 即可。
+0.6.2 起，文件 / URL / 文件夹上传可携带 `process_config`（`KnowledgeProcessOverrides`），在**本次批次**内覆盖知识库默认的解析引擎、分块、多模态（VLM / ASR）、问题生成、图谱抽取等设置，而不会改动 KB 全局配置。Web UI 在上传前会弹出确认对话框供调整；API 与 `semiclaw doc upload` 传同名 JSON 即可。
 
 - **与 KB 默认配置的关系**：未传的字段沿用 KB 默认值；`graph_enabled` 仅在 `extract_config.enabled` 为 true 时生效。
 - **重新解析**：`POST /knowledge/:id/reparse` 可在 body 中传 `process_config` 以新配置重跑解析，覆盖项会写入 `knowledge.metadata.process_overrides`。
 - **图片 / 音频校验**：批次含图片时需 KB 已配置 VLM；含音频时需已配置 ASR，否则上传会被拒绝。
 - 详见 [`docs/api/knowledge.md`](./api/knowledge.md)。
 
-## 19. 升级到 0.6.2 后 `weknora` CLI 登录或 MCP 工具报错？
+## 19. 升级到 0.6.2 后 `semiclaw` CLI 登录或 MCP 工具报错？
 
 0.6.2 随附 **CLI v0.9**（破坏性变更），常见迁移：
 
-- **`auth login` 不再创建 profile**：先 `weknora profile add <name> --host <url> --use`，再 `weknora auth login`；切换 profile 用全局 `--profile <name>`。
+- **`auth login` 不再创建 profile**：先 `semiclaw profile add <name> --host <url> --use`，再 `semiclaw auth login`；切换 profile 用全局 `--profile <name>`。
 - **`auth logout` / `auth refresh` 去掉 `--name`**：作用于当前 active profile。
 - **MCP 工具 `agent_invoke` 已更名为 `session_ask`**：外部 MCP 客户端需刷新工具 schema。
 - **`agent create --kb` 改为 `--attach-kb`**；`doc delete --all` 与 `search chunks` / `search docs` 的 `--kb` 必填且支持名称或 ID。
-- 新增 `weknora session stop <session-id>` 可中止进行中的 Agent 运行；仓库内附带 `weknora-rag-search` / `weknora-shared` 内置 Skills。
+- 新增 `semiclaw session stop <session-id>` 可中止进行中的 Agent 运行；仓库内附带 `semiclaw-rag-search` / `semiclaw-shared` 内置 Skills。
 - 详见 [`cli/CHANGELOG.md`](../cli/CHANGELOG.md)。
 
 ## 20. pgvector 检索变慢或刚升级后需要做什么？
 
 0.6.2 新增迁移 `000059_embeddings_hnsw_1024`，为 **1024 维** embedding（如 bge-m3）在 PostgreSQL pgvector 上创建 HNSW 索引。服务启动会自动执行迁移；若你使用其他维度，该索引可能不适用，需按自身 embedding 维度另行调优。升级后首次大批量入库期间索引构建可能占用额外 I/O，属正常现象。
 
-## 21. 如何在网站嵌入 WeKnora 智能体（Embed Widget）？
+## 21. 如何在网站嵌入 SemiClaw 智能体（Embed Widget）？
 
-0.6.3 起支持**嵌入渠道**：在 **集成中心** 或 Agent 编辑器中创建 embed 渠道，绑定自定义 Agent，获取渠道 ID 与发布 Token（`em_…`），将 `weknora-widget.js` 嵌入外部网页即可提供访客问答。
+0.6.3 起支持**嵌入渠道**：在 **集成中心** 或 Agent 编辑器中创建 embed 渠道，绑定自定义 Agent，获取渠道 ID 与发布 Token（`em_…`），将 `semiclaw-widget.js` 嵌入外部网页即可提供访客问答。
 
 - **域名白名单**：必须在渠道配置中填写允许加载 Widget 的 Origin，否则 exchange 会返回 403。
 - **安全模式（推荐）**：生产环境不要把 `em_…` 写在页面 HTML 里；由业务后端提供 `token-endpoint`，用发布 Token 调 `POST /api/v1/embed/:id/exchange` 换取短时令牌 `ems_…`（约 30 分钟有效）。详见 [`docs/embed-secure-mode.md`](./embed-secure-mode.md) 与 [`docs/embed-subdomain.md`](./embed-subdomain.md)。
@@ -343,7 +343,7 @@ SystemAdmin 可在 **系统管理 → 平台 API Key** 创建 `scope_type=platfo
 0.7.0 新增系统管理员的**运行时任务队列面板**与 **Worker 池治理**。文档处理从单一聚合池改为分阶段独立池（core / 后处理 / enrichment / maintenance）+ 弹性共享池，Wiki 独立治理：
 
 - 在 **系统设置 → 运行时队列** 查看队列深度、按模型并发统计、失败任务详情，并可手动重试。
-- 可通过 `WEKNORA_ASYNQ_*_CONCURRENCY` 与 `asynq.*_concurrency` 系统设置调整各池并发（需重启服务）；`model.max_concurrency` 用于约束单模型后台并发。
+- 可通过 `SEMICLAW_ASYNQ_*_CONCURRENCY` 与 `asynq.*_concurrency` 系统设置调整各池并发（需重启服务）；`model.max_concurrency` 用于约束单模型后台并发。
 - 详见 [`docs/worker-pool-governance.md`](./worker-pool-governance.md)。注意：Worker 并发只是调度预算，仍受模型配额、DocReader 容量、向量库与数据库连接数限制。
 
 ## 31. 对话中如何临时上传图片/文档做一次性问答？
@@ -358,7 +358,7 @@ SystemAdmin 可在 **系统管理 → 平台 API Key** 创建 `scope_type=platfo
 
 0.7.0 支持 Redis 的 **TLS 连接**（#1930）。按环境变量启用 TLS 后，启动日志会打印 TLS 配置状态便于确认。若连接失败，请核对证书/CA 配置与 Redis 服务端是否要求 TLS。
 
-## 34. 升级到 0.7.0 后 `weknora` CLI 命令找不到或行为变化？
+## 34. 升级到 0.7.0 后 `semiclaw` CLI 命令找不到或行为变化？
 
 0.7.0 随附 **CLI v0.10**（Agent 优先，破坏性变更）：新增 `model` / `message` / `config` / `skills` 命令组，`doc reparse` / `doc update`，`kb config` / `kb config set`；`session continue` 更名为 `session resume`，新增 `session tool-approval`；提供 agent-first 的 chat 与 `session ask` 输出模式，并强化了 SSE 可靠性与类型化错误。详见 [`cli/CHANGELOG.md`](../cli/CHANGELOG.md)。
 
@@ -388,8 +388,8 @@ SystemAdmin 可在 **系统管理 → 平台 API Key** 创建 `scope_type=platfo
 (cd website-docs && npm run setup && npm run build && npm run preview)
 
 # 独立容器部署（容器内完成构建，Nginx 监听 80）
-docker build -t weknora-site website-docs
-docker run -d -p 8081:80 weknora-site
+docker build -t semiclaw-site website-docs
+docker run -d -p 8081:80 semiclaw-site
 ```
 
 官网位于 `/`，文档位于 `/docs/`。从旧文档容器迁移时注意将反向代理目标端口改为 `80`，并让域名根路径指向同一容器。站点版本号在构建时读取 `website-docs/VERSION`，发布时需同步更新；该目录可独立复制构建。完整部署说明见 [website-docs/README.md](../website-docs/README.md)。若某处截图显示为虚线占位框，说明 `website-docs/public/screenshots/` 下缺少同名图片，补图即可生效，不需要改 Markdown。
@@ -427,7 +427,7 @@ docker run -d -p 8081:80 weknora-site
 注意事项：
 
 - 直链依赖 `APP_EXTERNAL_URL`（或存储后端本身公网可达）才能生成；无法生成时该引用会保持 `resource://` 原样，客户端仍可回退到 `/files`。
-- `public` 会为每个被引用文件签发**限时匿名可读**链接（WeKnora 侧 2 小时，MinIO 24 小时），请评估是否符合你的安全要求。
+- `public` 会为每个被引用文件签发**限时匿名可读**链接（SemiClaw 侧 2 小时，MinIO 24 小时），请评估是否符合你的安全要求。
 - 匿名的 embed 渠道与限定了知识库范围的 API Key **始终返回 handle**，不受该变量影响。
 - 建议同时配置 `SYSTEM_AES_KEY`，以便复用 grant 行、稳定直链 URL 并降低读接口的写入压力。
 
@@ -439,7 +439,7 @@ docker run -d -p 8081:80 weknora-site
 
 ## 44. MCP Server 用 `uvx` 启动失败，或者应该装哪个包？
 
-请安装**官方包 `tencent-weknora-mcp`**（由 Tencent/WeKnora 仓库 CI 通过 Trusted Publishing 发布）。此前社区包 `weknora-mcp` 非官方维护，请迁移安装命令。
+请安装**官方包 `tencent-semiclaw-mcp`**（由 vagawind/semiclaw 仓库 CI 通过 Trusted Publishing 发布）。此前社区包 `semiclaw-mcp` 非官方维护，请迁移安装命令。
 
 0.7.2 随附 MCP Server 1.1.x，已迁移到 mcp 2.x 的高级 `MCPServer` API，修复了 `uvx` 拉到 SDK 2.x 时的启动崩溃（`AttributeError: 'Server' object has no attribute 'list_tools'`），并恢复了 HTTP（`stateless_http`）与 SSE（`/sse/messages/`）传输的路由兼容性。工具总数为 29 个，新增 `create_knowledge_from_text`（用 Markdown 文本直接建知识条目）与 `list_shared_knowledge_bases`（共享知识库也纳入按名称解析）。
 
@@ -449,7 +449,7 @@ docker run -d -p 8081:80 weknora-site
 
 0.8.0 **移除了 Local 宿主机进程沙箱**。技能执行改为会话级常驻沙箱，三个后端共用同一套协议：
 
-- **Docker**（单机 / 私有化）：默认**关闭**。本机 `docker.sock` 等同宿主机 root，需系统管理员在 **设置 → 系统设置 → 网络安全** 打开，或设置 `WEKNORA_SANDBOX_DOCKER_ENABLED=true`。打开后才会出现「添加 Docker 后端」入口；已有配置仍可查看/删除。
+- **Docker**（单机 / 私有化）：默认**关闭**。本机 `docker.sock` 等同宿主机 root，需系统管理员在 **设置 → 系统设置 → 网络安全** 打开，或设置 `SEMICLAW_SANDBOX_DOCKER_ENABLED=true`。打开后才会出现「添加 Docker 后端」入口；已有配置仍可查看/删除。
 - **E2B**：E2B Cloud，或任意 E2B 兼容控制面（含自托管）。
 - **CubeSandbox**：集群模板 + 网络策略。
 
@@ -463,7 +463,7 @@ docker run -d -p 8081:80 weknora-site
 2. 从 ClawHub（`@owner/slug`）、SkillHub / skills.sh、GitHub/GitLab URL 或 zip 上传安装；
 3. 安装抽屉会保持打开并显示环形进度；卡住时用「停止安装」，再用「重新安装」走已保存的安装包。
 
-环境变量分两层：**空间级**（Admin，该空间所有人共用）和**个人级**（`/api/v1/me/env-vars`，值永远不会读回）。技能声明的 `WEKNORA_*` 凭据可以按人填写。卸载沙箱里的技能不会删掉目录里的安装包。
+环境变量分两层：**空间级**（Admin，该空间所有人共用）和**个人级**（`/api/v1/me/env-vars`，值永远不会读回）。技能声明的 `SEMICLAW_*` 凭据可以按人填写。卸载沙箱里的技能不会删掉目录里的安装包。
 
 ## 47. 0.7.1 删了 Neo4j 会话记忆，0.8.0 的「长期记忆」是一回事吗？
 
@@ -487,7 +487,7 @@ docker run -d -p 8081:80 weknora-site
 
 ## 50. 开启复杂密码后注册 / 改密失败？
 
-系统设置或 `WEKNORA_AUTH_COMPLEX_PASSWORD_ENABLED=true` 打开后，密码必须同时包含大写、小写、数字和特殊字符（`!@#$%^&*()_+-=[]{}|;:,.<>?`），长度 8–32。注册、个人中心改密、管理员重置走同一套规则。未打开时仍只要求长度。
+系统设置或 `SEMICLAW_AUTH_COMPLEX_PASSWORD_ENABLED=true` 打开后，密码必须同时包含大写、小写、数字和特殊字符（`!@#$%^&*()_+-=[]{}|;:,.<>?`），长度 8–32。注册、个人中心改密、管理员重置走同一套规则。未打开时仍只要求长度。
 
 ## P.S.
 如果以上方式未解决问题，请在issue中描述您的问题，并提供必要的日志信息辅助我们进行问题排查

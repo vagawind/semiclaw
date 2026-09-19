@@ -5,7 +5,7 @@
 // treats the authoritative session→sandbox binding as external state that
 // lives in SessionSandboxBindingStore (Redis in production, memory in tests
 // and single-process deployments). This makes the manager provider-neutral
-// (Cube , E2B) and multi-instance safe: two WeKnora processes
+// (Cube , E2B) and multi-instance safe: two SemiClaw processes
 // concurrently servicing the same session never allocate duplicate sandboxes,
 // and a restart never loses the session's remote resource.
 //
@@ -33,7 +33,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/types"
 )
 
 // SessionInputRoot is reserved for durable user attachments restored from
@@ -46,14 +46,14 @@ const SessionInputRoot = "/workspace/input"
 // do not depend on the template user being able to mkdir under /workspace.
 const SessionOutputRoot = "/workspace/output"
 
-// skillOutputEnvVar matches the skills manager's WEKNORA_SKILL_OUTPUT_DIR.
-const skillOutputEnvVar = "WEKNORA_SKILL_OUTPUT_DIR"
+// skillOutputEnvVar matches the skills manager's SEMICLAW_SKILL_OUTPUT_DIR.
+const skillOutputEnvVar = "SEMICLAW_SKILL_OUTPUT_DIR"
 
-// sessionInputEnvVar matches the skills manager's WEKNORA_SESSION_INPUT_DIR.
+// sessionInputEnvVar matches the skills manager's SEMICLAW_SESSION_INPUT_DIR.
 // Both names are injected into the sandbox environment itself, not only into
 // the skill-script Execute call, so an agent exploring with shell_exec reads
 // the same paths the skills framework uses.
-const sessionInputEnvVar = "WEKNORA_SESSION_INPUT_DIR"
+const sessionInputEnvVar = "SEMICLAW_SESSION_INPUT_DIR"
 
 // SessionWorkspaceRoot is the writable workspace root inside remote sandboxes.
 // shell_exec work_dir must stay underneath this path.
@@ -365,7 +365,7 @@ func withWorkspaceEnvDefaults(env map[string]string) map[string]string {
 }
 
 // executionOutputDir resolves the artifact directory for this Execute call.
-// It prefers WEKNORA_SKILL_OUTPUT_DIR from cfg.Env when the path stays under
+// It prefers SEMICLAW_SKILL_OUTPUT_DIR from cfg.Env when the path stays under
 // SessionWorkspaceRoot; otherwise it falls back to SessionOutputRoot.
 func executionOutputDir(cfg *ExecuteConfig) string {
 	if cfg != nil && cfg.Env != nil {
@@ -728,7 +728,7 @@ func (m *SessionBoundManager) ExecShellCommand(
 
 // ExecShellCommandWithOptions runs a shell command with install-only options.
 // Fallback is explicitly refused so even privileged installer calls never
-// escape onto the WeKnora host machine.
+// escape onto the SemiClaw host machine.
 func (m *SessionBoundManager) ExecShellCommandWithOptions(
 	ctx context.Context,
 	sessionID string,
@@ -968,7 +968,7 @@ var _ SessionDesktopProvider = (*SessionBoundManager)(nil)
 
 // Cleanup marks the manager closed. Session sandboxes are not force-deleted
 // here: their lifecycle is authoritative in the binding store and would
-// leak to any other WeKnora replica if this replica reaped them on shutdown.
+// leak to any other SemiClaw replica if this replica reaped them on shutdown.
 // Providers reclaim idle sandboxes via their own timeout/pause policies.
 func (m *SessionBoundManager) Cleanup(_ context.Context) error {
 	if m == nil {
@@ -1391,7 +1391,7 @@ var (
 )
 
 // PermissiveSessionExistenceChecker accepts every session. It is safe in
-// deployments where WeKnora's own DestroySession is the only session-delete
+// deployments where SemiClaw's own DestroySession is the only session-delete
 // path (single-process memory binding store); the Redis-authoritative
 // deployment must inject a real checker consulting the session repository.
 type PermissiveSessionExistenceChecker struct{}

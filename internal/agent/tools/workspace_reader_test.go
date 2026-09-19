@@ -9,7 +9,7 @@ import (
 	"time"
 	"unicode/utf8"
 
-	"github.com/Tencent/WeKnora/internal/sandbox"
+	"github.com/vagawind/semiclaw/internal/sandbox"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -491,7 +491,7 @@ func TestReadFileWorkspaceRefusesOutsideInspectableRoots(t *testing.T) {
 	for _, path := range []string{
 		"/etc/passwd",
 		"/home/user/.ssh/id_rsa",
-		"/opt/weknora/tenant/skills/pdf/SKILL.md",
+		"/opt/semiclaw/tenant/skills/pdf/SKILL.md",
 	} {
 		result, err := NewReadFileTool(source).Execute(
 			sandboxFileTestContext(),
@@ -558,7 +558,7 @@ func TestListSandboxFilesRedirectsSkillImagePaths(t *testing.T) {
 	source := &fakeSandboxFileSource{}
 	result, err := NewListSandboxFilesTool(source).Execute(
 		sandboxFileTestContext(),
-		json.RawMessage(`{"path":"/opt/weknora/tenant/skills/ppt-generator"}`),
+		json.RawMessage(`{"path":"/opt/semiclaw/tenant/skills/ppt-generator"}`),
 	)
 	require.NoError(t, err)
 	require.False(t, result.Success)
@@ -571,11 +571,11 @@ func TestListSandboxFilesRedirectsSkillImagePaths(t *testing.T) {
 func TestReadFileWorkspaceRedirectsSkillImagePaths(t *testing.T) {
 	source := &fakeSandboxFileSource{
 		data: []byte("must not be read"),
-		stat: &sandbox.RemoteStatEntry{Path: "/opt/weknora/tenant/skills/ppt-generator/scripts/generate_ppt.py", Type: sandbox.RemoteEntryFile, Size: 4},
+		stat: &sandbox.RemoteStatEntry{Path: "/opt/semiclaw/tenant/skills/ppt-generator/scripts/generate_ppt.py", Type: sandbox.RemoteEntryFile, Size: 4},
 	}
 	result, err := NewReadFileTool(source).Execute(
 		sandboxFileTestContext(),
-		json.RawMessage(`{"path":"/opt/weknora/tenant/skills/ppt-generator/scripts/generate_ppt.py"}`),
+		json.RawMessage(`{"path":"/opt/semiclaw/tenant/skills/ppt-generator/scripts/generate_ppt.py"}`),
 	)
 	require.NoError(t, err)
 	require.False(t, result.Success)

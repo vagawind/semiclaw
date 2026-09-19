@@ -8,22 +8,22 @@ import (
 	"io"
 	"strings"
 
-	"github.com/Tencent/WeKnora/internal/agent"
-	"github.com/Tencent/WeKnora/internal/agent/approval"
-	"github.com/Tencent/WeKnora/internal/agent/skills"
-	"github.com/Tencent/WeKnora/internal/agent/tools"
-	"github.com/Tencent/WeKnora/internal/application/repository"
-	"github.com/Tencent/WeKnora/internal/browserskill"
-	"github.com/Tencent/WeKnora/internal/config"
-	"github.com/Tencent/WeKnora/internal/event"
-	"github.com/Tencent/WeKnora/internal/logger"
-	"github.com/Tencent/WeKnora/internal/mcp"
-	"github.com/Tencent/WeKnora/internal/models/chat"
-	"github.com/Tencent/WeKnora/internal/models/rerank"
-	"github.com/Tencent/WeKnora/internal/sandbox"
-	"github.com/Tencent/WeKnora/internal/types"
-	"github.com/Tencent/WeKnora/internal/types/interfaces"
-	secutils "github.com/Tencent/WeKnora/internal/utils"
+	"github.com/vagawind/semiclaw/internal/agent"
+	"github.com/vagawind/semiclaw/internal/agent/approval"
+	"github.com/vagawind/semiclaw/internal/agent/skills"
+	"github.com/vagawind/semiclaw/internal/agent/tools"
+	"github.com/vagawind/semiclaw/internal/application/repository"
+	"github.com/vagawind/semiclaw/internal/browserskill"
+	"github.com/vagawind/semiclaw/internal/config"
+	"github.com/vagawind/semiclaw/internal/event"
+	"github.com/vagawind/semiclaw/internal/logger"
+	"github.com/vagawind/semiclaw/internal/mcp"
+	"github.com/vagawind/semiclaw/internal/models/chat"
+	"github.com/vagawind/semiclaw/internal/models/rerank"
+	"github.com/vagawind/semiclaw/internal/sandbox"
+	"github.com/vagawind/semiclaw/internal/types"
+	"github.com/vagawind/semiclaw/internal/types/interfaces"
+	secutils "github.com/vagawind/semiclaw/internal/utils"
 	"gorm.io/gorm"
 )
 
@@ -405,8 +405,8 @@ func (s *agentService) resolveKBAndDocInfos(
 // manager advertises a SessionFileStore.
 //
 // The skill installer is the exception: write_sandbox_file only accepts
-// /workspace, the installer must write .weknora/requirements.json under
-// /opt/weknora/tenant/skills, and its prompt forbids touching /workspace
+// /workspace, the installer must write .semiclaw/requirements.json under
+// /opt/semiclaw/tenant/skills, and its prompt forbids touching /workspace
 // (that tree is wiped before the snapshot). Offering the file tools made
 // the first write of every install fail, then fall back to a shell heredoc.
 // Install mode gets write_skill_file / edit_skill_file instead, which write

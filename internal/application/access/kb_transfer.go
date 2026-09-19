@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/types"
 )
 
 // KBTransferOperation selects the source and destination permission contract.

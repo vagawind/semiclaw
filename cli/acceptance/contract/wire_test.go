@@ -40,8 +40,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Tencent/WeKnora/cli/internal/config"
-	sdk "github.com/Tencent/WeKnora/client"
+	"github.com/vagawind/semiclaw/cli/internal/config"
+	sdk "github.com/vagawind/semiclaw/client"
 )
 
 // wireCase declares one row in the contract matrix. Optional fields:

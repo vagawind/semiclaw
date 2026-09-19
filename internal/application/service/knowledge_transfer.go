@@ -6,10 +6,10 @@ import (
 	"fmt"
 	"sort"
 
-	"github.com/Tencent/WeKnora/internal/application/access"
-	"github.com/Tencent/WeKnora/internal/application/service/retriever"
-	"github.com/Tencent/WeKnora/internal/logger"
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/application/access"
+	"github.com/vagawind/semiclaw/internal/application/service/retriever"
+	"github.com/vagawind/semiclaw/internal/logger"
+	"github.com/vagawind/semiclaw/internal/types"
 	"github.com/hibiken/asynq"
 )
 

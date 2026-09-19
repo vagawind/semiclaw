@@ -21,7 +21,7 @@ export function Header() {
   const menu = useRef<HTMLButtonElement>(null);
   return <header className="wk-header" onKeyDown={event => { if (event.key === "Escape" && open) { setOpen(false); menu.current?.focus(); } }}>
     <div className="wk-header-inner">
-      <Link className="wk-brand" href="/" aria-label="WeKnora 首页"><BrandLogo priority /></Link>
+      <Link className="wk-brand" href="/" aria-label="SemiClaw 首页"><BrandLogo priority /></Link>
       <nav id="main-navigation" className={`wk-navigation ${open ? "is-open" : ""}`} aria-label="主导航" onClick={() => setOpen(false)}>
         {siteNavigation.map(item => <a key={item.href} href={item.href}>{item.label}{item.badge && <span className="wk-new-label">{item.badge}</span>}</a>)}
         <a className="wk-mobile-github" href={repositoryUrl} target="_blank" rel="noreferrer">GitHub <HeaderIcon name="external" /></a>
@@ -48,8 +48,8 @@ export function ProductVideo() {
   return <figure id="demo" className={s.videoFigure}>
     <div className={s.videoTop}><span>产品演示 <span className={s.videoDot}>/</span> PRODUCT FILM</span><span>02:25 <span className={s.videoDot}>/</span> 1080P</span></div>
     <div className={s.videoStage}>
-      <video ref={player} controls={started} playsInline preload="none" poster="/product/agent-chat.png" aria-label="WeKnora 产品介绍，英文旁白，中英字幕" aria-describedby="video-caption" tabIndex={started ? 0 : -1} onError={() => setFailed(true)} />
-      {!started && <button className={s.videoCover} onClick={play} aria-label="播放 WeKnora 产品介绍视频，2 分 25 秒"><span className={s.playCircle}><Icon name="play" /></span><span className={s.videoCoverTitle}>WeKnora 产品演示</span><span className={s.videoCoverHint}>播放产品介绍 · 2 分 25 秒</span></button>}
+      <video ref={player} controls={started} playsInline preload="none" poster="/product/agent-chat.png" aria-label="SemiClaw 产品介绍，英文旁白，中英字幕" aria-describedby="video-caption" tabIndex={started ? 0 : -1} onError={() => setFailed(true)} />
+      {!started && <button className={s.videoCover} onClick={play} aria-label="播放 SemiClaw 产品介绍视频，2 分 25 秒"><span className={s.playCircle}><Icon name="play" /></span><span className={s.videoCoverTitle}>SemiClaw 产品演示</span><span className={s.videoCoverHint}>播放产品介绍 · 2 分 25 秒</span></button>}
       {failed && <div className={s.videoError} role="status"><p>视频暂时无法加载</p><a href={videoUrl} target="_blank" rel="noreferrer">在 GitHub 打开原视频 <Icon name="external" /></a></div>}
     </div>
     <figcaption id="video-caption" className={s.videoCaption}><span>知识问答、Agent 推理与 Wiki 整理</span><a href={videoUrl} target="_blank" rel="noreferrer">README 产品视频 · 英文旁白 / 中英字幕 <Icon name="external" /></a></figcaption>

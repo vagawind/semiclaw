@@ -7,8 +7,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Tencent/WeKnora/internal/models/limiter"
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/models/limiter"
+	"github.com/vagawind/semiclaw/internal/types"
 	"github.com/panjf2000/ants/v2"
 )
 

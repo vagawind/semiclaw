@@ -11,9 +11,9 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/Tencent/WeKnora/internal/middleware"
-	"github.com/Tencent/WeKnora/internal/types"
-	"github.com/Tencent/WeKnora/internal/types/interfaces"
+	"github.com/vagawind/semiclaw/internal/middleware"
+	"github.com/vagawind/semiclaw/internal/types"
+	"github.com/vagawind/semiclaw/internal/types/interfaces"
 )
 
 // The stubs below implement only the methods ContinueStream reaches; embedding
@@ -141,7 +141,7 @@ func continueStream(t *testing.T, query string) (int, string) {
 }
 
 // Default behaviour: the SSE stream keeps carrying internal handles, which the
-// WeKnora frontend resolves through the authenticated /files proxy.
+// SemiClaw frontend resolves through the authenticated /files proxy.
 func TestContinueStream_DefaultEmitsHandles(t *testing.T) {
 	code, body := continueStream(t, "")
 	require.Equal(t, http.StatusOK, code, body)

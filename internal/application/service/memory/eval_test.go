@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/types"
 	"github.com/stretchr/testify/require"
 )
 
@@ -22,8 +22,8 @@ import (
 // which is cheap and keeps the file honest. Given a real model it scores the
 // prompt against the set:
 //
-//	WEKNORA_MEMORY_EVAL_MODEL=<model id> \
-//	WEKNORA_MEMORY_EVAL_BASE_URL=... WEKNORA_MEMORY_EVAL_API_KEY=... \
+//	SEMICLAW_MEMORY_EVAL_MODEL=<model id> \
+//	SEMICLAW_MEMORY_EVAL_BASE_URL=... SEMICLAW_MEMORY_EVAL_API_KEY=... \
 //	go test ./internal/application/service/memory/ -run TestPromptEval -v
 //
 // Scores are printed per case and in total. There is no pass threshold on
@@ -213,11 +213,11 @@ func hasField(decisions []extractionDecision, match func(extractionDecision) boo
 }
 
 // TestPromptEval scores the prompt against the golden set using a real model.
-// Skipped unless WEKNORA_MEMORY_EVAL_MODEL is set.
+// Skipped unless SEMICLAW_MEMORY_EVAL_MODEL is set.
 func TestPromptEval(t *testing.T) {
-	modelID := strings.TrimSpace(os.Getenv("WEKNORA_MEMORY_EVAL_MODEL"))
+	modelID := strings.TrimSpace(os.Getenv("SEMICLAW_MEMORY_EVAL_MODEL"))
 	if modelID == "" {
-		t.Skip("set WEKNORA_MEMORY_EVAL_MODEL (plus base URL / API key) to score the prompt")
+		t.Skip("set SEMICLAW_MEMORY_EVAL_MODEL (plus base URL / API key) to score the prompt")
 	}
 	chatModel, err := newEvalChatModel(modelID)
 	require.NoError(t, err)

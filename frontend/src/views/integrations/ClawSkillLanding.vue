@@ -127,11 +127,11 @@ const capabilityIcons: Record<(typeof capabilityKeys)[number], string> = {
   browse: 'view-list',
 }
 
-const installCommand = 'openclaw skills install @lyingbug/weknora'
+const installCommand = 'openclaw skills install @lyingbug/semiclaw'
 
 const envExample = computed(() => {
   const base = apiBaseUrlDisplay.value || 'https://your-server.com/api/v1'
-  return `export WEKNORA_BASE_URL="${base}"\nexport WEKNORA_API_KEY="sk-your-api-key"`
+  return `export SEMICLAW_BASE_URL="${base}"\nexport SEMICLAW_API_KEY="sk-your-api-key"`
 })
 
 const openClawHub = () => {

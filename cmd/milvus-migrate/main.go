@@ -11,19 +11,19 @@ import (
 	"strings"
 	"time"
 
-	milvusRepo "github.com/Tencent/WeKnora/internal/application/repository/retriever/milvus"
+	milvusRepo "github.com/vagawind/semiclaw/internal/application/repository/retriever/milvus"
 	client "github.com/milvus-io/milvus/client/v2/milvusclient"
 )
 
 func main() {
 	sourceDefault := strings.TrimSpace(os.Getenv("MILVUS_COLLECTION"))
 	if sourceDefault == "" {
-		sourceDefault = "weknora_embeddings"
+		sourceDefault = "semiclaw_embeddings"
 	}
 	targetDefault := sourceDefault + "_multilingual"
 
-	source := flag.String("source", sourceDefault, "旧 Collection 前缀，例如 weknora_embeddings")
-	target := flag.String("target", targetDefault, "新 Collection 前缀，例如 weknora_embeddings_multilingual")
+	source := flag.String("source", sourceDefault, "旧 Collection 前缀，例如 semiclaw_embeddings")
+	target := flag.String("target", targetDefault, "新 Collection 前缀，例如 semiclaw_embeddings_multilingual")
 	address := flag.String("address", envOr("MILVUS_ADDRESS", "localhost:19530"), "Milvus 地址")
 	username := flag.String("username", os.Getenv("MILVUS_USERNAME"), "Milvus 用户名")
 	password := flag.String("password", os.Getenv("MILVUS_PASSWORD"), "Milvus 密码")

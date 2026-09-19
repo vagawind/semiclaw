@@ -6,8 +6,8 @@ import (
 	"io"
 	"strings"
 
-	"github.com/Tencent/WeKnora/cli/internal/format"
-	sdk "github.com/Tencent/WeKnora/client"
+	"github.com/vagawind/semiclaw/cli/internal/format"
+	sdk "github.com/vagawind/semiclaw/client"
 )
 
 // ProjectedEvent is the bounded event representation shared by

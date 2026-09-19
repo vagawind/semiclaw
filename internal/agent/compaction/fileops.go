@@ -18,8 +18,8 @@ import (
 	"fmt"
 	"strings"
 
-	agenttools "github.com/Tencent/WeKnora/internal/agent/tools"
-	"github.com/Tencent/WeKnora/internal/models/chat"
+	agenttools "github.com/vagawind/semiclaw/internal/agent/tools"
+	"github.com/vagawind/semiclaw/internal/models/chat"
 )
 
 const (

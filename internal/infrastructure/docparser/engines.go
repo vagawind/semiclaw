@@ -4,9 +4,9 @@ import (
 	"context"
 	"strings"
 
-	"github.com/Tencent/WeKnora/internal/infrastructure/docparser/anydoc"
-	"github.com/Tencent/WeKnora/internal/types"
-	"github.com/Tencent/WeKnora/internal/types/interfaces"
+	"github.com/vagawind/semiclaw/internal/infrastructure/docparser/anydoc"
+	"github.com/vagawind/semiclaw/internal/types"
+	"github.com/vagawind/semiclaw/internal/types/interfaces"
 )
 
 // Engine names, as stored in knowledge base parser rules and shown in the UI.
@@ -17,8 +17,8 @@ const (
 	SimpleEngineName = "simple"
 	// AnydocEngineName is the in-process anydoc office-document converter.
 	AnydocEngineName = "anydoc"
-	// WeKnoraCloudEngineName is the hosted WeKnora Cloud document reader.
-	WeKnoraCloudEngineName = "weknoracloud"
+	// SemiClawCloudEngineName is the hosted SemiClaw Cloud document reader.
+	SemiClawCloudEngineName = "weknoracloud"
 	// MinerUEngineName is a self-hosted MinerU service.
 	MinerUEngineName = "mineru"
 	// MinerUCloudEngineName is the MinerU Cloud API.
@@ -34,7 +34,7 @@ func init() {
 	RegisterEngine(&builtinEngine{})
 	RegisterEngine(&simpleEngine{})
 	RegisterEngine(&anydocEngine{})
-	RegisterEngine(&weKnoraCloudEngine{})
+	RegisterEngine(&semiClawCloudEngine{})
 	RegisterEngine(&mineruEngine{})
 	RegisterEngine(&mineruCloudEngine{})
 	RegisterEngine(&paddleOCRVLEngine{})
@@ -147,37 +147,37 @@ func (e *anydocEngine) NewReader(_ context.Context, deps ReaderDeps) (interfaces
 }
 
 // ---------------------------------------------------------------------------
-// weknoracloud — Tenant-scoped WeKnoraCloud docreader with signed requests.
+// semiclawcloud — Tenant-scoped SemiClawCloud docreader with signed requests.
 // ---------------------------------------------------------------------------
 
-type weKnoraCloudEngine struct{}
+type semiClawCloudEngine struct{}
 
-func (e *weKnoraCloudEngine) Name() string { return WeKnoraCloudEngineName }
+func (e *semiClawCloudEngine) Name() string { return SemiClawCloudEngineName }
 
-func (e *weKnoraCloudEngine) Description() string { return "WeKnoraCloud document reader" }
+func (e *semiClawCloudEngine) Description() string { return "SemiClawCloud document reader" }
 
-func (e *weKnoraCloudEngine) FileTypes(_ bool) []string {
+func (e *semiClawCloudEngine) FileTypes(_ bool) []string {
 	return []string{"docx", "doc", "pdf", "md", "markdown", "xlsx", "xls", "pptx", "ppt"}
 }
 
-func (e *weKnoraCloudEngine) CheckAvailable(_ bool, overrides map[string]string) (bool, string) {
-	if overrides["weknoracloud_app_id"] != "" {
+func (e *semiClawCloudEngine) CheckAvailable(_ bool, overrides map[string]string) (bool, string) {
+	if overrides["semiclawcloud_app_id"] != "" {
 		return true, ""
 	}
-	return false, "WeKnora Cloud credentials not configured. Go to Settings → WeKnora Cloud to set up."
+	return false, "SemiClaw Cloud credentials not configured. Go to Settings → SemiClaw Cloud to set up."
 }
 
-func (e *weKnoraCloudEngine) NewReader(
+func (e *semiClawCloudEngine) NewReader(
 	ctx context.Context, deps ReaderDeps,
 ) (interfaces.DocReader, error) {
-	if deps.WeKnoraCloudCredentials == nil {
-		return nil, errEngineUnavailable(WeKnoraCloudEngineName, "no credential resolver configured")
+	if deps.SemiClawCloudCredentials == nil {
+		return nil, errEngineUnavailable(SemiClawCloudEngineName, "no credential resolver configured")
 	}
-	creds := deps.WeKnoraCloudCredentials(ctx)
+	creds := deps.SemiClawCloudCredentials(ctx)
 	if creds == nil {
-		return nil, errEngineUnavailable(WeKnoraCloudEngineName, "tenant credentials not configured")
+		return nil, errEngineUnavailable(SemiClawCloudEngineName, "tenant credentials not configured")
 	}
-	return NewWeKnoraCloudSignedDocumentReader(creds.AppID, creds.AppSecret)
+	return NewSemiClawCloudSignedDocumentReader(creds.AppID, creds.AppSecret)
 }
 
 // ---------------------------------------------------------------------------

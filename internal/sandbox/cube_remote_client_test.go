@@ -9,7 +9,7 @@ import (
 
 	cubesandbox "github.com/tencentcloud/CubeSandbox/sdk/go"
 
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/types"
 	"github.com/stretchr/testify/require"
 )
 
@@ -67,15 +67,15 @@ func TestCubeRemoteClientCreateSnapshot(t *testing.T) {
 	handle, err := client.Create(ctx, RemoteCreateRequest{TemplateID: "template-a"})
 	require.NoError(t, err)
 
-	ref, err := client.CreateSnapshot(ctx, handle.ID(), "weknora-sk-cfg1-g1")
+	ref, err := client.CreateSnapshot(ctx, handle.ID(), "semiclaw-sk-cfg1-g1")
 
 	require.NoError(t, err)
 	require.Equal(t, "snap-1", ref.ID)
-	require.Equal(t, []string{"weknora-sk-cfg1-g1"}, ref.Names)
+	require.Equal(t, []string{"semiclaw-sk-cfg1-g1"}, ref.Names)
 	mock.mu.Lock()
 	body := mock.snapshotCreateBody
 	mock.mu.Unlock()
-	require.Equal(t, "weknora-sk-cfg1-g1", body["name"])
+	require.Equal(t, "semiclaw-sk-cfg1-g1", body["name"])
 }
 
 func TestCubeRemoteClientCreateSnapshotRejectsEmptySandboxID(t *testing.T) {
@@ -137,9 +137,9 @@ func TestCubeRemoteClientListSnapshotsPagesAllResults(t *testing.T) {
 	require.NoError(t, err)
 	second, err := client.Create(ctx, RemoteCreateRequest{TemplateID: "template-a"})
 	require.NoError(t, err)
-	firstRef, err := client.CreateSnapshot(ctx, first.ID(), "weknora-sk-cfg1-g1")
+	firstRef, err := client.CreateSnapshot(ctx, first.ID(), "semiclaw-sk-cfg1-g1")
 	require.NoError(t, err)
-	secondRef, err := client.CreateSnapshot(ctx, first.ID(), "weknora-sk-cfg2-g1")
+	secondRef, err := client.CreateSnapshot(ctx, first.ID(), "semiclaw-sk-cfg2-g1")
 	require.NoError(t, err)
 	_, err = client.CreateSnapshot(ctx, second.ID(), "other")
 	require.NoError(t, err)
@@ -287,7 +287,7 @@ func TestCubeRemoteClientCreateForwardsNetworkPolicy(t *testing.T) {
 	require.Equal(t, false, second["action"].(map[string]any)["allow"])
 }
 
-// WeKnora's default deliberately differs from Cube's: an unspecified policy
+// SemiClaw's default deliberately differs from Cube's: an unspecified policy
 // closes inbound access, because "anyone who knows the sandbox ID" used to be
 // the only barrier in front of the sandbox URL. Egress stays open so skill
 // installs keep working.
@@ -322,7 +322,7 @@ func TestCubeRemoteHandleExposesTrafficAccessToken(t *testing.T) {
 }
 
 // The provider issues the traffic token once, at create time. Everything that
-// re-attaches later — auto-resume, a WeKnora restart, an artifact download —
+// re-attaches later — auto-resume, a SemiClaw restart, an artifact download —
 // has to put it back or every data-plane call answers 403.
 func TestCubeRemoteClientConnectRestoresTrafficAccessToken(t *testing.T) {
 	mock := newCubeMockServer(t)

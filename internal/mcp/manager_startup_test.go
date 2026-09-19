@@ -12,8 +12,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Tencent/WeKnora/internal/types"
-	"github.com/Tencent/WeKnora/internal/utils"
+	"github.com/vagawind/semiclaw/internal/types"
+	"github.com/vagawind/semiclaw/internal/utils"
 	sdkserver "github.com/mark3labs/mcp-go/server"
 	"github.com/stretchr/testify/require"
 )

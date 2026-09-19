@@ -11,7 +11,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/Tencent/WeKnora/internal/sandbox"
+	"github.com/vagawind/semiclaw/internal/sandbox"
 )
 
 // skillPythonVerifier is the source of the in-sandbox Python checker. It is
@@ -246,8 +246,8 @@ func (s *TenantSkillService) execVerify(
 			WorkDir: sandbox.SessionWorkspaceRoot,
 			Timeout: installCommandTimeout,
 			Env: map[string]string{
-				"WEKNORA_SKILL_DIR":        skillDir,
-				"WEKNORA_SKILL_OUTPUT_DIR": sandbox.SessionOutputRoot,
+				"SEMICLAW_SKILL_DIR":        skillDir,
+				"SEMICLAW_SKILL_OUTPUT_DIR": sandbox.SessionOutputRoot,
 			},
 		})
 	if err != nil {

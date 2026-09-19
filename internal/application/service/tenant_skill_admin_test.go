@@ -7,8 +7,8 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	apperrors "github.com/Tencent/WeKnora/internal/errors"
-	"github.com/Tencent/WeKnora/internal/types"
+	apperrors "github.com/vagawind/semiclaw/internal/errors"
+	"github.com/vagawind/semiclaw/internal/types"
 )
 
 func TestListSkillsReturnsTheConfigsSkills(t *testing.T) {

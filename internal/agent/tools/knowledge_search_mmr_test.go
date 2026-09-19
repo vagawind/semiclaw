@@ -6,7 +6,7 @@ import (
 	"math"
 	"testing"
 
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/types"
 )
 
 // applyMMRNaive is the pre-optimization form of applyMMR: it recomputes the

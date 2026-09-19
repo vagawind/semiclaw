@@ -1869,7 +1869,7 @@ index 0000000..6b65d8a
 +      },
 +      tabGroups: { update: vi.fn() },
 +    });
-+    manager = new SessionManager({ taskTabs: () => true, taskLabel: () => "WeKnora" });
++    manager = new SessionManager({ taskTabs: () => true, taskLabel: () => "SemiClaw" });
 +  });
 +  afterEach(() => vi.unstubAllGlobals());
 +  it("opens opted-in tasks in a visible window and only selects tabs inside it", async () => {
@@ -1927,7 +1927,7 @@ index 0000000..6b65d8a
 +    );
 +    expect(chrome.tabGroups.update).toHaveBeenCalledWith(
 +      7,
-+      expect.objectContaining({ title: "WeKnora" }),
++      expect.objectContaining({ title: "SemiClaw" }),
 +    );
 +    expect(manager.findByWindowId(10)).toBeNull();
 +    expect(manager.findByTabId(a.activeTabId!)).toBe(a);

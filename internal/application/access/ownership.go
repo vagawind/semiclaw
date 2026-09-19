@@ -3,7 +3,7 @@ package access
 import (
 	"errors"
 
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/types"
 )
 
 var (

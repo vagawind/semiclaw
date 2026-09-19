@@ -2,7 +2,7 @@
 
 配套文档：[Docker 沙箱后端重做调研](../../sandbox-docker-backend.md)。
 
-这个程序直接打 Docker Engine API，逐项验证「Docker 能不能承载 WeKnora
+这个程序直接打 Docker Engine API，逐项验证「Docker 能不能承载 SemiClaw
 `RemoteSandboxClient` 契约 + E2B 那套 Snapshot 工作流」。它不是产品代码，也不参与主模块构建
 （自带 `go.mod`），只作为调研结论的可复现证据。
 
@@ -19,7 +19,7 @@ go run .            # daemon 在本机 unix socket 上时可能需要 sudo -E
 ```
 
 程序会自建一个带 uid 1000 `user` 账号的模板镜像（对齐 E2B 模板约定），跑完自行删除它创建的容器。
-留下的 `weknora-poc/*` 镜像用 `docker image rm` 清理。
+留下的 `semiclaw-poc/*` 镜像用 `docker image rm` 清理。
 
 ## 覆盖的内容
 

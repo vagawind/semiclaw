@@ -3,7 +3,7 @@ package provider
 import (
 	"fmt"
 
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/types"
 )
 
 const (
@@ -19,7 +19,7 @@ const (
 // (https://github.com/BerriAI/litellm). LiteLLM exposes a single
 // OpenAI-compatible endpoint that routes to 100+ providers (OpenAI, Anthropic,
 // Gemini, Bedrock, Vertex, Azure, ...) behind one base URL and key, so it plugs
-// into WeKnora's OpenAI-compatible transport like the other gateway providers.
+// into SemiClaw's OpenAI-compatible transport like the other gateway providers.
 type LiteLLMProvider struct{}
 
 func init() {

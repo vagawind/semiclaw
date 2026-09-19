@@ -169,7 +169,7 @@ curl -N "$BASE/api/v1/sandbox-configs/cfg-1/skills/skill-1/install-events" \
 | PUT | `/me/env-vars/sandbox` | `{sandbox_config_id,name,value}` |
 | DELETE | `/me/env-vars/sandbox` | `{sandbox_config_id,name}` |
 
-读取为 `{success,data:[{sandbox_config_id,sandbox_config_name,description,vars,skills}]}`，source 标明 user/workspace/unset 等状态。设置/删除成功返回 success；删未设置项返回 404。个人沙箱变量拒绝 WEKNORA_ 前缀和 PATH 等保留名；技能声明变量可使用所需的 WEKNORA_* 凭据名。
+读取为 `{success,data:[{sandbox_config_id,sandbox_config_name,description,vars,skills}]}`，source 标明 user/workspace/unset 等状态。设置/删除成功返回 success；删未设置项返回 404。个人沙箱变量拒绝 SEMICLAW_ 前缀和 PATH 等保留名；技能声明变量可使用所需的 SEMICLAW_* 凭据名。
 
 ```bash
 curl -X PUT "$BASE/api/v1/me/env-vars/skill" \

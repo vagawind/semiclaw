@@ -12,7 +12,7 @@
 //   - Directory guardrail: `path` must resolve underneath `/workspace`,
 //     the session's own tree — the same scope write_sandbox_file may
 //     create in. Omitting `path` lists the artifact output dir
-//     (`$WEKNORA_SKILL_OUTPUT_DIR`, default `/workspace/output`) so a
+//     (`$SEMICLAW_SKILL_OUTPUT_DIR`, default `/workspace/output`) so a
 //     listing does not dump every attachment and scratch file into context.
 //   - Read-only: this tool never creates, modifies or deletes anything
 //     inside the sandbox. Model-authored files go through write_sandbox_file.
@@ -31,11 +31,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Tencent/WeKnora/internal/agent/skills"
-	"github.com/Tencent/WeKnora/internal/logger"
-	"github.com/Tencent/WeKnora/internal/sandbox"
-	"github.com/Tencent/WeKnora/internal/types"
-	"github.com/Tencent/WeKnora/internal/utils"
+	"github.com/vagawind/semiclaw/internal/agent/skills"
+	"github.com/vagawind/semiclaw/internal/logger"
+	"github.com/vagawind/semiclaw/internal/sandbox"
+	"github.com/vagawind/semiclaw/internal/types"
+	"github.com/vagawind/semiclaw/internal/utils"
 )
 
 // SandboxFileSource is the narrow, tool-facing subset of a session-aware
@@ -236,7 +236,7 @@ func formatSandboxModTime(t time.Time) string {
 
 // resolveSessionID pulls the session ID out of the tool exec context (set
 // by the agent engine per tool call) with a fallback to the ambient
-// context helper used elsewhere in WeKnora.
+// context helper used elsewhere in SemiClaw.
 func resolveSessionID(ctx context.Context) string {
 	if meta, ok := ToolExecFromContext(ctx); ok && meta != nil && meta.SessionID != "" {
 		return meta.SessionID
@@ -270,7 +270,7 @@ func inspectableRootsDescription() string {
 }
 
 // inspectablePathError explains a refused list/read path. Skill image
-// paths are the common miss: the model sees /opt/weknora/tenant/skills/<name>
+// paths are the common miss: the model sees /opt/semiclaw/tenant/skills/<name>
 // in read_file's environment section and retries with this tool or ls.
 func inspectablePathError(requested string) string {
 	base := fmt.Sprintf("this tool only lists/reads /workspace. path %q is outside that scope", requested)

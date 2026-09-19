@@ -10,7 +10,7 @@ export interface ToolToggles {
 
 /** User-supplied configuration, as written in a Cordis patch row. */
 export interface Config {
-  /** WeKnora API root, with or without the `/api/v1` suffix. */
+  /** SemiClaw API root, with or without the `/api/v1` suffix. */
   baseUrl?: string
   /** Tenant or platform API key, sent as `X-API-Key`. */
   apiKey?: string
@@ -18,7 +18,7 @@ export interface Config {
   tenantId?: string
   /** Default knowledge-base scope when a call names none. */
   knowledgeBaseIds?: string[]
-  /** Default custom agent for `weknora_ask`; omitted uses the RAG pipeline. */
+  /** Default custom agent for `semiclaw_ask`; omitted uses the RAG pipeline. */
   agentId?: string
   /** Default and maximum number of chunks a search returns. */
   maxResults?: number
@@ -29,7 +29,7 @@ export interface Config {
   /** Timeout for a streamed answer, which includes model and tool time. */
   chatTimeoutMs?: number
   /**
-   * `public` asks WeKnora for directly loadable file URLs in answers and
+   * `public` asks SemiClaw for directly loadable file URLs in answers and
    * citations (the default: dsh can render `https://` Markdown images, not
    * `resource://` handles). `handle` keeps the internal references.
    */
@@ -63,13 +63,13 @@ const DEFAULTS = {
   requestTimeoutMs: 30_000,
   chatTimeoutMs: 300_000,
   resourceUrls: 'public',
-  toolPrefix: 'weknora',
+  toolPrefix: 'semiclaw',
 } as const
 
 /** Thrown when a patch row configures this plugin in a way it cannot serve. */
 export class ConfigError extends Error {
   constructor(violations: string[]) {
-    super(`dsh-weknora configuration is invalid:\n  - ${violations.join('\n  - ')}`)
+    super(`dsh-semiclaw configuration is invalid:\n  - ${violations.join('\n  - ')}`)
     this.name = 'ConfigError'
   }
 }
@@ -78,7 +78,7 @@ const API_ROOT = /\/api\/v\d+$/
 const TOOL_PREFIX = /^[a-z][a-z0-9_]*$/
 
 /**
- * Normalize a WeKnora base URL to an API root. Both `https://kb.example.com`
+ * Normalize a SemiClaw base URL to an API root. Both `https://kb.example.com`
  * and `https://kb.example.com/api/v1` are accepted, because a deployment's
  * documented address is usually the bare origin.
  */

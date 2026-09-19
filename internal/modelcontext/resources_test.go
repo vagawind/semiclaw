@@ -3,7 +3,7 @@ package modelcontext
 import (
 	"testing"
 
-	"github.com/Tencent/WeKnora/internal/models/chat"
+	"github.com/vagawind/semiclaw/internal/models/chat"
 	"github.com/stretchr/testify/require"
 )
 
@@ -38,7 +38,7 @@ func TestRegistryAliasesWikiSummarySlug(t *testing.T) {
 func TestRegistryLeavesEntitySlugUntouched(t *testing.T) {
 	r := newResourceRegistry()
 	// Entity slugs are low-entropy and semantically meaningful; not aliased.
-	entity := "[[entity/weknora-error-log|WeKnora 试错记录]]"
+	entity := "[[entity/semiclaw-error-log|SemiClaw 试错记录]]"
 	require.Equal(t, entity, r.EncodeText(entity))
 }
 

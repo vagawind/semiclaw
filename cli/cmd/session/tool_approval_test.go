@@ -9,10 +9,10 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/Tencent/WeKnora/cli/internal/cmdutil"
-	"github.com/Tencent/WeKnora/cli/internal/iostreams"
-	"github.com/Tencent/WeKnora/cli/internal/testutil"
-	sdk "github.com/Tencent/WeKnora/client"
+	"github.com/vagawind/semiclaw/cli/internal/cmdutil"
+	"github.com/vagawind/semiclaw/cli/internal/iostreams"
+	"github.com/vagawind/semiclaw/cli/internal/testutil"
+	sdk "github.com/vagawind/semiclaw/client"
 )
 
 type fakeResolveSvc struct {

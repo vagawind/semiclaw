@@ -7,9 +7,9 @@ import (
 	"strings"
 	"testing"
 
-	agenttoken "github.com/Tencent/WeKnora/internal/agent/token"
-	"github.com/Tencent/WeKnora/internal/models/chat"
-	"github.com/Tencent/WeKnora/internal/types"
+	agenttoken "github.com/vagawind/semiclaw/internal/agent/token"
+	"github.com/vagawind/semiclaw/internal/models/chat"
+	"github.com/vagawind/semiclaw/internal/types"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

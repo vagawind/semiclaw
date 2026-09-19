@@ -7,7 +7,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/Tencent/WeKnora/internal/utils"
+	"github.com/vagawind/semiclaw/internal/utils"
 )
 
 // ensureDesktopSigningKey persists a signing-only key. It never replaces an
@@ -20,7 +20,7 @@ func ensureDesktopSigningKey() error {
 	if err != nil {
 		return err
 	}
-	return ensureDesktopSigningKeyInDir(filepath.Join(dir, "WeKnora Lite"))
+	return ensureDesktopSigningKeyInDir(filepath.Join(dir, "SemiClaw Lite"))
 }
 
 func ensureDesktopSigningKeyInDir(dir string) error {

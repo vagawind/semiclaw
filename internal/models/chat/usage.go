@@ -4,8 +4,8 @@ import (
 	"context"
 	"strings"
 
-	"github.com/Tencent/WeKnora/internal/logger"
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/logger"
+	"github.com/vagawind/semiclaw/internal/types"
 )
 
 // logUsage emits the standard "[LLM Usage]" line shared by every Chat

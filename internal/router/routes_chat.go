@@ -3,8 +3,8 @@ package router
 import (
 	"github.com/gin-gonic/gin"
 
-	"github.com/Tencent/WeKnora/internal/handler"
-	"github.com/Tencent/WeKnora/internal/handler/session"
+	"github.com/vagawind/semiclaw/internal/handler"
+	"github.com/vagawind/semiclaw/internal/handler/session"
 )
 
 // RegisterMessageRoutes 注册消息相关的路由。

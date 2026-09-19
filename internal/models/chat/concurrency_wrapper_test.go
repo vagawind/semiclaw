@@ -5,8 +5,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Tencent/WeKnora/internal/models/limiter"
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/models/limiter"
+	"github.com/vagawind/semiclaw/internal/types"
 )
 
 // fakeChat is a minimal Chat whose stream emits continuously until ctx is done,

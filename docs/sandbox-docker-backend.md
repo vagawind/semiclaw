@@ -13,7 +13,7 @@ CubeSandbox / E2B 的集群与模板见 [沙箱集群与标准模板](./sandbox-
   这正是当初把 provider 抽象成 `RemoteSandboxClient` 的收益。
 - 它适合单机 / 私有化部署。跨主机调度、内核级隔离、内存态快照仍然要用 E2B 协议后端，
   原因见「边界」一节。
-- **默认关闭。** 本机 `docker.sock` 等同宿主机 root。系统管理员可在「设置 → 系统设置 → 网络安全」打开，立即生效；也可用环境变量 `WEKNORA_SANDBOX_DOCKER_ENABLED=true` 作为未落库时的回退。设置页始终保留 Docker 标签：未打开时没有「添加」入口，只说明如何启用。已有配置仍可查看/删除，但不会再创建容器。
+- **默认关闭。** 本机 `docker.sock` 等同宿主机 root。系统管理员可在「设置 → 系统设置 → 网络安全」打开，立即生效；也可用环境变量 `SEMICLAW_SANDBOX_DOCKER_ENABLED=true` 作为未落库时的回退。设置页始终保留 Docker 标签：未打开时没有「添加」入口，只说明如何启用。已有配置仍可查看/删除，但不会再创建容器。
 - Docker 官方的 Docker Sandboxes（`sbx`）不能当后端：那是开发者本机 CLI，要 Docker 账号登录、
   工作区是宿主机目录直挂、没有多租户服务端 API。
 
@@ -25,9 +25,9 @@ CubeSandbox / E2B 的集群与模板见 [沙箱集群与标准模板](./sandbox-
 | 旧行为 | 后果 |
 | --- | --- |
 | 执行完即销毁容器 | 没有会话状态，`shell_exec`、附件暂存、产物收集在能力矩阵里根本不注册 |
-| 超时 `kill` 的是 `docker run` 客户端进程 | 容器继续跑到自己结束；WeKnora 已经给用户返回超时了。实测见 [PoC](./poc/docker-sandbox) |
-| `/workspace` 只读挂载 | 脚本写不了 `/workspace/output`，而 skills 框架恰恰把 `WEKNORA_SKILL_OUTPUT_DIR` 指到那里 |
-| bind mount 由宿主机 daemon 解释 | WeKnora 自己跑在容器里时挂进去的是宿主机上的同名目录，通常不存在 |
+| 超时 `kill` 的是 `docker run` 客户端进程 | 容器继续跑到自己结束；SemiClaw 已经给用户返回超时了。实测见 [PoC](./poc/docker-sandbox) |
+| `/workspace` 只读挂载 | 脚本写不了 `/workspace/output`，而 skills 框架恰恰把 `SEMICLAW_SKILL_OUTPUT_DIR` 指到那里 |
+| bind mount 由宿主机 daemon 解释 | SemiClaw 自己跑在容器里时挂进去的是宿主机上的同名目录，通常不存在 |
 | 走 docker CLI 而不是 API | 依赖宿主机装 CLI，错误只能靠字符串匹配，拿不到容器 ID 做对账与回收 |
 | 配置面只有一个 `image` | CPU、内存、网络、TTL 都没法按空间配置 |
 
@@ -54,11 +54,11 @@ ENTRYPOINT 拼到 Cmd 前面，所以只设 Cmd 时，任何声明了 ENTRYPOINT
 
 **超时由容器内的 `timeout(1)` 执行。** 取消 HTTP 请求不会终止容器里的进程（[PoC](./poc/docker-sandbox)
 里专门复现了这条），所以每次 exec 都包一层
-`sh -c 'touch <marker>; exec timeout -s KILL <n> "$@"' weknora-exec <cmd> <args...>`。
+`sh -c 'touch <marker>; exec timeout -s KILL <n> "$@"' semiclaw-exec <cmd> <args...>`。
 命令通过位置参数传进去，不做任何字符串拼接，脚本里的引号和换行不会改变实际执行的东西。
 退出码 137/124 被翻译成 `Killed=true`。
 
-**空闲回收是 WeKnora 自己的事。** daemon 没有任何 TTL 概念。上面那层 wrapper 顺手 `touch`
+**空闲回收是 SemiClaw 自己的事。** daemon 没有任何 TTL 概念。上面那层 wrapper 顺手 `touch`
 一个活跃标记文件，清扫时用一次 `HEAD /archive` 读它的 mtime 就知道容器多久没干活了——
 不需要额外往容器里 exec，也不需要 Redis 记账。清扫在 `Create`/`Connect` 时触发，
 按 daemon 端点限流（默认最快一分钟一次），在后台跑。删掉一个空闲容器不需要跟绑定存储协调：
@@ -105,7 +105,7 @@ archive 接口里只剩 `HEAD` 还在用，且仅用于读固定路径的活跃�
 后台进程一旦活得比启动它的 exec 久，退出后就会变成没人回收的僵尸，堆到 `pids_limit` 之后所有
 后续 exec 都会失败。
 
-**镜像即模板。** `ListTemplates` 列出 daemon 上带 `com.weknora.sandbox.template=true` 标签的、
+**镜像即模板。** `ListTemplates` 列出 daemon 上带 `com.semiclaw.sandbox.template=true` 标签的、
 或名字就是标准镜像的镜像；`EnsureStandardTemplate` 在后台拉取，拉取期间模板状态显示为
 `building`，与其它后端的模板构建流程对齐。
 
@@ -113,13 +113,13 @@ archive 接口里只剩 `HEAD` 还在用，且仅用于读固定路径的活跃�
 
 在「设置 → 沙箱后端」中新建配置并选择 Docker：
 
-系统管理员可在「设置 → 系统设置 → 网络安全」打开 Docker 沙箱（立即生效）。未落库时回退到 `WEKNORA_SANDBOX_DOCKER_ENABLED`。默认关闭，因为能保存 Docker 配置的空间管理员可以在本进程够得到的 Engine API 上创建容器，而本机 `docker.sock` 等同宿主机 root。设置页始终有 Docker 标签；未打开时没有添加按钮，只提示如何启用。
+系统管理员可在「设置 → 系统设置 → 网络安全」打开 Docker 沙箱（立即生效）。未落库时回退到 `SEMICLAW_SANDBOX_DOCKER_ENABLED`。默认关闭，因为能保存 Docker 配置的空间管理员可以在本进程够得到的 Engine API 上创建容器，而本机 `docker.sock` 等同宿主机 root。设置页始终有 Docker 标签；未打开时没有添加按钮，只提示如何启用。
 
 | 字段 | 说明 |
 | --- | --- |
 | 镜像 | 必填。会话容器都从它创建，等价于其它后端的 template ID |
 | Docker 守护进程地址 | 留空跟随本机 `docker` CLI（`DOCKER_HOST` 或当前 `docker context`），因此 Colima / Docker Desktop 不必手填 socket。远程填 `tcp://host:2376`，**必须**同时填 TLS 证书目录；私网地址要打开「允许访问私网集群地址」 |
-| TLS 证书目录 | 远程 daemon 必填。WeKnora 主机上包含 `ca.pem`/`cert.pem`/`key.pem` 的目录，证书不入库 |
+| TLS 证书目录 | 远程 daemon 必填。SemiClaw 主机上包含 `ca.pem`/`cert.pem`/`key.pem` 的目录，证书不入库 |
 | 空闲回收 | 容器多久没执行任何命令就回收。留空 1800 秒 |
 | CPU / 内存 / 进程数上限 | 单个沙箱的资源上限。留空 2 核 / 2048 MB / 512 进程 |
 | 网络模式 | 只接受 `bridge`（默认）与 `none`（完全禁止出网）。`host`、`container:` 以及自定义网络名一律拒绝：常见部署通过挂载的 `docker.sock` 连 daemon，填上部署自身的 compose 网络就会让沙箱与 Postgres / Redis 同网 |
@@ -141,7 +141,7 @@ Debian 系基础镜像天然带 find 和 timeout。
 | 远程 daemon（mTLS） | 沙箱负载与应用分离 | 必须配 TLS 证书；daemon 端口不得暴露到公网 |
 | 每租户独立 daemon | 有强隔离诉求但没有 KVM | 由部署方分配，不同配置指向不同 host |
 
-WeKnora 自己跑在容器里时，要把 **实际的** docker socket 挂进 app 容器（并接受它等同宿主机 root 的事实），
+SemiClaw 自己跑在容器里时，要把 **实际的** docker socket 挂进 app 容器（并接受它等同宿主机 root 的事实），
 或者改用远程 daemon。Linux 上通常是 `/var/run/docker.sock`；macOS 上 Colima / Docker Desktop / OrbStack
 各自有 `$HOME` 下的 socket，以 `docker context show` 为准。入口脚本在 `gosu` 降权前会按
 socket 的 GID 把 `appuser` 加入对应组；不要依赖 compose `group_add`，也不要 `chmod 666`
@@ -166,9 +166,9 @@ socket 改成非 root 组的 `660`。
 
 「空间级管理沙箱装 skill → commit 成快照 → 会话从快照起容器 → 增量出下一版」这套流程已经接入：
 `DockerRemoteClient` 实现 `RemoteSnapshotManager`，`docker commit` 打出带
-`com.weknora.sandbox.skill-snapshot` 标签的本地镜像（命名空间 `weknora-skill/`），
+`com.semiclaw.sandbox.skill-snapshot` 标签的本地镜像（命名空间 `semiclaw-skill/`），
 会话启动时用该镜像覆盖配置里的基础 image。安装器用 root `shell_exec` 写
-`/opt/weknora/tenant/skills`，与 Cube / E2B 同一条技能安装链路。
+`/opt/semiclaw/tenant/skills`，与 Cube / E2B 同一条技能安装链路。
 
 两个要注意的约束：镜像层上限 127，长期增量要定期压平；快照是本机资产，多机部署必须推到 registry。
 压平和跨 daemon 分发还不在这条路径里。
@@ -194,7 +194,7 @@ socket 改成非 root 组的 `660`。
 因为状态是 `building` 而跳过它，`ReconcileSnapshots` 只告警不删，配置删除时空 `snapshot_id`
 被当成「无需释放」。因此 `planned_name` 在 commit **之前**就落库（迁移 000088），之后靠
 provider 的 `ListSnapshots` 按名字认领：Cube / E2B 会把请求的名字回显在 `Names` 里，Docker 的
-ID 本身就是这个名字加上 `weknora-skill/` 前缀。两条路径会用它——周期清理里的
+ID 本身就是这个名字加上 `semiclaw-skill/` 前缀。两条路径会用它——周期清理里的
 `reapAbandonedBuilds`，以及配置删除时的 `resolveAbandonedBuildIDs`（配置一删，周期清理就再也
 遍历不到这张快照，那是最后一次机会）。只有**认领成功**才会删；名字对不上时不动，因为无法区分
 「commit 从未发生」和「该 provider 不回显名字」，猜错就等于丢掉一张仍然存在的快照的唯一记录。
@@ -211,8 +211,8 @@ go test ./internal/sandbox -run 'TestDocker' -count=1
 附件暂存与产物收集、超时确实终止进程、容器被外部停掉后恢复：
 
 ```bash
-docker build -f docker/Dockerfile.sandbox --target sandbox -t wechatopenai/weknora-sandbox:dev .
-DOCKER_INTEGRATION_IMAGE=wechatopenai/weknora-sandbox:dev \
+docker build -f docker/Dockerfile.sandbox --target sandbox -t vagawind/semiclaw-sandbox:dev .
+DOCKER_INTEGRATION_IMAGE=vagawind/semiclaw-sandbox:dev \
 go test -tags=docker_integration ./internal/sandbox \
   -run '^TestDocker.*Integration' -count=1 -v -timeout=15m
 ```

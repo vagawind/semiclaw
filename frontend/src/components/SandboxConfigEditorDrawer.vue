@@ -214,14 +214,14 @@
 
       <section v-if="currentStepKey === 'connection' && !isRemoteBackend" class="setting-drawer__section">
         <h4 class="setting-drawer__section-title">{{ $t('settings.sandbox.sectionRuntimeEnvironment') }}</h4>
-        <div class="weknora-template-card is-active">
+        <div class="semiclaw-template-card is-active">
           <SandboxBackendBadge type="docker" />
-          <div class="weknora-template-card__content">
-            <div class="weknora-template-card__title-row">
-              <span class="weknora-template-card__title">{{ $t('settings.sandbox.weknoraDockerImage') }}</span>
+          <div class="semiclaw-template-card__content">
+            <div class="semiclaw-template-card__title-row">
+              <span class="semiclaw-template-card__title">{{ $t('settings.sandbox.semiclawDockerImage') }}</span>
               <t-tag theme="primary" variant="light" size="small">{{ $t('settings.sandbox.recommendedTag') }}</t-tag>
             </div>
-            <p>{{ $t('settings.sandbox.weknoraDockerImageHint') }}</p>
+            <p>{{ $t('settings.sandbox.semiclawDockerImageHint') }}</p>
           </div>
         </div>
         <t-form-item :label="requiredLabel('dockerImage')" :status="fieldStatus('image')"
@@ -240,7 +240,7 @@
         </t-form-item>
         <t-form-item :label="$t('settings.sandbox.dockerTlsCertPath')"
           :help="$t('settings.sandbox.dockerTlsCertPathHelp')">
-          <t-input v-model="docker.tls_cert_path" placeholder="/etc/weknora/docker-certs"
+          <t-input v-model="docker.tls_cert_path" placeholder="/etc/semiclaw/docker-certs"
             :disabled="retargetFrozen" @input="onFieldInput('tls_cert_path')" />
         </t-form-item>
         <t-alert theme="warning" class="compact-alert" :message="$t('settings.sandbox.dockerHostRisk')" />
@@ -277,7 +277,7 @@
           <div v-if="canCreateStandard" class="template-row template-row--offer">
             <div class="template-row__main">
               <div class="template-row__head">
-                <span class="template-row__title">{{ $t('settings.sandbox.weknoraStandardTemplate') }}</span>
+                <span class="template-row__title">{{ $t('settings.sandbox.semiclawStandardTemplate') }}</span>
                 <t-tag theme="primary" variant="outline" size="small">
                   {{ $t('settings.sandbox.recommendedTag') }}
                 </t-tag>
@@ -293,7 +293,7 @@
           <div v-if="canCreateDesktop" class="template-row template-row--offer">
             <div class="template-row__main">
               <div class="template-row__head">
-                <span class="template-row__title">{{ $t('settings.sandbox.weknoraDesktopTemplate') }}</span>
+                <span class="template-row__title">{{ $t('settings.sandbox.semiclawDesktopTemplate') }}</span>
                 <t-tag theme="warning" variant="outline" size="small">
                   {{ $t('settings.sandbox.desktopTemplateTag') }}
                 </t-tag>
@@ -412,7 +412,7 @@
             </template>
             <!--
               Docker has no provider-side timeout at all: an abandoned container
-              keeps its memory and CPU share on the daemon host until WeKnora
+              keeps its memory and CPU share on the daemon host until SemiClaw
               reclaims it, so the idle TTL and the resource caps are the only
               things bounding what one workspace can hold.
             -->
@@ -814,9 +814,9 @@ const isMaskedSecret = (value?: string) => value === secretPlaceholder
 // Mirrors DefaultDockerImage on the server, including why it tracks main
 // instead of latest: the latest tag still carries an image whose /workspace
 // the sandbox account cannot write.
-const defaultDockerImage = 'wechatopenai/weknora-sandbox:main'
+const defaultDockerImage = 'vagawind/semiclaw-sandbox:main'
 
-const clusterGuideUrl = 'https://github.com/Tencent/WeKnora/blob/main/docs/sandbox-cluster.md'
+const clusterGuideUrl = 'https://github.com/vagawind/semiclaw/blob/main/docs/sandbox-cluster.md'
 const e2bApiKeysUrl = 'https://e2b.dev/dashboard?tab=keys'
 
 const backendOptions = computed(() => {
@@ -1295,7 +1295,7 @@ function canRebuildTemplate(item: SandboxTemplate): boolean {
 }
 
 function templateDisplayName(item: SandboxTemplate): string {
-  if (item.standard) return t('settings.sandbox.weknoraStandardTemplate')
+  if (item.standard) return t('settings.sandbox.semiclawStandardTemplate')
   const name = item.name?.trim() || ''
   const id = item.id?.trim() || ''
   if (!name || name === id) return t('settings.sandbox.templateUnnamed')
@@ -2008,7 +2008,7 @@ onUnmounted(stopTemplatePolling)
   }
 }
 
-.weknora-template-card {
+.semiclaw-template-card {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -2023,7 +2023,7 @@ onUnmounted(stopTemplatePolling)
   }
 }
 
-.weknora-template-card__content {
+.semiclaw-template-card__content {
   flex: 1;
   min-width: 0;
 
@@ -2035,13 +2035,13 @@ onUnmounted(stopTemplatePolling)
   }
 }
 
-.weknora-template-card__title-row {
+.semiclaw-template-card__title-row {
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-.weknora-template-card__title {
+.semiclaw-template-card__title {
   font-size: 13px;
   font-weight: 600;
 }
@@ -2544,7 +2544,7 @@ onUnmounted(stopTemplatePolling)
 
 @media (max-width: 720px) {
   .form-grid--two,
-  .weknora-template-card {
+  .semiclaw-template-card {
     align-items: flex-start;
     flex-wrap: wrap;
   }

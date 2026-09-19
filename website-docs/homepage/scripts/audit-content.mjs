@@ -32,5 +32,5 @@ for (const asset of assets) {
   assert.ok(file.isFile() && file.size > 0, `Missing local asset: ${asset}`);
 }
 assert.match(html, /aria-controls="main-navigation"/);
-assert.match(html, /aria-label="播放 WeKnora 产品介绍视频/);
+assert.match(html, /aria-label="播放 SemiClaw 产品介绍视频/);
 console.log(`Homepage audit passed: product content, README video, navigation anchors, ${assets.size} local assets, and retired design choices.`);

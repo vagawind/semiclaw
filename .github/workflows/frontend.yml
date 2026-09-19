@@ -66,5 +66,5 @@ jobs:
           docker build \
             -f frontend/Dockerfile \
             --build-arg VITE_FRONTEND_COMMIT="${GITHUB_SHA::7}" \
-            -t weknora-ui:ci \
+            -t semiclaw-ui:ci \
             frontend/

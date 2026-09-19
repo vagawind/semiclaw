@@ -14,9 +14,9 @@ import (
 	"time"
 	"unicode/utf8"
 
-	"github.com/Tencent/WeKnora/internal/datasource"
-	"github.com/Tencent/WeKnora/internal/logger"
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/datasource"
+	"github.com/vagawind/semiclaw/internal/logger"
+	"github.com/vagawind/semiclaw/internal/types"
 )
 
 const FeishuWikiNodeResourceSeparator = ":"
@@ -43,7 +43,7 @@ var FeishuStreamCheckpointMaxInterval = 30 * time.Second
 // fetchTally accumulates the outcome of fetching a wiki node subtree so the
 // connector can Emit a single actionable summary. Without it, unsupported nodes
 // (mindnote/slides/etc.) vanish with no item, no error and no log, leaving users
-// unable to explain why "13 documents synced only 3" (Tencent/WeKnora#2136).
+// unable to explain why "13 documents synced only 3" (vagawind/semiclaw#2136).
 type fetchTally struct {
 	discovered    int
 	fetched       int
@@ -151,7 +151,7 @@ var parseableAttachmentExts = map[string]bool{
 const MinAttachmentBytes = 2 * 1024
 
 // SupportedImageExt sniffs image bytes and returns the filename extension and
-// content type WeKnora accepts for a standalone image knowledge item (png/jpg/
+// content type SemiClaw accepts for a standalone image knowledge item (png/jpg/
 // gif — the image set isValidFileType admits). ok is false for non-image or
 // unsupported formats (e.g. webp/bmp), which the caller skips rather than
 // mislabel — a wrong extension would fail parsing. The detected content type is
@@ -287,7 +287,7 @@ func truncateUTF8(s string, maxBytes int) string {
 // DocxFetchInput is the unified description of one docx document from either
 // source (wiki node or Drive file) that FetchDocxWithBlocks needs.
 type DocxFetchInput struct {
-	// WeKnora external_id: wiki=node.NodeToken, drive=file.Token
+	// SemiClaw external_id: wiki=node.NodeToken, drive=file.Token
 	DocToken string
 	// Feishu docx document token
 	ObjToken   string

@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/types"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -66,7 +66,7 @@ func sampleSecretTenant() *types.Tenant {
 			ProxyURL: "http://proxy.internal:8080",
 		},
 		Credentials: &types.CredentialsConfig{
-			WeKnoraCloud: &types.WeKnoraCloudCredentials{
+			SemiClawCloud: &types.SemiClawCloudCredentials{
 				AppID:     "wk-app-id-abc",
 				AppSecret: "wk-app-secret-def",
 			},

@@ -4,7 +4,7 @@ import (
 	"context"
 	"strings"
 
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/types"
 )
 
 // populateFAQAnswers populates FAQ answers for the search results

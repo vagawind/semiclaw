@@ -4,12 +4,12 @@ import (
 	"context"
 	"testing"
 
-	"github.com/Tencent/WeKnora/internal/agent"
-	"github.com/Tencent/WeKnora/internal/agent/tools"
-	"github.com/Tencent/WeKnora/internal/browserskill"
-	"github.com/Tencent/WeKnora/internal/config"
-	"github.com/Tencent/WeKnora/internal/sandbox"
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/agent"
+	"github.com/vagawind/semiclaw/internal/agent/tools"
+	"github.com/vagawind/semiclaw/internal/browserskill"
+	"github.com/vagawind/semiclaw/internal/config"
+	"github.com/vagawind/semiclaw/internal/sandbox"
+	"github.com/vagawind/semiclaw/internal/types"
 	"github.com/stretchr/testify/require"
 )
 

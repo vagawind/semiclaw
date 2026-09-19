@@ -7,12 +7,12 @@ import (
 
 const (
 	// StandardTemplateName is the provider-side name of the CLI template.
-	StandardTemplateName = "weknora"
+	StandardTemplateName = "semiclaw"
 
 	// DesktopTemplateName is the provider-side name of the desktop template.
 	// It is a sibling of StandardTemplateName, not a replacement: a config
 	// uses one or the other, decided by Config.DesktopEnabled.
-	DesktopTemplateName = "weknora-desktop"
+	DesktopTemplateName = "semiclaw-desktop"
 )
 
 // DefaultE2BTemplateTag is the tag E2B resolves when a sandbox is created from a
@@ -59,11 +59,11 @@ type RemoteTemplateCatalog interface {
 	ListTemplates(ctx context.Context) ([]RemoteTemplate, error)
 	EnsureStandardTemplate(ctx context.Context) (*RemoteTemplate, error)
 	// ReplaceStandardTemplate applies the current spec to the cluster's
-	// WeKnora template (DNS, image). A READY template cannot pick those up
+	// SemiClaw template (DNS, image). A READY template cannot pick those up
 	// any other way. It must not delete a usable template: callers persist
 	// the replacement ID first, then DeleteSupersededStandardTemplates.
 	ReplaceStandardTemplate(ctx context.Context) (*RemoteTemplate, error)
-	// DeleteSupersededStandardTemplates removes WeKnora templates other than
+	// DeleteSupersededStandardTemplates removes SemiClaw templates other than
 	// keepID. Call only after keepID is spawnable and has been written onto
 	// every config that still pointed at the previous standard template.
 	DeleteSupersededStandardTemplates(ctx context.Context, keepID string) error
@@ -72,7 +72,7 @@ type RemoteTemplateCatalog interface {
 // RemoteDesktopTemplateCatalog is the desktop sibling of RemoteTemplateCatalog.
 // Cube and E2B implement it; Docker does not (SupportsDesktop stays false).
 type RemoteDesktopTemplateCatalog interface {
-	// EnsureDesktopTemplate returns the cluster's WeKnora desktop template,
+	// EnsureDesktopTemplate returns the cluster's SemiClaw desktop template,
 	// building it when absent.
 	EnsureDesktopTemplate(ctx context.Context) (*RemoteTemplate, error)
 	// ReplaceDesktopTemplate applies the current spec to the desktop
@@ -101,11 +101,11 @@ func isTemplateName(name, want string) bool {
 	return len(parts) > 1 && strings.EqualFold(parts[len(parts)-1], want)
 }
 
-// classifyWeKnoraTemplate decides whether a catalog entry is our CLI template,
+// classifySemiClawTemplate decides whether a catalog entry is our CLI template,
 // our desktop sibling, or neither. Name wins over image: a template aliased
-// weknora-desktop is desktop even if the image repository matches the CLI
+// semiclaw-desktop is desktop even if the image repository matches the CLI
 // image, and a nameless Cube template falls back to the image tag.
-func classifyWeKnoraTemplate(name, image string) (standard, desktop bool) {
+func classifySemiClawTemplate(name, image string) (standard, desktop bool) {
 	if isDesktopTemplate(name) {
 		return false, true
 	}
@@ -153,8 +153,8 @@ func imageTag(image string) string {
 }
 
 // normalizeImageRepository reduces an image reference to its repository path so
-// that "docker.io/wechatopenai/weknora-sandbox:latest",
-// "wechatopenai/weknora-sandbox@sha256:…" and the bare name all compare equal.
+// that "docker.io/vagawind/semiclaw-sandbox:latest",
+// "vagawind/semiclaw-sandbox@sha256:…" and the bare name all compare equal.
 func normalizeImageRepository(image string) string {
 	ref := strings.TrimSpace(image)
 	if ref == "" {

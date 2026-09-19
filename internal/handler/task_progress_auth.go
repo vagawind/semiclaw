@@ -3,9 +3,9 @@ package handler
 import (
 	"context"
 
-	apperrors "github.com/Tencent/WeKnora/internal/errors"
-	"github.com/Tencent/WeKnora/internal/types"
-	"github.com/Tencent/WeKnora/internal/utils"
+	apperrors "github.com/vagawind/semiclaw/internal/errors"
+	"github.com/vagawind/semiclaw/internal/types"
+	"github.com/vagawind/semiclaw/internal/utils"
 )
 
 // requireTaskProgressTenant ensures async task progress endpoints only

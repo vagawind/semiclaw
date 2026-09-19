@@ -1,4 +1,4 @@
-// Package ima implements the WeKnora data source connector for Tencent IMA
+// Package ima implements the SemiClaw data source connector for Tencent IMA
 // (ima.qq.com), syncing documents and files out of IMA knowledge bases via the
 // /openapi/wiki/v1 OpenAPI.
 package ima
@@ -13,15 +13,15 @@ import (
 	"sync"
 	"time"
 
-	"github.com/Tencent/WeKnora/internal/datasource"
-	"github.com/Tencent/WeKnora/internal/logger"
-	"github.com/Tencent/WeKnora/internal/utils"
+	"github.com/vagawind/semiclaw/internal/datasource"
+	"github.com/vagawind/semiclaw/internal/logger"
+	"github.com/vagawind/semiclaw/internal/utils"
 )
 
 const (
 	defaultTimeout  = 60 * time.Second
 	defaultPageSize = 50
-	userAgent       = "WeKnora-IMA-Connector/1.0"
+	userAgent       = "SemiClaw-IMA-Connector/1.0"
 
 	// IMA hard limit: get_knowledge_list max limit=50; search_knowledge_base max=20.
 	searchPageSize = 20

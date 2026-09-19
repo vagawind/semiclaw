@@ -37,7 +37,7 @@ test('browser and web search selections are independent and persisted', () => {
   store.toggleLocalBrowser(true)
   assert.equal(store.isLocalBrowserEnabled, true)
   assert.equal(store.settings.webSearchEnabled, true)
-  assert.equal(JSON.parse(items.get('WeKnora_settings')!).localBrowserEnabled, true)
+  assert.equal(JSON.parse(items.get('SemiClaw_settings')!).localBrowserEnabled, true)
   store.toggleWebSearch(false)
   assert.equal(store.isLocalBrowserEnabled, true)
   store.toggleWebSearch(true)

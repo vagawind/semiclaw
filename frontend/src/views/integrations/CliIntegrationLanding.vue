@@ -81,21 +81,21 @@ const { apiBaseUrlDisplay } = useApiBaseUrlDisplay()
 const steps = computed(() => [
   {
     key: 'install',
-    command: 'git clone https://github.com/Tencent/WeKnora.git\ncd WeKnora/cli\ngo build -o weknora .\nexport PATH="$PWD:$PATH"',
+    command: 'git clone https://github.com/vagawind/semiclaw.git\ncd SemiClaw/cli\ngo build -o semiclaw .\nexport PATH="$PWD:$PATH"',
   },
   { key: 'connect', command: buildCLIConnectCommand(apiBaseUrlDisplay.value, window.location.origin) },
-  { key: 'verify', command: 'weknora doctor\nweknora kb list' },
+  { key: 'verify', command: 'semiclaw doctor\nsemiclaw kb list' },
 ])
 const examples = [
   {
     key: 'commands',
-    command: 'weknora doc upload ./document.pdf --kb "KB_ID"\nweknora search chunks "query" --kb "KB_ID"\nweknora chat "question" --kb "KB_ID" --format text\nweknora agent list',
+    command: 'semiclaw doc upload ./document.pdf --kb "KB_ID"\nsemiclaw search chunks "query" --kb "KB_ID"\nsemiclaw chat "question" --kb "KB_ID" --format text\nsemiclaw agent list',
   },
   {
     key: 'mcp',
     command: JSON.stringify({
       mcpServers: {
-        weknora: { command: 'weknora', args: ['--profile', 'weknora', 'mcp', 'serve'] },
+        semiclaw: { command: 'semiclaw', args: ['--profile', 'semiclaw', 'mcp', 'serve'] },
       },
     }, null, 2),
   },
@@ -103,6 +103,6 @@ const examples = [
 
 const copy = (command: string) => copyWithToast(command, 'integrations.cli.copied')
 const openDocs = () => {
-  window.open('https://github.com/Tencent/WeKnora/blob/main/cli/README.md', '_blank', 'noopener,noreferrer')
+  window.open('https://github.com/vagawind/semiclaw/blob/main/cli/README.md', '_blank', 'noopener,noreferrer')
 }
 </script>

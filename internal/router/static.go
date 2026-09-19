@@ -9,14 +9,14 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/Tencent/WeKnora/internal/logger"
+	"github.com/vagawind/semiclaw/internal/logger"
 )
 
 // serveFrontendStatic registers a middleware that serves the frontend SPA
 // from the ./web directory if it exists. Must be called BEFORE auth middleware
 // so static files are served without authentication.
 func serveFrontendStatic(r *gin.Engine) {
-	webDir := os.Getenv("WEKNORA_WEB_DIR")
+	webDir := os.Getenv("SEMICLAW_WEB_DIR")
 	if webDir == "" {
 		webDir = "./web"
 	}

@@ -7,9 +7,9 @@ import (
 	"sort"
 	"unicode/utf8"
 
-	"github.com/Tencent/WeKnora/internal/common"
-	"github.com/Tencent/WeKnora/internal/logger"
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/common"
+	"github.com/vagawind/semiclaw/internal/logger"
+	"github.com/vagawind/semiclaw/internal/types"
 )
 
 // ToolRegistry manages the registration and retrieval of tools

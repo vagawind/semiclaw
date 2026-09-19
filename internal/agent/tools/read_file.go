@@ -6,10 +6,10 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/Tencent/WeKnora/internal/agent/skills"
-	"github.com/Tencent/WeKnora/internal/sandbox"
-	"github.com/Tencent/WeKnora/internal/types"
-	"github.com/Tencent/WeKnora/internal/utils"
+	"github.com/vagawind/semiclaw/internal/agent/skills"
+	"github.com/vagawind/semiclaw/internal/sandbox"
+	"github.com/vagawind/semiclaw/internal/types"
+	"github.com/vagawind/semiclaw/internal/utils"
 )
 
 // ReadFileTool exposes one read operation over capability-scoped sources.
@@ -145,7 +145,7 @@ func (t *ReadFileTool) readSkillResource(ctx context.Context, input ReadFileInpu
 				dir = "a session directory prepared automatically from this skill package"
 			}
 			fmt.Fprintf(&b, "Execution: shell_exec(skill_name=%q, command=...). "+
-				"Use $WEKNORA_SKILL_DIR for bundled scripts (resources: %s); "+
+				"Use $SEMICLAW_SKILL_DIR for bundled scripts (resources: %s); "+
 				"cwd defaults to /workspace. "+
 				"Host skill resources are staged into the session automatically "+
 				"(host virtualenvs and node_modules are not copied). "+

@@ -4,8 +4,8 @@ import (
 	"context"
 	"time"
 
-	"github.com/Tencent/WeKnora/internal/tracing/langfuse"
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/tracing/langfuse"
+	"github.com/vagawind/semiclaw/internal/types"
 )
 
 // langfuseChat wraps a Chat implementation and emits a Langfuse generation

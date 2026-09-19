@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	secutils "github.com/Tencent/WeKnora/internal/utils"
+	secutils "github.com/vagawind/semiclaw/internal/utils"
 )
 
 func TestNewEmbeddingHTTPClient_ReusesTransport(t *testing.T) {

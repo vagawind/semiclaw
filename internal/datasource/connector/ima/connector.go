@@ -9,9 +9,9 @@ import (
 	"time"
 	"unicode/utf8"
 
-	"github.com/Tencent/WeKnora/internal/datasource"
-	"github.com/Tencent/WeKnora/internal/logger"
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/datasource"
+	"github.com/vagawind/semiclaw/internal/logger"
+	"github.com/vagawind/semiclaw/internal/types"
 )
 
 // Compile-time proof that *Connector satisfies the datasource.Connector interface.
@@ -504,9 +504,9 @@ func fetchOneMedia(
 	ext := extensionForMediaType(info.MediaType)
 
 	// A media type with no fixed extension (web page, WeChat article, ...) is
-	// normally handed to the ingest layer as a bare URL so WeKnora fetches it
+	// normally handed to the ingest layer as a bare URL so SemiClaw fetches it
 	// itself. That only works for publicly reachable links: when IMA attaches
-	// auth headers the URL points at IMA-hosted storage and WeKnora's own
+	// auth headers the URL points at IMA-hosted storage and SemiClaw's own
 	// fetch — which cannot carry those headers — would be rejected. In that
 	// case download here, where the headers are available, and infer the
 	// extension from the response instead.

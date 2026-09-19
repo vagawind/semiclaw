@@ -6,10 +6,10 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/Tencent/WeKnora/internal/application/access"
-	apperrors "github.com/Tencent/WeKnora/internal/errors"
-	"github.com/Tencent/WeKnora/internal/types"
-	"github.com/Tencent/WeKnora/internal/types/interfaces"
+	"github.com/vagawind/semiclaw/internal/application/access"
+	apperrors "github.com/vagawind/semiclaw/internal/errors"
+	"github.com/vagawind/semiclaw/internal/types"
+	"github.com/vagawind/semiclaw/internal/types/interfaces"
 	"github.com/hibiken/asynq"
 	"github.com/stretchr/testify/require"
 )

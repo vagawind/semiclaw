@@ -9,10 +9,10 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/Tencent/WeKnora/internal/application/repository"
-	"github.com/Tencent/WeKnora/internal/sandbox"
-	"github.com/Tencent/WeKnora/internal/types"
-	secutils "github.com/Tencent/WeKnora/internal/utils"
+	"github.com/vagawind/semiclaw/internal/application/repository"
+	"github.com/vagawind/semiclaw/internal/sandbox"
+	"github.com/vagawind/semiclaw/internal/types"
+	secutils "github.com/vagawind/semiclaw/internal/utils"
 )
 
 type stagedSessionAttachment struct {
@@ -276,7 +276,7 @@ func buildSandboxAttachmentsPrompt(attachments []stagedSessionAttachment) string
 		"and do not write into /workspace/input. Inspect them with read_file, " +
 		"or with shell_exec (ls/find) when a shell is available. " +
 		"Create generated files with write_sandbox_file " +
-		"and patch existing ones with edit_sandbox_file. $WEKNORA_SKILL_OUTPUT_DIR (/workspace/output) " +
+		"and patch existing ones with edit_sandbox_file. $SEMICLAW_SKILL_OUTPUT_DIR (/workspace/output) " +
 		"is the only directory collected for download, so put finished deliverables there " +
 		"and keep drafts and intermediate files in any other directory under /workspace.</instruction>\n")
 	b.WriteString("</sandbox_attachments>")

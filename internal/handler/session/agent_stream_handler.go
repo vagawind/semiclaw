@@ -8,13 +8,13 @@ import (
 	"sync"
 	"time"
 
-	"github.com/Tencent/WeKnora/internal/agent/skills"
-	agenttools "github.com/Tencent/WeKnora/internal/agent/tools"
-	"github.com/Tencent/WeKnora/internal/application/service"
-	"github.com/Tencent/WeKnora/internal/event"
-	"github.com/Tencent/WeKnora/internal/logger"
-	"github.com/Tencent/WeKnora/internal/types"
-	"github.com/Tencent/WeKnora/internal/types/interfaces"
+	"github.com/vagawind/semiclaw/internal/agent/skills"
+	agenttools "github.com/vagawind/semiclaw/internal/agent/tools"
+	"github.com/vagawind/semiclaw/internal/application/service"
+	"github.com/vagawind/semiclaw/internal/event"
+	"github.com/vagawind/semiclaw/internal/logger"
+	"github.com/vagawind/semiclaw/internal/types"
+	"github.com/vagawind/semiclaw/internal/types/interfaces"
 )
 
 // AgentStreamHandler handles agent events for SSE streaming
@@ -35,7 +35,7 @@ type AgentStreamHandler struct {
 
 	// artifactCollector drains skill-generated files from the session
 	// sandbox after the agent completes. Nil when the sandbox backend
-	// doesn't support artifact collection or WeKnora was built without it.
+	// doesn't support artifact collection or SemiClaw was built without it.
 	artifactCollector *service.ArtifactCollector
 
 	// State tracking

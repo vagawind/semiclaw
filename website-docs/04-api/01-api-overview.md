@@ -1,6 +1,6 @@
 # API 总览
 
-WeKnora HTTP API 使用 `/api/v1` 前缀，支持 JWT、API Key 和 Embed token 认证。调用各资源接口前，需按客户端类型选择凭证，并遵循统一的响应、错误处理、分页和流式事件约定。
+SemiClaw HTTP API 使用 `/api/v1` 前缀，支持 JWT、API Key 和 Embed token 认证。调用各资源接口前，需按客户端类型选择凭证，并遵循统一的响应、错误处理、分页和流式事件约定。
 
 ## Base URL 与版本前缀
 
@@ -40,7 +40,7 @@ X-API-Key: <api_key>
   - 受限（scoped）key：按 capability 放行，并受 `knowledge_base_ids` 白名单约束。Capability 常量见 `internal/types/tenant_api_key.go`：`retrieve`、`ingest`、`chat`、`read_agents`、`manage_kbs`、`manage_agents`、`message_history`、`manage_models`、`manage_mcp_services`、`manage_datasources`、`manage_channels`、`manage_vector_stores`、`manage_storage_backends`、`manage_web_search`、`run_evaluations`、`manage_members`、`manage_spaces`、`manage_tenant_settings`；平台能力：`system_tenants_read/manage`、`system_settings_read/manage`、`system_runtime_read/manage`、`system_audit_read`。
 - 外部用户主体（可选，按空间 `api-principal-config` 配置）：
   - `direct` 模式：`X-External-User-ID: <外部用户ID>`（≤128 字符）。
-  - `signed_token` 模式：`X-External-User-Token: <HS256 JWT>`，要求 `aud=weknora`、`exp`（生存期 ≤24h）、`tenant_id` claim 与目标空间一致、`sub` 为外部用户 ID。
+  - `signed_token` 模式：`X-External-User-Token: <HS256 JWT>`，要求 `aud=semiclaw`、`exp`（生存期 ≤24h）、`tenant_id` claim 与目标空间一致、`sub` 为外部用户 ID。
 
 ### Embed publish token（匿名嵌入端） {#_3-embed-publish-token-匿名嵌入端}
 
@@ -193,7 +193,7 @@ X-Accel-Buffering: no
 使用前需要知道的几件事：
 
 - **需要具备外链能力**：直链来自存储后端预签名，或 `APP_EXTERNAL_URL` + `/r/<token>`。两者都没有时（如 local 存储且未设 `APP_EXTERNAL_URL`），该引用保持 `resource://` 原样，客户端仍可回退到 `/files`；
-- **直链是限时匿名可读的**（WeKnora 签发的 grant 2 小时，MinIO 预签名 24 小时），任何拿到链接的人在过期前都能读取，不要写进日志或转发给不该看的人；
+- **直链是限时匿名可读的**（SemiClaw 签发的 grant 2 小时，MinIO 预签名 24 小时），任何拿到链接的人在过期前都能读取，不要写进日志或转发给不该看的人；
 - **嵌入渠道不支持**：`/api/v1/embed/...` 下的接口强制 `handle`，访客图片继续走渠道维度的鉴权代理；
 - **限定知识库的 API Key 用 `public` 会返回 403**：这类 Key 本身就被禁止访问 `/files` 代理，能拿到匿名直链等于绕过同一道限制；
 - **同一文件的直链在有效期内复用**，重复请求不会反复签发凭证，客户端与 CDN 缓存因此能命中。
@@ -206,7 +206,7 @@ X-Accel-Buffering: no
 | --- | --- | --- |
 | 公开分享链接接口（`/auth/invitations/lookup`、`/auth/register-by-invite`） | 每 IP 30 次/分钟（两个端点共享额度），超限 429（code 1006） | `internal/middleware/auth_public_ratelimit.go` |
 | Embed 公开路由 | 每 (channel, IP) `rate_limit_per_minute`（默认 30）/分钟；channel 级 `rate_limit_per_minute*20`（下限 120）/分钟；channel 级 `rate_limit_per_day`（默认 10000）/天；超限 429 | `internal/middleware/embed_auth.go` |
-| 反代信任 | 仅信任 `WEKNORA_TRUSTED_PROXIES`（默认回环+内网段）的 `X-Forwarded-For`，防止伪造 IP 绕过限流 | `router.go` `trustedProxies()` |
+| 反代信任 | 仅信任 `SEMICLAW_TRUSTED_PROXIES`（默认回环+内网段）的 `X-Forwarded-For`，防止伪造 IP 绕过限流 | `router.go` `trustedProxies()` |
 
 其余业务接口无全局限流；自助创建空间等配额类拒绝同样使用 429（code 1006）。
 
@@ -221,7 +221,7 @@ X-Accel-Buffering: no
 | 分块与标签 | [02-api-chunks.md](./02-api-chunks.md) | `/chunks`、`/knowledge-bases/:id/tags`、`/chunker/preview` |
 | FAQ 与 Wiki | [02-api-faq-wiki.md](./02-api-faq-wiki.md) | `/knowledge-bases/:id/faq`、`/faq`、`/knowledgebase/:kb_id/wiki` |
 | 会话、消息与聊天 | [02-api-chat.md](./02-api-chat.md) | `/sessions`、`/messages`、`/knowledge-chat`、`/agent-chat`、`/knowledge-search` |
-| 模型与初始化 | [02-api-model-system.md](./02-api-model-system.md) | `/models`、`/initialization`、`/evaluation`、`/weknoracloud` |
+| 模型与初始化 | [02-api-model-system.md](./02-api-model-system.md) | `/models`、`/initialization`、`/evaluation`、`/semiclawcloud` |
 | 系统与平台管理 | [02-api-system.md](./02-api-system.md) | `/system`、`/system/admin` |
 | 基础设施与数据源 | [02-api-infra.md](./02-api-infra.md) | `/vector-stores`、`/storage-backends`、`/web-search-providers`、`/datasource` |
 | Agent 与 MCP | [02-api-agent-mcp.md](./02-api-agent-mcp.md) | `/agents`、`/mcp-services`、`/agent`、`/user/favorites` |

@@ -4,8 +4,8 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/Tencent/WeKnora/internal/application/service"
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/application/service"
+	"github.com/vagawind/semiclaw/internal/types"
 	"github.com/gin-gonic/gin"
 )
 

@@ -97,7 +97,7 @@ curl --location --request PUT 'http://localhost:8080/api/v1/memory/settings' \
 
 ## GET `/memory/export`
 
-返回 `{success, total, truncated, data}`，并带 `Content-Disposition: attachment; filename="weknora-memories.json"`。`truncated` 仅在触达导出上限（2 万条）时为 true。
+返回 `{success, total, truncated, data}`，并带 `Content-Disposition: attachment; filename="semiclaw-memories.json"`。`truncated` 仅在触达导出上限（2 万条）时为 true。
 
 ## POST `/memory/consolidate`
 

@@ -4,13 +4,13 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/Tencent/WeKnora/internal/application/service/retriever"
-	apperrors "github.com/Tencent/WeKnora/internal/errors"
-	"github.com/Tencent/WeKnora/internal/logger"
-	"github.com/Tencent/WeKnora/internal/models/embedding"
-	"github.com/Tencent/WeKnora/internal/tracing/langfuse"
-	"github.com/Tencent/WeKnora/internal/types"
-	secutils "github.com/Tencent/WeKnora/internal/utils"
+	"github.com/vagawind/semiclaw/internal/application/service/retriever"
+	apperrors "github.com/vagawind/semiclaw/internal/errors"
+	"github.com/vagawind/semiclaw/internal/logger"
+	"github.com/vagawind/semiclaw/internal/models/embedding"
+	"github.com/vagawind/semiclaw/internal/tracing/langfuse"
+	"github.com/vagawind/semiclaw/internal/types"
+	secutils "github.com/vagawind/semiclaw/internal/utils"
 )
 
 // maxRetrievalPoolSize bounds every retrieval depth derived from MatchCount:

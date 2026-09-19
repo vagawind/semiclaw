@@ -8,7 +8,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/types"
 )
 
 func TestExecutionOutputDir(t *testing.T) {
@@ -37,7 +37,7 @@ func TestExecutionOutputDir(t *testing.T) {
 			name: "rejects path outside workspace",
 			cfg: &ExecuteConfig{
 				Env: map[string]string{
-					skillOutputEnvVar: "/tmp/weknora-skill-output",
+					skillOutputEnvVar: "/tmp/semiclaw-skill-output",
 				},
 			},
 			want: SessionOutputRoot,
@@ -106,7 +106,7 @@ func TestWorkspaceBootstrapPreservesExistingData(t *testing.T) {
 }
 
 // The agent can delete /workspace/output between turns. Preparing only once
-// per process would leave later writes failing until WeKnora restarted.
+// per process would leave later writes failing until SemiClaw restarted.
 func TestSessionBoundManagerPreparesWorkspaceOnEveryCall(t *testing.T) {
 	client := newFakeRemoteClient(SandboxTypeCube)
 	cfg := DefaultConfig()

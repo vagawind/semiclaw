@@ -13,11 +13,11 @@ func TestDockerCreateSnapshotTagsASkillImage(t *testing.T) {
 	engine := newFakeDockerEngine()
 	docker := newTestDockerClient(t, engine)
 
-	ref, err := docker.CreateSnapshot(context.Background(), "container-1", "weknora-sk-cfg1-g1")
+	ref, err := docker.CreateSnapshot(context.Background(), "container-1", "semiclaw-sk-cfg1-g1")
 	require.NoError(t, err)
-	require.Equal(t, "weknora-skill/weknora-sk-cfg1-g1", ref.ID)
+	require.Equal(t, "semiclaw-skill/semiclaw-sk-cfg1-g1", ref.ID)
 	require.Len(t, engine.committed, 1)
-	require.Equal(t, "weknora-skill/weknora-sk-cfg1-g1", engine.committed[0].Reference)
+	require.Equal(t, "semiclaw-skill/semiclaw-sk-cfg1-g1", engine.committed[0].Reference)
 	require.False(t, engine.committed[0].NoPause,
 		"the Engine must pause the container for the duration of the commit")
 	require.Contains(t, engine.committed[0].Changes, "LABEL "+dockerSkillSnapshotLabel+"=true")
@@ -33,7 +33,7 @@ func TestDockerCreateSnapshotRejectsEmptySandboxID(t *testing.T) {
 
 func TestDockerDeleteSnapshotTreatsMissingAsSuccess(t *testing.T) {
 	err := newTestDockerClient(t, newFakeDockerEngine()).
-		DeleteSnapshot(context.Background(), "weknora-skill/missing")
+		DeleteSnapshot(context.Background(), "semiclaw-skill/missing")
 	require.NoError(t, err)
 }
 
@@ -48,11 +48,11 @@ func TestDockerSnapshotRoundTripAndListFilter(t *testing.T) {
 	docker := newTestDockerClient(t, engine)
 	ctx := context.Background()
 
-	first, err := docker.CreateSnapshot(ctx, "container-a", "weknora-sk-a-g1")
+	first, err := docker.CreateSnapshot(ctx, "container-a", "semiclaw-sk-a-g1")
 	require.NoError(t, err)
-	second, err := docker.CreateSnapshot(ctx, "container-a", "weknora-sk-a-g2")
+	second, err := docker.CreateSnapshot(ctx, "container-a", "semiclaw-sk-a-g2")
 	require.NoError(t, err)
-	_, err = docker.CreateSnapshot(ctx, "container-b", "weknora-sk-b-g1")
+	_, err = docker.CreateSnapshot(ctx, "container-b", "semiclaw-sk-b-g1")
 	require.NoError(t, err)
 
 	all, err := docker.ListSnapshots(ctx, "")
@@ -82,7 +82,7 @@ func TestDockerDeleteSnapshotPrunesUntaggedAncestors(t *testing.T) {
 	engine := newFakeDockerEngine()
 	docker := newTestDockerClient(t, engine)
 
-	ref, err := docker.CreateSnapshot(context.Background(), "container-a", "weknora-sk-a-g1")
+	ref, err := docker.CreateSnapshot(context.Background(), "container-a", "semiclaw-sk-a-g1")
 	require.NoError(t, err)
 	require.NoError(t, docker.DeleteSnapshot(context.Background(), ref.ID))
 
@@ -99,7 +99,7 @@ func TestDockerDeleteSnapshotSweepsUntaggedSkillImages(t *testing.T) {
 	engine.images = []image.Summary{
 		{
 			ID:       "sha256:retired",
-			RepoTags: []string{"weknora-skill/weknora-sk-a-g1:latest"},
+			RepoTags: []string{"semiclaw-skill/semiclaw-sk-a-g1:latest"},
 			Labels:   map[string]string{dockerSkillSnapshotLabel: "true"},
 		},
 		{
@@ -109,22 +109,22 @@ func TestDockerDeleteSnapshotSweepsUntaggedSkillImages(t *testing.T) {
 		},
 		{
 			ID:       "sha256:live",
-			RepoTags: []string{"weknora-skill/weknora-sk-a-g2:latest"},
+			RepoTags: []string{"semiclaw-skill/semiclaw-sk-a-g2:latest"},
 			Labels:   map[string]string{dockerSkillSnapshotLabel: "true"},
 		},
 		{
 			ID:       "sha256:base",
-			RepoTags: []string{"weknora/sandbox:test"},
+			RepoTags: []string{"semiclaw/sandbox:test"},
 			Labels:   map[string]string{dockerTemplateLabel: "true"},
 		},
 	}
 	docker := newTestDockerClient(t, engine)
 
 	require.NoError(t, docker.DeleteSnapshot(
-		context.Background(), "weknora-skill/weknora-sk-a-g1"))
+		context.Background(), "semiclaw-skill/semiclaw-sk-a-g1"))
 
 	require.Equal(t,
-		[]string{"weknora-skill/weknora-sk-a-g1", "sha256:orphan"},
+		[]string{"semiclaw-skill/semiclaw-sk-a-g1", "sha256:orphan"},
 		engine.removedImages,
 		"the sweep must take the untagged snapshot and nothing that is still named")
 }
@@ -138,12 +138,12 @@ func TestDockerDeleteSnapshotSweepFailureIsNotAnError(t *testing.T) {
 			Labels:   map[string]string{dockerSkillSnapshotLabel: "true"},
 		},
 	}
-	engine.imagePresent["weknora-skill/weknora-sk-a-g1"] = true
+	engine.imagePresent["semiclaw-skill/semiclaw-sk-a-g1"] = true
 	engine.listImagesErr = errors.New("daemon busy")
 	docker := newTestDockerClient(t, engine)
 
 	require.NoError(t, docker.DeleteSnapshot(
-		context.Background(), "weknora-skill/weknora-sk-a-g1"),
+		context.Background(), "semiclaw-skill/semiclaw-sk-a-g1"),
 		"reclaiming storage must not turn a completed delete into a failure")
 }
 
@@ -152,12 +152,12 @@ func TestDockerListTemplatesHidesSkillSnapshots(t *testing.T) {
 	engine.images = []image.Summary{
 		{
 			ID:       "sha256:base",
-			RepoTags: []string{"weknora/sandbox:test"},
+			RepoTags: []string{"semiclaw/sandbox:test"},
 			Labels:   map[string]string{dockerTemplateLabel: "true"},
 		},
 		{
 			ID:       "sha256:snap",
-			RepoTags: []string{"weknora-skill/weknora-sk-cfg1-g1:latest"},
+			RepoTags: []string{"semiclaw-skill/semiclaw-sk-cfg1-g1:latest"},
 			Labels:   map[string]string{dockerSkillSnapshotLabel: "true"},
 		},
 	}
@@ -166,7 +166,7 @@ func TestDockerListTemplatesHidesSkillSnapshots(t *testing.T) {
 	templates, err := docker.ListTemplates(context.Background())
 	require.NoError(t, err)
 	require.Len(t, templates, 1)
-	require.Equal(t, "weknora/sandbox:test", templates[0].ID)
+	require.Equal(t, "semiclaw/sandbox:test", templates[0].ID)
 }
 
 func TestDockerCreateDoesNotPullAMissingSkillSnapshot(t *testing.T) {
@@ -174,7 +174,7 @@ func TestDockerCreateDoesNotPullAMissingSkillSnapshot(t *testing.T) {
 	docker := newTestDockerClient(t, engine)
 
 	_, err := docker.Create(context.Background(), RemoteCreateRequest{
-		TemplateID: "weknora-skill/weknora-sk-cfg1-g1",
+		TemplateID: "semiclaw-skill/semiclaw-sk-cfg1-g1",
 	})
 	require.True(t, IsRemoteInvalidRequest(err), err)
 	require.Empty(t, engine.pulled,
@@ -182,7 +182,7 @@ func TestDockerCreateDoesNotPullAMissingSkillSnapshot(t *testing.T) {
 }
 
 func TestDockerSanitizeImageName(t *testing.T) {
-	require.Equal(t, "weknora-sk-cfg1-g1", dockerSanitizeImageName("weknora-sk-cfg1-g1"))
+	require.Equal(t, "semiclaw-sk-cfg1-g1", dockerSanitizeImageName("semiclaw-sk-cfg1-g1"))
 	require.Equal(t, "abc-def", dockerSanitizeImageName("ABC_DEF"))
 	require.Equal(t, "snap", dockerSanitizeImageName("--snap--"))
 	require.Empty(t, dockerSanitizeImageName("***"))

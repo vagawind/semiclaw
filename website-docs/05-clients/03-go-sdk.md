@@ -7,7 +7,7 @@ Go SDK 封装知识库、文档、会话等主要资源的 CRUD 操作，以及 
 SDK 的 module 路径定义在 `client/go.mod`：
 
 ```
-module github.com/Tencent/WeKnora/client
+module github.com/vagawind/semiclaw/client
 
 go 1.24.2
 ```
@@ -15,13 +15,13 @@ go 1.24.2
 安装方式：
 
 ```bash
-go get github.com/Tencent/WeKnora/client
+go get github.com/vagawind/semiclaw/client
 ```
 
 导入：
 
 ```go
-import "github.com/Tencent/WeKnora/client"
+import "github.com/vagawind/semiclaw/client"
 ```
 
 ## 初始化与认证
@@ -91,7 +91,7 @@ kb, err := apiClient.GetKnowledgeBase(ctx, kbID)
 
 ### Raw 逃生舱
 
-`Client.Raw(ctx, method, path, body)`（Experimental）以客户端已配置的认证头直接发起任意 HTTP 请求，用于一次性集成与 `weknora api` CLI 透传；有类型化方法时应优先使用类型化方法。
+`Client.Raw(ctx, method, path, body)`（Experimental）以客户端已配置的认证头直接发起任意 HTTP 请求，用于一次性集成与 `semiclaw api` CLI 透传；有类型化方法时应优先使用类型化方法。
 
 ## 资源与方法总览
 
@@ -381,7 +381,7 @@ func (c *Client) AgentQAStreamWithRequest(ctx context.Context,
 
 ```go
 as := apiClient.NewAgentSession(session.ID)
-err := as.Ask(ctx, "介绍一下 WeKnora", func(ev *client.AgentStreamResponse) error {
+err := as.Ask(ctx, "介绍一下 SemiClaw", func(ev *client.AgentStreamResponse) error {
     if ev.ResponseType == client.AgentResponseTypeAnswer {
         fmt.Print(ev.Content)
     }
@@ -463,7 +463,7 @@ import (
     "fmt"
     "time"
 
-    "github.com/Tencent/WeKnora/client"
+    "github.com/vagawind/semiclaw/client"
 )
 
 func main() {
@@ -516,7 +516,7 @@ import (
     "fmt"
     "strings"
 
-    "github.com/Tencent/WeKnora/client"
+    "github.com/vagawind/semiclaw/client"
 )
 
 func main() {
@@ -575,7 +575,7 @@ import (
     "context"
     "fmt"
 
-    "github.com/Tencent/WeKnora/client"
+    "github.com/vagawind/semiclaw/client"
 )
 
 func main() {

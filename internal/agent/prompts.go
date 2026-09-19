@@ -6,9 +6,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Tencent/WeKnora/internal/agent/skills"
-	"github.com/Tencent/WeKnora/internal/config"
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/agent/skills"
+	"github.com/vagawind/semiclaw/internal/config"
+	"github.com/vagawind/semiclaw/internal/types"
 )
 
 // formatFileSize formats file size in human-readable format
@@ -276,7 +276,7 @@ func formatToolGuidanceForMode(names []string, skillInstallMode bool) string {
 		b.WriteString("For listed skills, run bundled scripts and your own scripts with " +
 			"shell_exec(skill_name=..., command=...). This selects an installed skill's runtime " +
 			"or stages host skill resources, and applies scoped credentials; " +
-			"use $WEKNORA_SKILL_DIR for bundled files.\n")
+			"use $SEMICLAW_SKILL_DIR for bundled files.\n")
 		b.WriteString("In older instructions, translate execute_skill_script(skill_name, script_path, ...) " +
 			"to shell_exec(skill_name=..., command=...).\n")
 	}

@@ -8,10 +8,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Tencent/WeKnora/internal/datasource"
-	"github.com/Tencent/WeKnora/internal/datasource/connector/feishu/core"
-	"github.com/Tencent/WeKnora/internal/logger"
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/datasource"
+	"github.com/vagawind/semiclaw/internal/datasource/connector/feishu/core"
+	"github.com/vagawind/semiclaw/internal/logger"
+	"github.com/vagawind/semiclaw/internal/types"
 )
 
 // DriveConnector implements the datasource.Connector (and StreamingConnector)
@@ -262,7 +262,7 @@ func (c *DriveConnector) FetchIncremental(
 // and incremental paths: with cursor == nil it fetches everything, and with a
 // cursor it skips files whose recorded modified_time is unchanged - the same
 // mechanism that lets a sync which timed out mid-traversal resume from the last
-// checkpoint instead of restarting (Tencent/WeKnora#2136).
+// checkpoint instead of restarting (vagawind/semiclaw#2136).
 //
 // The per-node loop lives in the shared engine (engine.go); this shell only
 // wires the Drive NodeOps adapter.

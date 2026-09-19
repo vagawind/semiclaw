@@ -1,4 +1,4 @@
-# WeKnora Sandbox Image
+# SemiClaw Sandbox Image
 # Pre-built environment for executing agent skill scripts in Docker sandbox
 # Multi-stage build, minimal dependencies
 #
@@ -91,10 +91,10 @@ RUN mkdir -p /workspace/input /workspace/output && \
 # Classic user@host:path prompt (colored). E2B's provisioner later appends
 # `PS1='\w $ '`; the script reapplies this prompt via PROMPT_COMMAND so
 # Cube, Docker, and E2B all show the same Debian-style line.
-COPY docker/sandbox-pty-prompt.sh /etc/weknora/pty-prompt.sh
-RUN echo '. /etc/weknora/pty-prompt.sh' > /etc/profile.d/zz-weknora-prompt.sh && \
-    echo '. /etc/weknora/pty-prompt.sh' >> /root/.bashrc && \
-    echo '. /etc/weknora/pty-prompt.sh' >> /home/user/.bashrc
+COPY docker/sandbox-pty-prompt.sh /etc/semiclaw/pty-prompt.sh
+RUN echo '. /etc/semiclaw/pty-prompt.sh' > /etc/profile.d/zz-semiclaw-prompt.sh && \
+    echo '. /etc/semiclaw/pty-prompt.sh' >> /root/.bashrc && \
+    echo '. /etc/semiclaw/pty-prompt.sh' >> /home/user/.bashrc
 
 WORKDIR /workspace
 USER root
@@ -103,7 +103,7 @@ USER root
 #
 # envd is what Cube talks to for everything — the readiness probe that decides
 # whether a template build succeeds, plus every later exec and file call. It
-# runs as root and selects the account named in each request. WeKnora names
+# runs as root and selects the account named in each request. SemiClaw names
 # root by default, matching the runtime stage.
 #
 # This target is linux/amd64 only: cubesandbox-base publishes no arm64 image,
@@ -131,7 +131,7 @@ ENTRYPOINT ["/usr/local/bin/cube-entrypoint.sh"]
 #
 # Debian package names (runtime is python:3.12-slim, not Ubuntu). Do not run
 # `yes | unminimize` — Debian has no such command. Do not clone noVNC; the
-# WeKnora frontend uses @novnc/novnc and the sandbox only needs websockify.
+# SemiClaw frontend uses @novnc/novnc and the sandbox only needs websockify.
 # procps supplies pgrep for the start script; util-linux supplies flock.
 FROM runtime AS desktop-runtime
 
@@ -143,7 +143,7 @@ USER root
 ENV DEBIAN_FRONTEND=noninteractive
 # XFCE apps (mousepad, xfce4-terminal) decode files with the process locale.
 # python:slim defaults to POSIX/C, which is why the desktop shows mojibake
-# while the WeKnora terminal tab does not: that tab is xterm.js in the
+# while the SemiClaw terminal tab does not: that tab is xterm.js in the
 # browser, and Cube/E2B already stamp LANG/LC_ALL on the envd PTY.
 # C.UTF-8 is built into glibc; do not pull locales-all.
 ENV LANG=C.UTF-8

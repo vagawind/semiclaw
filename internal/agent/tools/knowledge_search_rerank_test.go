@@ -5,9 +5,9 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/Tencent/WeKnora/internal/config"
-	"github.com/Tencent/WeKnora/internal/models/rerank"
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/config"
+	"github.com/vagawind/semiclaw/internal/models/rerank"
+	"github.com/vagawind/semiclaw/internal/types"
 )
 
 // stubReranker returns canned scores (or an error) without any network call.
@@ -103,7 +103,7 @@ func TestApplyModelRerankScores_faqUsesCompositeScale(t *testing.T) {
 	}
 	originals := []*searchResultWithMeta{
 		{
-			SearchResult:      &types.SearchResult{ID: "faq-1", Content: "Q: WeKnora", Score: 0.011},
+			SearchResult:      &types.SearchResult{ID: "faq-1", Content: "Q: SemiClaw", Score: 0.011},
 			KnowledgeBaseType: types.KnowledgeBaseTypeFAQ,
 		},
 		{

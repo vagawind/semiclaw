@@ -6,7 +6,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/Tencent/WeKnora/internal/logger"
+	"github.com/vagawind/semiclaw/internal/logger"
 	"github.com/redis/go-redis/v9"
 )
 
@@ -15,7 +15,7 @@ import (
 // previous sandbox ID.
 const DefaultSandboxDesktopLastTTL = 7 * 24 * time.Hour
 
-const desktopLastRedisPrefix = "weknora:desktop-last-sandbox:"
+const desktopLastRedisPrefix = "semiclaw:desktop-last-sandbox:"
 
 // SandboxDesktopLastStore remembers which sandbox a session's desktop last
 // attached to. SANDBOX_REBUILT is load-bearing: a skill install can recreate

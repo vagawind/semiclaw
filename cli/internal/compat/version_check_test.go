@@ -5,8 +5,8 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/Tencent/WeKnora/cli/internal/compat"
-	sdk "github.com/Tencent/WeKnora/client"
+	"github.com/vagawind/semiclaw/cli/internal/compat"
+	sdk "github.com/vagawind/semiclaw/client"
 )
 
 type fakeProbeClient struct {

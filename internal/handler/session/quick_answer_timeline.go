@@ -5,8 +5,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/Tencent/WeKnora/internal/event"
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/event"
+	"github.com/vagawind/semiclaw/internal/types"
 )
 
 // quickAnswerTimelineTools are the stages a fast-answer turn draws on its

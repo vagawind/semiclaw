@@ -1,17 +1,17 @@
-# WeKnora CLI（weknora 命令行工具）
+# SemiClaw CLI（semiclaw 命令行工具）
 
-WeKnora CLI（命令名 `weknora`）用于管理知识库与文档、执行检索和流式问答。交互使用可选择可读输出，脚本和 AI Agent 可使用 JSON 响应、类型化错误、`--dry-run` 预演及 `weknora schema` 契约查询；`weknora mcp serve` 提供 MCP 服务。
+SemiClaw CLI（命令名 `semiclaw`）用于管理知识库与文档、执行检索和流式问答。交互使用可选择可读输出，脚本和 AI Agent 可使用 JSON 响应、类型化错误、`--dry-run` 预演及 `semiclaw schema` 契约查询；`semiclaw mcp serve` 提供 MCP 服务。
 
-源码位于 `cli/`，是独立的 Go module（`github.com/Tencent/WeKnora/cli`），源码构建需要 Go 1.26+。命令入口为 `cli/cmd/root.go`。
+源码位于 `cli/`，是独立的 Go module（`github.com/vagawind/semiclaw/cli`），源码构建需要 Go 1.26+。命令入口为 `cli/cmd/root.go`。
 
-在控制台「设置 → 发布与集成 → CLI」可查看安装步骤，并复制当前部署的连接命令。服务地址保留反向代理路径前缀，末尾无需 `/api/v1`。连接后运行 `weknora doctor` 和 `weknora kb list`，确认服务与凭证可用。
+在控制台「设置 → 发布与集成 → CLI」可查看安装步骤，并复制当前部署的连接命令。服务地址保留反向代理路径前缀，末尾无需 `/api/v1`。连接后运行 `semiclaw doctor` 和 `semiclaw kb list`，确认服务与凭证可用。
 
 ## 总体架构
 
 ```mermaid
 flowchart TB
     subgraph entry["入口 (cli/main.go → cli/cmd/root.go)"]
-        R["weknora 根命令<br/>全局 flag: --format / --jq / --profile / --log-level / -y"]
+        R["semiclaw 根命令<br/>全局 flag: --format / --jq / --profile / --log-level / -y"]
     end
 
     subgraph groups["命令组 (cli/cmd/*)"]
@@ -27,11 +27,11 @@ flowchart TB
         F["cmdutil.Factory<br/>(惰性构建 Config / Client / Secrets / Prompter)"]
         C["config<br/>config.yaml 多 profile"]
         S["secrets<br/>OS keyring / 0600 文件回退"]
-        P["projectlink<br/>.weknora/project.yaml"]
+        P["projectlink<br/>.semiclaw/project.yaml"]
         O["output + format<br/>JSON envelope / NDJSON / jq"]
     end
 
-    SRV["WeKnora Server<br/>(REST API + SSE)"]
+    SRV["SemiClaw Server<br/>(REST API + SSE)"]
 
     R --> groups
     groups --> F
@@ -39,7 +39,7 @@ flowchart TB
     F --> S
     F --> P
     groups --> O
-    F -->|"SDK client (github.com/Tencent/WeKnora/client)"| SRV
+    F -->|"SDK client (github.com/vagawind/semiclaw/client)"| SRV
 ```
 
 ---
@@ -51,10 +51,10 @@ flowchart TB
 `cli/README.md` 明确说明：**从源码构建是目前受支持的安装方式**；预编译二进制、`go install`、CLI 的 Homebrew formula 计划随正式 tag 发布一同提供。
 
 ```bash
-git clone https://github.com/Tencent/WeKnora.git
-cd WeKnora/cli
-go build -o weknora .
-sudo mv weknora /usr/local/bin/   # 或放到任意 $PATH 目录
+git clone https://github.com/vagawind/semiclaw.git
+cd SemiClaw/cli
+go build -o semiclaw .
+sudo mv semiclaw /usr/local/bin/   # 或放到任意 $PATH 目录
 ```
 
 ### 使用 cli/Makefile
@@ -63,7 +63,7 @@ sudo mv weknora /usr/local/bin/   # 或放到任意 $PATH 目录
 
 | target | 作用 |
 |---|---|
-| `make build` | 编译到 `./bin/weknora`，注入 `git describe` 版本、commit 短哈希与构建时间 |
+| `make build` | 编译到 `./bin/semiclaw`，注入 `git describe` 版本、commit 短哈希与构建时间 |
 | `make test` | `go test ./...` |
 | `make test-coverage` | 测试并输出覆盖率报告 |
 | `make lint` | `go vet ./...` |
@@ -74,13 +74,13 @@ sudo mv weknora /usr/local/bin/   # 或放到任意 $PATH 目录
 
 ### Homebrew（服务端 Lite 版，非 CLI）
 
-仓库 `Formula/` 目录下目前只有一个 formula：`Formula/weknora-lite.rb`，它安装的是 **WeKnora 服务端的单二进制 Lite 版**（`weknora-lite`），而不是本文档的 `weknora` CLI。该 formula：
+仓库 `Formula/` 目录下目前只有一个 formula：`Formula/semiclaw-lite.rb`，它安装的是 **SemiClaw 服务端的单二进制 Lite 版**（`semiclaw-lite`），而不是本文档的 `semiclaw` CLI。该 formula：
 
-- 按 macOS/Linux × arm64/amd64 四个平台从 GitHub Releases 下载 `WeKnora-lite_v<version>_<os>_<arch>.tar.gz`；
-- 生成 `weknora-lite` 启动脚本：首次运行自动生成 `~/.config/weknora/.env.lite` 配置、数据存到 `~/.local/share/weknora/`；
-- 支持 `brew services start weknora-lite` 作为后台服务运行，日志在 `$(brew --prefix)/var/log/weknora-lite.log`。
+- 按 macOS/Linux × arm64/amd64 四个平台从 GitHub Releases 下载 `SemiClaw-lite_v<version>_<os>_<arch>.tar.gz`；
+- 生成 `semiclaw-lite` 启动脚本：首次运行自动生成 `~/.config/semiclaw/.env.lite` 配置、数据存到 `~/.local/share/semiclaw/`；
+- 支持 `brew services start semiclaw-lite` 作为后台服务运行，日志在 `$(brew --prefix)/var/log/semiclaw-lite.log`。
 
-在本地用 Lite 版做 CLI 的目标服务器是一个方便的组合：`brew services start weknora-lite` 起服务端，再用 `weknora profile add local --host http://localhost:8080 --use` 连接。
+在本地用 Lite 版做 CLI 的目标服务器是一个方便的组合：`brew services start semiclaw-lite` 起服务端，再用 `semiclaw profile add local --host http://localhost:8080 --use` 连接。
 
 ---
 
@@ -88,7 +88,7 @@ sudo mv weknora /usr/local/bin/   # 或放到任意 $PATH 目录
 
 ### 配置文件与路径
 
-用户级配置由 `cli/internal/config/config.go` 管理，路径为 `$XDG_CONFIG_HOME/weknora/config.yaml`（`XDG_CONFIG_HOME` 未设置时为 `~/.config/weknora/config.yaml`；路径解析见 `cli/internal/xdg/xdg.go`，在所有操作系统上都遵循 XDG 变量，包括 macOS）。写入使用原子写（临时文件 + rename），权限 0600。
+用户级配置由 `cli/internal/config/config.go` 管理，路径为 `$XDG_CONFIG_HOME/semiclaw/config.yaml`（`XDG_CONFIG_HOME` 未设置时为 `~/.config/semiclaw/config.yaml`；路径解析见 `cli/internal/xdg/xdg.go`，在所有操作系统上都遵循 XDG 变量，包括 macOS）。写入使用原子写（临时文件 + rename），权限 0600。
 
 on-disk schema（`config.Config` / `config.Profile`）：
 
@@ -112,16 +112,16 @@ defaults:
 
 凭证**不写入 config.yaml**，只存引用（ref）。`cli/internal/secrets/` 提供两种后端：
 
-- **KeyringStore**：OS 钥匙串（macOS Keychain / Linux keyring），命名空间 `weknora:<profile>:<key>`，key 为 `access` / `refresh` / `api_key`；
-- **FileStore**：钥匙串不可用时（headless CI、无 DBus 的 WSL、容器）回退到 `$XDG_CONFIG_HOME/weknora/secrets/<profile>/<key>` 的 0600 明文文件，`auth login` 会在 stderr 打印一次性警告。
+- **KeyringStore**：OS 钥匙串（macOS Keychain / Linux keyring），命名空间 `semiclaw:<profile>:<key>`，key 为 `access` / `refresh` / `api_key`；
+- **FileStore**：钥匙串不可用时（headless CI、无 DBus 的 WSL、容器）回退到 `$XDG_CONFIG_HOME/semiclaw/secrets/<profile>/<key>` 的 0600 明文文件，`auth login` 会在 stderr 打印一次性警告。
 
 ### 多 Profile 切换与解析优先级
 
 Profile 的解析链在 `cli/internal/cmdutil/factory.go`（`Factory.ActiveProfile`）中实现，优先级从高到低：
 
 1. 全局 `--profile <name>` flag（仅本次调用生效，不写盘）；
-2. 环境变量 `WEKNORA_PROFILE`；
-3. `config.yaml` 中的 `current_profile`（由 `weknora profile use` 持久化切换）。
+2. 环境变量 `SEMICLAW_PROFILE`；
+3. `config.yaml` 中的 `current_profile`（由 `semiclaw profile use` 持久化切换）。
 
 ### 无状态环境变量凭证（headless / CI / Agent 路径）
 
@@ -129,22 +129,22 @@ Profile 的解析链在 `cli/internal/cmdutil/factory.go`（`Factory.ActiveProfi
 
 | 环境变量 | 作用 |
 |---|---|
-| `WEKNORA_TOKEN` | Bearer JWT（优先于 `WEKNORA_API_KEY`） |
-| `WEKNORA_API_KEY` | API key |
-| `WEKNORA_HOST` | 服务器地址（未设置时回退到激活 profile 的 host） |
-| `WEKNORA_PROFILE` | 覆盖激活 profile |
-| `WEKNORA_KB_ID` | 显式指定知识库 id |
-| `WEKNORA_FORMAT` | 默认输出格式（text / json / ndjson） |
-| `WEKNORA_LOG_LEVEL` | SDK 日志级别（error / warn / info / debug） |
-| `WEKNORA_AGENT_HELP=1` | `--help` 时输出机器可读的 AgentHelp JSON（`cli/internal/cmdutil/agenthelp.go`） |
+| `SEMICLAW_TOKEN` | Bearer JWT（优先于 `SEMICLAW_API_KEY`） |
+| `SEMICLAW_API_KEY` | API key |
+| `SEMICLAW_HOST` | 服务器地址（未设置时回退到激活 profile 的 host） |
+| `SEMICLAW_PROFILE` | 覆盖激活 profile |
+| `SEMICLAW_KB_ID` | 显式指定知识库 id |
+| `SEMICLAW_FORMAT` | 默认输出格式（text / json / ndjson） |
+| `SEMICLAW_LOG_LEVEL` | SDK 日志级别（error / warn / info / debug） |
+| `SEMICLAW_AGENT_HELP=1` | `--help` 时输出机器可读的 AgentHelp JSON（`cli/internal/cmdutil/agenthelp.go`） |
 
 ### 知识库（--kb）解析链
 
 需要知识库作用域的命令（chat、doc、chunk、search chunks/docs 等）通过 `Factory.ResolveKB` 按 4 级回退解析（`cli/internal/cmdutil/factory.go`）：
 
 1. `--kb` flag（UUID 直接透传；名称则经 `ListKnowledgeBases` 做名称 → id 查找，见 `cli/internal/cmdutil/kb.go`）；
-2. `WEKNORA_KB_ID` 环境变量；
-3. 项目链接文件 `.weknora/project.yaml`（由 `weknora link` 写入，从当前目录向上逐级查找，最多 64 层，见 `cli/internal/projectlink/projectlink.go`）；
+2. `SEMICLAW_KB_ID` 环境变量；
+3. 项目链接文件 `.semiclaw/project.yaml`（由 `semiclaw link` 写入，从当前目录向上逐级查找，最多 64 层，见 `cli/internal/projectlink/projectlink.go`）；
 4. 均未命中则报 `local.kb_id_required` 错误。
 
 JWT profile（同时持有 access + refresh token）会自动获得 401 透明刷新传输层（`AuthRetryTransport`）：首个 401 触发 `/api/v1/auth/refresh` 并重放原请求；API key profile 与环境变量凭证不做刷新。
@@ -157,12 +157,12 @@ JWT profile（同时持有 access + refresh token）会自动获得 401 透明�
 
 | Flag | 简写 | 说明 |
 |---|---|---|
-| `--format` | | 输出格式：`text` \| `json` \| `ndjson`。**默认 `json`**（与是否 TTY 无关，agent-first 设计；人类可显式 `--format text`）。环境变量 `WEKNORA_FORMAT` 可设默认，优先级：`--format` > `WEKNORA_FORMAT` > 默认 json |
+| `--format` | | 输出格式：`text` \| `json` \| `ndjson`。**默认 `json`**（与是否 TTY 无关，agent-first 设计；人类可显式 `--format text`）。环境变量 `SEMICLAW_FORMAT` 可设默认，优先级：`--format` > `SEMICLAW_FORMAT` > 默认 json |
 | `--jq` | `-q` | 用 jq 表达式过滤 JSON 输出（要求 `--format json|ndjson`；与显式 `--format text` 组合报错） |
 | `--profile` | | 本次调用覆盖激活 profile（不写盘） |
 | `--log-level` | | SDK 调试日志级别：error \| warn \| info \| debug |
 | `--yes` | `-y` | 跳过破坏性操作的确认提示 |
-| `--version` | | 打印版本（等价于 `weknora version`） |
+| `--version` | | 打印版本（等价于 `semiclaw version`） |
 
 许多写命令还注册了 `--dry-run`（`cli/internal/cmdutil/dryrun.go`），覆盖 kb/doc/agent/model/profile/session/link/api/skills 等几乎全部 mutation 命令：不执行任何写操作，输出 `meta.dry_run=true` + `meta.plan`（将要执行的动作描述）。
 
@@ -182,21 +182,21 @@ JWT profile（同时持有 access + refresh token）会自动获得 401 透明�
 
 ```json
 {"ok": false, "error": {"type": "auth.unauthenticated", "message": "...", "exit_code": 3,
-  "hint": "...", "retry_argv": ["weknora","auth","login"], "retryable": false}}
+  "hint": "...", "retry_argv": ["semiclaw","auth","login"], "retryable": false}}
 ```
 
 错误类型是分层字符串（`cli/internal/cmdutil/errors.go`）：`auth.*`、`resource.*`、`input.*`、`server.*`、`network.error`、`operation.*`、`local.*`、`internal.error`。`retry_argv` 是可直接 exec 的修复命令数组。
 
 `--format ndjson` 用于流式命令（`chat` / `session ask` / `session resume`）：首行注入 CLI `init` 事件（含 session_id、kb_id、profile），之后逐行透传 SDK SSE 事件（`cli/internal/sse/`）。
 
-### 退出码矩阵（`cli/cmd/exitcodes.go`，可运行 `weknora exit-codes` 获取机器可读版本）
+### 退出码矩阵（`cli/cmd/exitcodes.go`，可运行 `semiclaw exit-codes` 获取机器可读版本）
 
 | 退出码 | 含义 | 对应错误类型 | Agent 建议动作 |
 |---|---|---|---|
 | 0 | 成功 | — | 继续 |
 | 1 | 类型化本地错误 / 操作失败 / 未分类 | `local.*`, `operation.failed`, `operation.cancelled`, `server.session_create_failed`, `internal.error` | 读 stderr 后决定重试/放弃 |
-| 2 | flag / 参数解析错误（未知 flag、参数个数、缺必填 flag） | `input.invalid_argument`（与退出码 5 同类型，靠退出码区分） | 查 `weknora <cmd> --help` |
-| 3 | 认证 / 授权失败 | `auth.*` | 重新 `weknora auth login` 后重试 |
+| 2 | flag / 参数解析错误（未知 flag、参数个数、缺必填 flag） | `input.invalid_argument`（与退出码 5 同类型，靠退出码区分） | 查 `semiclaw <cmd> --help` |
+| 3 | 认证 / 授权失败 | `auth.*` | 重新 `semiclaw auth login` 后重试 |
 | 4 | 资源不存在 | `resource.not_found` | 核对资源 id |
 | 5 | 输入值非法（类型化校验，非解析错误） | `input.*`（除 confirmation_required） | 调整参数重试 |
 | 6 | 限流 | `server.rate_limited` | 退避后重试 |
@@ -209,8 +209,8 @@ JWT profile（同时持有 access + refresh token）会自动获得 401 透明�
 
 ### 机器自省
 
-- `weknora schema`（`cli/cmd/schema.go`）：无参数列出所有叶子命令 + 用途索引；`weknora schema kb create` 输出单个命令的完整契约（used_for、flags、examples、output、risk）；
-- `WEKNORA_AGENT_HELP=1 weknora <cmd> --help`：输出同源的 AgentHelp JSON；
+- `semiclaw schema`（`cli/cmd/schema.go`）：无参数列出所有叶子命令 + 用途索引；`semiclaw schema kb create` 输出单个命令的完整契约（used_for、flags、examples、output、risk）；
+- `SEMICLAW_AGENT_HELP=1 semiclaw <cmd> --help`：输出同源的 AgentHelp JSON；
 - 未知子命令输出类型化 `input.unknown_subcommand` envelope，含 `suggestions`（did-you-mean）与可用子命令列表。
 
 ---
@@ -231,8 +231,8 @@ JWT profile（同时持有 access + refresh token）会自动获得 401 透明�
 `add` 的关键 flag：`--host`（必填，服务器 URL）、`--user`（可选展示用邮箱）、`--use`（添加后立即切换）。
 
 ```bash
-weknora profile add prod --host=https://kb.example.com --use
-weknora profile list --format json
+semiclaw profile add prod --host=https://kb.example.com --use
+semiclaw profile list --format json
 ```
 
 ### auth — 凭证管理（`cli/cmd/auth/`）
@@ -247,9 +247,9 @@ weknora profile list --format json
 | token | `token` | 把激活 profile 的原始凭证打印到 stdout（shell 脚本用） |
 
 ```bash
-weknora auth login                                    # 交互式（TTY）
-echo "$WEKNORA_API_KEY" | weknora auth login --with-token   # 非交互 / agent
-weknora auth status --format json
+semiclaw auth login                                    # 交互式（TTY）
+echo "$SEMICLAW_API_KEY" | semiclaw auth login --with-token   # 非交互 / agent
+semiclaw auth status --format json
 ```
 
 注意：`auth login` 不接受 `--host`，必须先 `profile add ... --use` 创建激活 profile。
@@ -261,7 +261,7 @@ weknora auth status --format json
 | view | `view` | 只读展示解析后的配置及**每个值的来源**（active_profile / profile_source / auth_source / host / kb_id / kb_source / log_level / format_default / config_file / secrets / project_link 等），全程不发网络请求 |
 
 ```bash
-weknora config view --format json --jq '.data.kb_source'
+semiclaw config view --format json --jq '.data.kb_source'
 ```
 
 ### link / unlink — 目录绑定知识库（`cli/cmd/link/`）
@@ -270,12 +270,12 @@ weknora config view --format json --jq '.data.kb_source'
 
 | 命令 | Use | 说明 |
 |---|---|---|
-| link | `link [kb]` | 在当前目录写 `.weknora/project.yaml`，绑定 KB（位置参数或 `--kb`，等价；TTY 下不传参进入交互选择；已有链接直接覆盖）。支持 `--dry-run` |
+| link | `link [kb]` | 在当前目录写 `.semiclaw/project.yaml`，绑定 KB（位置参数或 `--kb`，等价；TTY 下不传参进入交互选择；已有链接直接覆盖）。支持 `--dry-run` |
 | unlink | `unlink` | 删除当前目录的 KB 绑定 |
 
 ```bash
-weknora link engineering            # 名称自动解析为 id
-weknora link --kb a32a63ff-fb36-4874-bcaa-30f48570a694
+semiclaw link engineering            # 名称自动解析为 id
+semiclaw link --kb a32a63ff-fb36-4874-bcaa-30f48570a694
 ```
 
 ### kb — 知识库管理（`cli/cmd/kb/`）
@@ -294,8 +294,8 @@ weknora link --kb a32a63ff-fb36-4874-bcaa-30f48570a694
 | config set | `set <kb-id>` | 绑定模型：`--chat-model` 与 `--embedding-model` 均必填（id 或名称）；高风险写，exit-10 保护 |
 
 ```bash
-weknora kb create docs --embedding-model text-embedding-3 --chat-model gpt-4o
-weknora kb config set <kb-id> --chat-model <id> --embedding-model <id> -y
+semiclaw kb create docs --embedding-model text-embedding-3 --chat-model gpt-4o
+semiclaw kb config set <kb-id> --chat-model <id> --embedding-model <id> -y
 ```
 
 ### doc — 文档管理（`cli/cmd/doc/`）
@@ -314,8 +314,8 @@ weknora kb config set <kb-id> --chat-model <id> --embedding-model <id> -y
 | wait | `wait <doc-id> [<doc-id>...]` | 轮询等待解析完成；`--timeout`（默认 10m，超时退出码 124）、`--interval`（默认 2s，指数退避封顶 15s） |
 
 ```bash
-weknora doc upload ./design.pdf --kb docs
-weknora doc wait <doc-id> --timeout 5m && weknora search chunks "RRF" --kb docs
+semiclaw doc upload ./design.pdf --kb docs
+semiclaw doc wait <doc-id> --timeout 5m && semiclaw search chunks "RRF" --kb docs
 ```
 
 ### chunk — 分块调试（`cli/cmd/chunk/`）
@@ -336,7 +336,7 @@ weknora doc wait <doc-id> --timeout 5m && weknora search chunks "RRF" --kb docs
 | sessions | `sessions "<query>"` | 按标题/描述找会话（客户端子串匹配）：`--limit`、`--page-size`、`--all-pages` |
 
 ```bash
-weknora search chunks "rate limiting design" --kb docs --limit 5 --format json --jq '.data[].content'
+semiclaw search chunks "rate limiting design" --kb docs --limit 5 --format json --jq '.data[].content'
 ```
 
 ### chat — 流式 RAG 问答（`cli/cmd/chat/chat.go`）
@@ -350,8 +350,8 @@ weknora search chunks "rate limiting design" --kb docs --limit 5 --format json -
 flag：`--kb`、`--session`（续接已有会话）、`--reference`（带引用索引）、`--verbose`（带 reasoning / 工具 / 生命周期事件）。
 
 ```bash
-weknora chat "What is RRF?" --kb a32a63ff-fb36-4874-bcaa-30f48570a694
-weknora chat "继续" --session sess_abc --format ndjson
+semiclaw chat "What is RRF?" --kb a32a63ff-fb36-4874-bcaa-30f48570a694
+semiclaw chat "继续" --session sess_abc --format ndjson
 ```
 
 ### session — 会话管理（`cli/cmd/session/`）
@@ -367,8 +367,8 @@ weknora chat "继续" --session sess_abc --format ndjson
 | tool-approval resolve | `resolve <pending-id>` | 批准/拒绝 Agent 运行中挂起的工具调用：`--reject`、`--reason`、`--modified-args`（JSON，仅批准时）；高风险写 |
 
 ```bash
-weknora session ask "总结这个 KB" --agent agt_123 --format ndjson
-weknora session tool-approval resolve <pending-id> --reject --reason "不允许写操作" -y
+semiclaw session ask "总结这个 KB" --agent agt_123 --format ndjson
+semiclaw session tool-approval resolve <pending-id> --reject --reason "不允许写操作" -y
 ```
 
 ### message — 会话内消息（`cli/cmd/message/`）
@@ -392,8 +392,8 @@ weknora session tool-approval resolve <pending-id> --reject --reason "不允许�
 | check | `check <agent-id>` | 端到端校验（状态 + kb_scope 可达性） |
 
 ```bash
-weknora agent create researcher --model gpt-4o --attach-kb <kb-id> --system-prompt-file ./prompt.md
-weknora agent update agt_123 --add-kb <kb-id2> --temperature 0.3
+semiclaw agent create researcher --model gpt-4o --attach-kb <kb-id> --system-prompt-file ./prompt.md
+semiclaw agent update agt_123 --add-kb <kb-id2> --temperature 0.3
 ```
 
 ### model — 模型管理（`cli/cmd/model/`）
@@ -407,8 +407,8 @@ weknora agent update agt_123 --add-kb <kb-id2> --temperature 0.3
 | delete | `delete <model-id>` | 删除（exit-10 保护） |
 
 ```bash
-weknora model create bge-m3 --type Embedding --source local --base-url http://localhost:11434 --dimension 1024
-echo "$OPENAI_KEY" | weknora model create gpt-4o --type chat --source remote --provider openai --api-key-stdin
+semiclaw model create bge-m3 --type Embedding --source local --base-url http://localhost:11434 --dimension 1024
+echo "$OPENAI_KEY" | semiclaw model create gpt-4o --type chat --source remote --provider openai --api-key-stdin
 ```
 
 ### api — 原始 HTTP 逃生舱（`cli/cmd/api/api.go`）
@@ -426,9 +426,9 @@ echo "$OPENAI_KEY" | weknora model create gpt-4o --type chat --source remote --p
 `-X DELETE` 受 exit-10 destructive 确认保护；`PUT/PATCH` 受写确认保护；`POST` 与 typed create 一致不设门槛。支持 `--dry-run`（仅限非 GET）。
 
 ```bash
-weknora api /api/v1/knowledge-bases                              # GET
-weknora api /api/v1/knowledge-bases -d '{"name":"foo"}'          # POST（自动）
-weknora api /api/v1/knowledge-bases/<id> -X DELETE -y
+semiclaw api /api/v1/knowledge-bases                              # GET
+semiclaw api /api/v1/knowledge-bases -d '{"name":"foo"}'          # POST（自动）
+semiclaw api /api/v1/knowledge-bases/<id> -X DELETE -y
 ```
 
 ### mcp — Model Context Protocol 服务器（`cli/cmd/mcp/`）
@@ -444,7 +444,7 @@ MCP 客户端注册示例（写入客户端的 `mcpServers` 配置）：
 ```json
 {
   "mcpServers": {
-    "weknora": { "command": "weknora", "args": ["mcp", "serve"] }
+    "semiclaw": { "command": "semiclaw", "args": ["mcp", "serve"] }
   }
 }
 ```
@@ -457,18 +457,18 @@ MCP 客户端注册示例（写入客户端的 `mcpServers` 配置）：
 | install | `install` | 把内嵌 skills 写入 Agent 的 skills 目录：`--dir`（默认 `~/.claude/skills`，支持 `~` 展开）、`--force`（覆盖已存在文件，否则跳过）；支持 `--dry-run` |
 
 ```bash
-weknora skills install --dry-run --format json
-weknora skills install --dir ~/.claude/skills --force
+semiclaw skills install --dry-run --format json
+semiclaw skills install --dir ~/.claude/skills --force
 ```
 
 ### doctor — 自检（`cli/cmd/doctor/doctor.go`）
 
 单命令：`doctor`。运行 4 项检查：base URL 可达性、认证、服务器版本兼容、凭证存储。每项状态为 `ok / warn / fail / skip`；任一 `fail` → 退出码 1（JSON 数据仍会输出）；仅 warn → 退出码 0 但 `summary.all_passed=false`。
 
-flag：`--no-cache`（绕过 `$XDG_CACHE_HOME/weknora/server-info.yaml` 缓存强制重探测）、`--offline`（跳过网络检查，仅验本地钥匙串/文件存储）。
+flag：`--no-cache`（绕过 `$XDG_CACHE_HOME/semiclaw/server-info.yaml` 缓存强制重探测）、`--offline`（跳过网络检查，仅验本地钥匙串/文件存储）。
 
 ```bash
-weknora doctor --format json --jq '.data.summary.all_passed'
+semiclaw doctor --format json --jq '.data.summary.all_passed'
 ```
 
 ### 根级辅助命令（`cli/cmd/root.go`、`schema.go`、`exitcodes.go`）
@@ -496,11 +496,11 @@ weknora doctor --format json --jq '.data.summary.all_passed'
 
 ```bash
 cd cli
-WEKNORA_E2E_HOST=https://kb.example.com WEKNORA_E2E_TOKEN=eyJ... \
+SEMICLAW_E2E_HOST=https://kb.example.com SEMICLAW_E2E_TOKEN=eyJ... \
   go test -tags=acceptance_e2e -v ./acceptance/e2e/...
 ```
 
-`TestRAGFullLoop` 编译真实 CLI 二进制，通过 `WEKNORA_HOST`/`WEKNORA_TOKEN` 环境变量凭证路径（验证了无钥匙串的 headless 认证链路）驱动完整 RAG 闭环：**kb create（带模型绑定）→ doc upload → doc wait（等待索引）→ search → chat**，每一步解析上一步的 JSON envelope 提取 id，同时校验功能行为与 wire 契约稳定性；临时 KB 通过 `t.Cleanup` 保证测试失败也会清理。
+`TestRAGFullLoop` 编译真实 CLI 二进制，通过 `SEMICLAW_HOST`/`SEMICLAW_TOKEN` 环境变量凭证路径（验证了无钥匙串的 headless 认证链路）驱动完整 RAG 闭环：**kb create（带模型绑定）→ doc upload → doc wait（等待索引）→ search → chat**，每一步解析上一步的 JSON envelope 提取 id，同时校验功能行为与 wire 契约稳定性；临时 KB 通过 `t.Cleanup` 保证测试失败也会清理。
 
 此外 `cli/cmd/` 下还有横切的树级测试（非 acceptance 目录，但同样约束整树行为）：`required_positional_coverage_test.go`、`dryrun_coverage_test.go`、`agenthelp_coverage_test.go`、`root_unknown_subcommand_test.go` 等，确保每个叶子命令的位置参数校验、`--dry-run` 支持、AgentHelp 元数据与未知子命令处理全覆盖。
 
@@ -510,20 +510,20 @@ WEKNORA_E2E_HOST=https://kb.example.com WEKNORA_E2E_TOKEN=eyJ... \
 
 ```bash
 # 1. 注册服务器为 profile 并激活
-weknora profile add prod --host https://kb.example.com --use
+semiclaw profile add prod --host https://kb.example.com --use
 
 # 2. 认证（交互式；agent 场景用 --with-token）
-weknora auth login
+semiclaw auth login
 
 # 3. 自检
-weknora doctor
+semiclaw doctor
 
 # 4. 建库、绑定模型、传文档、等索引
-weknora kb create docs --embedding-model <emb> --chat-model <llm>
-weknora doc upload ./design.pdf --kb docs
-weknora doc wait <doc-id>
+semiclaw kb create docs --embedding-model <emb> --chat-model <llm>
+semiclaw doc upload ./design.pdf --kb docs
+semiclaw doc wait <doc-id>
 
 # 5. 检索与问答
-weknora search chunks "rate limiting" --kb docs
-weknora chat "总结这篇设计文档" --kb docs
+semiclaw search chunks "rate limiting" --kb docs
+semiclaw chat "总结这篇设计文档" --kb docs
 ```

@@ -22,9 +22,9 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/Tencent/WeKnora/internal/im"
-	"github.com/Tencent/WeKnora/internal/logger"
-	secutils "github.com/Tencent/WeKnora/internal/utils"
+	"github.com/vagawind/semiclaw/internal/im"
+	"github.com/vagawind/semiclaw/internal/logger"
+	secutils "github.com/vagawind/semiclaw/internal/utils"
 	"github.com/gin-gonic/gin"
 )
 
@@ -35,7 +35,7 @@ const (
 	// defaultBotType is the bot_type for iLink get_bot_qrcode / get_qrcode_status.
 	defaultBotType = "3"
 	// channelVersion is sent in base_info with every API request.
-	channelVersion = "weknora-1.0.0"
+	channelVersion = "semiclaw-1.0.0"
 )
 
 var ilinkHTTPClient = secutils.NewSSRFSafeHTTPClient(secutils.SSRFSafeHTTPClientConfig{
@@ -108,7 +108,7 @@ func (a *Adapter) SendReply(ctx context.Context, incoming *im.IncomingMessage, r
 		"msg": map[string]interface{}{
 			"from_user_id":  "",
 			"to_user_id":    incoming.UserID,
-			"client_id":     fmt.Sprintf("weknora_%d", time.Now().UnixNano()),
+			"client_id":     fmt.Sprintf("semiclaw_%d", time.Now().UnixNano()),
 			"message_type":  2, // BOT
 			"message_state": 2, // FINISH
 			"item_list": []map[string]interface{}{

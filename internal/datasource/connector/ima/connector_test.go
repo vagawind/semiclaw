@@ -5,8 +5,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Tencent/WeKnora/internal/datasource"
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/datasource"
+	"github.com/vagawind/semiclaw/internal/types"
 )
 
 func TestConnector_Type(t *testing.T) {
@@ -311,7 +311,7 @@ func TestFetchAll_AISessionIsStillSkipped(t *testing.T) {
 }
 
 // TestFetchAll_AuthenticatedURLIsDownloaded covers media types with no fixed
-// extension. When IMA attaches auth headers the URL is IMA-hosted and WeKnora's
+// extension. When IMA attaches auth headers the URL is IMA-hosted and SemiClaw's
 // own fetch could not authenticate, so the connector must download it here and
 // forward the headers.
 func TestFetchAll_AuthenticatedURLIsDownloaded(t *testing.T) {
@@ -343,7 +343,7 @@ func TestFetchAll_AuthenticatedURLIsDownloaded(t *testing.T) {
 
 // TestFetchAll_PublicURLStaysURLOnly is the counterpart: without auth headers
 // the link is publicly reachable, so it is handed to the ingest layer as a URL
-// and WeKnora renders the live page instead of a snapshot.
+// and SemiClaw renders the live page instead of a snapshot.
 func TestFetchAll_PublicURLStaysURLOnly(t *testing.T) {
 	f := newFakeIMA(t)
 	f.setKB("kb1", []fakeFile{{MediaID: "m-web", Title: "Article", MediaType: mediaTypeWeb, Body: "ignored"}})

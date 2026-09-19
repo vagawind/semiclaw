@@ -4,10 +4,10 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/Tencent/WeKnora/internal/handler"
-	sessionhandler "github.com/Tencent/WeKnora/internal/handler/session"
-	"github.com/Tencent/WeKnora/internal/middleware"
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/handler"
+	sessionhandler "github.com/vagawind/semiclaw/internal/handler/session"
+	"github.com/vagawind/semiclaw/internal/middleware"
+	"github.com/vagawind/semiclaw/internal/types"
 	"github.com/gin-gonic/gin"
 )
 
@@ -347,7 +347,7 @@ func TestTenantInfrastructureRoutesDeclareSpecificCapabilities(t *testing.T) {
 	RegisterEmbedChannelRoutes(v1, &handler.EmbedChannelHandler{}, g)
 	RegisterIMChannelRoutes(v1, &handler.IMHandler{}, g)
 	RegisterDataSourceRoutes(v1, &handler.DataSourceHandler{}, &handler.DataSourceCredentialsHandler{}, g)
-	RegisterWeKnoraCloudRoutes(v1, &handler.WeKnoraCloudHandler{}, g)
+	RegisterSemiClawCloudRoutes(v1, &handler.SemiClawCloudHandler{}, g)
 
 	capabilitiesPolicy := mustLookupAPIKeyPolicy(t, g, http.MethodGet, "/api/v1/system/capabilities")
 	if capabilitiesPolicy.RequireFullAccess || len(capabilitiesPolicy.Capabilities) != 0 {
@@ -375,7 +375,7 @@ func TestTenantInfrastructureRoutesDeclareSpecificCapabilities(t *testing.T) {
 		{http.MethodGet, "/api/v1/embed-channels", types.APIKeyCapabilityManageChannels},
 		{http.MethodGet, "/api/v1/im-channels", types.APIKeyCapabilityManageChannels},
 		{http.MethodGet, "/api/v1/datasource", types.APIKeyCapabilityManageDataSources},
-		{http.MethodGet, "/api/v1/models/weknoracloud/status", types.APIKeyCapabilityManageModels},
+		{http.MethodGet, "/api/v1/models/semiclawcloud/status", types.APIKeyCapabilityManageModels},
 	}
 
 	for _, tc := range cases {

@@ -78,7 +78,7 @@ type RemoteTerminalSession interface {
 	// Resize changes the PTY window size.
 	Resize(ctx context.Context, cols, rows uint32) error
 
-	// Close disconnects WeKnora from the PTY without killing the remote
+	// Close disconnects SemiClaw from the PTY without killing the remote
 	// process: the shell stays in the sandbox so a provider-native
 	// reconnect can re-attach. Safe to call more than once.
 	Close() error
@@ -198,7 +198,7 @@ func TerminalManagerFrom(client RemoteSandboxClient) (RemoteTerminalManager, boo
 }
 
 // DefaultTerminalIdleDisconnect is how long an interactive terminal may sit
-// without keystrokes or PTY output before WeKnora closes the WebSocket.
+// without keystrokes or PTY output before SemiClaw closes the WebSocket.
 // Closing the socket stops TTL refresh so the sandbox can pause on its own
 // provider timeout. 0 in a stored workspace config means this default.
 const DefaultTerminalIdleDisconnect = 15 * time.Minute

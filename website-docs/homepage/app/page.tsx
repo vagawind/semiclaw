@@ -7,7 +7,7 @@ import { Header, ProductVideo } from "./interactive";
 import { clients, dataSources, modelProviders, IntegrationMark } from "./brands";
 import s from "./home.module.css";
 
-const repo = "https://github.com/Tencent/WeKnora";
+const repo = "https://github.com/vagawind/semiclaw";
 const docs = "/docs/";
 const guide = (path: string) => `${docs}${path}.html`;
 const modes = [
@@ -31,7 +31,7 @@ export default function Home() {
         <div className={s.heroGrid}>
           <h1 id="hero-title">帮你找到答案，<br /><em>并将知识付诸实践。</em></h1>
           <div className={s.heroAside}>
-            <p className={s.eyebrow}>TENCENT OPEN SOURCE · WEKNORA</p>
+            <p className={s.eyebrow}>TENCENT OPEN SOURCE · SEMICLAW</p>
             <p className={s.heroDescription}>腾讯开源的企业级知识管理框架。<br />汇集团队资料，用于知识问答、任务执行和 Wiki 整理。</p>
             <div className={s.actions}><a className={s.primary} href="#get-started">开始使用 <Icon name="arrow" /></a><a className={s.secondary} href={repo} target="_blank" rel="noreferrer"><Icon name="github" /> GitHub</a></div>
             <p className={s.heroNote}>RAG 问答 / Agent 推理 / 自动 Wiki</p>
@@ -51,7 +51,7 @@ export default function Home() {
       <section id="release" className={s.release} aria-labelledby="release-title"><div className={s.shell}>
         <div className={s.sectionHeading}><div><p className={s.eyebrow}>02 / INTRODUCING v0.8.0</p><h2 id="release-title">智能体可以运行技能，<br />也能生成文件。</h2></div><a className={s.textLink} href={`${repo}/blob/main/CHANGELOG.md#080---2026-09-03`} target="_blank" rel="noreferrer">查看版本更新 <Icon name="arrow" /></a></div>
         <div className={s.releaseGrid}>
-          <figure className={s.artifactFigure}><div className={s.artifactHeading}><span><Icon name="file" /> 在对话中预览生成的文件</span><span>AGENT → ARTIFACT</span></div><div className={s.artifactImage}><Image src="/product/skill-sandbox-chat.png" alt="WeKnora 实际界面：智能体根据知识库生成 Word 文档，并在对话旁打开产物预览" width={3840} height={2112} sizes="(max-width: 960px) 100vw, 60vw" /></div><figcaption><span>检索知识 → 执行任务 → 生成文档</span><span>产品实景</span></figcaption></figure>
+          <figure className={s.artifactFigure}><div className={s.artifactHeading}><span><Icon name="file" /> 在对话中预览生成的文件</span><span>AGENT → ARTIFACT</span></div><div className={s.artifactImage}><Image src="/product/skill-sandbox-chat.png" alt="SemiClaw 实际界面：智能体根据知识库生成 Word 文档，并在对话旁打开产物预览" width={3840} height={2112} sizes="(max-width: 960px) 100vw, 60vw" /></div><figcaption><span>检索知识 → 执行任务 → 生成文档</span><span>产品实景</span></figcaption></figure>
           <div className={s.releaseFeatures}>{release.map(feature => <article key={feature.title}><Icon name={feature.icon} /><div><span className={s.featureLabel}>{feature.label}</span><h3>{feature.title}</h3><p>{feature.text}</p><a className={s.textLink} href={guide(feature.link)}>了解更多 <Icon name="arrow" /></a></div></article>)}</div>
         </div>
         <div className={s.releaseExtras}><span>本次更新还包括</span><p>GitLab / 腾讯 IMA 数据源</p><p>anydoc Office 解析</p><p>DeepSeek Harness 插件</p><p>LiteLLM 接入</p></div>
@@ -88,7 +88,7 @@ export default function Home() {
           <article className={s.startCard}>
             <div className={s.startLabel}><Image className={s.startBrand} src="/brands/tencent-cloud.ico" alt="腾讯云 Logo" width={32} height={32} /><span>云端部署</span></div>
             <h3>腾讯云轻量应用服务器</h3>
-            <p>通过应用模板部署 WeKnora，在自己的云服务器上运行。</p>
+            <p>通过应用模板部署 SemiClaw，在自己的云服务器上运行。</p>
             <a className={s.textLink} href="https://mc.tencent.com/s69nKCVz" target="_blank" rel="noreferrer">前往腾讯云部署 <Icon name="external" /></a>
           </article>
           <article className={s.startCard}>
@@ -100,6 +100,6 @@ export default function Home() {
         </div>
       </section>
     </main>
-    <footer className={`${s.shell} ${s.footer}`}><Link className={s.brand} href="/" aria-label="WeKnora 首页"><BrandLogo /></Link><p>Tencent Open Source · MIT License</p><nav aria-label="页脚导航"><a href={docs}>文档</a><a href={repo} target="_blank" rel="noreferrer">GitHub <Icon name="external" /></a><a href={`${repo}/blob/main/CHANGELOG.md`} target="_blank" rel="noreferrer">更新日志</a></nav></footer>
+    <footer className={`${s.shell} ${s.footer}`}><Link className={s.brand} href="/" aria-label="SemiClaw 首页"><BrandLogo /></Link><p>Tencent Open Source · MIT License</p><nav aria-label="页脚导航"><a href={docs}>文档</a><a href={repo} target="_blank" rel="noreferrer">GitHub <Icon name="external" /></a><a href={`${repo}/blob/main/CHANGELOG.md`} target="_blank" rel="noreferrer">更新日志</a></nav></footer>
   </div>;
 }

@@ -6,8 +6,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Tencent/WeKnora/internal/datasource"
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/datasource"
+	"github.com/vagawind/semiclaw/internal/types"
 )
 
 func TestLogicalKey_IsStableAndScoped(t *testing.T) {

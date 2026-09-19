@@ -118,7 +118,7 @@ func (m *Manager) AuthorizeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	_ = json.NewEncoder(w).
 		Encode(map[string]any{
-			"device_id": record.ID, "service_name": "WeKnora",
+			"device_id": record.ID, "service_name": "SemiClaw",
 			"expires_at": record.ExpiresAt, "renew_after": record.RenewAfter,
 		})
 }
@@ -241,6 +241,6 @@ func (m *Manager) DownloadExtension(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.Header().Set("Content-Type", "application/zip")
-	w.Header().Set("Content-Disposition", `attachment; filename="browser-skill-weknora.zip"`)
+	w.Header().Set("Content-Disposition", `attachment; filename="browser-skill-semiclaw.zip"`)
 	http.ServeFile(w, r, p)
 }

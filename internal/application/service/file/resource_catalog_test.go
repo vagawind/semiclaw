@@ -8,8 +8,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Tencent/WeKnora/internal/types"
-	"github.com/Tencent/WeKnora/internal/types/interfaces"
+	"github.com/vagawind/semiclaw/internal/types"
+	"github.com/vagawind/semiclaw/internal/types/interfaces"
 	"github.com/stretchr/testify/require"
 )
 
@@ -98,7 +98,7 @@ func TestResourceCatalogFileServiceReturnsReferenceAndResolvesReads(t *testing.T
 }
 
 func TestResourceCatalogFileServiceReturnsShortExternalGrantURL(t *testing.T) {
-	t.Setenv("APP_EXTERNAL_URL", "https://weknora.example.com/")
+	t.Setenv("APP_EXTERNAL_URL", "https://semiclaw.example.com/")
 	inner := &physicalFileStub{savedPath: "local://7/exports/a.png"}
 	catalog := &catalogStub{}
 	svc := NewResourceCatalogFileService(inner, catalog)
@@ -107,5 +107,5 @@ func TestResourceCatalogFileServiceReturnsShortExternalGrantURL(t *testing.T) {
 	require.NoError(t, err)
 	externalURL, err := svc.GetFileURL(context.Background(), ref)
 	require.NoError(t, err)
-	require.Equal(t, "https://weknora.example.com/r/GrantTokenAbCdEfGhIjKl", externalURL)
+	require.Equal(t, "https://semiclaw.example.com/r/GrantTokenAbCdEfGhIjKl", externalURL)
 }

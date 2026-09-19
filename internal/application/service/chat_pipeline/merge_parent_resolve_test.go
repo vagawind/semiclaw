@@ -6,8 +6,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Tencent/WeKnora/internal/searchutil"
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/searchutil"
+	"github.com/vagawind/semiclaw/internal/types"
 )
 
 func TestResolveParentChunksUsesCurrentContentAndImageURLs(t *testing.T) {

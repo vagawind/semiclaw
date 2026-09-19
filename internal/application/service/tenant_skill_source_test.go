@@ -10,7 +10,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/Tencent/WeKnora/internal/utils"
+	"github.com/vagawind/semiclaw/internal/utils"
 	"github.com/stretchr/testify/require"
 )
 
@@ -22,18 +22,18 @@ func TestParseSkillSource(t *testing.T) {
 	}{
 		{
 			name: "clawhub at-slug",
-			in:   "@lyingbug/weknora",
+			in:   "@lyingbug/semiclaw",
 			want: parsedSkillSource{
 				Kind: skillSourceRegistry, Registry: defaultSkillRegistryOrigin,
-				Owner: "lyingbug", Slug: "weknora",
+				Owner: "lyingbug", Slug: "semiclaw",
 			},
 		},
 		{
 			name: "clawhub page url",
-			in:   "https://clawhub.ai/lyingbug/weknora",
+			in:   "https://clawhub.ai/lyingbug/semiclaw",
 			want: parsedSkillSource{
 				Kind: skillSourceRegistry, Registry: "https://clawhub.ai",
-				Owner: "lyingbug", Slug: "weknora",
+				Owner: "lyingbug", Slug: "semiclaw",
 			},
 		},
 		{

@@ -14,7 +14,7 @@
 //	Get/List → GET  /containers/json?filters=label=…
 //	Delete   → DELETE /containers/{id}?force=1
 //	Exec     → POST /containers/{id}/exec → /exec/{id}/start (hijack)
-//	Snapshot → POST /commit (skill images under weknora-skill/)
+//	Snapshot → POST /commit (skill images under semiclaw-skill/)
 //
 // Every file operation uses exec with an explicit account (root by default),
 // timeout and activity tracking. Archive endpoints bypass those exec settings.
@@ -23,7 +23,7 @@
 // See WriteFile for the limits of the file API's path guards.
 //
 // ListDir and Stat use `find -printf`, which needs GNU findutils in the image;
-// the standard WeKnora sandbox image provides it.
+// the standard SemiClaw sandbox image provides it.
 //
 // Two Docker facts shape the rest of this file:
 //
@@ -56,7 +56,7 @@ import (
 // dockerActivityMarker is touched by every exec and read by the idle sweeper.
 // It lives outside /workspace so a script cannot mistake it for its own data,
 // and outside /tmp so a tmpfs mount cannot hide it.
-const dockerActivityMarker = "/var/lib/weknora-sandbox-activity"
+const dockerActivityMarker = "/var/lib/semiclaw-sandbox-activity"
 
 // dockerSandboxEntrypoint keeps the container alive without running anything —
 // the container is a place to exec into, not a service — and prepares the
@@ -213,7 +213,7 @@ func (c *DockerRemoteClient) Provider() RemoteProvider { return SandboxTypeDocke
 // Capabilities reports what this backend can do.
 //
 // SupportsTimeoutRefresh is false because the daemon has no timeout to
-// refresh: idle reclamation is WeKnora's own sweep, not a provider feature.
+// refresh: idle reclamation is SemiClaw's own sweep, not a provider feature.
 // SupportsVolumes is false until the volume-mount surface is mapped onto
 // Docker named volumes; advertising it early would let a workspace configure
 // a mount that silently never appears.
@@ -644,7 +644,7 @@ func (c *DockerRemoteClient) removeQuietly(ctx context.Context, id string) {
 // The command is wrapped so that the container, not the client, enforces the
 // timeout: cancelling the HTTP request leaves the process running (verified in
 // docs/poc/docker-sandbox), which would let a runaway script keep burning the
-// host's CPU long after WeKnora reported a timeout to the user.
+// host's CPU long after SemiClaw reported a timeout to the user.
 func (c *DockerRemoteClient) Exec(
 	ctx context.Context,
 	handle RemoteSandboxHandle,
@@ -803,13 +803,13 @@ func dockerExecCommand(req RemoteExecRequest, timeout time.Duration) []string {
 		return []string{
 			"/bin/sh", "-c",
 			touch + `exec timeout -s KILL ` + seconds + ` /bin/bash --noprofile --norc -c "$1"`,
-			"weknora-exec", req.Command,
+			"semiclaw-exec", req.Command,
 		}
 	}
 	argv := []string{
 		"/bin/sh", "-c",
 		touch + `exec timeout -s KILL ` + seconds + ` "$@"`,
-		"weknora-exec", req.Command,
+		"semiclaw-exec", req.Command,
 	}
 	return append(argv, req.Args...)
 }
@@ -875,7 +875,7 @@ func (c *DockerRemoteClient) WriteFile(
 	// metacharacters cannot change what the redirect targets.
 	result, err := c.Exec(ctx, &dockerSandboxHandle{id: id}, RemoteExecRequest{
 		Command: "sh",
-		Args:    []string{"-c", `cat > "$1"`, "weknora-write", clean},
+		Args:    []string{"-c", `cat > "$1"`, "semiclaw-write", clean},
 		Stdin:   string(content),
 		User:    remoteFileUser(ctx),
 		Timeout: dockerFilesystemOpTimeout,

@@ -69,7 +69,7 @@
 
 `config.settings.projects` 为非空数组，每项包含字符串 project_id、可选 ref 和 paths。ref 留空使用默认分支；paths 留空选整个仓库，目录使用相对路径与正斜杠。先验证凭据并浏览资源，再保存定时同步。
 
-流式同步支持恢复检查点；增量通过仓库提交差异更新文件，源端删除按 sync_deletions 处理。选择的仓库文件仍经过 WeKnora 文件类型、大小与解析引擎校验，并非所有代码或二进制文件都可直接入库。
+流式同步支持恢复检查点；增量通过仓库提交差异更新文件，源端删除按 sync_deletions 处理。选择的仓库文件仍经过 SemiClaw 文件类型、大小与解析引擎校验，并非所有代码或二进制文件都可直接入库。
 
 ```json
 {"credentials":{"base_url":"https://gitlab.example.com","access_token":"<token>"},"settings":{"projects":[{"project_id":"123","ref":"main","paths":["docs"]}]}}
@@ -180,10 +180,10 @@ flowchart LR
 - **流式路径的游标策略**（`streamStartCursor`）：用户触发的全量同步在**首次尝试**时丢弃游标全量抓取；Asynq **重试**（attempt > 0）以及所有增量同步都从最后一个 checkpoint 续传。
 - **入库核心 `applyFetchedItem` → `ingestItem`**：
   - `IsDeleted=true` 且 `sync_deletions=true` 时，按租户、知识库、数据源 ID 和 external_id 查找并真实删除对应知识；关闭同步删除则保留已有知识。删除能力还取决于连接器是否提供可靠的删除检测；
-  - 有 `Content` 字节 → 包装成 `multipart.FileHeader` 走 `KnowledgeService.CreateKnowledgeFromFile`（完整文档解析流水线）；只有 `URL` → 走 `CreateKnowledgeFromURL` 由 WeKnora 下载解析；
+  - 有 `Content` 字节 → 包装成 `multipart.FileHeader` 走 `KnowledgeService.CreateKnowledgeFromFile`（完整文档解析流水线）；只有 `URL` → 走 `CreateKnowledgeFromURL` 由 SemiClaw 下载解析；
   - **更新 = 先删后建**：按 metadata `external_id` 查到既有知识条目就先 `DeleteKnowledge` 再重建，计为 Updated；
   - 重复文件（`DuplicateKnowledgeError`）计为 Skipped，不算失败；
-  - 每个条目自动带上 metadata：`external_id`、`source_resource_id`、`datasource_id` 以及连接器附加的 metadata。若源端提供时间，还保存 UTC RFC3339 格式的 `source_created_at` / `source_updated_at`；它们表示源文档时间，与 WeKnora 的 created_at/updated_at 分开。
+  - 每个条目自动带上 metadata：`external_id`、`source_resource_id`、`datasource_id` 以及连接器附加的 metadata。若源端提供时间，还保存 UTC RFC3339 格式的 `source_created_at` / `source_updated_at`；它们表示源文档时间，与 SemiClaw 的 created_at/updated_at 分开。
 - **自动打标**：`resolveAutoTagIDs` 按数据源名称在目标 KB 中 FindOrCreate 一个标签，所有同步条目自动挂上，便于在 KB 中识别来源；打标失败不阻断同步。
 - **结果状态**：全部条目失败 → `failed`（`allFetchedItemsFailedError`）；RSS 部分 feed 失败（`PartialFetchError`）或流式路径存在失败文档 → `partial`；其余 → `success`。失败样本以 `SyncItemError` 形式最多保留 100 条。
 - 抓取失败时若连接器返回了新游标（如 RSS），仍会持久化游标，避免瞬时故障后被迫全量重抓。
@@ -276,7 +276,7 @@ func NewConnectorHTTPClient(timeout time.Duration) *http.Client {
 }
 ```
 
-底层 `internal/utils/security.go` 会拒绝私网地址、回环地址、link-local 等目标，并且在**每次重定向和实际拨号时**重新校验（而非只校验初始 URL），防止恶意 feed 或自定义 base_url 把 WeKnora 引向内网服务。各连接器的 `parseXXXConfig` 都会对 base_url 调用 `ValidateConnectorBaseURL`。
+底层 `internal/utils/security.go` 会拒绝私网地址、回环地址、link-local 等目标，并且在**每次重定向和实际拨号时**重新校验（而非只校验初始 URL），防止恶意 feed 或自定义 base_url 把 SemiClaw 引向内网服务。各连接器的 `parseXXXConfig` 都会对 base_url 调用 `ValidateConnectorBaseURL`。
 
 `errors.go` 定义了模块级哨兵错误（`ErrConnectorNotFound`、`ErrDataSourceInvalid`、`ErrInvalidCredentials`、`ErrSyncFailed` 等）与 `PartialFetchError`（部分资源成功、部分失败；调用方应处理已得条目、持久化游标、把 `Details` 以 partial 状态呈现给用户）。
 

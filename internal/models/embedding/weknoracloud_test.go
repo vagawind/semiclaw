@@ -10,12 +10,12 @@ import (
 	"testing"
 )
 
-func newWeKnoraCloudEmbedderTestServer(t *testing.T, response string) *WeKnoraCloudEmbedder {
+func newSemiClawCloudEmbedderTestServer(t *testing.T, response string) *SemiClawCloudEmbedder {
 	t.Helper()
 
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path != weKnoraCloudEmbedPath {
-			http.Error(w, fmt.Sprintf("request path = %q, want %q", r.URL.Path, weKnoraCloudEmbedPath), http.StatusNotFound)
+		if r.URL.Path != semiClawCloudEmbedPath {
+			http.Error(w, fmt.Sprintf("request path = %q, want %q", r.URL.Path, semiClawCloudEmbedPath), http.StatusNotFound)
 			return
 		}
 		w.Header().Set("Content-Type", "application/json")
@@ -23,7 +23,7 @@ func newWeKnoraCloudEmbedderTestServer(t *testing.T, response string) *WeKnoraCl
 	}))
 	t.Cleanup(server.Close)
 
-	return &WeKnoraCloudEmbedder{
+	return &SemiClawCloudEmbedder{
 		modelName: "test-embedding",
 		modelID:   "test-model-id",
 		appID:     "test-app-id",
@@ -33,8 +33,8 @@ func newWeKnoraCloudEmbedderTestServer(t *testing.T, response string) *WeKnoraCl
 	}
 }
 
-func TestWeKnoraCloudBatchEmbedPreservesInputOrder(t *testing.T) {
-	embedder := newWeKnoraCloudEmbedderTestServer(t, `{
+func TestSemiClawCloudBatchEmbedPreservesInputOrder(t *testing.T) {
+	embedder := newSemiClawCloudEmbedderTestServer(t, `{
 		"data": [
 			{"index": 1, "embedding": [0.3, 0.4]},
 			{"index": 0, "embedding": [0.1, 0.2]}
@@ -51,7 +51,7 @@ func TestWeKnoraCloudBatchEmbedPreservesInputOrder(t *testing.T) {
 	}
 }
 
-func TestWeKnoraCloudBatchEmbedRejectsMalformedResponse(t *testing.T) {
+func TestSemiClawCloudBatchEmbedRejectsMalformedResponse(t *testing.T) {
 	tests := []struct {
 		name       string
 		response   string
@@ -86,7 +86,7 @@ func TestWeKnoraCloudBatchEmbedRejectsMalformedResponse(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			embedder := newWeKnoraCloudEmbedderTestServer(t, tt.response)
+			embedder := newSemiClawCloudEmbedderTestServer(t, tt.response)
 
 			_, err := embedder.BatchEmbed(context.Background(), tt.texts)
 			if err == nil {

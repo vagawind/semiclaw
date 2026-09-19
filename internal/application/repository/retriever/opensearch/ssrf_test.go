@@ -4,7 +4,7 @@ import (
 	"os"
 	"testing"
 
-	secutils "github.com/Tencent/WeKnora/internal/utils"
+	secutils "github.com/vagawind/semiclaw/internal/utils"
 )
 
 func TestMain(m *testing.M) {

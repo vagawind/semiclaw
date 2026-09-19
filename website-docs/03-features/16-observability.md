@@ -83,7 +83,7 @@ return &lumberjack.Logger{
 
 - `RequestID()`：读取或生成 `X-Request-ID`，写回响应头，并把 request_id 与带字段的 logger 一起放入 gin context 与 `http.Request` context —— 全链路日志（含 asynq worker 侧透传的 session 标签）都能按 request_id 关联。
 - `Logger()`：记录 method、path（query 经 `sanitizeQuery` 抹掉 `token`/`code`/`state` 等 OAuth 敏感参数）、status_code、latency、client_ip、size，以及最多 10KB 的请求/响应体。请求/响应体经 `sensitiveFieldRegex` 脱敏（password/token/api_key/secret/private_key 等字段值替换为 `"***"`，兼容 snake_case/camelCase）；SSE 响应体记为 `[SSE流式响应，已跳过]`；`/assets/` 与 wiki stats 轮询路径直接跳过。
-- 信任代理：`r.SetTrustedProxies(...)`（`WEKNORA_TRUSTED_PROXIES`）防止伪造 `X-Forwarded-For` 绕过基于 `ClientIP` 的限流。
+- 信任代理：`r.SetTrustedProxies(...)`（`SEMICLAW_TRUSTED_PROXIES`）防止伪造 `X-Forwarded-For` 绕过基于 `ClientIP` 的限流。
 
 ### Langfuse 追踪（`internal/tracing/langfuse`） {#_3-langfuse-追踪-internal-tracing-langfuse}
 
@@ -106,7 +106,7 @@ return &lumberjack.Logger{
 
 #### 导出器（`exporter.go`） {#_3-2-导出器-exporter-go}
 
-OTLP/HTTP exporter，`Authorization: Basic base64(public:secret)`；`x-langfuse-ingestion-version: 4` 是 Langfuse v3/LiteFuse OTel 直写路径的必需门槛头（缺失会返回 400），`x-langfuse-sdk-name/version` 为兼容标记。`Manager`（`manager.go`）持有独立的 `TracerProvider`（`service.name=weknora` resource），不调用 `otel.SetTextMapPropagator` 等全局 OTel 变更，避免影响进程内其他 OTel 埋点；W3C `TraceContext` propagator 为包级私有值。
+OTLP/HTTP exporter，`Authorization: Basic base64(public:secret)`；`x-langfuse-ingestion-version: 4` 是 Langfuse v3/LiteFuse OTel 直写路径的必需门槛头（缺失会返回 400），`x-langfuse-sdk-name/version` 为兼容标记。`Manager`（`manager.go`）持有独立的 `TracerProvider`（`service.name=semiclaw` resource），不调用 `otel.SetTextMapPropagator` 等全局 OTel 变更，避免影响进程内其他 OTel 埋点；W3C `TraceContext` propagator 为包级私有值。
 
 #### 观测模型与埋点点位 {#_3-3-观测模型与埋点点位}
 
@@ -183,7 +183,7 @@ Prompt 组装将稳定说明放在前部，动态会话内容放在后部；支�
 
 - `auditLogService.Log`（`internal/application/service/audit_log.go`）是规范写入口：默认 `outcome=success`、填充 `CreatedAt`；**写失败只记 ERROR 日志不向上传播** —— 审计失败绝不能中断业务操作。
 - `LogDenied` 记录 RBAC 中间件拒绝：以 `(tenant_id, actor, action=rbac.access_denied, route 模板)` 为键做 **1 分钟滑动窗口去重**（`denyDedupWindow`，`repo.CountSinceForDedup`），防止探测客户端灌满表（100 RPS 打同一端点每分钟只产生 1 行）；用路由模板而非原始 URL 作为 dedup 键，防止遍历 UUID 绕过窗口。stderr 侧的 `[rbac] role insufficient` 日志不受去重影响，每次拒绝都打。
-- `middleware/audit_provider.go` 的 `AuditServiceProvider` 把 service 注入 gin context（键 `weknora.audit_service`），RBAC 中间件经 `AuditServiceFromContext` 取用，nil 安全（Lite 模式可不配审计）。
+- `middleware/audit_provider.go` 的 `AuditServiceProvider` 把 service 注入 gin context（键 `semiclaw.audit_service`），RBAC 中间件经 `AuditServiceFromContext` 取用，nil 安全（Lite 模式可不配审计）。
 
 #### 查询 API（`internal/handler/audit_log.go`） {#_4-4-查询-api-internal-handler-audit-log-go}
 
@@ -197,7 +197,7 @@ Prompt 组装将稳定说明放在前部，动态会话内容放在后部；支�
 
 #### 保留策略（`internal/application/service/audit_log_retention.go`） {#_4-5-保留策略-internal-application-service-audit-log-retention-go}
 
-- 配置：`audit.retention_days`（YAML）/ `WEKNORA_AUDIT_RETENTION_DAYS`（env 覆盖）；省略 `audit:` 段时默认 **90 天**；显式 0 表示禁用清扫（合规场景库外归档），负值在 config 校验时报错。
+- 配置：`audit.retention_days`（YAML）/ `SEMICLAW_AUDIT_RETENTION_DAYS`（env 覆盖）；省略 `audit:` 段时默认 **90 天**；显式 0 表示禁用清扫（合规场景库外归档），负值在 config 校验时报错。
 - `AuditLogRetentionRunner`：裸 `time.Ticker` 后台 goroutine（无 cron / asynq 依赖），启动延迟 10 分钟（避开迁移与启动流量），之后**每 24h** 执行一次 `Purge` → `DeleteOlderThan(now - retention_days)`（单条带索引 DELETE，30s 超时）。删除数量记 INFO，失败记 WARN（下轮再试）。由 `internal/container/container.go` 装配并注册 `ResourceCleaner` 优雅停止（`Stop` 幂等，未 Start 直接返回）。
 
 ### 限流（`internal/ratelimit` 与中间件） {#_5-限流-internal-ratelimit-与中间件}

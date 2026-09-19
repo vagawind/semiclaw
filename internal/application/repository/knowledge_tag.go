@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/types"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 )

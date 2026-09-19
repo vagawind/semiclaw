@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"sort"
 
-	"github.com/Tencent/WeKnora/internal/searchutil"
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/searchutil"
+	"github.com/vagawind/semiclaw/internal/types"
 )
 
 // mergeSequentialChunks joins sequential current chunk bodies.

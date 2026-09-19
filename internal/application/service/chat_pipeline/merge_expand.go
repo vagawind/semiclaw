@@ -3,8 +3,8 @@ package chatpipeline
 import (
 	"context"
 
-	"github.com/Tencent/WeKnora/internal/searchutil"
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/searchutil"
+	"github.com/vagawind/semiclaw/internal/types"
 )
 
 // expandShortContextWithNeighbors expands the short context with neighbors

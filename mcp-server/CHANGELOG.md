@@ -15,15 +15,15 @@
 ## [1.1.1] - 2026-07-30
 
 ### 变更
-- 官方 PyPI 包名改为 **`tencent-weknora-mcp`**（由 Tencent/WeKnora 仓库 CI 通过 Trusted Publishing 发布）。
-  原社区包 `weknora-mcp` 非官方维护，请迁移安装命令。
-- 项目 URL 指向 [Tencent/WeKnora](https://github.com/Tencent/WeKnora) 官方仓库（`mcp-server/` 目录）。
+- 官方 PyPI 包名改为 **`tencent-semiclaw-mcp`**（由 vagawind/semiclaw 仓库 CI 通过 Trusted Publishing 发布）。
+  原社区包 `semiclaw-mcp` 非官方维护，请迁移安装命令。
+- 项目 URL 指向 [vagawind/semiclaw](https://github.com/vagawind/semiclaw) 官方仓库（`mcp-server/` 目录）。
 
 ### 修复
 - HTTP 传输恢复 `stateless_http=True`，与迁移前 `StreamableHTTPSessionManager(stateless=True)` 行为一致。
 - SSE 传输恢复消息端点 `/sse/messages/`，与迁移前路由一致。
-- `WeKnoraClient` 使用线程本地 `requests.Session`，避免 MCP 2.x 在线程池中并发调用时出现 Session 竞态。
-- 文件上传（`create_knowledge_from_file`）尊重 `WEKNORA_VERIFY_SSL` 设置。
+- `SemiClawClient` 使用线程本地 `requests.Session`，避免 MCP 2.x 在线程池中并发调用时出现 Session 竞态。
+- 文件上传（`create_knowledge_from_file`）尊重 `SEMICLAW_VERIFY_SSL` 设置。
 
 ### 注意
 - 工具执行失败时，MCPServer 2.x 返回 `CallToolResult(isError=True)`（`ToolError`），
@@ -42,7 +42,7 @@
   - 28 个工具重写为 `@mcp.tool()` 函数签名式：输入参数走类型标注（schema 由框架自动生成），
     描述走 docstring，返回纯 Python 值由框架序列化。
   - 传输层改用 `run_stdio_async()` / `sse_app()` / `streamable_http_app()`，鉴权仍由 `MCPAuthMiddleware` 包裹。
-  - `WeKnoraClient` 业务逻辑（REST/SSE 调用、resolve_*、wiki）保持不变。
+  - `SemiClawClient` 业务逻辑（REST/SSE 调用、resolve_*、wiki）保持不变。
 - 依赖上限调整为 `mcp>=2,<3`（发布包与开发环境一致，避免再次因无上限被解析到未来破坏性版本）。
 
 ### 注意
@@ -56,15 +56,15 @@
 - 将 `__init__.py` 改为绝对导入，修复 unittest/pytest 收集测试时的包导入错误
 
 ### 变更
-- PyPI 分发包名统一为 `weknora-mcp`（命令行入口 `weknora-mcp-server` / `weknora-server` 不变）
+- PyPI 分发包名统一为 `semiclaw-mcp`（命令行入口 `semiclaw-mcp-server` / `semiclaw-server` 不变）
 - 新增 CI workflow（`.github/workflows/mcp-server.yml`），发布 tag 格式为 `mcp-server-v*`
 
 ## [1.0.0] - 2024-01-XX
 
 ### 新增
 - 初始版本发布
-- WeKnora MCP Server 核心功能
-- 完整的 WeKnora API 集成
+- SemiClaw MCP Server 核心功能
+- 完整的 SemiClaw API 集成
 - 空间管理工具
 - 知识库管理工具
 - 知识管理工具
@@ -104,12 +104,12 @@
 
 ### 文件结构
 ```
-WeKnora/mcp-server/
+SemiClaw/mcp-server/
 ├── __init__.py              # 包初始化文件
 ├── main.py                  # 主入口点 (推荐)
 ├── run.py                   # 便捷启动脚本
 ├── run_server.py           # 原始启动脚本
-├── weknora_mcp_server.py   # MCP 服务器实现
+├── semiclaw_mcp_server.py   # MCP 服务器实现
 ├── test_module.py          # 模组测试脚本
 ├── requirements.txt        # 依赖列表
 ├── setup.py               # 安装脚本 (传统)
@@ -125,10 +125,10 @@ WeKnora/mcp-server/
 1. `python main.py` - 主入口点 (推荐)
 2. `python run_server.py` - 原始启动脚本
 3. `python run.py` - 便捷启动脚本
-4. `python weknora_mcp_server.py` - 直接运行
-5. `python -m weknora_mcp_server` - 模块运行
-6. `weknora-mcp-server` - 安装后命令行工具
-7. `weknora-server` - 安装后命令行工具 (别名)
+4. `python semiclaw_mcp_server.py` - 直接运行
+5. `python -m semiclaw_mcp_server` - 模块运行
+6. `semiclaw-mcp-server` - 安装后命令行工具
+7. `semiclaw-server` - 安装后命令行工具 (别名)
 
 ### 技术特性
 - 基于 Model Context Protocol (MCP) 1.0.0+

@@ -6,7 +6,7 @@ name: Build & Publish (mcp-server)
 #
 # Release policy: publishing does NOT depend on tags. Bump the version in
 # mcp-server/pyproject.toml (and the synced version strings in setup.py,
-# __init__.py, weknora_mcp_server.py server_version, main.py --version),
+# __init__.py, semiclaw_mcp_server.py server_version, main.py --version),
 # merge to main, and the pipeline builds + publishes automatically.
 # A pre-publish check queries PyPI and skips upload if that version is
 # already published, so re-running on an unchanged version stays green.
@@ -105,7 +105,7 @@ jobs:
       id-token: write
     environment:
       name: pypi
-      url: https://pypi.org/project/tencent-weknora-mcp/
+      url: https://pypi.org/project/tencent-semiclaw-mcp/
     steps:
       - uses: actions/checkout@v4
 
@@ -123,7 +123,7 @@ jobs:
           import json, sys, urllib.request
           v = sys.argv[1]
           try:
-              d = json.load(urllib.request.urlopen("https://pypi.org/pypi/tencent-weknora-mcp/json"))
+              d = json.load(urllib.request.urlopen("https://pypi.org/pypi/tencent-semiclaw-mcp/json"))
               print("true" if v in d.get("releases", {}) else "false")
           except Exception:
               # If PyPI is unreachable or the project is brand-new (404), treat as unpublished.
@@ -132,7 +132,7 @@ jobs:
           echo "already on PyPI: $exists"
           if [ "$exists" = "true" ]; then
             echo "should_publish=false" >> "$GITHUB_OUTPUT"
-            echo "::warning::tencent-weknora-mcp $version is already on PyPI; skipping publish. Bump pyproject.toml (and synced version strings) to release new changes."
+            echo "::warning::tencent-semiclaw-mcp $version is already on PyPI; skipping publish. Bump pyproject.toml (and synced version strings) to release new changes."
           else
             echo "should_publish=true" >> "$GITHUB_OUTPUT"
           fi

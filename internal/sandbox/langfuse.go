@@ -4,7 +4,7 @@ import (
 	"context"
 	"unicode/utf8"
 
-	"github.com/Tencent/WeKnora/internal/tracing/langfuse"
+	"github.com/vagawind/semiclaw/internal/tracing/langfuse"
 	"github.com/gorilla/websocket"
 )
 

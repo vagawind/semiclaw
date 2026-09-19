@@ -1,11 +1,11 @@
 # MCP（Model Context Protocol）集成
 
-MCP 用于智能体与外部工具之间的连接。WeKnora 支持接入外部 MCP 服务，也提供独立 MCP Server 供其他客户端调用：
+MCP 用于智能体与外部工具之间的连接。SemiClaw 支持接入外部 MCP 服务，也提供独立 MCP Server 供其他客户端调用：
 
-1. **WeKnora 作为 MCP 客户端**：在「MCP 服务」设置中接入任意外部 MCP server（SSE / Streamable HTTP），其工具自动注册进 Agent 的工具箱，供 Agent 在对话中调用。支持 API Key / Bearer / OAuth 2.0（含动态客户端注册与 PKCE）三种认证策略、按工具粒度的人工审批，以及会话内（in-conversation）OAuth 授权。
-2. **WeKnora 作为 MCP Server**：仓库 `mcp-server/` 目录提供一个独立的 Python MCP server（PyPI 包 `tencent-weknora-mcp`，入口命令 `weknora-mcp-server`），把 WeKnora 的知识库、检索、会话、Agent 问答、Wiki 等 REST API 封装成 31 个 MCP 工具，供 Claude Desktop、VS Code Copilot 等外部 MCP 客户端使用。
+1. **SemiClaw 作为 MCP 客户端**：在「MCP 服务」设置中接入任意外部 MCP server（SSE / Streamable HTTP），其工具自动注册进 Agent 的工具箱，供 Agent 在对话中调用。支持 API Key / Bearer / OAuth 2.0（含动态客户端注册与 PKCE）三种认证策略、按工具粒度的人工审批，以及会话内（in-conversation）OAuth 授权。
+2. **SemiClaw 作为 MCP Server**：仓库 `mcp-server/` 目录提供一个独立的 Python MCP server（PyPI 包 `tencent-semiclaw-mcp`，入口命令 `semiclaw-mcp-server`），把 SemiClaw 的知识库、检索、会话、Agent 问答、Wiki 等 REST API 封装成 31 个 MCP 工具，供 Claude Desktop、VS Code Copilot 等外部 MCP 客户端使用。
 
-接入外部服务可扩展 WeKnora 智能体的工具；运行 WeKnora MCP Server 可让外部客户端使用知识库检索、问答和管理能力。
+接入外部服务可扩展 SemiClaw 智能体的工具；运行 SemiClaw MCP Server 可让外部客户端使用知识库检索、问答和管理能力。
 
 在「设置 → MCP 服务」新建服务，选择传输和认证方式，测试连接后在智能体中选择所需工具。需要控制写入或外发操作时，可为相应工具开启人工审批，调用前会显示确认卡片。
 
@@ -22,28 +22,28 @@ MCP 用于智能体与外部工具之间的连接。WeKnora 支持接入外部 M
 
 在 MCP 服务设置中添加服务地址，选择 SSE 或 Streamable HTTP 传输，并配置认证。测试连接后查看发现的工具，在智能体配置中选择需要的服务或工具。
 
-OAuth 服务按调用者分别授权。工具需要审批时，在对话中检查参数并确认；单独停用某个工具后，运行时不会执行该工具。WeKnora 的 MCP 客户端不支持 stdio 传输。
+OAuth 服务按调用者分别授权。工具需要审批时，在对话中检查参数并确认；单独停用某个工具后，运行时不会执行该工具。SemiClaw 的 MCP 客户端不支持 stdio 传输。
 
 ## 供外部客户端调用
 
-在外部客户端所在环境安装 `tencent-weknora-mcp`，配置 WeKnora API 地址与 API Key，再启动 `weknora-mcp-server`。客户端可调用知识库、检索、会话和 Wiki 等 31 个工具，范围受 API Key 权限约束。
+在外部客户端所在环境安装 `tencent-semiclaw-mcp`，配置 SemiClaw API 地址与 API Key，再启动 `semiclaw-mcp-server`。客户端可调用知识库、检索、会话和 Wiki 等 31 个工具，范围受 API Key 权限约束。
 
 安装命令、环境变量、传输模式和客户端配置示例见下方 MCP Server 参考。
 
 ## 接入方式对照 {#两个方向的对照速览}
 
-| 维度 | WeKnora 作为 MCP 客户端 | WeKnora 作为 MCP Server |
+| 维度 | SemiClaw 作为 MCP 客户端 | SemiClaw 作为 MCP Server |
 |---|---|---|
 | 代码位置 | `internal/mcp/` + handler/service/repository + `internal/agent/tools/` | `mcp-server/`（Python） |
 | 协议库 | `github.com/mark3labs/mcp-go` | `mcp`（官方 Python SDK，2.x 高层 `MCPServer` API） |
 | 传输 | SSE、Streamable HTTP（stdio 因安全禁用） | stdio（默认）、SSE、Streamable HTTP |
-| 认证 | API Key / Bearer / OAuth 2.0（DCR + PKCE，token AES 加密、按 principal 隔离） | 出站 `X-API-Key`（WeKnora API Key）；入站网络传输 `MCP_SERVER_AUTH_TOKEN` |
+| 认证 | API Key / Bearer / OAuth 2.0（DCR + PKCE，token AES 加密、按 principal 隔离） | 出站 `X-API-Key`（SemiClaw API Key）；入站网络传输 `MCP_SERVER_AUTH_TOKEN` |
 | 安全控制 | 工具级人工审批、SSRF 校验、不可信输出前缀、DTO 级密钥隔离 | 上传目录白名单、网络传输强制鉴权、SSL 校验默认开启 |
-| 消费者 | WeKnora Agent（对话中自动调用） | Claude Desktop / VS Code Copilot 等任意 MCP 客户端 |
+| 消费者 | SemiClaw Agent（对话中自动调用） | Claude Desktop / VS Code Copilot 等任意 MCP 客户端 |
 
 ## 配置与实现参考
 
-### MCP 客户端参考 {#第一部分-weknora-作为-mcp-客户端}
+### MCP 客户端参考 {#第一部分-semiclaw-作为-mcp-客户端}
 
 #### 总体架构 {#_1-1-总体架构}
 
@@ -156,7 +156,7 @@ type MCPService struct {
 `Initialize` 握手中客户端标识为：
 
 ```go
-ClientInfo: mcp.Implementation{ Name: "WeKnora", Version: "1.0.0" }
+ClientInfo: mcp.Implementation{ Name: "SemiClaw", Version: "1.0.0" }
 ```
 
 #### REST API 端点 {#_1-5-rest-api-端点}
@@ -199,7 +199,7 @@ PUT body 中字段为指针语义：**缺省 = 保留原值**，**空字符串 =
 
 #### OAuth 2.0 授权全流程 {#_1-6-oauth-2-0-授权全流程}
 
-当 MCP server 要求 OAuth（`auth_type: "oauth"`）时，WeKnora 实现了完整的授权码流程：**RFC 9728 / RFC 8414 发现 → RFC 7591 动态客户端注册 → Authorization Code + PKCE → token 加密持久化 → 带分布式租约的自动刷新**。token 按 `(tenant_id, principal_type, principal_id, service_id)` 维度隔离——同一服务，每个用户（或 embed 访客、IM 用户等 principal，见 `internal/types/principal.go`）都持有自己的 token。
+当 MCP server 要求 OAuth（`auth_type: "oauth"`）时，SemiClaw 实现了完整的授权码流程：**RFC 9728 / RFC 8414 发现 → RFC 7591 动态客户端注册 → Authorization Code + PKCE → token 加密持久化 → 带分布式租约的自动刷新**。token 按 `(tenant_id, principal_type, principal_id, service_id)` 维度隔离——同一服务，每个用户（或 embed 访客、IM 用户等 principal，见 `internal/types/principal.go`）都持有自己的 token。
 
 ##### 授权时序
 
@@ -207,8 +207,8 @@ PUT body 中字段为指针语义：**缺省 = 保留原值**，**空字符串 =
 sequenceDiagram
     autonumber
     participant B as "用户浏览器"
-    participant FE as "WeKnora 前端"
-    participant BE as "WeKnora 后端（OAuthManager）"
+    participant FE as "SemiClaw 前端"
+    participant BE as "SemiClaw 后端（OAuthManager）"
     participant ST as "State 存储（Redis / 内存，TTL 10 分钟）"
     participant AS as "OAuth 授权服务器"
     participant DB as "PostgreSQL（mcp_oauth_clients / mcp_oauth_tokens）"
@@ -216,7 +216,7 @@ sequenceDiagram
     FE->>BE: "POST /mcp-services/{id}/oauth/authorize-url<br/>{redirect_uri, frontend_redirect}"
     BE->>AS: "元数据发现（AuthServerMetadataURL 或按 RFC 9728/8414 自动发现）"
     alt "该服务尚无已注册客户端"
-        BE->>AS: "RFC 7591 动态客户端注册（client_name = WeKnora）"
+        BE->>AS: "RFC 7591 动态客户端注册（client_name = SemiClaw）"
         AS-->>BE: "client_id（可含 client_secret）"
         BE->>DB: "SaveClient：按（tenant, service）持久化，secret AES 加密"
     end
@@ -241,9 +241,9 @@ sequenceDiagram
 
 ##### 流程要点（对应源码）
 
-- **发现与动态注册**（`internal/mcp/oauth_manager.go`）：`StartAuthorization` 先构造 `transport.OAuthHandler`（`AuthServerMetadataURL` 为空时由 mcp-go 依据 MCP URL 自动发现授权服务器）；若 `mcp_oauth_clients` 表中该 `(tenant, service)` 尚无客户端，调用 `h.RegisterClient(ctx, "WeKnora")` 做一次性 RFC 7591 注册并 `SaveClient` 持久化，之后所有用户复用同一 client_id。
+- **发现与动态注册**（`internal/mcp/oauth_manager.go`）：`StartAuthorization` 先构造 `transport.OAuthHandler`（`AuthServerMetadataURL` 为空时由 mcp-go 依据 MCP URL 自动发现授权服务器）；若 `mcp_oauth_clients` 表中该 `(tenant, service)` 尚无客户端，调用 `h.RegisterClient(ctx, "SemiClaw")` 做一次性 RFC 7591 注册并 `SaveClient` 持久化，之后所有用户复用同一 client_id。
 - **PKCE**：`transport.GenerateCodeVerifier()` / `GenerateCodeChallenge()` / `GenerateState()`；`code_verifier` 是秘密，**只存服务端 state**（`internal/mcp/oauth_state.go` 注释明确禁止编码进 state 参数）。
-- **State 存储**（`oauth_state.go`）：有 Redis 时写 `weknora:mcp_oauth_state:<state>`（支持 `WEKNORA_REDIS_NAMESPACE` 命名空间，回调可落在任意后端副本）；Lite 模式退化为带 GC 的内存 map。TTL 固定 10 分钟；`Take` 为**取即删**的单次消费。另存一份不含秘密的 `OAuthAttempt` 记录，`CompleteAttempt` 仅在 token 成功落库后置 `Completed=true`——因此新弹窗的授权状态查询（`status?authorization_attempt=`）**绝不会被历史 token 误判为已完成**。
+- **State 存储**（`oauth_state.go`）：有 Redis 时写 `semiclaw:mcp_oauth_state:<state>`（支持 `SEMICLAW_REDIS_NAMESPACE` 命名空间，回调可落在任意后端副本）；Lite 模式退化为带 GC 的内存 map。TTL 固定 10 分钟；`Take` 为**取即删**的单次消费。另存一份不含秘密的 `OAuthAttempt` 记录，`CompleteAttempt` 仅在 token 成功落库后置 `Completed=true`——因此新弹窗的授权状态查询（`status?authorization_attempt=`）**绝不会被历史 token 误判为已完成**。
 - **回调**（`oauth_manager.go` 的 `CompleteAuthorization` + `internal/handler/mcp_oauth.go` 的 `Callback`）：回调路由公开无鉴权，靠单次 state 认证；由于浏览器收到重定向后 Gin 请求 ctx 即取消，token 交换用 `context.WithoutCancel + 60s` 超时（`oauthCallbackTimeout`）脱离请求生命周期。交换成功后 `CloseClient(serviceID)` 回收可能携带旧注册信息的连接，最后把结果编码在 URL fragment（`#mcp_oauth_result=success` / `#mcp_oauth_error=...`）重定向回前端。
 - **重建 handler 的 CSRF 检查**：回调请求里 handler 是重新构造的，需 `h.SetExpectedState(state)` 重新灌入期望 state，mcp-go 的 CSRF 校验才能通过。
 
@@ -254,7 +254,7 @@ sequenceDiagram
 `internal/mcp/oauth_tokenstore.go` 提供两层 TokenStore：
 
 - `dbTokenStore`：实现 mcp-go 的 `transport.TokenStore`，授权/刷新成功后由 mcp-go 回调 `SaveToken` 落库（缺省 `TokenType` 补 `Bearer`，`ExpiresIn` 换算成 `ExpiresAt`）。
-- `managedTokenStore`：运行时传输实际使用的包装——**`GetToken` 抹掉 `ExpiresAt`**，让 mcp-go 永远认为 token 未过期，从而禁用依赖库自身的自动刷新；刷新决策完全收归 WeKnora 的协调生命周期（否则会绕过跨实例租约，并把刷新失败折叠成笼统的 authorization-required）。
+- `managedTokenStore`：运行时传输实际使用的包装——**`GetToken` 抹掉 `ExpiresAt`**，让 mcp-go 永远认为 token 未过期，从而禁用依赖库自身的自动刷新；刷新决策完全收归 SemiClaw 的协调生命周期（否则会绕过跨实例租约，并把刷新失败折叠成笼统的 authorization-required）。
 
 ##### Token 刷新与跨实例租约（oauth_lifecycle.go）
 
@@ -331,8 +331,8 @@ flowchart LR
 - **阻塞与恢复**：`RequestAndWait` 生成 `pending_id`，向 EventBus 发 `EventToolApprovalRequired`（含工具名、参数 JSON、超时秒数），在内存 waiter 上等待；用户通过 `POST /agent/tool-approvals/{pending_id}` 传 `decision: approve|reject` 解除。审批放行后 `mcp_tool.go` 会**从 ApprovalCtx 重新派生完整的工具执行超时**（审批可能耗尽原 60 秒预算）。
 - **参数修改**：approve 时可附 `modified_args`（必须是非 null JSON object，handler 侧显式拒绝 `"null"`），替换原始参数后执行。
 - **鉴权**：Resolve 校验 tenant 与 session 属主（`ErrTenantMismatch` / `ErrUserMismatch`，空 userID 按不匹配处理，fail-close）；重复决议返回 `ErrAlreadyResolved`。
-- **跨实例**：waiter 在发起等待的实例内存中；配置 Redis 时，落在其他副本的 Resolve 经 `weknora:mcp_approval:resolve` Pub/Sub 广播，属主实例投递决议并通过 per-pending 回复通道回 ack（3 秒窗口），使 HTTP 状态码跨实例仍准确；无 Redis 时退化为单实例（需 sticky session）。
-- **超时与失败策略**：等待超时默认 10 分钟，可由 `config.Agent.ToolApprovalTimeoutSeconds` 配置。审批检查默认 **fail-close**——查询 DB 出错时按「需要审批」处理，可设 `WEKNORA_AGENT_TOOL_APPROVAL_FAIL_OPEN=true` 恢复旧的 fail-open 行为。
+- **跨实例**：waiter 在发起等待的实例内存中；配置 Redis 时，落在其他副本的 Resolve 经 `semiclaw:mcp_approval:resolve` Pub/Sub 广播，属主实例投递决议并通过 per-pending 回复通道回 ack（3 秒窗口），使 HTTP 状态码跨实例仍准确；无 Redis 时退化为单实例（需 sticky session）。
+- **超时与失败策略**：等待超时默认 10 分钟，可由 `config.Agent.ToolApprovalTimeoutSeconds` 配置。审批检查默认 **fail-close**——查询 DB 出错时按「需要审批」处理，可设 `SEMICLAW_AGENT_TOOL_APPROVAL_FAIL_OPEN=true` 恢复旧的 fail-open 行为。
 
 #### 单工具启停
 
@@ -352,12 +352,12 @@ flowchart LR
 
 ---
 
-### MCP Server 参考 {#第二部分-weknora-作为-mcp-server-mcp-server}
+### MCP Server 参考 {#第二部分-semiclaw-作为-mcp-server-mcp-server}
 
-`mcp-server/` 是一个独立的 Python 包，PyPI 名 **`tencent-weknora-mcp`**（当前 1.1.1，Python ≥ 3.10，依赖 `mcp>=2,<3`、`requests>=2.31.0`、`starlette`、`uvicorn`），核心实现在 `mcp-server/weknora_mcp_server.py`：`WeKnoraClient` 用 `requests.Session` 携带 `X-API-Key` 调 WeKnora REST API，`MCPServer("weknora-server", version="1.1.1")` 注册工具并通过所选传输对外服务。
+`mcp-server/` 是一个独立的 Python 包，PyPI 名 **`tencent-semiclaw-mcp`**（当前 1.1.1，Python ≥ 3.10，依赖 `mcp>=2,<3`、`requests>=2.31.0`、`starlette`、`uvicorn`），核心实现在 `mcp-server/semiclaw_mcp_server.py`：`SemiClawClient` 用 `requests.Session` 携带 `X-API-Key` 调 SemiClaw REST API，`MCPServer("semiclaw-server", version="1.1.1")` 注册工具并通过所选传输对外服务。
 
 ::: warning 包名与 API 变更（v1.1.x）
-- 官方包名是 `tencent-weknora-mcp`（由 Tencent/WeKnora 通过 Trusted Publishing 发布）；社区早期的 `weknora-mcp` 已不再使用。命令行入口仍是 `weknora-mcp-server` / `weknora-server`。
+- 官方包名是 `tencent-semiclaw-mcp`（由 vagawind/semiclaw 通过 Trusted Publishing 发布）；社区早期的 `semiclaw-mcp` 已不再使用。命令行入口仍是 `semiclaw-mcp-server` / `semiclaw-server`。
 - 实现已迁移到 mcp 2.x 的高层 API：工具是加了 `@mcp.tool()` 装饰器的普通函数，入参 JSON Schema 由类型标注自动推导，描述取自 docstring，返回值自动序列化。旧的 `handle_list_tools()` / `handle_call_tool()` 分发写法已移除——扩展工具时只需新增一个带装饰器的函数。
 - 阻塞式网络 I/O（`chat` / `agent_chat`）被投递到线程池执行，不阻塞 asyncio 事件循环。
 :::
@@ -374,14 +374,14 @@ pip install -r requirements.txt
 python main.py            # 或 python run.py / python run_server.py
 ```
 
-**从 PyPI 安装**（提供两个 console 入口 `weknora-mcp-server` 与 `weknora-server`）：
+**从 PyPI 安装**（提供两个 console 入口 `semiclaw-mcp-server` 与 `semiclaw-server`）：
 
 ```bash
-pip install tencent-weknora-mcp
-weknora-mcp-server
+pip install tencent-semiclaw-mcp
+semiclaw-mcp-server
 
 # 或者不预装，直接用 uvx 运行
-uvx --from tencent-weknora-mcp weknora-mcp-server
+uvx --from tencent-semiclaw-mcp semiclaw-mcp-server
 ```
 
 **本地开发安装**：
@@ -389,7 +389,7 @@ uvx --from tencent-weknora-mcp weknora-mcp-server
 ```bash
 cd mcp-server
 pip install -e .          # 开发模式；或 pip install .
-weknora-mcp-server
+semiclaw-mcp-server
 ```
 
 **Docker**（`mcp-server/Dockerfile`，基于 `python:3.11-slim`，默认以 Streamable HTTP 传输启动并暴露 8000 端口）：
@@ -397,14 +397,14 @@ weknora-mcp-server
 ```dockerfile
 ENV MCP_HOST=0.0.0.0
 ENV MCP_PORT=8000
-ENV WEKNORA_BASE_URL=http://app:8080/api/v1
+ENV SEMICLAW_BASE_URL=http://app:8080/api/v1
 EXPOSE 8000
-CMD ["weknora-mcp-server", "--transport", "http", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["semiclaw-mcp-server", "--transport", "http", "--host", "0.0.0.0", "--port", "8000"]
 ```
 
 运行容器时必须注入 `MCP_SERVER_AUTH_TOKEN`（HTTP 传输没有它会拒绝启动，见 2.3）。
 
-三个入口脚本的分工：`main.py` 是功能最全的主入口（`--check-only` 环境检查、`--verbose`、`--transport/--host/--port`）；`run.py` 是转调 `main.sync_main` 的简化脚本；`run_server.py` 走 `weknora_mcp_server.run`（stdio 别名）。
+三个入口脚本的分工：`main.py` 是功能最全的主入口（`--check-only` 环境检查、`--verbose`、`--transport/--host/--port`）；`run.py` 是转调 `main.sync_main` 的简化脚本；`run_server.py` 走 `semiclaw_mcp_server.run`（stdio 别名）。
 
 ::: tip stdio 传输下的诊断输出
 stdio 传输把 stdout 当作协议通道，任何多余的 `print` 都会污染协议流，客户端会直接判定「启动失败」。因此入口脚本的所有诊断信息一律写 stderr（#2371）。自行封装启动脚本时务必遵守同样的约定。
@@ -412,14 +412,14 @@ stdio 传输把 stdout 当作协议通道，任何多余的 `print` 都会污染
 
 #### 环境变量 {#_2-2-环境变量}
 
-均以 `weknora_mcp_server.py` / `upload_paths.py` 实际读取为准：
+均以 `semiclaw_mcp_server.py` / `upload_paths.py` 实际读取为准：
 
 | 环境变量 | 默认值 | 说明 |
 |---|---|---|
-| `WEKNORA_BASE_URL` | `http://localhost:8080/api/v1` | WeKnora API 基础 URL |
-| `WEKNORA_API_KEY` | 空 | 租户 API Key，以 `X-API-Key` header 发送 |
-| `WEKNORA_CHAT_TIMEOUT` | `300` | chat / agent_chat 的 SSE 读超时（秒），非法值回退 300 |
-| `WEKNORA_VERIFY_SSL` | `true` | 设为 `false` 关闭 SSL 证书校验（仅限自签名证书的开发环境） |
+| `SEMICLAW_BASE_URL` | `http://localhost:8080/api/v1` | SemiClaw API 基础 URL |
+| `SEMICLAW_API_KEY` | 空 | 租户 API Key，以 `X-API-Key` header 发送 |
+| `SEMICLAW_CHAT_TIMEOUT` | `300` | chat / agent_chat 的 SSE 读超时（秒），非法值回退 300 |
+| `SEMICLAW_VERIFY_SSL` | `true` | 设为 `false` 关闭 SSL 证书校验（仅限自签名证书的开发环境） |
 | `MCP_TRANSPORT` | `stdio` | 传输方式：`stdio` / `sse` / `http`（CLI `--transport` 优先） |
 | `MCP_HOST` | `127.0.0.1` | 网络传输绑定地址 |
 | `MCP_PORT` | `8000` | 网络传输绑定端口 |
@@ -442,7 +442,7 @@ SSE 与 HTTP 传输由 `MCPAuthMiddleware`（ASGI 中间件）统一鉴权：客
 
 #### 暴露的 MCP 工具清单 {#_2-4-暴露的-mcp-工具清单}
 
-共 31 个工具，对应 `weknora_mcp_server.py` 中带 `@mcp.tool()` 装饰器的函数（参数列 `*` 表示 required；`WeKnoraClient.update_knowledge_base` 方法存在但**未注册**为工具）：
+共 31 个工具，对应 `semiclaw_mcp_server.py` 中带 `@mcp.tool()` 装饰器的函数（参数列 `*` 表示 required；`SemiClawClient.update_knowledge_base` 方法存在但**未注册**为工具）：
 
 **租户管理**
 
@@ -524,29 +524,29 @@ stdio 传输（Claude Desktop 的 `claude_desktop_config.json`）：
 ```json
 {
   "mcpServers": {
-    "weknora": {
+    "semiclaw": {
       "command": "python",
-      "args": ["/path/to/WeKnora/mcp-server/main.py"],
+      "args": ["/path/to/SemiClaw/mcp-server/main.py"],
       "env": {
-        "WEKNORA_BASE_URL": "http://localhost:8080/api/v1",
-        "WEKNORA_API_KEY": "your-weknora-api-key"
+        "SEMICLAW_BASE_URL": "http://localhost:8080/api/v1",
+        "SEMICLAW_API_KEY": "your-semiclaw-api-key"
       }
     }
   }
 }
 ```
 
-已从 PyPI 安装时，`command` 可直接写 `weknora-mcp-server`，或者用 `uvx` 免安装运行：
+已从 PyPI 安装时，`command` 可直接写 `semiclaw-mcp-server`，或者用 `uvx` 免安装运行：
 
 ```json
 {
   "mcpServers": {
-    "weknora": {
+    "semiclaw": {
       "command": "uvx",
-      "args": ["--from", "tencent-weknora-mcp", "weknora-mcp-server"],
+      "args": ["--from", "tencent-semiclaw-mcp", "semiclaw-mcp-server"],
       "env": {
-        "WEKNORA_BASE_URL": "http://localhost:8080/api/v1",
-        "WEKNORA_API_KEY": "your-weknora-api-key"
+        "SEMICLAW_BASE_URL": "http://localhost:8080/api/v1",
+        "SEMICLAW_API_KEY": "your-semiclaw-api-key"
       }
     }
   }
@@ -555,7 +555,7 @@ stdio 传输（Claude Desktop 的 `claude_desktop_config.json`）：
 
 远程部署（Docker / `--transport http`）时，客户端连接 `http://<host>:8000/mcp` 并携带 `Authorization: Bearer <MCP_SERVER_AUTH_TOKEN>`。
 
-顺带一提：WeKnora 主程序（第一部分）也可以作为 MCP 客户端接入这个 mcp-server——在「MCP 服务」中新建 Streamable HTTP 服务指向 `/mcp` 端点、认证方式选 Bearer 即可，从而让 WeKnora Agent 操作另一套 WeKnora 实例。
+顺带一提：SemiClaw 主程序（第一部分）也可以作为 MCP 客户端接入这个 mcp-server——在「MCP 服务」中新建 Streamable HTTP 服务指向 `/mcp` 端点、认证方式选 Bearer 即可，从而让 SemiClaw Agent 操作另一套 SemiClaw 实例。
 
 #### 文件上传路径安全（upload_paths.py） {#_2-6-文件上传路径安全-upload-paths-py}
 

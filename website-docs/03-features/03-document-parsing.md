@@ -1,6 +1,6 @@
 # 文档解析服务 docreader
 
-文档解析将上传的文件转换为可检索的文本，并提取原始图片引用。WeKnora 支持多种格式，可按文件类型选择解析引擎；扫描件、图片和音频还需要相应的视觉或语音模型。
+文档解析将上传的文件转换为可检索的文本，并提取原始图片引用。SemiClaw 支持多种格式，可按文件类型选择解析引擎；扫描件、图片和音频还需要相应的视觉或语音模型。
 
 支持的格式：
 
@@ -400,13 +400,13 @@ Python 依赖（`pyproject.toml` + `uv.lock` 锁定）：`grpcio`、`pypdfium2`�
 
 ### anydoc 引擎（Go 进程内解析，不经 docreader） {#_8-anydoc-引擎-go-进程内解析-不经-docreader}
 
-`anydoc` 是一个 Go 侧的可选解析引擎：它把 [anydoc](https://github.com/firecrawl/anydoc)（Rust 编写的文档转换库）通过 cgo 链接进 WeKnora 主进程，直接把 office 文档转成 Markdown。与本文其余部分描述的 docreader 不同，它**不经过 Python 服务、不跨进程、也不调用外部二进制**——适合不想部署 docreader 的轻量部署，或对解析延迟敏感的场景。
+`anydoc` 是一个 Go 侧的可选解析引擎：它把 [anydoc](https://github.com/firecrawl/anydoc)（Rust 编写的文档转换库）通过 cgo 链接进 SemiClaw 主进程，直接把 office 文档转成 Markdown。与本文其余部分描述的 docreader 不同，它**不经过 Python 服务、不跨进程、也不调用外部二进制**——适合不想部署 docreader 的轻量部署，或对解析延迟敏感的场景。
 
 支持的文件类型：`doc`、`docx`、`docm`、`odt`、`rtf`、`ppt`、`pptx`、`pptm`、`odp`、`xls`、`xlsx`、`xlsm`、`ods`、`epub`、`csv`、`pdf`。
 
 #### 启用方式 {#_8-1-启用方式}
 
-解析库是 Rust 静态库，需要 Rust 工具链构建。官方 Docker 镜像（`wechatopenai/weknora-app`）和 `docker compose build` **默认链接** anydoc，设置页可直接选用。本地 `go build` 默认不链接：未加 `-tags anydoc` 时该引擎在「解析引擎」列表里显示为不可用，其它引擎不受影响。
+解析库是 Rust 静态库，需要 Rust 工具链构建。官方 Docker 镜像（`vagawind/semiclaw-app`）和 `docker compose build` **默认链接** anydoc，设置页可直接选用。本地 `go build` 默认不链接：未加 `-tags anydoc` 时该引擎在「解析引擎」列表里显示为不可用，其它引擎不受影响。
 
 ```bash
 make build-anydoc                  # 构建静态库 + 带 anydoc 标签的二进制
@@ -417,7 +417,7 @@ scripts/build-anydoc-lib.sh && go build -tags anydoc ./cmd/server
 Docker 镜像默认 `WITH_ANYDOC=1`。若要跳过 Rust 工具链、缩短构建：
 
 ```bash
-docker build -f docker/Dockerfile.app --build-arg WITH_ANYDOC=0 -t weknora-app .
+docker build -f docker/Dockerfile.app --build-arg WITH_ANYDOC=0 -t semiclaw-app .
 # 或在 .env 里设 WITH_ANYDOC=0 再 docker compose build
 ```
 

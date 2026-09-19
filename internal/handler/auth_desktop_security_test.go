@@ -5,8 +5,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/Tencent/WeKnora/internal/types"
-	"github.com/Tencent/WeKnora/internal/types/interfaces"
+	"github.com/vagawind/semiclaw/internal/types"
+	"github.com/vagawind/semiclaw/internal/types/interfaces"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/require"
 )
@@ -42,7 +42,7 @@ func TestAutoSetupRequiresNativeCapability(t *testing.T) {
 		recorder := httptest.NewRecorder()
 		ctx, _ := gin.CreateTestContext(recorder)
 		ctx.Request = httptest.NewRequest("POST", "/api/v1/auth/auto-setup", nil)
-		ctx.Request.Header.Set("X-WeKnora-Desktop-Token", token)
+		ctx.Request.Header.Set("X-SemiClaw-Desktop-Token", token)
 		h.AutoSetup(ctx)
 		if token != "test-native-capability" {
 			require.NotEmpty(t, ctx.Errors)

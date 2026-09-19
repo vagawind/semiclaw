@@ -8,8 +8,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Tencent/WeKnora/internal/datasource"
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/datasource"
+	"github.com/vagawind/semiclaw/internal/types"
 )
 
 // DefaultBaseURL is the IMA OpenAPI base URL. The Path prefix is baked into
@@ -269,7 +269,7 @@ type imaCursor struct {
 // Rationale:
 //
 //   - kb_id keeps identities isolated across knowledge bases (same file
-//     copied into two KBs is two distinct docs from WeKnora's perspective).
+//     copied into two KBs is two distinct docs from SemiClaw's perspective).
 //   - parent_folder_id + title anchor the doc to its folder location and
 //     display name — the tuple IMA's own check_repeated_names uses to gate
 //     uploads (see api.md), so IMA's own uniqueness constraint enforces

@@ -238,7 +238,7 @@ const dockerBackendEnabled = computed(() =>
   deploymentCapabilities.isSupported('settings.sandbox.docker'),
 )
 
-const sandboxGuideUrl = 'https://github.com/Tencent/WeKnora/blob/main/docs/sandbox-cluster.md'
+const sandboxGuideUrl = 'https://github.com/vagawind/semiclaw/blob/main/docs/sandbox-cluster.md'
 
 const backendTypes = [...NAMED_SANDBOX_BACKEND_TYPES]
 

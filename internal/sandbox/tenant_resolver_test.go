@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/types"
 	"github.com/stretchr/testify/require"
 )
 
@@ -117,7 +117,7 @@ func TestResolveBuildsSessionBoundManagerForDocker(t *testing.T) {
 			Config: &types.TenantSandboxConfig{
 				SandboxType: "docker",
 				Docker: &types.DockerSandboxConfig{
-					Image: "wechatopenai/weknora-sandbox:test",
+					Image: "vagawind/semiclaw-sandbox:test",
 				},
 			},
 			Found: true,
@@ -146,7 +146,7 @@ func TestResolveRefusesDockerWhenDisabled(t *testing.T) {
 			Config: &types.TenantSandboxConfig{
 				SandboxType: "docker",
 				Docker: &types.DockerSandboxConfig{
-					Image: "wechatopenai/weknora-sandbox:test",
+					Image: "vagawind/semiclaw-sandbox:test",
 				},
 			},
 			Found: true,

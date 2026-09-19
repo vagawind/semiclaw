@@ -8,9 +8,9 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/Tencent/WeKnora/internal/im"
-	"github.com/Tencent/WeKnora/internal/logger"
-	secutils "github.com/Tencent/WeKnora/internal/utils"
+	"github.com/vagawind/semiclaw/internal/im"
+	"github.com/vagawind/semiclaw/internal/logger"
+	secutils "github.com/vagawind/semiclaw/internal/utils"
 )
 
 // MessageHandler is called when an IM message is received via long polling.

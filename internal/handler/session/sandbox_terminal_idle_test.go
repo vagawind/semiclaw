@@ -6,8 +6,8 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/Tencent/WeKnora/internal/application/service"
-	"github.com/Tencent/WeKnora/internal/sandbox"
+	"github.com/vagawind/semiclaw/internal/application/service"
+	"github.com/vagawind/semiclaw/internal/sandbox"
 )
 
 func TestTerminalIdleExpired(t *testing.T) {

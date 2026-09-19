@@ -1,4 +1,4 @@
-// Package service provides business logic implementations for WeKnora application
+// Package service provides business logic implementations for SemiClaw application
 // This package contains service layer implementations that coordinate between
 // repositories and handlers, applying business rules and transaction management
 package service
@@ -11,12 +11,12 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Tencent/WeKnora/internal/application/repository"
-	"github.com/Tencent/WeKnora/internal/application/service/retriever"
-	"github.com/Tencent/WeKnora/internal/logger"
-	"github.com/Tencent/WeKnora/internal/searchutil"
-	"github.com/Tencent/WeKnora/internal/types"
-	"github.com/Tencent/WeKnora/internal/types/interfaces"
+	"github.com/vagawind/semiclaw/internal/application/repository"
+	"github.com/vagawind/semiclaw/internal/application/service/retriever"
+	"github.com/vagawind/semiclaw/internal/logger"
+	"github.com/vagawind/semiclaw/internal/searchutil"
+	"github.com/vagawind/semiclaw/internal/types"
+	"github.com/vagawind/semiclaw/internal/types/interfaces"
 	"github.com/google/uuid"
 )
 

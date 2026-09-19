@@ -17,8 +17,8 @@ import (
 	"unicode/utf8"
 
 	"github.com/PuerkitoBio/goquery"
-	"github.com/Tencent/WeKnora/internal/logger"
-	"github.com/Tencent/WeKnora/internal/utils"
+	"github.com/vagawind/semiclaw/internal/logger"
+	"github.com/vagawind/semiclaw/internal/utils"
 	"github.com/chromedp/chromedp"
 )
 

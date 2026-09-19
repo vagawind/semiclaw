@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/Tencent/WeKnora/internal/agent/skills"
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/agent/skills"
+	"github.com/vagawind/semiclaw/internal/types"
 	"github.com/stretchr/testify/require"
 )
 
@@ -19,7 +19,7 @@ func declareBundle() *SkillBundle {
 		Files: map[string][]byte{
 			"SKILL.md": []byte(
 				"Set DOC_ROOT before running. Do not touch PATH, path_prefix or " +
-					"WEKNORA_SKILL_DIR.\n",
+					"SEMICLAW_SKILL_DIR.\n",
 			),
 			"scripts/extract.py": []byte(
 				"import os\nkey = os.environ[\"TAVILY_API_KEY\"]\n",
@@ -91,17 +91,17 @@ func TestValidateUserEnvNameFormatLayer(t *testing.T) {
 
 func TestValidateUserEnvNameReservedLayer(t *testing.T) {
 	require.NoError(t, validateEnvNameNotReserved("TAVILY_API_KEY"))
-	require.NoError(t, validateEnvNameNotReserved("WEKNORA_API_KEY"),
-		"credential names a WeKnora skill reads are not sandbox-injected")
-	require.NoError(t, validateEnvNameNotReserved("WEKNORA_BASE_URL"))
+	require.NoError(t, validateEnvNameNotReserved("SEMICLAW_API_KEY"),
+		"credential names a SemiClaw skill reads are not sandbox-injected")
+	require.NoError(t, validateEnvNameNotReserved("SEMICLAW_BASE_URL"))
 	require.NoError(t, validateEnvNameNotReserved("lowercase-is-a-format-concern"),
 		"reserved-name validation must remain independent of name format")
 	require.Error(t, validateEnvNameNotReserved("PATH"))
 	require.Error(t, validateEnvNameNotReserved("LD_PRELOAD"))
-	require.Error(t, validateEnvNameNotReserved("WEKNORA_SKILL_DIR"))
-	require.Error(t, validateEnvNameNotReserved("WEKNORA_SKILL_OUTPUT_DIR"))
-	require.Error(t, validateEnvNameNotReserved("WEKNORA_SKILL_HISTORY_ROOT"))
-	require.Error(t, validateEnvNameNotReserved("WEKNORA_SESSION_INPUT_DIR"))
+	require.Error(t, validateEnvNameNotReserved("SEMICLAW_SKILL_DIR"))
+	require.Error(t, validateEnvNameNotReserved("SEMICLAW_SKILL_OUTPUT_DIR"))
+	require.Error(t, validateEnvNameNotReserved("SEMICLAW_SKILL_HISTORY_ROOT"))
+	require.Error(t, validateEnvNameNotReserved("SEMICLAW_SESSION_INPUT_DIR"))
 }
 
 // Every name skill environment preparation injects must be undeclarable. This is the lock that
@@ -148,8 +148,8 @@ func TestValidateEnvDeclarationsAppliesThreeLayers(t *testing.T) {
 			want:     nil,
 		},
 		{
-			name:     "sandbox-injected WEKNORA_SKILL_* names are reserved",
-			declared: []declaredSkillEnv{{Name: "WEKNORA_SKILL_DIR"}},
+			name:     "sandbox-injected SEMICLAW_SKILL_* names are reserved",
+			declared: []declaredSkillEnv{{Name: "SEMICLAW_SKILL_DIR"}},
 			want:     nil,
 		},
 		{
@@ -225,33 +225,33 @@ func TestValidateEnvDeclarationsNeverCarriesAValue(t *testing.T) {
 	require.Equal(t, types.SkillEnvVars{{Name: "TAVILY_API_KEY"}}, got)
 }
 
-// Official WeKnora skills (and the ClawHub weknora skill) authenticate with
-// WEKNORA_API_KEY / WEKNORA_BASE_URL. Those names must survive validation:
-// only the sandbox-injected WEKNORA_SKILL_* / WEKNORA_SESSION_INPUT_DIR
+// Official SemiClaw skills (and the ClawHub semiclaw skill) authenticate with
+// SEMICLAW_API_KEY / SEMICLAW_BASE_URL. Those names must survive validation:
+// only the sandbox-injected SEMICLAW_SKILL_* / SEMICLAW_SESSION_INPUT_DIR
 // names are reserved.
 func TestValidateEnvDeclarationsAllowsWeknoraCredentialNames(t *testing.T) {
 	bundle := &SkillBundle{
-		Name: "weknora",
+		Name: "semiclaw",
 		Files: map[string][]byte{
 			"SKILL.md": []byte(
-				"export WEKNORA_BASE_URL WEKNORA_API_KEY WEKNORA_HOST WEKNORA_TOKEN WEKNORA_KB_ID; " +
-					"do not override WEKNORA_SKILL_DIR or WEKNORA_SESSION_INPUT_DIR.\n",
+				"export SEMICLAW_BASE_URL SEMICLAW_API_KEY SEMICLAW_HOST SEMICLAW_TOKEN SEMICLAW_KB_ID; " +
+					"do not override SEMICLAW_SKILL_DIR or SEMICLAW_SESSION_INPUT_DIR.\n",
 			),
 		},
 	}
 
 	got := validateEnvDeclarations([]declaredSkillEnv{
-		{Name: "WEKNORA_BASE_URL", Required: true, Description: "API origin"},
-		{Name: "WEKNORA_API_KEY", Required: true},
-		{Name: "WEKNORA_HOST"},
-		{Name: "WEKNORA_SKILL_DIR"},
-		{Name: "WEKNORA_SESSION_INPUT_DIR"},
+		{Name: "SEMICLAW_BASE_URL", Required: true, Description: "API origin"},
+		{Name: "SEMICLAW_API_KEY", Required: true},
+		{Name: "SEMICLAW_HOST"},
+		{Name: "SEMICLAW_SKILL_DIR"},
+		{Name: "SEMICLAW_SESSION_INPUT_DIR"},
 	}, bundle)
 
 	require.Equal(t, types.SkillEnvVars{
-		{Name: "WEKNORA_BASE_URL", Description: "API origin", Required: true},
-		{Name: "WEKNORA_API_KEY", Required: true},
-		{Name: "WEKNORA_HOST"},
+		{Name: "SEMICLAW_BASE_URL", Description: "API origin", Required: true},
+		{Name: "SEMICLAW_API_KEY", Required: true},
+		{Name: "SEMICLAW_HOST"},
 	}, got)
 }
 
@@ -297,10 +297,10 @@ func TestValidateUserEnvNameAcceptsAndRejects(t *testing.T) {
 	require.Error(t, validateUserEnvName("1LEADING_DIGIT"))
 	require.Error(t, validateUserEnvName("PATH"))
 	require.Error(t, validateUserEnvName("LD_PRELOAD"))
-	require.Error(t, validateUserEnvName("WEKNORA_SKILL_DIR"))
-	require.Error(t, validateUserEnvName("WEKNORA_SESSION_INPUT_DIR"))
-	require.NoError(t, validateUserEnvName("WEKNORA_API_KEY"))
-	require.NoError(t, validateUserEnvName("WEKNORA_BASE_URL"))
+	require.Error(t, validateUserEnvName("SEMICLAW_SKILL_DIR"))
+	require.Error(t, validateUserEnvName("SEMICLAW_SESSION_INPUT_DIR"))
+	require.NoError(t, validateUserEnvName("SEMICLAW_API_KEY"))
+	require.NoError(t, validateUserEnvName("SEMICLAW_BASE_URL"))
 }
 
 // The user path deliberately skips the bundle match: matching exists to catch

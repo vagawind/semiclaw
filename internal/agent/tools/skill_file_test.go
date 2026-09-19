@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Tencent/WeKnora/internal/sandbox"
+	"github.com/vagawind/semiclaw/internal/sandbox"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -73,12 +73,12 @@ func TestWriteSkillFileWritesAFileTooLargeForAHeredoc(t *testing.T) {
 
 	result, err := NewWriteSkillFileTool(store, testSkillDir).Execute(
 		sandboxFileTestContext(),
-		mustWriteSandboxArgs(testSkillDir+"/.weknora/requirements.json", content),
+		mustWriteSandboxArgs(testSkillDir+"/.semiclaw/requirements.json", content),
 	)
 
 	require.NoError(t, err)
 	require.True(t, result.Success, result.Error)
-	assert.Equal(t, []string{testSkillDir + "/.weknora/requirements.json"}, store.writes)
+	assert.Equal(t, []string{testSkillDir + "/.semiclaw/requirements.json"}, store.writes)
 	assert.Equal(t, content, string(store.last))
 	assert.NotContains(t, result.Output, content, "the model already has these bytes")
 }
@@ -90,12 +90,12 @@ func TestWriteSkillFileResolvesARelativePathAgainstTheSkillDirectory(t *testing.
 
 	result, err := NewWriteSkillFileTool(store, testSkillDir).Execute(
 		sandboxFileTestContext(),
-		mustWriteSandboxArgs(".weknora/requirements.json", `{"env":[]}`),
+		mustWriteSandboxArgs(".semiclaw/requirements.json", `{"env":[]}`),
 	)
 
 	require.NoError(t, err)
 	require.True(t, result.Success, result.Error)
-	assert.Equal(t, []string{testSkillDir + "/.weknora/requirements.json"}, store.writes)
+	assert.Equal(t, []string{testSkillDir + "/.semiclaw/requirements.json"}, store.writes)
 }
 
 // One install writes one skill. The installer's shell runs as root in an image

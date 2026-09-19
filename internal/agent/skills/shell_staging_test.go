@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Tencent/WeKnora/internal/sandbox"
+	"github.com/vagawind/semiclaw/internal/sandbox"
 	"github.com/stretchr/testify/require"
 )
 
@@ -71,7 +71,7 @@ func TestShellStagesHostResourcesOncePerSession(t *testing.T) {
 	backend := &stagingManager{store: store}
 	mgr := NewManager(&ManagerConfig{Enabled: true, SkillDirs: []string{root}, AllowedSkills: []string{"host-skill"}}, backend)
 	require.NoError(t, mgr.Initialize(context.Background()))
-	command := `python3 "$WEKNORA_SKILL_DIR/scripts/run.py"`
+	command := `python3 "$SEMICLAW_SKILL_DIR/scripts/run.py"`
 	_, env, err := mgr.PrepareShellEnvironment(context.Background(), "session-1", "host-skill", command, nil)
 	require.NoError(t, err)
 	dir := env[skillDirEnvVar]

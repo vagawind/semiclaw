@@ -4,9 +4,9 @@ import (
 	"context"
 	"testing"
 
-	"github.com/Tencent/WeKnora/internal/infrastructure/docparser/anydoc"
-	"github.com/Tencent/WeKnora/internal/types"
-	"github.com/Tencent/WeKnora/internal/types/interfaces"
+	"github.com/vagawind/semiclaw/internal/infrastructure/docparser/anydoc"
+	"github.com/vagawind/semiclaw/internal/types"
+	"github.com/vagawind/semiclaw/internal/types/interfaces"
 )
 
 // stubRemote stands in for the docreader client. NewReader only ever hands it
@@ -62,9 +62,9 @@ func TestNewReaderReportsDisconnectedDocReader(t *testing.T) {
 	}
 }
 
-func TestNewReaderRequiresWeKnoraCloudCredentials(t *testing.T) {
-	_, err := NewReader(context.Background(), WeKnoraCloudEngineName, "docx", false, ReaderDeps{
-		WeKnoraCloudCredentials: func(context.Context) *types.WeKnoraCloudCredentials { return nil },
+func TestNewReaderRequiresSemiClawCloudCredentials(t *testing.T) {
+	_, err := NewReader(context.Background(), SemiClawCloudEngineName, "docx", false, ReaderDeps{
+		SemiClawCloudCredentials: func(context.Context) *types.SemiClawCloudCredentials { return nil },
 	})
 	if err == nil {
 		t.Fatal("NewReader succeeded without credentials, want an error")

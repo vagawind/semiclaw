@@ -1,21 +1,21 @@
 # 总体架构
 
-WeKnora 由 Web 前端、Go 主服务和 Python 文档解析服务组成，使用数据库保存业务数据，通过 Redis 调度异步任务。向量存储、对象存储、知识图谱和模型服务可按部署需求配置。
+SemiClaw 由 Web 前端、Go 主服务和 Python 文档解析服务组成，使用数据库保存业务数据，通过 Redis 调度异步任务。向量存储、对象存储、知识图谱和模型服务可按部署需求配置。
 
 ## 系统组成 {#_1-系统组成}
 
-WeKnora 采用"主服务 + 前端 + 文档解析微服务"的三进程核心架构，外加 PostgreSQL 与 Redis 两个基础设施依赖；其余组件（向量库、知识图谱、联网搜索等）均为可选，通过 Docker Compose profile 按需启用。
+SemiClaw 采用"主服务 + 前端 + 文档解析微服务"的三进程核心架构，外加 PostgreSQL 与 Redis 两个基础设施依赖；其余组件（向量库、知识图谱、联网搜索等）均为可选，通过 Docker Compose profile 按需启用。
 
 ### 核心服务（默认启动） {#_1-1-核心服务-默认启动}
 
 | 服务 | 镜像 / 构建 | 端口 | 职责 |
 | --- | --- | --- | --- |
-| `app` | `wechatopenai/weknora-app`（`docker/Dockerfile.app`，Go） | `8080` | 主后端：REST API、RAG 检索、Agent 引擎、异步任务 worker、IM/Embed 渠道接入。健康检查 `GET /health` |
-| `frontend` | `wechatopenai/weknora-ui`（`frontend/`，NGINX + Vue3 静态产物） | `80` | Web UI；NGINX 同时充当反向代理，将 `/api` 转发到 `app`（`APP_HOST`/`APP_BACKEND_PORT`/`APP_SCHEME` 可指向远端后端） |
-| `docreader` | `wechatopenai/weknora-docreader`（`docker/Dockerfile.docreader`，Python） | `50051`（仅 compose 网络内 expose，不映射宿主机） | 文档解析微服务：gRPC 服务端，PDF/DOCX/Excel/EPUB/网页等 25+ 格式解析与页面渲染。健康检查 `grpc_health_probe` |
+| `app` | `vagawind/semiclaw-app`（`docker/Dockerfile.app`，Go） | `8080` | 主后端：REST API、RAG 检索、Agent 引擎、异步任务 worker、IM/Embed 渠道接入。健康检查 `GET /health` |
+| `frontend` | `vagawind/semiclaw-ui`（`frontend/`，NGINX + Vue3 静态产物） | `80` | Web UI；NGINX 同时充当反向代理，将 `/api` 转发到 `app`（`APP_HOST`/`APP_BACKEND_PORT`/`APP_SCHEME` 可指向远端后端） |
+| `docreader` | `vagawind/semiclaw-docreader`（`docker/Dockerfile.docreader`，Python） | `50051`（仅 compose 网络内 expose，不映射宿主机） | 文档解析微服务：gRPC 服务端，PDF/DOCX/Excel/EPUB/网页等 25+ 格式解析与页面渲染。健康检查 `grpc_health_probe` |
 | `postgres` | `paradedb/paradedb:v0.22.2-pg17` | `5432`（网络内） | 主数据库。ParadeDB 发行版自带 BM25 全文检索与 pgvector 向量能力，因此**默认部署无需独立向量库**（`RETRIEVE_DRIVER=postgres`） |
 | `redis` | `redis:7.0-alpine`（`appendonly` + `requirepass`） | `6379`（网络内） | Asynq 任务队列、SSE 流管理（跨实例）、system_settings 发布订阅、限流与分布式模型并发闸门 |
-| `sandbox` | `wechatopenai/weknora-sandbox`（`docker/Dockerfile.sandbox`） | — | WeKnora 标准运行镜像；可直接用于空间 Docker 后端，接入 CubeSandbox/E2B 时则通过模板 API 自动注册并用于 Agent Skills |
+| `sandbox` | `vagawind/semiclaw-sandbox`（`docker/Dockerfile.sandbox`） | — | SemiClaw 标准运行镜像；可直接用于空间 Docker 后端，接入 CubeSandbox/E2B 时则通过模板 API 自动注册并用于 Agent Skills |
 
 `app` 与 `docreader` 之间还通过共享卷 `docreader-tmp`（挂载于 `/tmp/docreader`）传递解析产物图片；`app` 的本地文件存储卷为 `data-files`（`/data/files`）。
 
@@ -30,7 +30,7 @@ WeKnora 采用"主服务 + 前端 + 文档解析微服务"的三进程核心架�
 | `doris-fe` + `doris-be` | `doris` | Apache Doris 4.1 检索引擎（FE MySQL 9030 / FE HTTP 8030 Stream Load / BE 8040） |
 | `odl-hybrid` | `odl-hybrid` | OpenDataLoader PDF 混合解析后端（docreader 通过 HTTP `:5002` 调用） |
 | `dex` | `dex` / `full` | OIDC 测试用 IdP（配合 `OIDC_AUTH_ENABLE`） |
-| `langfuse-*`（web/worker/clickhouse/minio/db-init） | `langfuse` | 自建 LLM 可观测栈，复用 WeKnora 的 postgres（新建 `langfuse` 库）与 redis（DB 1） |
+| `langfuse-*`（web/worker/clickhouse/minio/db-init） | `langfuse` | 自建 LLM 可观测栈，复用 SemiClaw 的 postgres（新建 `langfuse` 库）与 redis（DB 1） |
 
 此外，Go 后端还可直连未在 compose 内的外部引擎：Elasticsearch v7/v8、OpenSearch、腾讯云 VectorDB、火山 VikingDB，以及 8 种对象存储（local/MinIO/COS/TOS/S3/OSS/KS3/OBS）。
 
@@ -96,7 +96,7 @@ graph LR
         IM["IM 平台 (微信/飞书/钉钉/Slack...)"]
     end
 
-    subgraph Compose["Docker Compose: WeKnora-network"]
+    subgraph Compose["Docker Compose: SemiClaw-network"]
         FE["frontend: NGINX + 静态资源 (:80)"]
         APP["app: Go 主服务 (:8080)<br/>Gin REST + SSE / Agent 引擎 / Asynq worker"]
         DR["docreader: Python gRPC (:50051)<br/>PDF / DOCX / Excel / Web 解析"]
@@ -183,9 +183,9 @@ sequenceDiagram
 | `internal/` | Go 后端全部业务代码（分层结构见后端设计篇）：`handler`、`application/service`、`application/repository`、`container`（DI）、`router`、`middleware`、`types`、`agent`、`im`、`mcp`、`stream`、`sandbox` 等 |
 | `frontend/` | Vue3 + Vite + TDesign 的 Web 前端，构建产物由 NGINX 或 Lite 模式内嵌托管 |
 | `docreader/` | Python gRPC 文档解析微服务：`main.py` 服务端入口、`parser/` 25+ 解析器、`splitter/` 分割器、`proto/` 协议定义、独立 `Dockerfile.docreader` 构建 |
-| `cli/` | `weknora` 命令行工具（约 30 个子命令：部署、日志、备份、诊断等） |
-| `client/` | Go SDK：以 HTTP 客户端形式封装 WeKnora API，供二次开发集成 |
-| `mcp-server/` | Python 实现的 MCP Server（`weknora_mcp_server.py`），把 WeKnora API 暴露为 MCP 工具给 Claude 等 MCP 客户端 |
+| `cli/` | `semiclaw` 命令行工具（约 30 个子命令：部署、日志、备份、诊断等） |
+| `client/` | Go SDK：以 HTTP 客户端形式封装 SemiClaw API，供二次开发集成 |
+| `mcp-server/` | Python 实现的 MCP Server（`semiclaw_mcp_server.py`），把 SemiClaw API 暴露为 MCP 工具给 Claude 等 MCP 客户端 |
 | `miniprogram/` | 微信小程序客户端（WXML/WXSS/JS） |
 | `migrations/` | golang-migrate 数据库迁移：`versioned/`（Postgres 主线 `NNNNNN_*.up/down.sql`）、`sqlite/`（Lite 模式）、`paradedb/`、`mysql/` |
 | `config/` | 运行配置：`config.yaml` 主配置、`builtin_agents.yaml` 内置 Agent、`agent_type_presets.yaml` Agent 预设、`builtin_models.yaml.example` 声明式内置模型、`prompt_templates/` 提示词模板 |
@@ -201,6 +201,6 @@ sequenceDiagram
 | `packages/` | 预留的本地包目录 |
 | `docs/` | 早期文档，部分内容已过时 |
 
-> 说明：Go 模块路径为 `github.com/Tencent/WeKnora`；根目录还包含 `docker-compose.yml`（生产编排）与 `docker-compose.dev.yml`（开发编排）、`Makefile`、`VERSION` 等。
+> 说明：Go 模块路径为 `github.com/vagawind/semiclaw`；根目录还包含 `docker-compose.yml`（生产编排）与 `docker-compose.dev.yml`（开发编排）、`Makefile`、`VERSION` 等。
 
 下一篇《Go 后端设计》将深入 `internal/` 内部：分层架构、dig 依赖注入、启动流程、路由与 RBAC、中间件、领域模型与错误/日志规范。

@@ -4,7 +4,7 @@
 
 ## 技术栈与环境要求 {#_1-技术栈与环境要求}
 
-WeKnora 由三个可独立开发的进程组成：
+SemiClaw 由三个可独立开发的进程组成：
 
 | 组件 | 目录 | 语言 / 运行时 | 版本要求（来源） |
 | --- | --- | --- | --- |
@@ -77,7 +77,7 @@ make dev-restart  # 重启
 | `dex` | `dexidp/dex:latest`（OIDC 测试身份源，配置 `misc/dex-config.yaml`） | `5556` | `--dex` / `--full` |
 | `langfuse-web` / `langfuse-worker` / `langfuse-clickhouse` / `langfuse-minio` / `langfuse-db-init` | Langfuse v3 自建栈，复用 dev 的 postgres（独立 `langfuse` 库）与 redis（DB 1） | web `3000`、minio `9100/9101` | `--langfuse`（`dev.sh` 默认开启，`--no-langfuse` 关闭） |
 | `odl-hybrid` | 本地构建 `docker/Dockerfile.odl-hybrid`（Docling PDF 后端） | `5002` | `--odl-hybrid`（镜像较大，按需） |
-| `sandbox` | `wechatopenai/weknora-sandbox`（Skills 脚本执行沙箱，仅 build/pull，非常驻） | - | profile `full` |
+| `sandbox` | `vagawind/semiclaw-sandbox`（Skills 脚本执行沙箱，仅 build/pull，非常驻） | - | profile `full` |
 
 `dev.sh start` 的可选参数：`--minio`、`--qdrant`、`--neo4j`、`--dex`、`--langfuse`（默认开）、`--no-langfuse`、`--odl-hybrid`、`--full`（全部可选服务，不含 odl-hybrid）。通过 Makefile 传参：`make dev-start DEV_ARGS=--odl-hybrid`。
 
@@ -99,7 +99,7 @@ Lite 模式把 SQLite（+sqlite-vec）与内存队列编译进单个二进制，
 
 ```bash
 make build-lite     # 先构建前端到 web/，再 CGO 构建 Go（tags: sqlite_fts5）；SKIP_FRONTEND=1 跳过前端
-make run-lite       # 依赖 .env.lite，构建并启动 WeKnora-lite
+make run-lite       # 依赖 .env.lite，构建并启动 SemiClaw-lite
 make package-lite   # 打 tarball 发行包（scripts/package-lite.sh）
 make package-mac-app  # 打 macOS .app（scripts/package-mac-app.sh）
 ```
@@ -112,8 +112,8 @@ make package-mac-app  # 打 macOS .app（scripts/package-mac-app.sh）
 
 | 目标 | 作用 |
 | --- | --- |
-| `build` | `go build -o WeKnora ./cmd/server` |
-| `run` | 先 `build` 再运行 `./WeKnora` |
+| `build` | `go build -o SemiClaw ./cmd/server` |
+| `run` | 先 `build` 再运行 `./SemiClaw` |
 | `test` | `go test -v ./...` |
 | `clean` | `go clean` 并删除二进制 |
 | `build-prod` | 生产构建：CGO_ENABLED=1，`-ldflags "-w -s"` 注入 Version/CommitID/BuildTime/GoVersion（`internal/handler` 包变量），并设置 protobuf `conflictPolicy=warn`（规避 qdrant/milvus proto 冲突） |
@@ -127,9 +127,9 @@ make package-mac-app  # 打 macOS .app（scripts/package-mac-app.sh）
 
 | 目标 | 作用 |
 | --- | --- |
-| `docker-build-app` | 构建 `wechatopenai/weknora-app`（`docker/Dockerfile.app`，注入 `scripts/get_version.sh` 的版本信息） |
-| `docker-build-docreader` | 构建 `wechatopenai/weknora-docreader`（`docker/Dockerfile.docreader`） |
-| `docker-build-frontend` | 多阶段构建 `wechatopenai/weknora-ui`（builder 内 `npm ci` + `npm run build`，无需宿主机预构建 dist） |
+| `docker-build-app` | 构建 `vagawind/semiclaw-app`（`docker/Dockerfile.app`，注入 `scripts/get_version.sh` 的版本信息） |
+| `docker-build-docreader` | 构建 `vagawind/semiclaw-docreader`（`docker/Dockerfile.docreader`） |
+| `docker-build-frontend` | 多阶段构建 `vagawind/semiclaw-ui`（builder 内 `npm ci` + `npm run build`，无需宿主机预构建 dist） |
 | `docker-build-all` | 以上三个镜像 |
 | `docker-run` | 确保 `.env` 存在（缺失时从 `.env.example` 复制或 touch）后 `docker-compose up` |
 | `docker-stop` / `docker-restart` | `docker-compose down` / `stop -t 60` + `up` |
@@ -138,7 +138,7 @@ make package-mac-app  # 打 macOS .app（scripts/package-mac-app.sh）
 | `build-images` / `build-images-app` / `build-images-docreader` / `build-images-frontend` / `clean-images` | `scripts/build_images.sh` 从源码构建/清理镜像 |
 | `check-env` / `list-containers` / `pull-images` | `start_all.sh --check / --list / --pull` |
 | `show-platform` | 显示 `uname -m` 与 Docker 构建平台（amd64/arm64 自动探测） |
-| `clean-db` | 删除 `weknora_postgres-data` / `weknora_minio_data` / `weknora_redis_data` 三个 Docker volume（**清空数据**） |
+| `clean-db` | 删除 `semiclaw_postgres-data` / `semiclaw_minio_data` / `semiclaw_redis_data` 三个 Docker volume（**清空数据**） |
 
 ### 数据库迁移（详见《数据库与迁移》一章） {#_3-3-数据库迁移-详见《数据库与迁移》一章}
 
@@ -198,7 +198,7 @@ make lint            # go vet
 跨切面的契约/集成测试集中在 `cli/acceptance/`（见 `cli/acceptance/doc.go`）：
 
 - `cli/acceptance/contract/` — envelope JSON 输出形状 golden 测试 + error.code 注册表一致性；
-- `cli/acceptance/e2e/` — 对真实 WeKnora server 的黑盒测试（testscript 风格），需要环境变量指向测试服务器；CI 侧由 `.github/workflows/cli-e2e.yml` 承载，**按需触发**（`workflow_dispatch` 手动，或给 PR 打 `acceptance-e2e` 标签），使用 secrets `WEKNORA_E2E_HOST` / `WEKNORA_E2E_TOKEN`。
+- `cli/acceptance/e2e/` — 对真实 SemiClaw server 的黑盒测试（testscript 风格），需要环境变量指向测试服务器；CI 侧由 `.github/workflows/cli-e2e.yml` 承载，**按需触发**（`workflow_dispatch` 手动，或给 PR 打 `acceptance-e2e` 标签），使用 secrets `SEMICLAW_E2E_HOST` / `SEMICLAW_E2E_TOKEN`。
 
 ### tests/ 目录与前端测试 {#_4-4-tests-目录与前端测试}
 

@@ -6,9 +6,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Tencent/WeKnora/internal/agent/compaction"
-	"github.com/Tencent/WeKnora/internal/browserskill"
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/agent/compaction"
+	"github.com/vagawind/semiclaw/internal/browserskill"
+	"github.com/vagawind/semiclaw/internal/types"
 	"github.com/google/uuid"
 )
 
@@ -25,7 +25,7 @@ const (
 	// a round that streams a whole file body inside a write_sandbox_file call
 	// runs for minutes while emitting continuously, and killing it on elapsed
 	// time throws away the half-assembled call. The overall ceiling belongs to
-	// the provider transport (WEKNORA_LLM_STREAM_TIMEOUT_SECONDS).
+	// the provider transport (SEMICLAW_LLM_STREAM_TIMEOUT_SECONDS).
 	// Can be overridden via AgentConfig.LLMCallTimeout.
 	defaultLLMStallTimeout = 120 * time.Second
 

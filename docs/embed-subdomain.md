@@ -9,15 +9,15 @@
 | 角色 | 举例 | 干什么 |
 |------|------|--------|
 | **A. 业务站点（宿主）** | `https://shop.example.com` | 你的商城 / 文档站；在这里粘贴 Widget 脚本或 iframe |
-| **B. Embed 页面源站** | `https://app.example.com` 或 `https://embed.example.com` | 提供 `embed.html`、`weknora-widget.js`；聊天 iframe 加载自这里 |
-| **C. WeKnora API** | 通常与 B 同域，如 `https://app.example.com/api` | 后端接口 |
+| **B. Embed 页面源站** | `https://app.example.com` 或 `https://embed.example.com` | 提供 `embed.html`、`semiclaw-widget.js`；聊天 iframe 加载自这里 |
+| **C. SemiClaw API** | 通常与 B 同域，如 `https://app.example.com/api` | 后端接口 |
 
 **默认（推荐入门）**：B 和主站管理后台都在 `https://app.example.com`，A 可以是任意第三方域名。
 
 ```
 shop.example.com          app.example.com
 ┌─────────────────┐       ┌──────────────────────────┐
-│ <script src=    │       │ /weknora-widget.js       │
+│ <script src=    │       │ /semiclaw-widget.js       │
 │  app.../widget> │──────►│ /embed/:channelId        │
 │                 │       │ /api/v1/embed/...        │
 │  (浮窗 iframe)   │◄──────│                          │
@@ -67,15 +67,15 @@ window.__RUNTIME_CONFIG__ = {
 `frontend/nginx.conf` 顶部有注释掉的示例。要点：
 
 - `server_name embed.example.com`
-- 只暴露：`/embed/*` → `embed.html`，`/weknora-widget.js`，`/assets/*`
-- `/api/` 反代到 WeKnora 后端（与主站相同后端即可）
+- 只暴露：`/embed/*` → `embed.html`，`/semiclaw-widget.js`，`/assets/*`
+- `/api/` 反代到 SemiClaw 后端（与主站相同后端即可）
 - **不要**在这个 server 上挂完整 `index.html` 管理 SPA（减少攻击面）
 
 主站 `server` 块可继续 `X-Frame-Options: SAMEORIGIN`，不影响第三方嵌 embed 子域的 iframe。
 
 ### 3. 域名白名单填什么？
 
-填写**允许嵌入的宿主网站 Origin**：A 网站嵌入 B 上的 WeKnora，就填 A，例如 `https://shop.example.com`，不需要为了聊天 API 再添加 B。
+填写**允许嵌入的宿主网站 Origin**：A 网站嵌入 B 上的 SemiClaw，就填 A，例如 `https://shop.example.com`，不需要为了聊天 API 再添加 B。
 
 - 每行一个完整 Origin（协议、域名、可选端口），不能带业务路径、查询参数或用户名。允许末尾 `/`，匹配时会规范化。
 - `*.example.com` 允许 HTTP(S) 子域名及其端口，不包含根域 `example.com`；`*.example.com:8443` 可限定端口。
@@ -85,20 +85,20 @@ window.__RUNTIME_CONFIG__ = {
 
 **部署要求**：标准前端 Nginx 的 `/embed/` 必须保留 `auth_request`、内部 `/_embed-frame-policy` 和 CSP 响应头配置。它通过后端 `/api/v1/embed-frame-policy` 获取策略，再直接返回 `embed.html`。后端不可用时拒绝返回嵌入页面。Lite 在 Go 静态页面响应上设置同一策略。自定义网关/CDN 不得移除或缓存该响应头；HTTPS 代理应保留原始 Host（含端口）、协议和 `Sec-Fetch-Site`。
 
-**升级已有渠道**：过去仅填写 WeKnora 的 B 地址的渠道，需改为实际宿主 A；同时更新前端 Nginx 和后端。不会自动猜测或放行未知宿主。安全模式的业务来源配置保持一致。
+**升级已有渠道**：过去仅填写 SemiClaw 的 B 地址的渠道，需改为实际宿主 A；同时更新前端 Nginx 和后端。不会自动猜测或放行未知宿主。安全模式的业务来源配置保持一致。
 
 白名单限制浏览器嵌入，不替代用户认证。直接打开链接或非浏览器客户端仍由 token、会话签名和限流保护；需控制访客身份时使用安全模式。
 
 ## Widget 跨域与 sandbox
 
-当宿主站 A 与 embed 源站 B **不同域**时，`weknora-widget.js` 会自动给内部 iframe 加上 `sandbox`（也可手动 `data-sandbox="true"`）。
+当宿主站 A 与 embed 源站 B **不同域**时，`semiclaw-widget.js` 会自动给内部 iframe 加上 `sandbox`（也可手动 `data-sandbox="true"`）。
 
 A 与 B 同域时保持默认即可，无需 `data-sandbox`。
 
 ## 检查清单
 
 - [ ] `EMBED_BASE_URL` 与真实访问地址一致（含 `https`）
-- [ ] embed 子域能打开 `/embed/<渠道ID>` 和 `/weknora-widget.js`
+- [ ] embed 子域能打开 `/embed/<渠道ID>` 和 `/semiclaw-widget.js`
 - [ ] embed 子域 `/api/` 能连到后端
 - [ ] 渠道白名单包含实际宿主网站 A；安全模式 exchange 声明同一业务 Origin
 - [ ] 管理端复制的 snippet 里 URL 已变为 embed 子域

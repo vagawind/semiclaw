@@ -6,7 +6,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/Tencent/WeKnora/internal/handler"
+	"github.com/vagawind/semiclaw/internal/handler"
 	"github.com/gin-gonic/gin"
 )
 

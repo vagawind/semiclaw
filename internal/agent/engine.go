@@ -7,18 +7,18 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Tencent/WeKnora/internal/agent/compaction"
-	"github.com/Tencent/WeKnora/internal/agent/skills"
-	agenttoken "github.com/Tencent/WeKnora/internal/agent/token"
-	agenttools "github.com/Tencent/WeKnora/internal/agent/tools"
-	"github.com/Tencent/WeKnora/internal/common"
-	appconfig "github.com/Tencent/WeKnora/internal/config"
-	"github.com/Tencent/WeKnora/internal/event"
-	"github.com/Tencent/WeKnora/internal/logger"
-	"github.com/Tencent/WeKnora/internal/modelcontext"
-	"github.com/Tencent/WeKnora/internal/models/chat"
-	"github.com/Tencent/WeKnora/internal/tracing/langfuse"
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/agent/compaction"
+	"github.com/vagawind/semiclaw/internal/agent/skills"
+	agenttoken "github.com/vagawind/semiclaw/internal/agent/token"
+	agenttools "github.com/vagawind/semiclaw/internal/agent/tools"
+	"github.com/vagawind/semiclaw/internal/common"
+	appconfig "github.com/vagawind/semiclaw/internal/config"
+	"github.com/vagawind/semiclaw/internal/event"
+	"github.com/vagawind/semiclaw/internal/logger"
+	"github.com/vagawind/semiclaw/internal/modelcontext"
+	"github.com/vagawind/semiclaw/internal/models/chat"
+	"github.com/vagawind/semiclaw/internal/tracing/langfuse"
+	"github.com/vagawind/semiclaw/internal/types"
 )
 
 // langfuseQueryPreview caps the query length we ship as the agent.execute
@@ -256,7 +256,7 @@ func (e *AgentEngine) deltaStart(messages []chat.Message) int {
 }
 
 // contextTokensFromUsage reduces a usage report to the size of the context it
-// describes. Cache counters are not added in: WeKnora normalizes PromptTokens
+// describes. Cache counters are not added in: SemiClaw normalizes PromptTokens
 // to the provider's full input count, with read/write/miss as descriptive
 // subsets of it (see types.TokenUsage.SetPromptCacheUsage).
 func contextTokensFromUsage(usage types.TokenUsage) int {

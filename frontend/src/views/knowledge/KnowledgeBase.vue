@@ -425,7 +425,7 @@ let movePollTimer: ReturnType<typeof setInterval> | null = null;
 
 // View mode (grid / list) — persisted per browser
 type DocViewMode = 'grid' | 'list';
-const VIEW_MODE_KEY = 'weknora.kb.docs.viewMode';
+const VIEW_MODE_KEY = 'semiclaw.kb.docs.viewMode';
 const initViewMode = (): DocViewMode => {
   try {
     return localStorage.getItem(VIEW_MODE_KEY) === 'list' ? 'list' : 'grid';
@@ -679,7 +679,7 @@ const updatedTimeRange = ref<string[]>([]);
 const disableFutureDate = { after: new Date(new Date().setHours(23, 59, 59, 999)) };
 
 // ── Folder tree (documents uploaded as a folder keep their relative path) ──
-const FOLDER_TREE_COLLAPSED_KEY = 'weknora.kbFolderTreeCollapsed';
+const FOLDER_TREE_COLLAPSED_KEY = 'semiclaw.kbFolderTreeCollapsed';
 const readStoredFlag = (key: string, fallback = false) => {
   try {
     const raw = localStorage.getItem(key);
@@ -1350,15 +1350,15 @@ onMounted(() => {
 
   window.addEventListener('knowledgeFileUploaded', handleFileUploaded as EventListener);
   window.addEventListener('openURLImportDialog', handleOpenURLImportDialog as EventListener);
-  window.addEventListener('weknora:knowledge-file-drop', handleKnowledgeFileDrop as EventListener);
-  window.addEventListener('weknora:open-knowledge', handleOpenKnowledgeEvent as EventListener);
+  window.addEventListener('semiclaw:knowledge-file-drop', handleKnowledgeFileDrop as EventListener);
+  window.addEventListener('semiclaw:open-knowledge', handleOpenKnowledgeEvent as EventListener);
 });
 
 onUnmounted(() => {
   window.removeEventListener('knowledgeFileUploaded', handleFileUploaded as EventListener);
   window.removeEventListener('openURLImportDialog', handleOpenURLImportDialog as EventListener);
-  window.removeEventListener('weknora:knowledge-file-drop', handleKnowledgeFileDrop as EventListener);
-  window.removeEventListener('weknora:open-knowledge', handleOpenKnowledgeEvent as EventListener);
+  window.removeEventListener('semiclaw:knowledge-file-drop', handleKnowledgeFileDrop as EventListener);
+  window.removeEventListener('semiclaw:open-knowledge', handleOpenKnowledgeEvent as EventListener);
   stopMovePoll();
   if (timeout !== null) {
     clearTimeout(timeout);

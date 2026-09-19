@@ -15,16 +15,16 @@ import (
 	"sync"
 	"time"
 
-	"github.com/Tencent/WeKnora/internal/application/access"
-	"github.com/Tencent/WeKnora/internal/errors"
-	"github.com/Tencent/WeKnora/internal/event"
-	"github.com/Tencent/WeKnora/internal/logger"
-	"github.com/Tencent/WeKnora/internal/storageurl"
-	"github.com/Tencent/WeKnora/internal/stream"
-	"github.com/Tencent/WeKnora/internal/tracing/langfuse"
-	"github.com/Tencent/WeKnora/internal/types"
-	"github.com/Tencent/WeKnora/internal/types/interfaces"
-	secutils "github.com/Tencent/WeKnora/internal/utils"
+	"github.com/vagawind/semiclaw/internal/application/access"
+	"github.com/vagawind/semiclaw/internal/errors"
+	"github.com/vagawind/semiclaw/internal/event"
+	"github.com/vagawind/semiclaw/internal/logger"
+	"github.com/vagawind/semiclaw/internal/storageurl"
+	"github.com/vagawind/semiclaw/internal/stream"
+	"github.com/vagawind/semiclaw/internal/tracing/langfuse"
+	"github.com/vagawind/semiclaw/internal/types"
+	"github.com/vagawind/semiclaw/internal/types/interfaces"
+	secutils "github.com/vagawind/semiclaw/internal/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 )
@@ -1395,14 +1395,14 @@ func (h *Handler) runVLMAnalysisIfNeeded(streamCtx *sseStreamContext, reqCtx *qa
 // defaultAttachmentParseWaitTimeout bounds how long a QA turn waits for
 // still-parsing attachments before proceeding with only the finished ones.
 // Large or scanned documents can exceed this; raise it via
-// WEKNORA_CHAT_ATTACHMENT_WAIT_TIMEOUT_SEC when needed.
+// SEMICLAW_CHAT_ATTACHMENT_WAIT_TIMEOUT_SEC when needed.
 const defaultAttachmentParseWaitTimeout = 60 * time.Second
 
 // attachmentParseWaitTimeout returns the configured wait timeout, honoring the
-// WEKNORA_CHAT_ATTACHMENT_WAIT_TIMEOUT_SEC override (in seconds) and falling
+// SEMICLAW_CHAT_ATTACHMENT_WAIT_TIMEOUT_SEC override (in seconds) and falling
 // back to the default when unset or invalid.
 func attachmentParseWaitTimeout() time.Duration {
-	if raw := strings.TrimSpace(os.Getenv("WEKNORA_CHAT_ATTACHMENT_WAIT_TIMEOUT_SEC")); raw != "" {
+	if raw := strings.TrimSpace(os.Getenv("SEMICLAW_CHAT_ATTACHMENT_WAIT_TIMEOUT_SEC")); raw != "" {
 		if secs, err := strconv.Atoi(raw); err == nil && secs > 0 {
 			return time.Duration(secs) * time.Second
 		}

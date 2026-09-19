@@ -1,7 +1,7 @@
 /**
  * The plugin side of the API contract: the calls this package makes must stay
  * exactly the ones recorded in test/fixtures/api-contract.json, which
- * contract/contract_test.go checks against WeKnora's real Go request and
+ * contract/contract_test.go checks against SemiClaw's real Go request and
  * response types. Change a request body and both sides tell you.
  */
 
@@ -14,7 +14,7 @@ import { fileURLToPath } from 'node:url'
 import { WeknoraClient } from '../dist/client.js'
 import { resolveConfig } from '../dist/config.js'
 import { createTools } from '../dist/tools.js'
-import { startMockWeknora } from './helpers/mock-weknora.mjs'
+import { startMockWeknora } from './helpers/mock-semiclaw.mjs'
 
 const here = dirname(fileURLToPath(import.meta.url))
 const fixture = JSON.parse(await readFile(join(here, 'fixtures', 'api-contract.json'), 'utf8'))
@@ -27,17 +27,17 @@ async function replayCalls() {
 
   const ragConfig = resolveConfig({ baseUrl: mock.url, knowledgeBaseIds: ['kb-product'] })
   const ragTools = new Map(createTools(new WeknoraClient(ragConfig), ragConfig).map(tool => [tool.name, tool]))
-  await ragTools.get('weknora_list_knowledge_bases').execute({}, exec)
-  await ragTools.get('weknora_search').execute({ query: '默认的检索阈值是多少' }, exec)
-  await ragTools.get('weknora_read_document').execute(
+  await ragTools.get('semiclaw_list_knowledge_bases').execute({}, exec)
+  await ragTools.get('semiclaw_search').execute({ query: '默认的检索阈值是多少' }, exec)
+  await ragTools.get('semiclaw_read_document').execute(
     { knowledge_id: 'doc-retrieval-pipeline', page: 1, page_size: 5 },
     exec,
   )
-  await ragTools.get('weknora_ask').execute({ query: '默认的检索阈值是多少' }, exec)
+  await ragTools.get('semiclaw_ask').execute({ query: '默认的检索阈值是多少' }, exec)
 
   const agentConfig = resolveConfig({ baseUrl: mock.url, agentId: 'agent-42' })
   const agentAsk = createTools(new WeknoraClient(agentConfig), agentConfig)
-    .find(tool => tool.name === 'weknora_ask')
+    .find(tool => tool.name === 'semiclaw_ask')
   await agentAsk.execute({ query: '部署方式', session_id: 's1', web_search: true }, exec)
 
   return mock.requests.map(request => ({
@@ -53,7 +53,7 @@ const observed = await replayCalls()
 /** Order-insensitive key: a tool that fires two calls at once may land either way round. */
 const callKey = call => `${call.method} ${call.path} ${JSON.stringify(call.query)} ${JSON.stringify(call.body)}`
 
-test('the plugin makes exactly the documented WeKnora calls', () => {
+test('the plugin makes exactly the documented SemiClaw calls', () => {
   const expected = fixture.calls.map(call => ({
     method: call.method,
     path: call.path,
@@ -112,7 +112,7 @@ test('the plugin only reads response fields the fixture declares', async () => {
     Object.entries(result).filter(([key]) => declared.has(key)),
   ))
   const tools = createTools(new WeknoraClient(config), config)
-  const search = tools.find(tool => tool.name === 'weknora_search')
+  const search = tools.find(tool => tool.name === 'semiclaw_search')
   // Feed the trimmed shape back through the projection the tool uses.
   const projected = search.output.render({ query: '混合检索' }, {
     query: '混合检索',

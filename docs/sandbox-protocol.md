@@ -1,12 +1,12 @@
-# WeKnora 沙箱：以 E2B 协议为唯一接入契约
+# SemiClaw 沙箱：以 E2B 协议为唯一接入契约
 
-本文说明 WeKnora 为什么把 E2B 协议当作沙箱后端的唯一对接契约、现在还有哪些例外、以及可以直接拿来用的开源实现有哪些。面向部署方与要新接一种沙箱后端的开发者。
+本文说明 SemiClaw 为什么把 E2B 协议当作沙箱后端的唯一对接契约、现在还有哪些例外、以及可以直接拿来用的开源实现有哪些。面向部署方与要新接一种沙箱后端的开发者。
 
 ## 结论
 
-- 跨主机、需要内核级隔离的部署走 E2B 协议（控制面 REST + 数据面 envd）：WeKnora 只维护一套这样的客户端，具体隔离能力由社区实现提供，见下面的选型表。
-- 单机 / 私有化部署可以直接用 `docker` 后端：它现在也是会话级后端（一个会话一个长驻容器），在应用层与 E2B 行为一致，代价是空闲回收、执行超时这些控制面职责由 WeKnora 承担。详见 [Docker 沙箱后端](./sandbox-docker-backend.md)。
-- `local` 后端在 WeKnora 主机上直接跑脚本，没有任何隔离，只适合可信的开发空间。
+- 跨主机、需要内核级隔离的部署走 E2B 协议（控制面 REST + 数据面 envd）：SemiClaw 只维护一套这样的客户端，具体隔离能力由社区实现提供，见下面的选型表。
+- 单机 / 私有化部署可以直接用 `docker` 后端：它现在也是会话级后端（一个会话一个长驻容器），在应用层与 E2B 行为一致，代价是空闲回收、执行超时这些控制面职责由 SemiClaw 承担。详见 [Docker 沙箱后端](./sandbox-docker-backend.md)。
+- `local` 后端在 SemiClaw 主机上直接跑脚本，没有任何隔离，只适合可信的开发空间。
 
 ## 当前的后端形态
 
@@ -30,9 +30,9 @@
 
 选型要点：
 
-- 只有容器可用（没有 KVM、也不想上 PVM 内核）时，走 Agent-Sandbox 这类 K8s 原生实现，而不是给 WeKnora 加一个 Docker 控制面。
+- 只有容器可用（没有 KVM、也不想上 PVM 内核）时，走 Agent-Sandbox 这类 K8s 原生实现，而不是给 SemiClaw 加一个 Docker 控制面。
 - 单机、有 KVM 或可装 PVM 内核，走 CubeSandbox。
-- 上述实现都通过同一个 `e2b` 配置接入，WeKnora 侧零改动。
+- 上述实现都通过同一个 `e2b` 配置接入，SemiClaw 侧零改动。
 
 不建议采用的方向：`e2bgateway`、`circlesac/sandbox`、`Cage` 这类项目虽然也宣称 E2B 兼容并支持 Docker 后端，但当前 star 数与维护强度都在个位数量级，作为生产依赖风险过高。
 
@@ -49,20 +49,20 @@
 | `template_id` | 模板 / 镜像标识 |
 | 允许访问私网集群地址 | 集群位于 RFC1918/loopback 时必须打开 |
 
-`proxy_url` 是自建集群的关键：E2B Cloud 通过公网 DNS 解析每个沙箱的域名并提供证书，自建集群通常把所有沙箱收敛到一个网关地址、按 Host 头路由。填了 `proxy_url` 之后，WeKnora 会把数据面请求直接拨到该网关，同时保留沙箱域名在 Host 头里；网关是 `http://` 时还会把数据面 scheme 一并降级——E2B SDK 把它写死成 https，这一步省掉了为泛域名申请证书的成本。控制面请求不受影响，仍走共享连接池（实现见 `internal/sandbox/gateway_transport.go`）。
+`proxy_url` 是自建集群的关键：E2B Cloud 通过公网 DNS 解析每个沙箱的域名并提供证书，自建集群通常把所有沙箱收敛到一个网关地址、按 Host 头路由。填了 `proxy_url` 之后，SemiClaw 会把数据面请求直接拨到该网关，同时保留沙箱域名在 Host 头里；网关是 `http://` 时还会把数据面 scheme 一并降级——E2B SDK 把它写死成 https，这一步省掉了为泛域名申请证书的成本。控制面请求不受影响，仍走共享连接池（实现见 `internal/sandbox/gateway_transport.go`）。
 
 配置保存前先执行“连接并继续”，上线前执行一次“完整验证”，后者会真实创建、执行并销毁一个沙箱。
 
 ## envd 协议的兼容性坑
 
-数据面 envd 的契约和 `github.com/matiasinsaurralde/go-e2b` 的实现之间有两处偏差，WeKnora 在 `internal/sandbox/envd_compat_transport.go` 里统一补齐：
+数据面 envd 的契约和 `github.com/matiasinsaurralde/go-e2b` 的实现之间有两处偏差，SemiClaw 在 `internal/sandbox/envd_compat_transport.go` 里统一补齐：
 
 - 认证：envd 要求 `Authorization: Basic base64("<user>:")`，SDK 发的是 `X-User-ID` 头。E2B Cloud 对此宽容，其他实现直接返回 `unauthenticated: no user specified`。
 - 文件上传：envd 的 `POST /files` 只接受 `multipart/form-data`，SDK 发的是裸 `application/octet-stream`，会得到 500。
 
 另外健康探针改用 `GET /v2/sandboxes`：旧的 `GET /sandboxes` 已不在客户端其他调用路径上，部分 E2B 兼容实现也只实现了 v2，用旧接口探活会把健康的后端判成不可用。文件操作显式声明执行账号（默认 `root`，见 `DefaultSandboxExecUser`），与脚本运行账号保持一致，而不是依赖各实现的默认值。
 
-标准模板保留 `user` 账号（uid 1000）供兼容工具显式选用；WeKnora 默认以 `root` 执行脚本与文件操作。模板应提供可写的 `/workspace`，普通调用会准备 `/workspace/output`、`/workspace/input` 和本次工作目录，维护调用只准备其工作目录。工作目录参数的前缀检查不是 root 命令的文件系统隔离边界；自定义只读挂载也不会因为使用 root 而变成可写。
+标准模板保留 `user` 账号（uid 1000）供兼容工具显式选用；SemiClaw 默认以 `root` 执行脚本与文件操作。模板应提供可写的 `/workspace`，普通调用会准备 `/workspace/output`、`/workspace/input` 和本次工作目录，维护调用只准备其工作目录。工作目录参数的前缀检查不是 root 命令的文件系统隔离边界；自定义只读挂载也不会因为使用 root 而变成可写。
 
 ## 一致性测试
 

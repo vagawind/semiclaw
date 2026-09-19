@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/types"
 )
 
 func TestTenantOptionalAPISurface(t *testing.T) {

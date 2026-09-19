@@ -11,9 +11,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Tencent/WeKnora/internal/logger"
-	"github.com/Tencent/WeKnora/internal/types/interfaces"
-	"github.com/Tencent/WeKnora/internal/utils"
+	"github.com/vagawind/semiclaw/internal/logger"
+	"github.com/vagawind/semiclaw/internal/types/interfaces"
+	"github.com/vagawind/semiclaw/internal/utils"
 	"github.com/google/uuid"
 	"github.com/volcengine/ve-tos-golang-sdk/v2/tos"
 	"github.com/volcengine/ve-tos-golang-sdk/v2/tos/enum"

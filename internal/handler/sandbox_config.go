@@ -8,11 +8,11 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/Tencent/WeKnora/internal/application/repository"
-	"github.com/Tencent/WeKnora/internal/application/service"
-	apperrors "github.com/Tencent/WeKnora/internal/errors"
-	"github.com/Tencent/WeKnora/internal/sandbox"
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/application/repository"
+	"github.com/vagawind/semiclaw/internal/application/service"
+	apperrors "github.com/vagawind/semiclaw/internal/errors"
+	"github.com/vagawind/semiclaw/internal/sandbox"
+	"github.com/vagawind/semiclaw/internal/types"
 )
 
 type sandboxConfigService interface {
@@ -38,7 +38,7 @@ type sandboxTemplateQueryRequest struct {
 
 // QueryTemplates returns the templates visible through an unsaved workspace
 // connection. ensure_standard / ensure_desktop start a build only when that
-// WeKnora template is missing (from the published Hub image); replace_standard
+// SemiClaw template is missing (from the published Hub image); replace_standard
 // / replace_desktop rebuild it so a new spec (DNS, image) can take effect.
 // Replace requires config_id.
 func (h *SandboxConfigHandler) QueryTemplates(c *gin.Context) {

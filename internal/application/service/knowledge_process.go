@@ -10,21 +10,21 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Tencent/WeKnora/internal/application/access"
-	"github.com/Tencent/WeKnora/internal/application/repository"
-	"github.com/Tencent/WeKnora/internal/application/service/retriever"
-	"github.com/Tencent/WeKnora/internal/common"
-	werrors "github.com/Tencent/WeKnora/internal/errors"
-	"github.com/Tencent/WeKnora/internal/infrastructure/chunker"
-	"github.com/Tencent/WeKnora/internal/infrastructure/docparser"
-	"github.com/Tencent/WeKnora/internal/logger"
-	"github.com/Tencent/WeKnora/internal/models/chat"
-	"github.com/Tencent/WeKnora/internal/models/embedding"
-	"github.com/Tencent/WeKnora/internal/searchutil"
-	"github.com/Tencent/WeKnora/internal/tracing/langfuse"
-	"github.com/Tencent/WeKnora/internal/types"
-	"github.com/Tencent/WeKnora/internal/types/interfaces"
-	secutils "github.com/Tencent/WeKnora/internal/utils"
+	"github.com/vagawind/semiclaw/internal/application/access"
+	"github.com/vagawind/semiclaw/internal/application/repository"
+	"github.com/vagawind/semiclaw/internal/application/service/retriever"
+	"github.com/vagawind/semiclaw/internal/common"
+	werrors "github.com/vagawind/semiclaw/internal/errors"
+	"github.com/vagawind/semiclaw/internal/infrastructure/chunker"
+	"github.com/vagawind/semiclaw/internal/infrastructure/docparser"
+	"github.com/vagawind/semiclaw/internal/logger"
+	"github.com/vagawind/semiclaw/internal/models/chat"
+	"github.com/vagawind/semiclaw/internal/models/embedding"
+	"github.com/vagawind/semiclaw/internal/searchutil"
+	"github.com/vagawind/semiclaw/internal/tracing/langfuse"
+	"github.com/vagawind/semiclaw/internal/types"
+	"github.com/vagawind/semiclaw/internal/types/interfaces"
+	secutils "github.com/vagawind/semiclaw/internal/utils"
 	"github.com/google/uuid"
 	"github.com/hibiken/asynq"
 )
@@ -3922,7 +3922,7 @@ func (s *knowledgeService) resolveDocReader(
 	reader, err := docparser.NewReader(ctx, engine, fileType, isURL, docparser.ReaderDeps{
 		Overrides:               overrides,
 		Remote:                  s.documentReader,
-		WeKnoraCloudCredentials: s.tenantService.GetWeKnoraCloudCredentials,
+		SemiClawCloudCredentials: s.tenantService.GetSemiClawCloudCredentials,
 	})
 	if err != nil {
 		logger.Warnf(ctx, "[resolveDocReader] engine=%q fileType=%q unusable: %v", engine, fileType, err)

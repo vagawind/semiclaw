@@ -9,8 +9,8 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/Tencent/WeKnora/internal/datasource/connector/feishu/core"
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/datasource/connector/feishu/core"
+	"github.com/vagawind/semiclaw/internal/types"
 )
 
 // statefulFeishu is a fake Feishu server whose per-node export outcome can be
@@ -148,7 +148,7 @@ func lastCheckpointCursor(h *convergenceHandler, t *testing.T) *types.SyncCursor
 }
 
 // TestFetchStream_ResumeConvergesAfterTimeoutAndTransientFailure is the
-// end-to-end proof for Tencent/WeKnora#2136: a large-ish wiki that (a) hits a
+// end-to-end proof for vagawind/semiclaw#2136: a large-ish wiki that (a) hits a
 // transient per-node export failure and (b) is killed by the 2h task timeout
 // mid-traversal must, on the asynq retry, resume from the last Checkpoint,
 // re-core.Fetch only what is outstanding, retry the transiently-failed node, and end

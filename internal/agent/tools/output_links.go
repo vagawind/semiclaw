@@ -8,8 +8,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Tencent/WeKnora/internal/agent/skills"
-	"github.com/Tencent/WeKnora/internal/sandbox"
+	"github.com/vagawind/semiclaw/internal/agent/skills"
+	"github.com/vagawind/semiclaw/internal/sandbox"
 )
 
 // Metadata snapshots detect outputs without parsing arbitrary commands or stdout.

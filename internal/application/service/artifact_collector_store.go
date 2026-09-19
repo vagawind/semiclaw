@@ -3,8 +3,8 @@ package service
 import (
 	"context"
 
-	"github.com/Tencent/WeKnora/internal/types"
-	"github.com/Tencent/WeKnora/internal/types/interfaces"
+	"github.com/vagawind/semiclaw/internal/types"
+	"github.com/vagawind/semiclaw/internal/types/interfaces"
 )
 
 // messageRepoArtifactStore adapts interfaces.MessageRepository to the

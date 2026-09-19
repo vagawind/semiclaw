@@ -9,8 +9,8 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/Tencent/WeKnora/internal/application/repository"
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/application/repository"
+	"github.com/vagawind/semiclaw/internal/types"
 )
 
 const userEnvTenantID = uint64(7)
@@ -274,7 +274,7 @@ func TestSetMineRejectsUnusableNames(t *testing.T) {
 	svc, repo := newUserEnvFixture(t)
 	ctx := userEnvCtx(userEnvTenantID, "alice")
 
-	for _, name := range []string{"PATH", "WEKNORA_SKILL_OUTPUT_DIR", "lower_case", "HAS SPACE", ""} {
+	for _, name := range []string{"PATH", "SEMICLAW_SKILL_OUTPUT_DIR", "lower_case", "HAS SPACE", ""} {
 		t.Run(name, func(t *testing.T) {
 			require.Error(t, svc.SetMineSandbox(ctx, "cfg-1", name, "whatever"))
 		})
@@ -438,7 +438,7 @@ func TestCaptureSkillEnvSkipsUndeclaredAndReservedNames(t *testing.T) {
 			"USER_TOKEN":        "keep-me",
 			"INVENTED":          "no",
 			"PATH":              "/bin",
-			"WEKNORA_SKILL_DIR": "no",
+			"SEMICLAW_SKILL_DIR": "no",
 		}))
 
 	require.Len(t, repo.userEnvs, 1)

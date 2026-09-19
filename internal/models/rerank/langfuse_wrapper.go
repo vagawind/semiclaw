@@ -3,7 +3,7 @@ package rerank
 import (
 	"context"
 
-	"github.com/Tencent/WeKnora/internal/tracing/langfuse"
+	"github.com/vagawind/semiclaw/internal/tracing/langfuse"
 )
 
 const langfuseRerankPreviewDocs = 8

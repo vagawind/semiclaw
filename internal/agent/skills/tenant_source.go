@@ -11,8 +11,8 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/Tencent/WeKnora/internal/sandbox"
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/sandbox"
+	"github.com/vagawind/semiclaw/internal/types"
 )
 
 // Bundle limits bound decompression. They mirror the install-time limits: the

@@ -11,8 +11,8 @@
 //
 // Run with a reachable daemon and the standard sandbox image:
 //
-//	docker build -f docker/Dockerfile.sandbox -t wechatopenai/weknora-sandbox:dev .
-//	DOCKER_INTEGRATION_IMAGE=wechatopenai/weknora-sandbox:dev \
+//	docker build -f docker/Dockerfile.sandbox -t vagawind/semiclaw-sandbox:dev .
+//	DOCKER_INTEGRATION_IMAGE=vagawind/semiclaw-sandbox:dev \
 //	go test -tags=docker_integration ./internal/sandbox \
 //	  -run '^TestDocker.*Integration' -count=1 -v -timeout=15m
 package sandbox
@@ -30,7 +30,7 @@ import (
 	"github.com/moby/moby/api/types/container"
 	"github.com/moby/moby/client"
 
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/types"
 )
 
 const dockerIntegrationTenantID = 1
@@ -599,7 +599,7 @@ func TestDockerSkillSnapshotIntegration(t *testing.T) {
 
 	builder, err := client.Create(ctx, RemoteCreateRequest{
 		TemplateID: cfg.DockerImage,
-		Metadata:   map[string]string{"weknora.test": "skill-snapshot"},
+		Metadata:   map[string]string{"semiclaw.test": "skill-snapshot"},
 	})
 	if err != nil {
 		t.Fatalf("Create builder: %v", err)
@@ -626,7 +626,7 @@ func TestDockerSkillSnapshotIntegration(t *testing.T) {
 		t.Fatalf("seed skill tree: err=%v result=%#v", err, seed)
 	}
 
-	ref, err := client.CreateSnapshot(ctx, builder.ID(), "weknora-sk-itest-g1")
+	ref, err := client.CreateSnapshot(ctx, builder.ID(), "semiclaw-sk-itest-g1")
 	if err != nil {
 		t.Fatalf("CreateSnapshot: %v", err)
 	}
@@ -645,7 +645,7 @@ func TestDockerSkillSnapshotIntegration(t *testing.T) {
 
 	booted, err := client.Create(ctx, RemoteCreateRequest{
 		TemplateID: ref.ID,
-		Metadata:   map[string]string{"weknora.test": "skill-snapshot-boot"},
+		Metadata:   map[string]string{"semiclaw.test": "skill-snapshot-boot"},
 	})
 	if err != nil {
 		t.Fatalf("Create from snapshot: %v", err)

@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/types"
 )
 
 func TestMetasoProviderSearch(t *testing.T) {
@@ -24,7 +24,7 @@ func TestMetasoProviderSearch(t *testing.T) {
 		if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
 			t.Fatal(err)
 		}
-		if request.Query != "WeKnora" || request.Scope != "scholar" || request.Size != 2 {
+		if request.Query != "SemiClaw" || request.Scope != "scholar" || request.Size != 2 {
 			t.Fatalf("unexpected request: %+v", request)
 		}
 		if !request.IncludeSummary || request.IncludeRawContent || !request.ConciseSnippet {
@@ -40,7 +40,7 @@ func TestMetasoProviderSearch(t *testing.T) {
 	defer server.Close()
 
 	metaso := &MetasoProvider{client: server.Client(), baseURL: server.URL, apiKey: "mk-test", scope: "scholar"}
-	results, err := metaso.Search(context.Background(), " WeKnora ", 2, true)
+	results, err := metaso.Search(context.Background(), " SemiClaw ", 2, true)
 	if err != nil {
 		t.Fatal(err)
 	}

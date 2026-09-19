@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Tencent/WeKnora/internal/event"
+	"github.com/vagawind/semiclaw/internal/event"
 	"github.com/stretchr/testify/require"
 )
 

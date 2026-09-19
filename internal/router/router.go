@@ -13,15 +13,15 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"go.uber.org/dig"
 
-	"github.com/Tencent/WeKnora/internal/config"
-	"github.com/Tencent/WeKnora/internal/handler"
-	"github.com/Tencent/WeKnora/internal/handler/session"
-	"github.com/Tencent/WeKnora/internal/logger"
-	"github.com/Tencent/WeKnora/internal/middleware"
-	"github.com/Tencent/WeKnora/internal/tracing/langfuse"
-	"github.com/Tencent/WeKnora/internal/types/interfaces"
+	"github.com/vagawind/semiclaw/internal/config"
+	"github.com/vagawind/semiclaw/internal/handler"
+	"github.com/vagawind/semiclaw/internal/handler/session"
+	"github.com/vagawind/semiclaw/internal/logger"
+	"github.com/vagawind/semiclaw/internal/middleware"
+	"github.com/vagawind/semiclaw/internal/tracing/langfuse"
+	"github.com/vagawind/semiclaw/internal/types/interfaces"
 
-	_ "github.com/Tencent/WeKnora/docs" // swagger docs
+	_ "github.com/vagawind/semiclaw/docs" // swagger docs
 )
 
 // RouterParams 路由参数
@@ -85,7 +85,7 @@ type RouterParams struct {
 	RedisClient                  *redis.Client
 	DataSourceHandler            *handler.DataSourceHandler
 	DataSourceCredentialsHandler *handler.DataSourceCredentialsHandler
-	WeKnoraCloudHandler          *handler.WeKnoraCloudHandler
+	SemiClawCloudHandler          *handler.SemiClawCloudHandler
 	WikiPageHandler              *handler.WikiPageHandler
 	MemoryHandler                *handler.MemoryHandler
 }
@@ -100,7 +100,7 @@ func NewRouter(params RouterParams) *gin.Engine {
 	// embed endpoints rate-limit per (channel, ClientIP), so a spoofed XFF would
 	// trivially bypass the limiter. Restrict to the fronting proxy network so
 	// only the real client IP (appended by nginx) is returned. Configurable via
-	// WEKNORA_TRUSTED_PROXIES (comma-separated CIDRs/IPs).
+	// SEMICLAW_TRUSTED_PROXIES (comma-separated CIDRs/IPs).
 	if err := r.SetTrustedProxies(trustedProxies()); err != nil {
 		logger.Errorf(context.Background(), "[Router] failed to set trusted proxies: %v", err)
 	}
@@ -116,7 +116,7 @@ func NewRouter(params RouterParams) *gin.Engine {
 		AllowMethods: []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
 		AllowHeaders: []string{
 			"Origin", "Content-Type", "Accept", "Authorization", "X-API-Key", "X-Request-ID", "X-Tenant-ID",
-			"X-Embed-Session", "X-External-User-ID", "X-External-User-Token", "X-WeKnora-Desktop-Token",
+			"X-Embed-Session", "X-External-User-ID", "X-External-User-Token", "X-SemiClaw-Desktop-Token",
 		},
 		ExposeHeaders:    []string{"Content-Length", "Access-Control-Allow-Origin"},
 		AllowCredentials: true,
@@ -176,7 +176,7 @@ func NewRouter(params RouterParams) *gin.Engine {
 	)
 
 	// Short-lived capability URLs for IM and other clients that cannot attach
-	// WeKnora authentication headers.
+	// SemiClaw authentication headers.
 	serveResourceGrants(r, params.ResourceCatalog, params.TenantService, params.FileService, params.StorageBackendResolver)
 
 	// Sandbox terminal WebSocket (self-authenticated via a short-lived
@@ -306,7 +306,7 @@ func NewRouter(params RouterParams) *gin.Engine {
 		RegisterIMChannelRoutes(v1, params.IMHandler, rbacGuards)
 		RegisterEmbedChannelRoutes(v1, params.EmbedChannelHandler, rbacGuards)
 		RegisterDataSourceRoutes(v1, params.DataSourceHandler, params.DataSourceCredentialsHandler, rbacGuards)
-		RegisterWeKnoraCloudRoutes(v1, params.WeKnoraCloudHandler, rbacGuards)
+		RegisterSemiClawCloudRoutes(v1, params.SemiClawCloudHandler, rbacGuards)
 		RegisterWikiPageRoutes(v1, params.WikiPageHandler, rbacGuards)
 		RegisterMemoryRoutes(v1, params.MemoryHandler, rbacGuards)
 		RegisterChunkerDebugRoutes(v1, rbacGuards)
@@ -324,10 +324,10 @@ func NewRouter(params RouterParams) *gin.Engine {
 // trustedProxies returns the proxy CIDRs/IPs whose X-Forwarded-For headers
 // gin should trust when resolving the client IP. Defaults to loopback and
 // private ranges (covers the bundled nginx in a container network); override
-// with WEKNORA_TRUSTED_PROXIES (comma-separated). An explicit empty value
+// with SEMICLAW_TRUSTED_PROXIES (comma-separated). An explicit empty value
 // disables proxy trust entirely so ClientIP() returns the direct peer.
 func trustedProxies() []string {
-	raw, ok := os.LookupEnv("WEKNORA_TRUSTED_PROXIES")
+	raw, ok := os.LookupEnv("SEMICLAW_TRUSTED_PROXIES")
 	if !ok {
 		return []string{
 			"127.0.0.0/8",

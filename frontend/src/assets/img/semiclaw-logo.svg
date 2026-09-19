@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="126" viewBox="0 0 400 126" fill="none">
+  <text x="6" y="78" fill="#102A43" font-family="Inter, 'Segoe UI', Arial, Helvetica, sans-serif" font-size="48" font-weight="700" letter-spacing="1.2">SEMICLAW</text>
+  <path d="M62 98C108 78 148 114 198 94C242 76 286 108 338 90" stroke="#C4A35A" stroke-width="3.2" stroke-linecap="round"/>
+  <path d="M78 104C118 88 156 118 200 102C238 88 278 112 322 98" stroke="#102A43" stroke-width="2.2" stroke-linecap="round" opacity="0.85"/>
+</svg>

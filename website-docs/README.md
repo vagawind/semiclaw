@@ -1,4 +1,4 @@
-# WeKnora 官网与文档
+# SemiClaw 官网与文档
 
 `website-docs/` 包含官网、文档、共享样式和全部构建部署脚本，可独立复制和构建，不依赖仓库外层文件。官网和文档共用一个域名、一次构建和一份部署产物。
 
@@ -25,13 +25,13 @@ npm run package:site
 
 ### 2. 上传并解压
 
-只需把压缩包上传到服务器。服务器不需要 Node.js，也不需要 WeKnora 后端或独立文档服务。
+只需把压缩包上传到服务器。服务器不需要 Node.js，也不需要 SemiClaw 后端或独立文档服务。
 
 每次发布使用一个新的空目录，避免混入旧站点文件。下面的 `20260915-1` 是示例发布编号，后续发布换一个编号：
 
 ```bash
-sudo mkdir -p /srv/www/weknora/releases/20260915-1
-sudo tar -xzf weknora-site-v0.8.0.tar.gz -C /srv/www/weknora/releases/20260915-1
+sudo mkdir -p /srv/www/semiclaw/releases/20260915-1
+sudo tar -xzf semiclaw-site-v0.8.0.tar.gz -C /srv/www/semiclaw/releases/20260915-1
 ```
 
 解压后该目录下应直接有 `index.html`、`docs/`、`_next/`，无需再套一层 `static-site/`。
@@ -42,12 +42,12 @@ sudo tar -xzf weknora-site-v0.8.0.tar.gz -C /srv/www/weknora/releases/20260915-1
 
 ```nginx
 server_name 你的域名;
-root /srv/www/weknora/releases/20260915-1;
+root /srv/www/semiclaw/releases/20260915-1;
 ```
 
 如果域名已有 HTTPS 配置，保留原来的证书及监听设置，把模板中的 `root`、`index` 和 `location` 规则合入现有站点配置。域名应指向这台服务器。
 
-必须保留文档的 `.html` 路由解析规则；不要把所有未知路径回退到官网 `index.html`。当前构建部署在域名根路径，不支持直接放进 `/weknora/` 等子目录。
+必须保留文档的 `.html` 路由解析规则；不要把所有未知路径回退到官网 `index.html`。当前构建部署在域名根路径，不支持直接放进 `/semiclaw/` 等子目录。
 
 检查配置后重载：
 
@@ -76,13 +76,13 @@ sudo nginx -s reload
 在仓库根目录执行：
 
 ```bash
-docker build -t weknora-site:0.8.0 website-docs
-docker run -d --name weknora-site --restart unless-stopped -p 8080:80 weknora-site:0.8.0
+docker build -t semiclaw-site:0.8.0 website-docs
+docker run -d --name semiclaw-site --restart unless-stopped -p 8080:80 semiclaw-site:0.8.0
 ```
 
 访问 `http://服务器地址:8080/`。如使用域名和 HTTPS，让现有反向代理转发到该端口即可。镜像内已经包含官网、文档和 Nginx 路由配置。
 
-也可以只复制 `website-docs/` 目录，在该目录执行 `docker build -t weknora-site:0.8.0 .`。构建上下文必须是 `website-docs/`，宿主机的依赖、旧构建产物和部署包由 `.dockerignore` 排除。
+也可以只复制 `website-docs/` 目录，在该目录执行 `docker build -t semiclaw-site:0.8.0 .`。构建上下文必须是 `website-docs/`，宿主机的依赖、旧构建产物和部署包由 `.dockerignore` 排除。
 
 从旧文档镜像迁移时，将容器端口映射或反向代理目标端口从 `8081` 改为 `80`（宿主机端口可自行选择，例如 `-p 8081:80`）。域名根路径 `/` 现在提供官网，`/docs/` 提供文档，反向代理需覆盖整个站点并保留请求路径。容器使用 Nginx 官方镜像的默认入口，无需额外的 `docker-entrypoint.sh`。
 
@@ -90,7 +90,7 @@ docker run -d --name weknora-site --restart unless-stopped -p 8080:80 weknora-si
 
 ```bash
 cd website-docs
-npm run test:docker -- weknora-site:0.8.0
+npm run test:docker -- semiclaw-site:0.8.0
 ```
 
 ## 本地开发

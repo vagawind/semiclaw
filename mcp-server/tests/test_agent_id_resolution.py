@@ -1,8 +1,8 @@
-from weknora_mcp_server import WeKnoraClient
+from semiclaw_mcp_server import SemiClawClient
 
 
 def test_resolve_agent_id_accepts_non_uuid_agent_id(monkeypatch):
-    client = WeKnoraClient("http://example.test/api/v1", "")
+    client = SemiClawClient("http://example.test/api/v1", "")
     agents = {
         "data": [
             {
@@ -20,7 +20,7 @@ def test_resolve_agent_id_accepts_non_uuid_agent_id(monkeypatch):
 
 
 def test_resolve_agent_id_accepts_agent_name_case_insensitively(monkeypatch):
-    client = WeKnoraClient("http://example.test/api/v1", "")
+    client = SemiClawClient("http://example.test/api/v1", "")
     agents = {
         "data": [
             {

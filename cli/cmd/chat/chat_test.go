@@ -7,10 +7,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Tencent/WeKnora/cli/internal/cmdutil"
-	"github.com/Tencent/WeKnora/cli/internal/iostreams"
-	"github.com/Tencent/WeKnora/cli/internal/sse"
-	sdk "github.com/Tencent/WeKnora/client"
+	"github.com/vagawind/semiclaw/cli/internal/cmdutil"
+	"github.com/vagawind/semiclaw/cli/internal/iostreams"
+	"github.com/vagawind/semiclaw/cli/internal/sse"
+	sdk "github.com/vagawind/semiclaw/client"
 )
 
 // fakeChatService implements ChatService for unit tests. Tests configure the

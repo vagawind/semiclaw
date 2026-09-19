@@ -1,6 +1,6 @@
 # BrowserSkill 生产部署链路
 
-当前实现支持单实例调试与多个 WeKnora app 副本。浏览器执行、队列、标签借用与归还继续复用官方 BrowserSkill daemon/扩展。每个 app 按需启动一个共享 daemon；设备授权、连接归属和任务中断标记放在共用数据库中。
+当前实现支持单实例调试与多个 SemiClaw app 副本。浏览器执行、队列、标签借用与归还继续复用官方 BrowserSkill daemon/扩展。每个 app 按需启动一个共享 daemon；设备授权、连接归属和任务中断标记放在共用数据库中。
 
 ## 配对与重连
 
@@ -9,7 +9,7 @@ sequenceDiagram
   participant U as 个人设置
   participant E as Chrome 扩展
   participant L as HTTPS/WSS 入口
-  participant A as WeKnora 节点
+  participant A as SemiClaw 节点
   participant DB as PostgreSQL
   participant B as 共享 BrowserSkill daemon
   U->>A: 登录态生成一次性配对链接
@@ -67,10 +67,10 @@ flowchart LR
 Docker app 镜像已内置匹配目标架构的官方 bsk、配套扩展和许可证，并预设两个文件路径；单实例默认无需额外环境变量，配对地址从用户当前页面的 origin 生成，保留外部域名和端口。`BROWSERSKILL_PUBLIC_URL` 仅作为独立网关域名/路径等特殊部署的优先覆盖项。原生部署各节点需自行安装产物。配置示例如下：
 
 ```dotenv
-BROWSERSKILL_BINARY=/opt/weknora/browserskill/bsk
+BROWSERSKILL_BINARY=/opt/semiclaw/browserskill/bsk
 # 可选覆盖；省略时从页面自动生成。
-# BROWSERSKILL_PUBLIC_URL=wss://weknora.example.com/api/v1/local-browser/extension
-BROWSERSKILL_EXTENSION_PATH=/opt/weknora/browserskill/browser-skill-weknora-0.2.1.zip
+# BROWSERSKILL_PUBLIC_URL=wss://semiclaw.example.com/api/v1/local-browser/extension
+BROWSERSKILL_EXTENSION_PATH=/opt/semiclaw/browserskill/browser-skill-semiclaw-0.2.1.zip
 BROWSERSKILL_MAX_CONNECTIONS=32
 ```
 

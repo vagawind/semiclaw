@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/Tencent/WeKnora/internal/logger"
+	"github.com/vagawind/semiclaw/internal/logger"
 )
 
 // skillProgressTTL keeps a finished run's last value around long enough for a
@@ -24,7 +24,7 @@ type SkillProgress struct {
 }
 
 func skillProgressKey(tenantID uint64, configID, skillID string) string {
-	return fmt.Sprintf("weknora-skill-install:%d:%s:%s", tenantID, configID, skillID)
+	return fmt.Sprintf("semiclaw-skill-install:%d:%s:%s", tenantID, configID, skillID)
 }
 
 // publishProgress stores the latest value and broadcasts it. Without Redis both

@@ -2,7 +2,7 @@
 
 ## 结论与参考范围
 
-WeKnora 的通用沙箱操作需要四个稳定原语：读取、写入、编辑、执行命令。技能通过指令和运行环境扩展这些原语；知识库、Wiki、历史记录等业务能力继续通过服务端工具提供，因为它们包含租户隔离、访问控制和检索语义。
+SemiClaw 的通用沙箱操作需要四个稳定原语：读取、写入、编辑、执行命令。技能通过指令和运行环境扩展这些原语；知识库、Wiki、历史记录等业务能力继续通过服务端工具提供，因为它们包含租户隔离、访问控制和检索语义。
 
 本次参考 PI，克隆 `badlogic/pi-mono`，固定提交 `17de82d7bea18a6589677a9761baabc2060c9efb`（仓库现转到 `earendil-works/pi`）。重点阅读 coding-agent 的 README、系统提示词、工具注册与实现、路径及文件变更处理，以及 agent-core 的执行循环。本次没有审阅其整个 monorepo，也没有复制实现。
 
@@ -77,12 +77,12 @@ WeKnora 的通用沙箱操作需要四个稳定原语：读取、写入、编辑
 
 - 技能 `.venv/bin`、`node_modules/.bin` 优先的 PATH；使用独立 Bash 子进程执行原命令。
 - Python/Node 会话依赖目录及技能 Node 模块目录。
-- `WEKNORA_SKILL_DIR`、附件目录及产物目录变量。
+- `SEMICLAW_SKILL_DIR`、附件目录及产物目录变量。
 - 原有按调用者解析的凭据，不写入容器全局环境。
 
 未指定技能的下一条命令使用系统运行环境。命名了不存在或未接入的技能环境时直接报错，不静默回退到系统解释器。
 
-技能缺包时装进技能自己的环境：安装调用也带 `skill_name`，保持 `work_dir` 为默认的 `/workspace`。Python 用 `uv pip install --python "${WEKNORA_SKILL_DIR:?}/.venv/bin/python" <package>`，无需虚拟环境内已有 pip；Node 用 `npm --prefix "${WEKNORA_SKILL_DIR:?}" install <package>`。`$WEKNORA_SKILL_DIR` 由本次调用注入，指向镜像内技能或宿主机来源技能的实际暂存目录。如果尚无 `.venv`，先用 `python3 -m venv --without-pip "${WEKNORA_SKILL_DIR:?}/.venv"` 创建；自定义镜像没有 uv 时，先用该虚拟环境的 Python 执行 `-m ensurepip --upgrade`，成功后再执行 `-m pip install <package>`。随后仍带同一 `skill_name` 执行原命令。命令中的 `${WEKNORA_SKILL_DIR:?}` 会在变量缺失或为空时终止，避免误用根目录。真正的只读挂载仍需先配置可写的技能环境，root、uv 和 pip 都无法绕过挂载限制。
+技能缺包时装进技能自己的环境：安装调用也带 `skill_name`，保持 `work_dir` 为默认的 `/workspace`。Python 用 `uv pip install --python "${SEMICLAW_SKILL_DIR:?}/.venv/bin/python" <package>`，无需虚拟环境内已有 pip；Node 用 `npm --prefix "${SEMICLAW_SKILL_DIR:?}" install <package>`。`$SEMICLAW_SKILL_DIR` 由本次调用注入，指向镜像内技能或宿主机来源技能的实际暂存目录。如果尚无 `.venv`，先用 `python3 -m venv --without-pip "${SEMICLAW_SKILL_DIR:?}/.venv"` 创建；自定义镜像没有 uv 时，先用该虚拟环境的 Python 执行 `-m ensurepip --upgrade`，成功后再执行 `-m pip install <package>`。随后仍带同一 `skill_name` 执行原命令。命令中的 `${SEMICLAW_SKILL_DIR:?}` 会在变量缺失或为空时终止，避免误用根目录。真正的只读挂载仍需先配置可写的技能环境，root、uv 和 pip 都无法绕过挂载限制。
 
 沙箱归本会话独占且以 root 运行，这类写入落在会话自己的容器里、随会话销毁，不会回流到其他会话启动用的镜像；因此不再需要 `/workspace` 下的包 overlay，技能的包也不会被拆到两个位置。Node 的 `NODE_PATH` 支持 CommonJS；自建 ESM 脚本应在可写项目目录安装依赖，或调用技能目录里的原始脚本，不能假定 NODE_PATH 支持 ESM。
 
@@ -144,7 +144,7 @@ Shell 的补齐能力：
 3. 由 `user` 可写、可进入的 `/workspace`；标准镜像预建 input、output。
 4. 安装流程维护的只读技能目录；普通会话不能修改它。
 
-当前 `docker/Dockerfile.sandbox` 已满足账号和工作区所有权要求。本次现场检查发现，本机缓存的 `wechatopenai/weknora-sandbox:main` 仍只有名为 `sandbox` 的 UID 1000 账号，`/workspace` 由 root 所有。这类旧镜像不能靠换工具解决，必须使用当前 Dockerfile 重建镜像，并更新所用模板/镜像及后续会话。
+当前 `docker/Dockerfile.sandbox` 已满足账号和工作区所有权要求。本次现场检查发现，本机缓存的 `vagawind/semiclaw-sandbox:main` 仍只有名为 `sandbox` 的 UID 1000 账号，`/workspace` 由 root 所有。这类旧镜像不能靠换工具解决，必须使用当前 Dockerfile 重建镜像，并更新所用模板/镜像及后续会话。
 
 不要在运行时自动提权、递归 chown、移动目录或删除链接来兼容旧镜像。已有会话中的错误所有权、目录链接会明确报错并保留数据；必要的恢复应由管理员检查具体路径后执行。切换到新模板前，应先保存所需附件和产物。
 

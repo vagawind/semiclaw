@@ -9,8 +9,8 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/Tencent/WeKnora/internal/types"
-	"github.com/Tencent/WeKnora/internal/types/interfaces"
+	"github.com/vagawind/semiclaw/internal/types"
+	"github.com/vagawind/semiclaw/internal/types/interfaces"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/require"
 )
@@ -35,7 +35,7 @@ func TestEmbedFramePolicy(t *testing.T) {
 	webDir := t.TempDir()
 	require.NoError(t, os.WriteFile(filepath.Join(webDir, "index.html"), []byte("main SPA"), 0o600))
 	require.NoError(t, os.WriteFile(filepath.Join(webDir, "embed.html"), []byte("embed entry"), 0o600))
-	t.Setenv("WEKNORA_WEB_DIR", webDir)
+	t.Setenv("SEMICLAW_WEB_DIR", webDir)
 	r := gin.New()
 	r.Use(embedFrameAncestorsMiddleware(framePolicyService{}))
 	serveFrontendStatic(r)

@@ -23,13 +23,13 @@ import (
 	"github.com/gorilla/websocket"
 	"github.com/redis/go-redis/v9"
 
-	"github.com/Tencent/WeKnora/internal/application/service"
-	"github.com/Tencent/WeKnora/internal/common/redislock"
-	"github.com/Tencent/WeKnora/internal/errors"
-	"github.com/Tencent/WeKnora/internal/logger"
-	"github.com/Tencent/WeKnora/internal/middleware"
-	"github.com/Tencent/WeKnora/internal/sandbox"
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/application/service"
+	"github.com/vagawind/semiclaw/internal/common/redislock"
+	"github.com/vagawind/semiclaw/internal/errors"
+	"github.com/vagawind/semiclaw/internal/logger"
+	"github.com/vagawind/semiclaw/internal/middleware"
+	"github.com/vagawind/semiclaw/internal/sandbox"
+	"github.com/vagawind/semiclaw/internal/types"
 )
 
 const (
@@ -508,7 +508,7 @@ var (
 )
 
 func desktopSlotKey(sessionID string) string {
-	return "weknora:desktop-slot:" + sessionID
+	return "semiclaw:desktop-slot:" + sessionID
 }
 
 // desktopLimiter caps the session to one desktop within this process.

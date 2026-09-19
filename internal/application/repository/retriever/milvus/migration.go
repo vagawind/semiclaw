@@ -15,7 +15,7 @@ import (
 	"github.com/milvus-io/milvus/client/v2/index"
 	client "github.com/milvus-io/milvus/client/v2/milvusclient"
 
-	"github.com/Tencent/WeKnora/internal/logger"
+	"github.com/vagawind/semiclaw/internal/logger"
 )
 
 const defaultMultilingualMigrationBatchSize = 64
@@ -56,7 +56,7 @@ type MigrationSummary struct {
 	MigratedRows        int
 }
 
-// MigrateLegacyCollections copies all legacy WeKnora Milvus collections to a
+// MigrateLegacyCollections copies all legacy SemiClaw Milvus collections to a
 // new multilingual collection base. Existing dense vectors are reused; only
 // Milvus's BM25 sparse vectors are regenerated from content and language.
 //

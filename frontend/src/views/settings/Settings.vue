@@ -36,7 +36,7 @@
                         <line x1="2.94" y1="12.5" x2="15.06" y2="12.5" stroke="currentColor" stroke-width="1.2"
                           stroke-linecap="round" />
                       </svg>
-                      <!-- WeKnora Cloud 使用自定义 W 图标 -->
+                      <!-- SemiClaw Cloud 使用自定义 W 图标 -->
                       <svg v-else-if="item.key === 'weknoracloud'" width="17" height="17" viewBox="0 0 18 18"
                         fill="none" xmlns="http://www.w3.org/2000/svg" class="nav-icon">
                         <rect x="1.5" y="1.5" width="15" height="15" rx="3.5" stroke="currentColor" stroke-width="1.2"
@@ -104,9 +104,9 @@
                     <OllamaSettings />
                   </div>
 
-                  <!-- WeKnora Cloud -->
+                  <!-- SemiClaw Cloud -->
                   <div v-if="currentSection === 'weknoracloud'" class="section">
-                    <WeKnoraCloudSettings />
+                    <SemiClawCloudSettings />
                   </div>
 
                   <!-- 模型配置 -->
@@ -252,7 +252,7 @@ import ParserEngineSettings from './ParserEngineSettings.vue'
 import StorageBackendSettings from './StorageBackendSettings.vue'
 import SandboxSettings from './SandboxSettings.vue'
 import SkillSettings from './SkillSettings.vue'
-import WeKnoraCloudSettings from './WeKnoraCloudSettings.vue'
+import SemiClawCloudSettings from './SemiClawCloudSettings.vue'
 import TenantMembers from './TenantMembers.vue'
 import SystemSettings from '@/views/system/SystemSettings.vue'
 import RuntimeQueues from '@/views/system/RuntimeQueues.vue'
@@ -374,7 +374,7 @@ const navItems = computed(() => {
   const all: NavItem[] = [
     { key: 'general', icon: 'setting', label: t('general.title') },
     { key: 'ollama', icon: 'server', label: 'Ollama' },
-    { key: 'weknoracloud', icon: '', label: 'WeKnora Cloud' },
+    { key: 'weknoracloud', icon: '', label: 'SemiClaw Cloud' },
     { key: 'models', icon: 'control-platform', label: t('settings.modelManagement') },
     { key: 'websearch', icon: 'search', label: t('settings.webSearchConfig') },
     { key: 'chathistory', icon: 'chat', label: t('chatHistorySettings.title') },

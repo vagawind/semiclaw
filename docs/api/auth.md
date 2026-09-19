@@ -6,7 +6,7 @@ OIDC 完整调用流程见 [../OIDC认证调用流程.md](../OIDC认证调用流
 
 ## 说明
 
-WeKnora 的 `/auth/*` 端点本身**不需要 X-API-Key**，但部分端点需要在 `Authorization: Bearer <token>` 头中携带由 `/auth/login` 或 `/auth/oidc/callback` 返回的 JWT：
+SemiClaw 的 `/auth/*` 端点本身**不需要 X-API-Key**，但部分端点需要在 `Authorization: Bearer <token>` 头中携带由 `/auth/login` 或 `/auth/oidc/callback` 返回的 JWT：
 
 | 端点 | 鉴权方式 |
 | --- | --- |
@@ -15,7 +15,7 @@ WeKnora 的 `/auth/*` 端点本身**不需要 X-API-Key**，但部分端点需�
 | `/auth/refresh` | refresh_token（请求体携带） |
 | `/auth/validate` `/auth/me` `/auth/logout` `/auth/change-password` `/auth/switch-tenant` `/auth/me/preferences` | Bearer JWT |
 
-注册接口可通过环境变量 `DISABLE_REGISTRATION=true` 关闭。密码策略默认 8–32 位且同时包含字母与数字；部署可通过环境变量 `WEKNORA_AUTH_COMPLEX_PASSWORD_ENABLED` 或系统设置 `auth.complex_password_enabled` 要求额外包含大小写字母与特殊字符。当前策略见 `GET /auth/config`。
+注册接口可通过环境变量 `DISABLE_REGISTRATION=true` 关闭。密码策略默认 8–32 位且同时包含字母与数字；部署可通过环境变量 `SEMICLAW_AUTH_COMPLEX_PASSWORD_ENABLED` 或系统设置 `auth.complex_password_enabled` 要求额外包含大小写字母与特殊字符。当前策略见 `GET /auth/config`。
 
 ## 端点一览
 
@@ -160,7 +160,7 @@ curl --location 'http://localhost:8080/api/v1/auth/oidc/config'
 {
     "success": true,
     "enabled": true,
-    "provider_display_name": "WeKnora SSO"
+    "provider_display_name": "SemiClaw SSO"
 }
 ```
 
@@ -187,7 +187,7 @@ curl --location 'http://localhost:8080/api/v1/auth/oidc/url?redirect=%2Fdashboar
 ```json
 {
     "success": true,
-    "provider_display_name": "WeKnora SSO",
+    "provider_display_name": "SemiClaw SSO",
     "authorization_url": "https://idp.example.com/oauth/authorize?client_id=...&state=...",
     "state": "abcdef..."
 }

@@ -5,7 +5,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/types"
 )
 
 type anthropicTool struct {

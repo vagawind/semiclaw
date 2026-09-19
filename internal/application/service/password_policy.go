@@ -6,13 +6,13 @@ import (
 	"strings"
 	"unicode/utf8"
 
-	"github.com/Tencent/WeKnora/internal/config"
-	"github.com/Tencent/WeKnora/internal/types/interfaces"
+	"github.com/vagawind/semiclaw/internal/config"
+	"github.com/vagawind/semiclaw/internal/types/interfaces"
 )
 
 const (
 	authComplexPasswordEnabledSettingKey = "auth.complex_password_enabled"
-	authComplexPasswordEnabledEnvName    = "WEKNORA_AUTH_COMPLEX_PASSWORD_ENABLED"
+	authComplexPasswordEnabledEnvName    = "SEMICLAW_AUTH_COMPLEX_PASSWORD_ENABLED"
 
 	upperChars           = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 	lowerChars           = "abcdefghijklmnopqrstuvwxyz"

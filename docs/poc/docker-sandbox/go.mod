@@ -1,4 +1,4 @@
-module github.com/Tencent/WeKnora/docs/poc/docker-sandbox
+module github.com/vagawind/semiclaw/docs/poc/docker-sandbox
 
 go 1.26.0
 

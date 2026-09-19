@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/Tencent/WeKnora/internal/browserskill"
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/browserskill"
+	"github.com/vagawind/semiclaw/internal/types"
 	"github.com/gin-gonic/gin"
 )
 

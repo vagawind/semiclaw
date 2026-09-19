@@ -7,8 +7,8 @@ import (
 	"os"
 	"testing"
 
-	"github.com/Tencent/WeKnora/internal/types"
-	secutils "github.com/Tencent/WeKnora/internal/utils"
+	"github.com/vagawind/semiclaw/internal/types"
+	secutils "github.com/vagawind/semiclaw/internal/utils"
 )
 
 // TestMain whitelists loopback for the httptest servers and the default base

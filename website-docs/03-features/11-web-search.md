@@ -137,7 +137,7 @@ flowchart TD
 
 ### 行为调整与回归验证
 
-| 行为 | 调整前 WeKnora Agent | 调整后 |
+| 行为 | 调整前 SemiClaw Agent | 调整后 |
 | --- | --- | --- |
 | 搜索前置 | 强制两个 KB 工具，即使未注册 | 根据任务与可用来源选择 |
 | 搜索附带处理 | 可自动入临时 KB 做 RAG | 直接返回搜索证据，按需读页 |
@@ -152,9 +152,9 @@ flowchart TD
 
 ## docker/searxng 的角色
 
-SearXNG 是自托管的元搜索引擎（聚合上游多个引擎），WeKnora 把它作为**免 API Key 的默认可选搜索后端**打包在 `docker-compose.yml` 的 `searxng` / `full` profile 中：
+SearXNG 是自托管的元搜索引擎（聚合上游多个引擎），SemiClaw 把它作为**免 API Key 的默认可选搜索后端**打包在 `docker-compose.yml` 的 `searxng` / `full` profile 中：
 
-- `docker/searxng/settings.yml`：关键定制包括 `search.formats` 开启 `json`（WeKnora 后端走 `/search?format=json`）、`server.limiter: false`（关闭 IP 限流，否则后端会被节流；若公开部署需重新开启并配置放行名单）、`secret_key` 由入口脚本以 `SEARXNG_SECRET` 环境变量替换。
+- `docker/searxng/settings.yml`：关键定制包括 `search.formats` 开启 `json`（SemiClaw 后端走 `/search?format=json`）、`server.limiter: false`（关闭 IP 限流，否则后端会被节流；若公开部署需重新开启并配置放行名单）、`secret_key` 由入口脚本以 `SEARXNG_SECRET` 环境变量替换。
 - `searxng-init` 辅助容器先把模板复制进独立 volume，避免 SearXNG 入口脚本原地 sed 修改把解析后的密钥写回仓库工作区。
 - 应用容器默认把 `searxng` 主机名并入 SSRF 白名单：`SSRF_WHITELIST_EXTRA=searxng,qdrant,...`，因此租户配置 `base_url: http://searxng:8080` 开箱即用。
 - 客户端超时 12s（`defaultSearxngTimeout`），略高于 SearXNG 的 `outgoing.max_request_timeout: 10.0`，让上游慢引擎表现为 SearXNG 侧错误而非客户端取消。`ValidateSearxngBaseURL` 在"保存"与"使用"两处共享，保证配置校验一致。

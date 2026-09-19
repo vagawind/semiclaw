@@ -38,7 +38,7 @@ graph TD
 
 ## 依赖注入：internal/container（uber/dig） {#_2-依赖注入-internal-container-uber-dig}
 
-WeKnora 使用 **`go.uber.org/dig` v1.19.0**（构造函数注入容器，非代码生成的 wire）。入口是 `internal/container/container.go` 的 `BuildContainer`：
+SemiClaw 使用 **`go.uber.org/dig` v1.19.0**（构造函数注入容器，非代码生成的 wire）。入口是 `internal/container/container.go` 的 `BuildContainer`：
 
 ```go
 // cmd/server/main.go
@@ -92,7 +92,7 @@ if redisAvailable {
 }
 ```
 
-6 个 Asynq worker 池的并发度可经 system settings / 环境变量调整（默认 Core=8、PostProcess=2、Enrichment=12、Maintenance=4、Shared=6、Wiki=8，`WEKNORA_ASYNQ_*_CONCURRENCY`）；队列拓扑定义在 `internal/types/task.go`（default、chat_attachment、postprocess、summary、multimodal、graph、question、memory、sync、low/maintenance、wiki 等，包含自动标签与记忆抽取）。
+6 个 Asynq worker 池的并发度可经 system settings / 环境变量调整（默认 Core=8、PostProcess=2、Enrichment=12、Maintenance=4、Shared=6、Wiki=8，`SEMICLAW_ASYNQ_*_CONCURRENCY`）；队列拓扑定义在 `internal/types/task.go`（default、chat_attachment、postprocess、summary、multimodal、graph、question、memory、sync、low/maintenance、wiki 等，包含自动标签与记忆抽取）。
 
 ### 资源清理与工厂 {#_2-3-资源清理与工厂}
 
@@ -112,7 +112,7 @@ flowchart TD
     D --> E["container.BuildContainer(runtime.GetContainer())<br/>DI 装配: DB 迁移 / Redis / Asynq / Router..."]
     E --> F["runStartupBootstrap(c) — best-effort, 失败仅告警"]
     F --> F1["TenantAPIKeyService.BackfillMissingKeyHashes<br/>(迁移 000065 遗留 API Key 哈希回填)"]
-    F --> F2["bootstrapSystemAdmin<br/>WEKNORA_BOOTSTRAP_SYSTEM_ADMIN_EMAIL 指定的用户<br/>在无系统管理员时晋升为超管 (幂等)"]
+    F --> F2["bootstrapSystemAdmin<br/>SEMICLAW_BOOTSTRAP_SYSTEM_ADMIN_EMAIL 指定的用户<br/>在无系统管理员时晋升为超管 (幂等)"]
     F --> G["c.Invoke(cfg, router, resourceCleaner, systemSettingSvc)"]
     G --> H["listenWithRetry(addr, 10 次, 300ms 指数退避, 上限 3s)"]
     H --> I["systemSettingSvc.SubscribeRedis(ctx)<br/>订阅 system_settings 变更 (Lite 模式 no-op)"]
@@ -138,7 +138,7 @@ flowchart TD
 
 `internal/router/router.go` 的 `NewRouter(params RouterParams)`（`RouterParams` 为 `dig.In` 结构体）按以下顺序装配，**顺序即安全语义**：
 
-1. `gin.New()` + `SetTrustedProxies`（`WEKNORA_TRUSTED_PROXIES`，默认仅信任回环与私网段，防止伪造 `X-Forwarded-For` 绕过按 IP 限流）；
+1. `gin.New()` + `SetTrustedProxies`（`SEMICLAW_TRUSTED_PROXIES`，默认仅信任回环与私网段，防止伪造 `X-Forwarded-For` 绕过按 IP 限流）；
 2. 全局中间件：`cors` → `RequestID` → `Language` → `Logger` → `Recovery` → `ErrorHandler`；
 3. 免认证端点：`GET /health`；非 release 模式挂载 `/swagger/*any`；
 4. Embed 页面 `frame-ancestors` CSP 中间件；Lite 版内嵌前端静态资源（`handler.Edition == "lite"`）；
@@ -190,7 +190,7 @@ kb.PUT("/:id", g.OwnedKBOrAdmin(), handler.UpdateKnowledgeBase)
 | --- | --- | --- |
 | `cors.New`（gin-contrib） | router.go | 允许 `Authorization`、`X-API-Key`、`X-Tenant-ID`、`X-Embed-Session` 等头；MaxAge 12h |
 | `RequestID()` | logger.go | 复用请求头 `X-Request-ID` 或生成 UUID，写入 gin context 与 `Request.Context()`，贯穿日志/追踪 |
-| `Language()` | language.go | 决定文档处理语言：`WEKNORA_LANGUAGE` 环境变量 > `Accept-Language` 首个标签 > 默认 `zh-CN` |
+| `Language()` | language.go | 决定文档处理语言：`SEMICLAW_LANGUAGE` 环境变量 > `Accept-Language` 首个标签 > 默认 `zh-CN` |
 | `Logger()` | logger.go | 请求/响应全量日志；正则脱敏密码/令牌字段、截断 base64 图片 data URL、SSE 响应标记跳过、单条上限 10KB |
 | `Recovery()` | recovery.go | panic 捕获 + 堆栈记录 + 500 响应 |
 | `ErrorHandler()` | error_handler.go | 读取 `c.Errors` 末位错误：`*errors.AppError` 按其 `HTTPCode` 返回 `{success:false, error:{code,message,details}}` 统一信封；其余 500 |

@@ -3,7 +3,7 @@ package tools
 import (
 	"html"
 
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/types"
 )
 
 func browserDescription(instructions []string) string {

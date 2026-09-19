@@ -23,11 +23,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Tencent/WeKnora/internal/searchutil"
-	secutils "github.com/Tencent/WeKnora/internal/utils"
+	"github.com/vagawind/semiclaw/internal/searchutil"
+	secutils "github.com/vagawind/semiclaw/internal/utils"
 
-	"github.com/Tencent/WeKnora/internal/types"
-	"github.com/Tencent/WeKnora/internal/types/interfaces"
+	"github.com/vagawind/semiclaw/internal/types"
+	"github.com/vagawind/semiclaw/internal/types/interfaces"
 	"github.com/google/uuid"
 )
 
@@ -1010,7 +1010,7 @@ func downloadImage(ctx context.Context, client *http.Client, remoteURL string) (
 		return nil, "", fmt.Errorf("create request: %w", err)
 	}
 	// Some CDNs require a browser-like User-Agent.
-	req.Header.Set("User-Agent", "Mozilla/5.0 (compatible; WeKnora/1.0)")
+	req.Header.Set("User-Agent", "Mozilla/5.0 (compatible; SemiClaw/1.0)")
 
 	resp, err := client.Do(req)
 	if err != nil {

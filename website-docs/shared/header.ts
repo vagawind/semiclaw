@@ -6,7 +6,7 @@ export const siteNavigation = [
   { label: '企业部署', href: '/#enterprise', badge: '' },
   { label: '文档', href: '/docs/', badge: '' },
 ];
-export const repositoryUrl = 'https://github.com/Tencent/WeKnora';
+export const repositoryUrl = 'https://github.com/vagawind/semiclaw';
 export const headerIcons: Record<string, string> = {
   sun: 'M16 12a4 4 0 1 1-8 0 4 4 0 0 1 8 0M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5',
   moon: 'M20.8 13A9 9 0 0 1 11 3.2 9 9 0 1 0 20.8 13Z',

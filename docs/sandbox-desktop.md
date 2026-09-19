@@ -1,6 +1,6 @@
 # 沙箱图形桌面
 
-会话沙箱可以带一个 XFCE 图形桌面（x11vnc + websockify），由 WeKnora 把 RFB 中继到对话侧栏的「桌面」页。本文说明它如何接入、为什么默认不创建，以及部署时必须避开的几条路径。
+会话沙箱可以带一个 XFCE 图形桌面（x11vnc + websockify），由 SemiClaw 把 RFB 中继到对话侧栏的「桌面」页。本文说明它如何接入、为什么默认不创建，以及部署时必须避开的几条路径。
 
 Docker 后端目前**没有**桌面路径；只有 CubeSandbox / E2B 的桌面模板能打开该页。集群与 CLI 标准模板见 [沙箱集群与标准模板](./sandbox-cluster.md)。
 
@@ -10,7 +10,7 @@ Docker 后端目前**没有**桌面路径；只有 CubeSandbox / E2B 的桌面�
 
 ```
 浏览器 (noVNC)
-  ⇄ WeKnora 中继          一次性票据鉴权、14 字节 RFB 握手、opcode 空闲判定
+  ⇄ SemiClaw 中继          一次性票据鉴权、14 字节 RFB 握手、opcode 空闲判定
   ⇄ 提供商网关            e2b-traffic-access-token + Authorization: Basic
   ⇄ 沙箱内 websockify :6080  ⇄ 127.0.0.1:5900 上的 x11vnc（-nopw）⇄ Xvfb ⇄ XFCE
 ```
@@ -28,8 +28,8 @@ Docker 后端目前**没有**桌面路径；只有 CubeSandbox / E2B 的桌面�
 
 | 变体 | 标签 | 用途 |
 | --- | --- | --- |
-| `desktop` | `wechatopenai/weknora-sandbox:<版本>-desktop` | E2B 桌面模板的基础镜像 |
-| `desktop-cube` | `wechatopenai/weknora-sandbox:<版本>-desktop-cube` | Cube 桌面模板（amd64，带 envd） |
+| `desktop` | `vagawind/semiclaw-sandbox:<版本>-desktop` | E2B 桌面模板的基础镜像 |
+| `desktop-cube` | `vagawind/semiclaw-sandbox:<版本>-desktop-cube` | Cube 桌面模板（amd64，带 envd） |
 
 E2B 桌面模板构建为 4 CPU / 4 GB；Cube 桌面模板的可写层是 8G（标准 CLI 模板是 1G）。不要把 Python 运行时或 `/workspace` 权限改成「桌面专用」——那会连带改掉所有沙箱镜像。
 
@@ -45,7 +45,7 @@ E2B 桌面模板构建为 4 CPU / 4 GB；Cube 桌面模板的可写层是 8G（�
 
 Cube 模板的 `exposedPorts` **只**含 envd 的 `49983`。Cube 会把这份列表用 eBPF static NAT 打到宿主机网卡，从而绕过 CubeProxy。
 
-WeKnora 访问 websockify 的方式和访问 envd 一样：CubeProxy Host `{port}-{id}.{domain}`（即 `6080-{sandboxId}.{domain}`）加上入站 token。不要把 6080 写进 `exposedPorts`：沙箱内 agent/技能默认以 root Exec，读得到 `/run/desktop/secret`，一旦 6080 暴露在宿主机上就可以跳过票据中继、空闲断开和审计。
+SemiClaw 访问 websockify 的方式和访问 envd 一样：CubeProxy Host `{port}-{id}.{domain}`（即 `6080-{sandboxId}.{domain}`）加上入站 token。不要把 6080 写进 `exposedPorts`：沙箱内 agent/技能默认以 root Exec，读得到 `/run/desktop/secret`，一旦 6080 暴露在宿主机上就可以跳过票据中继、空闲断开和审计。
 
 websockify 上的 Basic auth 只是叠加路径上的纵深防御，不是可以把端口公网化的理由。
 
@@ -59,7 +59,7 @@ websockify 上的 Basic auth 只是叠加路径上的纵深防御，不是可以
 
 票据是不透明随机串，不是 JWT，避免出现在网关 access log 和浏览器历史里。nginx 对该路径使用 `api_no_query` 日志格式，避免把 `ticket` 打进访问日志。
 
-每个会话同一时刻只允许一条桌面中继（跨副本用 Redis 槽位）。技能安装可能重建沙箱；中继用 Redis 键 `weknora:desktop-last-sandbox:`（TTL 7 天）记住上次连上的 sandbox ID，换 ID 时以 `SANDBOX_REBUILT` 关掉连接，避免多副本重连进空白桌面还以为 `/workspace` 还在。未配 Redis 时退回进程内存储，只适合单实例。
+每个会话同一时刻只允许一条桌面中继（跨副本用 Redis 槽位）。技能安装可能重建沙箱；中继用 Redis 键 `semiclaw:desktop-last-sandbox:`（TTL 7 天）记住上次连上的 sandbox ID，换 ID 时以 `SANDBOX_REBUILT` 关掉连接，避免多副本重连进空白桌面还以为 `/workspace` 还在。未配 Redis 时退回进程内存储，只适合单实例。
 
 ## 空闲断开
 

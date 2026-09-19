@@ -3,7 +3,7 @@ package agent
 import (
 	"testing"
 
-	"github.com/Tencent/WeKnora/internal/agent/skills"
+	"github.com/vagawind/semiclaw/internal/agent/skills"
 	"github.com/stretchr/testify/require"
 )
 

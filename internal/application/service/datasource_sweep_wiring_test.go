@@ -7,8 +7,8 @@ import (
 	"mime/multipart"
 	"testing"
 
-	"github.com/Tencent/WeKnora/internal/types"
-	"github.com/Tencent/WeKnora/internal/types/interfaces"
+	"github.com/vagawind/semiclaw/internal/types"
+	"github.com/vagawind/semiclaw/internal/types/interfaces"
 )
 
 // ── interface-embedding fakes: only the methods ingestItem touches are

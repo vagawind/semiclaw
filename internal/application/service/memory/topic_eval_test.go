@@ -8,8 +8,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Tencent/WeKnora/internal/models/chat"
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/models/chat"
+	"github.com/vagawind/semiclaw/internal/types"
 	"github.com/stretchr/testify/require"
 )
 
@@ -24,8 +24,8 @@ import (
 // checks the deterministic tiers and that the prompt still carries the rules
 // the boundary cases depend on. Given a real model it scores the model tier:
 //
-//	WEKNORA_MEMORY_EVAL_MODEL=<model id> \
-//	WEKNORA_MEMORY_EVAL_BASE_URL=... WEKNORA_MEMORY_EVAL_API_KEY=... \
+//	SEMICLAW_MEMORY_EVAL_MODEL=<model id> \
+//	SEMICLAW_MEMORY_EVAL_BASE_URL=... SEMICLAW_MEMORY_EVAL_API_KEY=... \
 //	go test ./internal/application/service/memory/ -run TestTopicMergeEval -v
 
 type topicEvalCase struct {
@@ -138,11 +138,11 @@ func TestExtractionPromptDoesNotDumpEveryTrackedTopic(t *testing.T) {
 }
 
 // TestTopicMergeEval scores the model tier against the golden set.
-// Skipped unless WEKNORA_MEMORY_EVAL_MODEL is set.
+// Skipped unless SEMICLAW_MEMORY_EVAL_MODEL is set.
 func TestTopicMergeEval(t *testing.T) {
-	modelID := strings.TrimSpace(os.Getenv("WEKNORA_MEMORY_EVAL_MODEL"))
+	modelID := strings.TrimSpace(os.Getenv("SEMICLAW_MEMORY_EVAL_MODEL"))
 	if modelID == "" {
-		t.Skip("set WEKNORA_MEMORY_EVAL_MODEL (plus base URL / API key) to score topic merging")
+		t.Skip("set SEMICLAW_MEMORY_EVAL_MODEL (plus base URL / API key) to score topic merging")
 	}
 	set := loadTopicEvalSet(t)
 	chatModel, err := newEvalChatModel(modelID)

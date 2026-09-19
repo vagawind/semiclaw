@@ -13,7 +13,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/types"
 )
 
 // MCPServiceResponse mirrors types.MCPService for response bodies, omitting

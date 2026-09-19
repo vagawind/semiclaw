@@ -12,8 +12,8 @@ import (
 
 	"github.com/gorilla/websocket"
 
-	"github.com/Tencent/WeKnora/internal/application/service"
-	"github.com/Tencent/WeKnora/internal/logger"
+	"github.com/vagawind/semiclaw/internal/application/service"
+	"github.com/vagawind/semiclaw/internal/logger"
 )
 
 // terminalBridge owns one upgraded terminal connection. Exactly one of the
@@ -328,7 +328,7 @@ func (b *terminalBridge) heartbeat(done chan struct{}) {
 // session slot. Callers must go through teardownWith so the reason is logged.
 func (b *terminalBridge) teardownLocked() {
 	b.cancel()
-	// Close only disconnects WeKnora from the PTY; the shell keeps running in
+	// Close only disconnects SemiClaw from the PTY; the shell keeps running in
 	// the sandbox and can be reattached provider-side.
 	if err := b.terminal.Session.Close(); err != nil {
 		logger.Debugf(b.ctx, "[sandbox-terminal] close failed session=%s: %v",

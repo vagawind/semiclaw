@@ -6,8 +6,8 @@ import (
 	"testing"
 	"time"
 
-	apperrors "github.com/Tencent/WeKnora/internal/errors"
-	"github.com/Tencent/WeKnora/internal/types"
+	apperrors "github.com/vagawind/semiclaw/internal/errors"
+	"github.com/vagawind/semiclaw/internal/types"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"gorm.io/gorm"
@@ -323,7 +323,7 @@ func (s *stubTenantServiceForModelDelete) SearchTenants(context.Context, string,
 func (s *stubTenantServiceForModelDelete) GetTenantByIDForUser(context.Context, uint64, string) (*types.Tenant, error) {
 	return s.tenant, nil
 }
-func (s *stubTenantServiceForModelDelete) GetWeKnoraCloudCredentials(context.Context) *types.WeKnoraCloudCredentials {
+func (s *stubTenantServiceForModelDelete) GetSemiClawCloudCredentials(context.Context) *types.SemiClawCloudCredentials {
 	return nil
 }
 

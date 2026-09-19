@@ -1,6 +1,6 @@
-# WeKnora MCP Server
+# SemiClaw MCP Server
 
-这是一个 Model Context Protocol (MCP) 服务器，提供对 WeKnora 知识管理 API 的访问。
+这是一个 Model Context Protocol (MCP) 服务器，提供对 SemiClaw 知识管理 API 的访问。
 
 ## 快速开始
 
@@ -14,16 +14,16 @@ pip install -r requirements.txt
 ### 2. 配置环境变量
 ```bash
 # Linux/macOS
-export WEKNORA_BASE_URL="http://localhost:8080/api/v1"
-export WEKNORA_API_KEY="your_api_key_here"
+export SEMICLAW_BASE_URL="http://localhost:8080/api/v1"
+export SEMICLAW_API_KEY="your_api_key_here"
 
 # Windows PowerShell
-$env:WEKNORA_BASE_URL="http://localhost:8080/api/v1"
-$env:WEKNORA_API_KEY="your_api_key_here"
+$env:SEMICLAW_BASE_URL="http://localhost:8080/api/v1"
+$env:SEMICLAW_API_KEY="your_api_key_here"
 
 # Windows CMD
-set WEKNORA_BASE_URL=http://localhost:8080/api/v1
-set WEKNORA_API_KEY=your_api_key_here
+set SEMICLAW_BASE_URL=http://localhost:8080/api/v1
+set SEMICLAW_API_KEY=your_api_key_here
 ```
 
 ### 3. 运行服务器
@@ -42,10 +42,10 @@ python run_server.py
 python run.py
 
 # 直接运行服务器模块
-python weknora_mcp_server.py
+python semiclaw_mcp_server.py
 
 # 作为 Python 模块运行
-python -m weknora_mcp_server
+python -m semiclaw_mcp_server
 ```
 
 ### 4. 命令行选项
@@ -61,14 +61,14 @@ python main.py --version              # 显示版本信息
 ### 从 PyPI 安装
 
 ```bash
-pip install tencent-weknora-mcp
+pip install tencent-semiclaw-mcp
 # 或使用 uvx 直接运行（无需预安装）
-uvx --from tencent-weknora-mcp weknora-mcp-server
+uvx --from tencent-semiclaw-mcp semiclaw-mcp-server
 ```
 
-> 官方 PyPI 包名为 **`tencent-weknora-mcp`**（Tencent/WeKnora 维护，Trusted Publishing 发布）。
-> 旧社区包 `weknora-mcp` 请不要再使用。
-> 安装后命令行入口仍为 `weknora-mcp-server` / `weknora-server`。
+> 官方 PyPI 包名为 **`tencent-semiclaw-mcp`**（vagawind/semiclaw 维护，Trusted Publishing 发布）。
+> 旧社区包 `semiclaw-mcp` 请不要再使用。
+> 安装后命令行入口仍为 `semiclaw-mcp-server` / `semiclaw-server`。
 
 ### 开发模式安装
 ```bash
@@ -77,9 +77,9 @@ pip install -e .
 
 安装后可以使用命令行工具：
 ```bash
-weknora-mcp-server
+semiclaw-mcp-server
 # 或
-weknora-server
+semiclaw-server
 ```
 
 ### 生产模式安装

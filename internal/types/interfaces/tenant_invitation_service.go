@@ -3,7 +3,7 @@ package interfaces
 import (
 	"context"
 
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/types"
 )
 
 // TenantInvitationService is the business-logic layer over

@@ -15,15 +15,15 @@ import (
 	"github.com/milvus-io/milvus/client/v2/index"
 	client "github.com/milvus-io/milvus/client/v2/milvusclient"
 
-	"github.com/Tencent/WeKnora/internal/logger"
-	"github.com/Tencent/WeKnora/internal/types"
-	"github.com/Tencent/WeKnora/internal/types/interfaces"
+	"github.com/vagawind/semiclaw/internal/logger"
+	"github.com/vagawind/semiclaw/internal/types"
+	"github.com/vagawind/semiclaw/internal/types/interfaces"
 )
 
 const (
 	envMilvusCollection   = "MILVUS_COLLECTION"
 	envMilvusMetricType   = "MILVUS_METRIC_TYPE"
-	defaultCollectionName = "weknora_embeddings"
+	defaultCollectionName = "semiclaw_embeddings"
 	fieldSourceID         = "source_id"
 	fieldSourceType       = "source_type"
 	fieldChunkID          = "chunk_id"
@@ -83,7 +83,7 @@ func (m *milvusRepository) getCollectionName(dimension int) string {
 }
 
 // collectionAnalyzerMode inspects a collection once and caches whether it
-// uses the multilingual schema. Older WeKnora collections do not have the
+// uses the multilingual schema. Older SemiClaw collections do not have the
 // language field, so they must continue using the legacy upsert and search
 // paths until they are migrated.
 func (m *milvusRepository) collectionAnalyzerMode(
@@ -142,7 +142,7 @@ func (m *milvusRepository) ensureCollection(ctx context.Context, dimension int) 
 		// Define schema
 		schema := &entity.Schema{
 			CollectionName: collectionName,
-			Description:    fmt.Sprintf("WeKnora embeddings collection with dimension %d", dimension),
+			Description:    fmt.Sprintf("SemiClaw embeddings collection with dimension %d", dimension),
 			AutoID:         false,
 			Fields: []*entity.Field{
 				entity.NewField().
@@ -230,7 +230,7 @@ func (m *milvusRepository) ensureCollection(ctx context.Context, dimension int) 
 		log.Infof("[Milvus] Successfully created collection %s", collectionName)
 		m.collectionAnalyzerModes.Store(collectionName, collectionAnalyzerMulti)
 	} else {
-		// Existing collections may have been created by an older WeKnora
+		// Existing collections may have been created by an older SemiClaw
 		// version. Keep them readable and writable until they are migrated.
 		if _, err := m.collectionAnalyzerMode(ctx, collectionName); err != nil {
 			return err

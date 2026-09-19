@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/Tencent/WeKnora/internal/im"
-	"github.com/Tencent/WeKnora/internal/logger"
+	"github.com/vagawind/semiclaw/internal/im"
+	"github.com/vagawind/semiclaw/internal/logger"
 )
 
 // NewFactory returns an im.AdapterFactory for WeChat channels (iLink bot).

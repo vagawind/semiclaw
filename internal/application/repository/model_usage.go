@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/types"
 	"gorm.io/gorm"
 )
 

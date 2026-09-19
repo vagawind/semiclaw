@@ -2,7 +2,7 @@
 
 // Conformance test for E2B-protocol control planes.
 //
-// WeKnora treats "E2B protocol" as the single integration contract for remote
+// SemiClaw treats "E2B protocol" as the single integration contract for remote
 // sandboxes, so the same suite must pass against every implementation of it:
 // E2B Cloud, a self-hosted e2b-dev/infra, CubeSandbox's CubeAPI, or a
 // container-backed gateway such as Agent-Sandbox. It drives the same public
@@ -35,7 +35,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/types"
 )
 
 const (
@@ -90,7 +90,7 @@ func TestE2BCompatibleControlPlaneConformance(t *testing.T) {
 	})
 
 	// State is written under the artifact directory rather than an arbitrary
-	// path: that directory is the one WeKnora provisions and grants to the
+	// path: that directory is the one SemiClaw provisions and grants to the
 	// script account, so the assertion tests session persistence instead of a
 	// template's /workspace permissions.
 	counterPath := path.Join(SessionOutputRoot, "counter.txt")

@@ -5,8 +5,8 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/Tencent/WeKnora/internal/sandbox"
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/sandbox"
+	"github.com/vagawind/semiclaw/internal/types"
 	"github.com/stretchr/testify/require"
 )
 
@@ -113,9 +113,9 @@ func TestEffectiveTenantSkillsInjectsReadySkillsOnDocker(t *testing.T) {
 	fx.configs.entity.SandboxType = "docker"
 	fx.configs.entity.Config.SandboxType = "docker"
 	fx.configs.entity.Config.E2B = nil
-	fx.configs.entity.Config.Docker = &types.DockerSandboxConfig{Image: "weknora/sandbox:base", Host: host}
+	fx.configs.entity.Config.Docker = &types.DockerSandboxConfig{Image: "semiclaw/sandbox:base", Host: host}
 	fx.configs.entity.Config.SkillImage = &types.SkillImageConfig{
-		SnapshotID:       "weknora-skill/weknora-sk-cfg1-g1",
+		SnapshotID:       "semiclaw-skill/semiclaw-sk-cfg1-g1",
 		Generation:       1,
 		OwnerFingerprint: sandbox.SkillImageFingerprint("docker", "", host),
 	}

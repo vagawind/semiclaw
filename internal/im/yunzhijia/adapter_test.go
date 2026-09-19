@@ -13,7 +13,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/Tencent/WeKnora/internal/im"
+	"github.com/vagawind/semiclaw/internal/im"
 )
 
 type roundTripFunc func(*http.Request) (*http.Response, error)
@@ -25,8 +25,8 @@ func (f roundTripFunc) RoundTrip(req *http.Request) (*http.Response, error) {
 func TestVerifyCallbackSignature(t *testing.T) {
 	gin.SetMode(gin.TestMode)
 	msg := callbackMessage{
-		Type: 2, RobotID: "robot", RobotName: "WeKnora", OperatorOpenid: "user",
-		OperatorName: "User", Time: 123, MsgID: "message", Content: "@WeKnora hello",
+		Type: 2, RobotID: "robot", RobotName: "SemiClaw", OperatorOpenid: "user",
+		OperatorName: "User", Time: 123, MsgID: "message", Content: "@SemiClaw hello",
 	}
 	body, err := json.Marshal(msg)
 	if err != nil {
@@ -53,7 +53,7 @@ func TestVerifyCallbackSignature(t *testing.T) {
 
 func TestToIncomingMessageRequiresRobotMention(t *testing.T) {
 	msg := &callbackMessage{
-		Type: 2, RobotID: "robot", RobotName: "WeKnora", OperatorOpenid: "user",
+		Type: 2, RobotID: "robot", RobotName: "SemiClaw", OperatorOpenid: "user",
 		OperatorName: "User", Time: 123, MsgID: "message", Content: "hello",
 	}
 	if got := toIncomingMessage(t.Context(), msg); got != nil {
@@ -62,10 +62,10 @@ func TestToIncomingMessageRequiresRobotMention(t *testing.T) {
 }
 
 func TestCleanAtMentionRequiresNameBoundary(t *testing.T) {
-	if _, mentioned := cleanAtMention("@WeKnoraPlus hello", "WeKnora"); mentioned {
+	if _, mentioned := cleanAtMention("@SemiClawPlus hello", "SemiClaw"); mentioned {
 		t.Fatal("longer user name must not be treated as a robot mention")
 	}
-	if got, mentioned := cleanAtMention("@WeKnora：你好", "WeKnora"); !mentioned || got != "你好" {
+	if got, mentioned := cleanAtMention("@SemiClaw：你好", "SemiClaw"); !mentioned || got != "你好" {
 		t.Fatalf("cleanAtMention() = %q, %v; want 你好, true", got, mentioned)
 	}
 }

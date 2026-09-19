@@ -8,7 +8,7 @@
 //
 // They are separate from write_sandbox_file / edit_sandbox_file rather than a
 // loosening of them. Those write /workspace, which is wiped before the
-// snapshot; the skill tree lives under /opt/weknora/tenant/skills and is what
+// snapshot; the skill tree lives under /opt/semiclaw/tenant/skills and is what
 // the snapshot keeps. Sharing one tool would mean one path guard covering both
 // a per-session scratch area and the shared image.
 //
@@ -25,10 +25,10 @@ import (
 	"path"
 	"strings"
 
-	"github.com/Tencent/WeKnora/internal/logger"
-	"github.com/Tencent/WeKnora/internal/sandbox"
-	"github.com/Tencent/WeKnora/internal/types"
-	"github.com/Tencent/WeKnora/internal/utils"
+	"github.com/vagawind/semiclaw/internal/logger"
+	"github.com/vagawind/semiclaw/internal/sandbox"
+	"github.com/vagawind/semiclaw/internal/types"
+	"github.com/vagawind/semiclaw/internal/utils"
 )
 
 // SkillFileStore is the write surface these tools need. Production uses
@@ -49,7 +49,7 @@ var writeSkillFileTool = BaseTool{
 - This is the way to write a file into the skill tree. Do NOT use
   ` + "`shell_exec`" + ` with ` + "`cat`" + `, a heredoc, or ` + "`python -c`" + `:
   those hit a command-length cap and mangle quoting.
-- Use it for ` + "`.weknora/requirements.json`" + `, a small wrapper script, or a
+- Use it for ` + "`.semiclaw/requirements.json`" + `, a small wrapper script, or a
   patch to a shipped file.
 - ` + pythonQuoteGuidance + `
 

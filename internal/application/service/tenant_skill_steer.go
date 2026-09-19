@@ -7,9 +7,9 @@ import (
 	"time"
 	"unicode/utf8"
 
-	apperrors "github.com/Tencent/WeKnora/internal/errors"
-	"github.com/Tencent/WeKnora/internal/types"
-	"github.com/Tencent/WeKnora/internal/types/interfaces"
+	apperrors "github.com/vagawind/semiclaw/internal/errors"
+	"github.com/vagawind/semiclaw/internal/types"
+	"github.com/vagawind/semiclaw/internal/types/interfaces"
 	"github.com/google/uuid"
 )
 
@@ -22,7 +22,7 @@ func (s *TenantSkillService) withInstallSteerLock(
 	sessionID string,
 	fn func(context.Context) error,
 ) error {
-	return s.withSkillLock(ctx, "weknora-skill-steer-lock:"+sessionID, fn)
+	return s.withSkillLock(ctx, "semiclaw-skill-steer-lock:"+sessionID, fn)
 }
 
 // SkillInstallGuidance describes one instruction and its delivery state.

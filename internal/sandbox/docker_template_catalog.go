@@ -11,7 +11,7 @@
 //     nothing to do with sandboxes. Listing all of them would bury the one the
 //     admin needs, so the catalog only reports images that are recognisably
 //     sandbox templates.
-//   - Skill snapshots live in the same image store (weknora-skill/…), so they
+//   - Skill snapshots live in the same image store (semiclaw-skill/…), so they
 //     are subtracted the way Cube hides snap- IDs from GET /templates.
 //   - Making the standard template exist means pulling, which can take minutes
 //     on a cold host. The pull therefore runs in the background and the
@@ -30,9 +30,9 @@ import (
 	"github.com/moby/moby/client"
 )
 
-// dockerTemplateLabel marks an image as a WeKnora sandbox template. Images
+// dockerTemplateLabel marks an image as a SemiClaw sandbox template. Images
 // built by an operator can opt into the catalog by carrying it.
-const dockerTemplateLabel = "com.weknora.sandbox.template"
+const dockerTemplateLabel = "com.semiclaw.sandbox.template"
 
 // dockerImagePulls tracks background pulls per daemon endpoint and image, so a
 // second refresh reports the in-flight pull instead of starting another one.

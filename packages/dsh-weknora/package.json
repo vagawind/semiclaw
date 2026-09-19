@@ -1,31 +1,31 @@
 {
-  "name": "@wxg-prc-cpg/dsh-weknora",
+  "name": "@wxg-prc-cpg/dsh-semiclaw",
   "version": "0.1.0",
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
   },
-  "description": "WeKnora knowledge retrieval tools for DeepSeek Harness (dsh): semantic search, document reading and RAG/agent answers over your own knowledge bases.",
+  "description": "SemiClaw knowledge retrieval tools for DeepSeek Harness (dsh): semantic search, document reading and RAG/agent answers over your own knowledge bases.",
   "keywords": [
     "dsh",
     "dsh-plugin",
     "deepseek-harness",
     "cordis",
-    "weknora",
+    "semiclaw",
     "rag",
     "retrieval",
     "knowledge-base"
   ],
   "license": "MIT",
-  "author": "WeKnora",
-  "homepage": "https://github.com/Tencent/WeKnora/tree/main/packages/dsh-weknora",
+  "author": "SemiClaw",
+  "homepage": "https://github.com/vagawind/semiclaw/tree/main/packages/dsh-semiclaw",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Tencent/WeKnora.git",
-    "directory": "packages/dsh-weknora"
+    "url": "git+https://github.com/vagawind/semiclaw.git",
+    "directory": "packages/dsh-semiclaw"
   },
   "bugs": {
-    "url": "https://github.com/Tencent/WeKnora/issues"
+    "url": "https://github.com/vagawind/semiclaw/issues"
   },
   "type": "module",
   "main": "./dist/index.js",

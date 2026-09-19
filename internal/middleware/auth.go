@@ -11,10 +11,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Tencent/WeKnora/internal/config"
-	"github.com/Tencent/WeKnora/internal/logger"
-	"github.com/Tencent/WeKnora/internal/types"
-	"github.com/Tencent/WeKnora/internal/types/interfaces"
+	"github.com/vagawind/semiclaw/internal/config"
+	"github.com/vagawind/semiclaw/internal/logger"
+	"github.com/vagawind/semiclaw/internal/types"
+	"github.com/vagawind/semiclaw/internal/types/interfaces"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 )
@@ -52,7 +52,7 @@ var noAuthAPI = map[string][]string{
 	"/api/v1/auth/oidc/start":         {"GET"},
 	"/api/v1/auth/oidc/callback":      {"GET"},
 	// MCP OAuth provider redirect: the third-party authorization server
-	// redirects the browser here without a WeKnora bearer token. The request
+	// redirects the browser here without a SemiClaw bearer token. The request
 	// is authenticated by the opaque, single-use `state` parameter instead.
 	"/api/v1/mcp-oauth/callback": {"GET"},
 	"/api/v1/auth/refresh":       {"POST"},
@@ -619,7 +619,7 @@ func verifyExternalUserJWT(tokenString string, tenantID uint64, secret string) (
 	}
 	claims := jwt.MapClaims{}
 	parser := jwt.NewParser(
-		jwt.WithAudience("weknora"),
+		jwt.WithAudience("semiclaw"),
 		jwt.WithExpirationRequired(),
 		jwt.WithValidMethods([]string{jwt.SigningMethodHS256.Alg()}),
 	)

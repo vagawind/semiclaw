@@ -5,8 +5,8 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/Tencent/WeKnora/internal/config"
-	"github.com/Tencent/WeKnora/internal/types/interfaces"
+	"github.com/vagawind/semiclaw/internal/config"
+	"github.com/vagawind/semiclaw/internal/types/interfaces"
 )
 
 type stubComplexPasswordSettings struct {

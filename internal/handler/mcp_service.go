@@ -8,14 +8,14 @@ import (
 	"strings"
 	"unicode/utf8"
 
-	"github.com/Tencent/WeKnora/internal/agent/approval"
-	"github.com/Tencent/WeKnora/internal/errors"
-	"github.com/Tencent/WeKnora/internal/handler/dto"
-	"github.com/Tencent/WeKnora/internal/logger"
-	mcpsecurity "github.com/Tencent/WeKnora/internal/mcp"
-	"github.com/Tencent/WeKnora/internal/types"
-	"github.com/Tencent/WeKnora/internal/types/interfaces"
-	secutils "github.com/Tencent/WeKnora/internal/utils"
+	"github.com/vagawind/semiclaw/internal/agent/approval"
+	"github.com/vagawind/semiclaw/internal/errors"
+	"github.com/vagawind/semiclaw/internal/handler/dto"
+	"github.com/vagawind/semiclaw/internal/logger"
+	mcpsecurity "github.com/vagawind/semiclaw/internal/mcp"
+	"github.com/vagawind/semiclaw/internal/types"
+	"github.com/vagawind/semiclaw/internal/types/interfaces"
+	secutils "github.com/vagawind/semiclaw/internal/utils"
 	"github.com/gin-gonic/gin"
 )
 

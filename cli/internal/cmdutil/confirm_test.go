@@ -6,9 +6,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/Tencent/WeKnora/cli/internal/cmdutil"
-	"github.com/Tencent/WeKnora/cli/internal/iostreams"
-	"github.com/Tencent/WeKnora/cli/internal/testutil"
+	"github.com/vagawind/semiclaw/cli/internal/cmdutil"
+	"github.com/vagawind/semiclaw/cli/internal/iostreams"
+	"github.com/vagawind/semiclaw/cli/internal/testutil"
 )
 
 // The confirmation message verb must match the actual operation: an `edit`
@@ -73,11 +73,11 @@ func TestBuildRetryArgv_ScalarsAndSlices(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	got := cmdutil.BuildRetryArgv(cmd, []string{"weknora", "agent", "update", "ag_abc"},
+	got := cmdutil.BuildRetryArgv(cmd, []string{"semiclaw", "agent", "update", "ag_abc"},
 		"name", "add-kb", "format")
 	// Visit order is lexicographical among changed flags.
 	want := []string{
-		"weknora", "agent", "update", "ag_abc",
+		"semiclaw", "agent", "update", "ag_abc",
 		"--add-kb", "kb_new",
 		"--add-kb", "kb_old",
 		"--format", "json",
@@ -103,8 +103,8 @@ func TestBuildRetryArgv_SkipsFlagsNotInAllow(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	got := cmdutil.BuildRetryArgv(cmd, []string{"weknora", "model", "update", "m1"}, "name", "format")
-	want := []string{"weknora", "model", "update", "m1", "--name", "x", "-y"}
+	got := cmdutil.BuildRetryArgv(cmd, []string{"semiclaw", "model", "update", "m1"}, "name", "format")
+	want := []string{"semiclaw", "model", "update", "m1", "--name", "x", "-y"}
 	if len(got) != len(want) {
 		t.Fatalf("len got=%d want=%d\ngot=%v\nwant=%v", len(got), len(want), got, want)
 	}

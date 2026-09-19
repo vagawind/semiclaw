@@ -13,9 +13,9 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/Tencent/WeKnora/internal/middleware"
-	"github.com/Tencent/WeKnora/internal/types"
-	"github.com/Tencent/WeKnora/internal/types/interfaces"
+	"github.com/vagawind/semiclaw/internal/middleware"
+	"github.com/vagawind/semiclaw/internal/types"
+	"github.com/vagawind/semiclaw/internal/types/interfaces"
 )
 
 // stubResourceFileService resolves any storage reference to one fixed public URL.
@@ -77,7 +77,7 @@ func loadMessageContent(t *testing.T, router *gin.Engine, query string) string {
 }
 
 // Without the parameter, history must keep returning handles so existing clients
-// (including the WeKnora frontend, which proxies through /files) are unaffected.
+// (including the SemiClaw frontend, which proxies through /files) are unaffected.
 func TestLoadMessages_DefaultsToHandles(t *testing.T) {
 	router := newResourceURLTestRouter(t, []*types.Message{
 		{Content: "see ![fig](" + testResourceHandle + ")"},

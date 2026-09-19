@@ -6,9 +6,9 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/Tencent/WeKnora/internal/application/access"
-	"github.com/Tencent/WeKnora/internal/types"
-	"github.com/Tencent/WeKnora/internal/types/interfaces"
+	"github.com/vagawind/semiclaw/internal/application/access"
+	"github.com/vagawind/semiclaw/internal/types"
+	"github.com/vagawind/semiclaw/internal/types/interfaces"
 	"github.com/hibiken/asynq"
 	"github.com/stretchr/testify/require"
 )
@@ -16,13 +16,13 @@ import (
 func TestBuildKnowledgeIndexContentExcludesCustomMetadata(t *testing.T) {
 	t.Parallel()
 	knowledge := &types.Knowledge{
-		Title:          "  WeKnora Handbook  ",
+		Title:          "  SemiClaw Handbook  ",
 		CustomMetadata: types.JSON(`{"region":"Shanghai","department":"R&D"}`),
 	}
 
 	content := buildKnowledgeIndexContent(knowledge, "Chunk body")
 
-	require.Equal(t, "WeKnora Handbook\nChunk body", content)
+	require.Equal(t, "SemiClaw Handbook\nChunk body", content)
 	require.NotContains(t, content, "Shanghai")
 	require.NotContains(t, content, "department")
 }

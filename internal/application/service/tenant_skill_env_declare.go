@@ -7,8 +7,8 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/Tencent/WeKnora/internal/agent/skills"
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/agent/skills"
+	"github.com/vagawind/semiclaw/internal/types"
 )
 
 const (
@@ -55,7 +55,7 @@ var reservedEnvNames = map[string]bool{
 
 func init() {
 	// The names skill environment preparation actually writes, not a guessed prefix. Output
-	// dir, history root and skill dir currently share WEKNORA_SKILL_, but
+	// dir, history root and skill dir currently share SEMICLAW_SKILL_, but
 	// SESSION_INPUT_DIR does not; pulling the list from skills keeps the
 	// blacklist aligned when a fifth injected name appears.
 	for _, name := range skills.InjectedSandboxEnvVars() {
@@ -63,10 +63,10 @@ func init() {
 	}
 }
 
-// reservedEnvPrefix covers future WEKNORA_SKILL_* names the sandbox may start
+// reservedEnvPrefix covers future SEMICLAW_SKILL_* names the sandbox may start
 // injecting before the exact list above is updated. Credential names a skill
-// reads — WEKNORA_API_KEY, WEKNORA_BASE_URL, WEKNORA_HOST — are outside it.
-const reservedEnvPrefix = "WEKNORA_SKILL_"
+// reads — SEMICLAW_API_KEY, SEMICLAW_BASE_URL, SEMICLAW_HOST — are outside it.
+const reservedEnvPrefix = "SEMICLAW_SKILL_"
 
 // declaredSkillEnv is one entry as the installer agent wrote it.
 //

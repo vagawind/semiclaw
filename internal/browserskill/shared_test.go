@@ -418,13 +418,13 @@ func TestSharedDaemonCrashKeepsAuthorizationAndPausesTasks(t *testing.T) {
 func TestSlowDaemonStartupDoesNotBlockStatusOrCancelledWaiter(t *testing.T) {
 	m, ctx := sharedTestManager(t)
 	gate := t.TempDir()
-	t.Setenv("WEKNORA_BSK_START_GATE", gate)
-	t.Setenv("WEKNORA_BSK_NATIVE", m.binary)
+	t.Setenv("SEMICLAW_BSK_START_GATE", gate)
+	t.Setenv("SEMICLAW_BSK_NATIVE", m.binary)
 	wrapper := gate + "/delayed-bsk"
 	require.NoError(t, os.WriteFile(wrapper, []byte(`#!/bin/sh
-printf ready > "$WEKNORA_BSK_START_GATE/ready"
-while [ ! -e "$WEKNORA_BSK_START_GATE/release" ]; do sleep 0.02; done
-exec "$WEKNORA_BSK_NATIVE" "$@"
+printf ready > "$SEMICLAW_BSK_START_GATE/ready"
+while [ ! -e "$SEMICLAW_BSK_START_GATE/release" ]; do sleep 0.02; done
+exec "$SEMICLAW_BSK_NATIVE" "$@"
 `), 0o700))
 	m.binary = wrapper
 	t.Cleanup(func() { _ = os.WriteFile(gate+"/release", nil, 0o600) })

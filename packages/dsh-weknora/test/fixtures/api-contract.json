@@ -1,13 +1,13 @@
 {
   "$comment": [
-    "The exact WeKnora API calls this plugin makes, and the response fields it reads.",
+    "The exact SemiClaw API calls this plugin makes, and the response fields it reads.",
     "test/contract.test.mjs asserts the plugin still emits these calls;",
-    "contract/contract_test.go asserts the WeKnora server still accepts them and still",
+    "contract/contract_test.go asserts the SemiClaw server still accepts them and still",
     "serves those response fields, so a rename on either side fails CI instead of a user's agent."
   ],
   "calls": [
     {
-      "tool": "weknora_list_knowledge_bases",
+      "tool": "semiclaw_list_knowledge_bases",
       "method": "GET",
       "path": "/api/v1/knowledge-bases",
       "query": { "resource_urls": "public" },
@@ -15,7 +15,7 @@
       "goRequestType": null
     },
     {
-      "tool": "weknora_search",
+      "tool": "semiclaw_search",
       "method": "POST",
       "path": "/api/v1/knowledge-search",
       "query": { "resource_urls": "public" },
@@ -26,7 +26,7 @@
       "goRequestType": "session.SearchKnowledgeRequest"
     },
     {
-      "tool": "weknora_search",
+      "tool": "semiclaw_search",
       "method": "GET",
       "path": "/api/v1/knowledge/search",
       "query": { "keyword": "默认的检索阈值是多少", "limit": "8", "resource_urls": "public" },
@@ -34,7 +34,7 @@
       "goRequestType": null
     },
     {
-      "tool": "weknora_read_document",
+      "tool": "semiclaw_read_document",
       "method": "GET",
       "path": "/api/v1/chunks/doc-retrieval-pipeline",
       "query": { "page": "1", "page_size": "5", "resource_urls": "public" },
@@ -42,7 +42,7 @@
       "goRequestType": "types.Pagination"
     },
     {
-      "tool": "weknora_read_document",
+      "tool": "semiclaw_read_document",
       "method": "GET",
       "path": "/api/v1/knowledge/doc-retrieval-pipeline",
       "query": { "resource_urls": "public" },
@@ -50,7 +50,7 @@
       "goRequestType": null
     },
     {
-      "tool": "weknora_ask",
+      "tool": "semiclaw_ask",
       "method": "POST",
       "path": "/api/v1/sessions",
       "query": { "resource_urls": "public" },
@@ -60,7 +60,7 @@
       "goRequestType": "session.CreateSessionRequest"
     },
     {
-      "tool": "weknora_ask",
+      "tool": "semiclaw_ask",
       "method": "POST",
       "path": "/api/v1/knowledge-chat/session-mock-1",
       "query": { "resource_urls": "public" },
@@ -72,7 +72,7 @@
       "goRequestType": "session.CreateKnowledgeQARequest"
     },
     {
-      "tool": "weknora_ask",
+      "tool": "semiclaw_ask",
       "method": "POST",
       "path": "/api/v1/agent-chat/s1",
       "query": { "resource_urls": "public" },

@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/Tencent/WeKnora/internal/datasource"
-	"github.com/Tencent/WeKnora/internal/logger"
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/datasource"
+	"github.com/vagawind/semiclaw/internal/logger"
+	"github.com/vagawind/semiclaw/internal/types"
 )
 
 // engine.go holds the single generic streaming sync engine shared by the wiki
@@ -22,7 +22,7 @@ import (
 //     is skipped, keeping the cursor entry.
 //   - A fetch failure does NOT advance the cursor: the prior edit time is
 //     retained so the node is retried next run instead of being permanently
-//     skipped on a transient export failure (Tencent/WeKnora#2136). This now
+//     skipped on a transient export failure (vagawind/semiclaw#2136). This now
 //     also holds for the FetchIncremental path (previously it advanced the
 //     cursor before fetching, a latent #2136 bug).
 //   - Logs use the "stream progress/summary" wording uniformly; the
@@ -155,7 +155,7 @@ func runSync[N any](
 				// Do NOT advance the cursor: the content was never fetched.
 				// Retain the prior edit time (if any) so prev != current next
 				// run and the node is retried, instead of being permanently
-				// skipped on a transient export failure (Tencent/WeKnora#2136).
+				// skipped on a transient export failure (vagawind/semiclaw#2136).
 				if hadPrev {
 					newTimes[resourceID][tok] = prevEdit
 				}

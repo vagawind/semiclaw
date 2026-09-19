@@ -6,9 +6,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Tencent/WeKnora/internal/application/repository"
-	"github.com/Tencent/WeKnora/internal/types"
-	"github.com/Tencent/WeKnora/internal/types/interfaces"
+	"github.com/vagawind/semiclaw/internal/application/repository"
+	"github.com/vagawind/semiclaw/internal/types"
+	"github.com/vagawind/semiclaw/internal/types/interfaces"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/require"
 	"gorm.io/driver/postgres"
@@ -23,9 +23,9 @@ import (
 //
 // Opt in with a disposable database that has pgvector installed.
 func TestVectorSearchRanksInPostgres(t *testing.T) {
-	dsn := os.Getenv("WEKNORA_MEMORY_TEST_POSTGRES_DSN")
+	dsn := os.Getenv("SEMICLAW_MEMORY_TEST_POSTGRES_DSN")
 	if dsn == "" {
-		t.Skip("set WEKNORA_MEMORY_TEST_POSTGRES_DSN to run PostgreSQL integration tests")
+		t.Skip("set SEMICLAW_MEMORY_TEST_POSTGRES_DSN to run PostgreSQL integration tests")
 	}
 	admin, err := gorm.Open(postgres.Open(dsn), &gorm.Config{Logger: logger.Discard})
 	require.NoError(t, err)

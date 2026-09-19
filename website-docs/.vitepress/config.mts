@@ -57,13 +57,13 @@ function tokenize(text: string): string[] {
   return tokens
 }
 
-const repo = 'https://github.com/Tencent/WeKnora'
+const repo = 'https://github.com/vagawind/semiclaw'
 
 export default withMermaid(
   defineConfig({
-    title: 'WeKnora',
-    titleTemplate: ':title · WeKnora 文档',
-    description: 'WeKnora（维娜拉）官方文档：部署、配置、功能说明、API 参考与二次开发',
+    title: 'SemiClaw',
+    titleTemplate: ':title · SemiClaw 文档',
+    description: 'SemiClaw（维娜拉）官方文档：部署、配置、功能说明、API 参考与二次开发',
     lang: 'zh-CN',
     base: '/docs/',
     cleanUrls: true,
@@ -80,7 +80,7 @@ export default withMermaid(
       ['link', { rel: 'icon', href: '/docs/favicon.ico', type: 'image/x-icon' }],
       ['meta', { name: 'theme-color', content: '#101f38' }],
       ['meta', { property: 'og:type', content: 'website' }],
-      ['meta', { property: 'og:title', content: 'WeKnora 文档' }],
+      ['meta', { property: 'og:title', content: 'SemiClaw 文档' }],
       [
         'meta',
         {
@@ -105,11 +105,11 @@ export default withMermaid(
 
     themeConfig: {
       logoLink: { link: '/', target: '_self' },
-      siteTitle: 'WeKnora',
+      siteTitle: 'SemiClaw',
 
       nav: [],
 
-      weknoraVersion: repoVersionLabel,
+      semiclawVersion: repoVersionLabel,
 
       sidebar,
 
@@ -163,8 +163,8 @@ export default withMermaid(
       },
 
       footer: {
-        message: `基于 WeKnora ${repoVersionLabel} 源码整理 · MIT License`,
-        copyright: '© Tencent WeKnora',
+        message: `基于 SemiClaw ${repoVersionLabel} 源码整理 · MIT License`,
+        copyright: '© Tencent SemiClaw',
       },
     },
 

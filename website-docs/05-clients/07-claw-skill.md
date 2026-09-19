@@ -1,8 +1,8 @@
 # Claw Skill
 
-Claw Skill 为 OpenClaw 生态中的智能体提供 WeKnora 接入能力，通过 REST API 上传文档、导入网页和执行跨库检索。
+Claw Skill 为 OpenClaw 生态中的智能体提供 SemiClaw 接入能力，通过 REST API 上传文档、导入网页和执行跨库检索。
 
-技能托管在 ClawHub，包名为 [`@lyingbug/weknora`](https://clawhub.ai/lyingbug/weknora)，许可证为 MIT-0。调用能力与权限由所连接的 WeKnora API 决定。
+技能托管在 ClawHub，包名为 [`@lyingbug/semiclaw`](https://clawhub.ai/lyingbug/semiclaw)，许可证为 MIT-0。调用能力与权限由所连接的 SemiClaw API 决定。
 
 ## 主要功能 {#能做什么}
 
@@ -22,8 +22,8 @@ Claw Skill 为 OpenClaw 生态中的智能体提供 WeKnora 接入能力，通�
 2. **设置环境变量**：在终端或 `~/.zshrc` / `~/.bashrc` 里设置
 
    ```bash
-   export WEKNORA_BASE_URL=https://your-weknora.example.com/api/v1
-   export WEKNORA_API_KEY=sk-xxxxx
+   export SEMICLAW_BASE_URL=https://your-semiclaw.example.com/api/v1
+   export SEMICLAW_API_KEY=sk-xxxxx
    ```
 
 3. **安装 Skill**：在装好 OpenClaw CLI 的环境里执行引导页给出的安装命令，或到 ClawHub 页面按指引安装；
@@ -36,7 +36,7 @@ Claw Skill 和 MCP Server 均可供外部智能体调用，选择取决于客户
 | | Claw Skill | MCP Server |
 | --- | --- | --- |
 | 面向 | OpenClaw / ClawHub 生态的 Agent | 支持 MCP 协议的客户端（Claude Desktop、VS Code Copilot 等） |
-| 安装 | ClawHub 安装 Skill | `pip install tencent-weknora-mcp` 或 `uvx` 运行 |
+| 安装 | ClawHub 安装 Skill | `pip install tencent-semiclaw-mcp` 或 `uvx` 运行 |
 | 传输 | 直接调 REST | stdio / SSE / Streamable HTTP |
 | 能力范围 | 导入、检索、浏览（5 类） | 31 个工具，另含租户、模型、会话、Agent 问答、Wiki |
 | 文档 | 本篇 | [MCP 集成](../03-features/08-mcp.md) |

@@ -25,7 +25,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Tencent/WeKnora/internal/types"
+	"github.com/vagawind/semiclaw/internal/types"
 )
 
 // ResolveEffectiveConfig returns the Config to build a tenant's sandbox manager
@@ -305,7 +305,7 @@ func overrideSeconds(dst *time.Duration, seconds int) {
 // that reaches this function without going through that merge cannot open
 // the sandbox URL.
 //
-// A nil stored policy is not "unset": it resolves to WeKnora's default of
+// A nil stored policy is not "unset": it resolves to SemiClaw's default of
 // egress allowed and inbound closed, so every downstream consumer sees one
 // fully specified policy and nobody re-derives the default.
 func resolveNetworkPolicy(stored *types.SandboxNetworkPolicy) RemoteNetworkPolicy {
